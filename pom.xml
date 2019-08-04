@@ -6,7 +6,7 @@
 	<groupId>it.bld.generator</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Generator Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
@@ -249,7 +249,7 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
-			</plugin>
+			</plugin>  
 		</plugins>
 
 	</build>
