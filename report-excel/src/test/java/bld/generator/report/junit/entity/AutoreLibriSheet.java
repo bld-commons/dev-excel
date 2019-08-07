@@ -2,10 +2,10 @@ package bld.generator.report.junit.entity;
 
 import javax.validation.constraints.Size;
 
-import it.bld.generator.report.excel.SheetData;
-import it.bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import it.bld.generator.report.excel.annotation.ExcelMarginSheet;
-import it.bld.generator.report.excel.annotation.ExcelSheetLayout;
+import bld.generator.report.excel.SheetData;
+import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 @ExcelSheetLayout
 @ExcelHeaderLayout(cmWidthCell=5)

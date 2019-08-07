@@ -6,14 +6,14 @@ import javax.validation.constraints.Size;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import it.bld.generator.report.excel.SheetSummary;
-import it.bld.generator.report.excel.annotation.ExcelCellLayout;
-import it.bld.generator.report.excel.annotation.ExcelColumn;
-import it.bld.generator.report.excel.annotation.ExcelDate;
-import it.bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import it.bld.generator.report.excel.annotation.ExcelMarginSheet;
-import it.bld.generator.report.excel.annotation.ExcelSheetLayout;
-import it.bld.generator.report.excel.annotation.ExcelSummary;
+import bld.generator.report.excel.SheetSummary;
+import bld.generator.report.excel.annotation.ExcelCellLayout;
+import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import bld.generator.report.excel.annotation.ExcelSummary;
 
 @ExcelSheetLayout
 @ExcelSummary(title = "Casa Editrice")

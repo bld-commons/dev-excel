@@ -3,14 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>bld-commons.github.io.excel</groupId>
 	<artifactId>report-excel</artifactId>
 	<name>report-excel</name>
 	<description>Report Excel</description>
 
 	<parent>
-		<groupId>com.bld.generator</groupId>
+		<groupId>bld-commons.github.io</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>1.0.0</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 
@@ -33,7 +34,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>it.bld.generator.report</groupId>
+			<groupId>bld-commons.github.io.excel</groupId>
 			<artifactId>generator-excel</artifactId>
 		</dependency>
 		<dependency>
