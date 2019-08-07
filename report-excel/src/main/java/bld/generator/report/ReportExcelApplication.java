@@ -4,7 +4,7 @@
  * @mail francesco.baldi1987@gmail.com
  * @date 3-ago-2019
  */
-package com.bld.generator.report;
+package bld.generator.report;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

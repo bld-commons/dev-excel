@@ -3,15 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>it.bld.generator.report</groupId>
 	<artifactId>report-excel</artifactId>
 	<name>report-excel</name>
 	<description>Report Excel</description>
 
 	<parent>
-		<groupId>it.bld.generator</groupId>
+		<groupId>com.bld.generator</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 
 

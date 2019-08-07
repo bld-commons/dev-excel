@@ -1,4 +1,4 @@
-package com.bld.generator.report.junit.entity;
+package bld.generator.report.junit.entity;
 
 import javax.validation.constraints.Size;
 

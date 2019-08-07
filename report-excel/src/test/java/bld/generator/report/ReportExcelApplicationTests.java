@@ -1,4 +1,4 @@
-package com.bld.generator.report;
+package bld.generator.report;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

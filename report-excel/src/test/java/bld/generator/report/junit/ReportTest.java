@@ -1,4 +1,4 @@
-package com.bld.generator.report.junit;
+package bld.generator.report.junit;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -15,12 +15,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.bld.generator.report.junit.entity.AutoreLibriRow;
-import com.bld.generator.report.junit.entity.AutoreLibriRowDynamic;
-import com.bld.generator.report.junit.entity.AutoreLibriSheet;
-import com.bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
-import com.bld.generator.report.junit.entity.CasaEditrice;
-
+import bld.generator.report.junit.entity.AutoreLibriRow;
+import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
+import bld.generator.report.junit.entity.AutoreLibriSheet;
+import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
+import bld.generator.report.junit.entity.CasaEditrice;
 import it.bld.generator.report.excel.BaseSheet;
 import it.bld.generator.report.excel.GenerateExcel;
 import it.bld.generator.report.excel.MergeSheet;
