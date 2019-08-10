@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>bld-commons.github.io</groupId>
+	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.0</version>
@@ -72,7 +72,7 @@
 
 	<modules>
 		<module>generator-excel</module>
-		<module>report-excel</module>
+		<!-- <module>report-excel</module> -->
 	</modules>
 
 	<dependencyManagement>
@@ -108,7 +108,7 @@
 				<version>${commons-lang.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>bld-commons.github.io.excel</groupId>
+				<groupId>com.github.bld-commons.excel</groupId>
 				<artifactId>generator-excel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
