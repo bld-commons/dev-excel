@@ -8,7 +8,9 @@
 package bld.generator.report.excel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Size;
 
@@ -19,6 +21,8 @@ import javax.validation.constraints.Size;
  * @param <T> the generic type
  */
 public abstract class SheetData<T extends RowSheet> extends BaseSheet implements SheetComponent{
+	
+	private Map<String, Integer> mapFieldColumn;
 		
 	/**
 	 * Instantiates a new sheet data.
@@ -63,6 +67,17 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 * @return the row class
 	 */
 	public abstract Class<T> getRowClass();
+
+	public Map<String, Integer> getMapFieldColumn() {
+		if(this.mapFieldColumn==null)
+			this.mapFieldColumn=new HashMap<>();
+		return mapFieldColumn;
+	}
+
+	protected void setMapFieldColumn(Map<String, Integer> mapFieldColumn) {
+		this.mapFieldColumn = mapFieldColumn;
+	}	
+	
 	
 	
 }

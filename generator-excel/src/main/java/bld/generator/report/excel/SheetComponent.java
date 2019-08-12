@@ -11,5 +11,5 @@ package bld.generator.report.excel;
  */
 public interface SheetComponent {
 
-	
+	public void setNameSheet(String nameSheet);
 }

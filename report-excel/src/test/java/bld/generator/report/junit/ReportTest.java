@@ -32,6 +32,8 @@ import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
 import bld.generator.report.junit.entity.CasaEditrice;
+import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
+import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -91,10 +93,11 @@ public class ReportTest {
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);
-		ExcelFunctionRowImpl excelFunctionImpl = new ExcelFunctionRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni", null, 21).getExcelColumn(), new ExcelFunctionImpl("sum($anno1From:$anno3From)", "totalePrezzoAnni").getExcelFunction());
+		ExcelFunctionRowImpl excelFunctionImpl = new ExcelFunctionRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni", null, 21).getExcelColumn(), new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni").getExcelFunction());
 		ExcelMergeRowImpl excelMergeRowImpl = new ExcelMergeRowImpl("matricola");
 		ExcelFunctionMergeRowImpl excelFunctionMergeImpl = new ExcelFunctionMergeRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22).getExcelColumn(),
-				 excelMergeRowImpl.getExcelMergeRow(),new ExcelFunctionImpl("sum($totalePrezzoAnniFrom:$totalePrezzoAnniTo)", "totalePrezzoAnniAutore").getExcelFunction());
+				 excelMergeRowImpl.getExcelMergeRow(),new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore").getExcelFunction());
+		
 		autoreLibriRow.addDynamicExcelFunction(excelFunctionImpl, excelFunctionMergeImpl);
 		
 		
@@ -154,15 +157,19 @@ public class ReportTest {
 		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,10,10);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
+		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);
+		
+		TotaleAutoreLibriRow totaleAutoreLibriRow=new TotaleAutoreLibriRow(1);
+		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);
+		
+		totaleAutoreLibriRow=new TotaleAutoreLibriRow(2);
+		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);
+		
+		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
+		
 		listBaseSheet.add(autoreLibriSheet);
 
-		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
-		mergeSheet.getListSheet().add(casaEditrice);
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(casaEditrice);
-
-		listBaseSheet.add(mergeSheet);
+		
 		ReportExcel excel = new ReportExcel("Mondadori Dynamic", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);

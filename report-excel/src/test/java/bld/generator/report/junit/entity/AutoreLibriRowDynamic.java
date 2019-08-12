@@ -16,10 +16,14 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 
 @ExcelFunctionRows(
 		excelFunctions = {
-				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), excelColumn = @ExcelColumn(indexColumn = 9, nameColumn = "Prezzo Totale"), excelFunction = @ExcelFunction(function = "sum($prezzoFrom,$supplementoFrom)", nameFunction = "prezzoTotale")) 
+				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
+						excelColumn = @ExcelColumn(indexColumn = 9, nameColumn = "Prezzo Totale"), 
+						excelFunction = @ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")) 
 				}, 
 		excelFunctionMerges = {
-				@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), excelColumn = @ExcelColumn(indexColumn = 7.1, nameColumn = "Prezzo Totale per Autore"), excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum($prezzoFrom:$prezzoTo)", nameFunction = "prezzoTotalePerAutore")) 
+				@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
+						excelColumn = @ExcelColumn(indexColumn = 7.1, nameColumn = "Prezzo Totale per Autore"), 
+						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoFrom}:${prezzoTo})", nameFunction = "prezzoTotalePerAutore")) 
 				}
 		)
 public class AutoreLibriRowDynamic extends DynamicRowSheet {

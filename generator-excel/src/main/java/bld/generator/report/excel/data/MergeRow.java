@@ -29,6 +29,27 @@ public class MergeRow {
 	
 	/** The cell style from. */
 	private CellStyle cellStyleFrom;
+	
+	private Integer calRowStart;
+	
+	private Integer calRowEnd;
+	
+
+	public Integer getCalRowStart() {
+		return calRowStart;
+	}
+
+	public void setCalRowStart(Integer calRowStart) {
+		this.calRowStart = calRowStart;
+	}
+
+	public Integer getCalRowEnd() {
+		return calRowEnd;
+	}
+
+	public void setCalRowEnd(Integer calRowEnd) {
+		this.calRowEnd = calRowEnd;
+	}
 
 	/**
 	 * Gets the row from.

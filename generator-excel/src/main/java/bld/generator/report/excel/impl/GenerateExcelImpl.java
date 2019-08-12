@@ -48,11 +48,13 @@ import org.springframework.stereotype.Component;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.DynamicRowSheet;
+import bld.generator.report.excel.FunctionsTotal;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
+import bld.generator.report.excel.SheetFunctionTotal;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelChart;
@@ -238,6 +240,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	private void generateMergeSheet(Workbook workbook, Sheet worksheet, MergeSheet mergeSheet) throws Exception {
 		Integer indexRow = new Integer(0);
 		for (SheetComponent sheetComponent : mergeSheet.getListSheet()) {
+			sheetComponent.setNameSheet(worksheet.getSheetName());
 			if (sheetComponent instanceof SheetSummary)
 				indexRow = this.generateSheetSommario(workbook, worksheet, (SheetSummary) sheetComponent, indexRow);
 			else if (sheetComponent instanceof SheetData) 
@@ -299,7 +302,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	 */
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData,
 			Integer indexRow, boolean isMergeSheet) throws Exception {
-		this.mapFieldColumn = new HashMap<>();
+		this.mapFieldColumn = sheetData.getMapFieldColumn();
 		int startRowSheet = indexRow + 1;
 		Row rowHeader = worksheet.createRow(indexRow);
 		List<SheetHeader> listSheetHeader = generateHeaderSheetData(workbook, worksheet, rowHeader, sheetData,
@@ -316,6 +319,16 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		String startKey = null;
 		String endKey = null;
 
+		Integer calRowStart=null;
+		Integer calRowEnd=null;
+		
+		if(sheetData instanceof SheetFunctionTotal) {
+			SheetFunctionTotal<? extends RowSheet> functionSheetData=(SheetFunctionTotal<? extends RowSheet>)sheetData;
+			calRowStart=functionSheetData.getCalRowStart();
+			calRowEnd=functionSheetData.getCalRowEnd();
+		}
+		
+		
 		// int i=0;
 
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
@@ -357,6 +370,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 				do {
 					MergeRow mergeRow = null;
 					Object valueBefore = null;
+					
 					if (excelSheetLayout.notMerge() || !mapMergeRow.containsKey(numColumn)) {
 						if (!excelSheetLayout.notMerge() && sheetHeader.getExcelMergeColumn() != null) {
 							mergeRow = new MergeRow();
@@ -368,9 +382,15 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 								mergeRow.getSheetHeader().setValue(value);
 							mergeRow.setCellFrom(cell);
 							mergeRow.setCellStyleFrom(cellStyle);
+							if(sheetData instanceof SheetFunctionTotal) {
+								mergeRow.setCalRowStart(calRowStart);
+								mergeRow.setCalRowEnd(calRowEnd);
+							}
+							
+							
 							mapMergeRow.put(numColumn, mergeRow);
 						} else
-							super.setCellValueExcel(cell, cellStyle, sheetHeader, indexRow);
+							super.setCellValueExcel(cell, cellStyle, sheetHeader, indexRow,calRowStart,calRowEnd);
 						repeat = false;
 					} else {
 						if (numColumn > 0 && StringUtils.isBlank(sheetHeader.getExcelMergeColumn().referenceField()))
@@ -383,7 +403,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(cellStyle, cell, sheetHeader);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeColumn().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeColumn().referenceField();
@@ -396,8 +416,9 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 									|| !(sheetHeader.getValue() == valueBefore
 											|| sheetHeader.getValue().equals(valueBefore)))
 								mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
-							else
-								repeat = writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
+							else {
+								repeat = setCellValueWillMerged(cellStyle, cell, sheetHeader);
+							}	
 						}
 
 					}
@@ -425,6 +446,18 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			logger.info(sheetData.getClass().getSimpleName() + "- " + "A" + startRowSheet + ":" + generaColonna);
 			worksheet.setAutoFilter(CellRangeAddress.valueOf("A" + startRowSheet + ":" + generaColonna));
 		}
+		
+		if(sheetData instanceof FunctionsTotal) {
+			FunctionsTotal<? extends RowSheet,SheetFunctionTotal<? extends RowSheet>> functionsTotal=(FunctionsTotal<? extends RowSheet,SheetFunctionTotal<? extends RowSheet>>)sheetData;
+			if(functionsTotal.getSheetFunctionsTotal()!=null) {
+				SheetFunctionTotal<? extends RowSheet> functionSheetData=functionsTotal.getSheetFunctionsTotal();
+				functionSheetData.setMapFieldColumn(this.mapFieldColumn);
+				functionSheetData.setCalRowStart(startRowSheet);
+				functionSheetData.setCalRowEnd(indexRow-1);
+				indexRow += 2;
+				indexRow=this.generateSheetData(workbook, worksheet, functionSheetData, indexRow, isMergeSheet);
+			}
+		}
 
 		if (!isMergeSheet && worksheet instanceof XSSFSheet
 				&& sheetData.getClass().isAnnotationPresent(ExcelChart.class)) {
@@ -436,10 +469,13 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			indexRow = generateChart((XSSFSheet) worksheet, mapChart,
 					sheetData.getClass().getAnnotation(ExcelChart.class), indexRow, xAxis);
 		}
+		
+		
 
 		return indexRow;
 
 	}
+
 
 	/**
 	 * Generate chart.
