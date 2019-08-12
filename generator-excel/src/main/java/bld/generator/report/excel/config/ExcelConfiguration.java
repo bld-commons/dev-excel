@@ -11,15 +11,15 @@ import bld.generator.report.utils.ValuePropsImpl;
 @Configuration
 public class ExcelConfiguration {
 	
-//	@Bean
-//	public GenerateExcel generatorExcel() {
-//		return new GenerateExcelImpl();
-//	}
-//	
-//
-//	@Bean
-//	public ValueProps valueProps() {
-//		return new ValuePropsImpl();
-//	}
+	@Bean
+	public GenerateExcel generatorExcel() {
+		return new GenerateExcelImpl();
+	}
+	
+
+	@Bean
+	public ValueProps valueProps() {
+		return new ValuePropsImpl();
+	}
 	
 }
