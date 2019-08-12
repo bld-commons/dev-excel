@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,6 +25,7 @@ import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionMergeRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
+import bld.generator.report.excel.config.ExcelConfiguration;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.impl.ReportExcel;
@@ -38,6 +40,7 @@ import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ConfigurationProperties
+//@EnableAutoConfiguration(exclude=ExcelConfiguration.class)
 public class ReportTest {
 
 	@Autowired
