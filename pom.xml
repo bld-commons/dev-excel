@@ -72,7 +72,7 @@
 
 	<modules>
 		<module>generator-excel</module>
-		<module>report-excel</module>
+		<!--<module>report-excel</module>-->
 	</modules>
 
 	<dependencyManagement>
