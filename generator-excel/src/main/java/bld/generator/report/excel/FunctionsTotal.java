@@ -1,6 +1,6 @@
 package bld.generator.report.excel;
 
-public interface FunctionsTotal<K extends RowSheet,T extends SheetFunctionTotal<K>> {
+public interface FunctionsTotal<T extends SheetFunctionTotal<? extends RowSheet>> {
 	
 	public T getSheetFunctionsTotal();
 	

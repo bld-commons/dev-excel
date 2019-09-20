@@ -448,7 +448,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		}
 		
 		if(sheetData instanceof FunctionsTotal) {
-			FunctionsTotal<? extends RowSheet,SheetFunctionTotal<? extends RowSheet>> functionsTotal=(FunctionsTotal<? extends RowSheet,SheetFunctionTotal<? extends RowSheet>>)sheetData;
+			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal=(FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>)sheetData;
 			if(functionsTotal.getSheetFunctionsTotal()!=null) {
 				SheetFunctionTotal<? extends RowSheet> functionSheetData=functionsTotal.getSheetFunctionsTotal();
 				functionSheetData.setMapFieldColumn(this.mapFieldColumn);

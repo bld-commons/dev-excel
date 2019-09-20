@@ -13,7 +13,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelSheetLayout(notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDynamic> implements FunctionsTotal<TotaleAutoreLibriRow, TotaleAutoreLibriSheet>{
+public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDynamic> implements FunctionsTotal<TotaleAutoreLibriSheet>{
 
 	private TotaleAutoreLibriSheet sheetFunctionsTotal;
 	
