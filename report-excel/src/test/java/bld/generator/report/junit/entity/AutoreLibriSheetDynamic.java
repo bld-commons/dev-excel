@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.FunctionsTotal;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 
@@ -21,6 +22,14 @@ public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDyna
 		super(nameSheet);
 		
 	}
+
+	
+	public AutoreLibriSheetDynamic(@Size(max = 30) String nameSheet,String etichetta) {
+		super(nameSheet);
+		this.etichetta = etichetta;
+	}
+
+
 
 	public TotaleAutoreLibriSheet getSheetFunctionsTotal() {
 		return sheetFunctionsTotal;
@@ -43,6 +52,17 @@ public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDyna
 		return AutoreLibriRowDynamic.class;
 	}
 
+	@ExcelLabel(columnMerge = 4)
+	private String etichetta;
+
+	public String getEtichetta() {
+		return etichetta;
+	}
+
+	public void setEtichetta(String etichetta) {
+		this.etichetta = etichetta;
+	}
+	
 	
 	
 }

@@ -87,7 +87,7 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	 */
 	@SuppressWarnings("unchecked")
 	private  void addAnnotation(Class<? extends Annotation>classAnnotation,Annotation annotation) throws Exception {
-		 Method method = Class.class.getDeclaredMethod(ExcelUtils.ANNOTATION_DATA, null);
+		 Method method = Class.class.getDeclaredMethod(ExcelUtils.ANNOTATION_DATA);
          method.setAccessible(true);
          //Since AnnotationData is a private class we cannot create a direct reference to it. We will have to
          //manage with just Object

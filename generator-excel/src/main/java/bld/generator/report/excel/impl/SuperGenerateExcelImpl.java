@@ -68,7 +68,7 @@ import bld.generator.report.excel.comparator.SheetColumnComparator;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.data.LayoutCell;
-import bld.generator.report.excel.data.MergeRow;
+import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
@@ -85,8 +85,6 @@ public class SuperGenerateExcelImpl {
 	private static final String FROM = "From";
 
 	private static final String PATTERN = "\\$\\{.*?}";
-
-
 
 	private static final String $ = "${";
 
@@ -111,7 +109,6 @@ public class SuperGenerateExcelImpl {
 	private static final String ROW_START = "RowStart";
 
 	private static final String ROW_END = "RowEnd";
-
 
 	/** The map field column. */
 	protected Map<String, Integer> mapFieldColumn = new HashMap<>();
@@ -340,9 +337,9 @@ public class SuperGenerateExcelImpl {
 //		repeat = false;
 //		return repeat;
 //	}
-	
+
 	protected boolean setCellValueWillMerged(CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
-		this.setCellValueExcel(cell,cellStyle,sheetHeader); //writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
+		this.setCellValueExcel(cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
 		return false;
 	}
 
@@ -357,8 +354,8 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void mergeRowAndRemoveMap(Workbook workbook, Sheet worksheet, Integer indexRow,
-			Map<Integer, MergeRow> mapMergeRow, int numColumn) throws Exception {
-		mergeRow(workbook, worksheet, indexRow, mapMergeRow, numColumn);
+			Map<Integer, MergeCell> mapMergeRow, int numColumn) throws Exception {
+		mergeRow(worksheet, indexRow, mapMergeRow, numColumn);
 		mapMergeRow.remove(numColumn);
 	}
 
@@ -372,17 +369,20 @@ public class SuperGenerateExcelImpl {
 	 * @param numColumn   the num column
 	 * @throws Exception the exception
 	 */
-	protected void mergeRow(Workbook workbook, Sheet worksheet, Integer indexRow, Map<Integer, MergeRow> mapMergeRow,
-			int numColumn) throws Exception {
-		MergeRow mergeRow = mapMergeRow.get(numColumn);
+	protected void mergeRow(Sheet worksheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn)
+			throws Exception {
+		MergeCell mergeRow = mapMergeRow.get(numColumn);
 		mergeRow.setRowTo(indexRow - 1);
 		// setCellValueExcel(mergeRow.getCellFrom(),
 		// mergeRow.getCellStyleFrom(),
 		// mergeRow.getSheetHeader());
-		setCellValueExcel(mergeRow);
-		if (mergeRow.getRowFrom() < mergeRow.getRowTo())
-			worksheet.addMergedRegion(new CellRangeAddress(mergeRow.getRowFrom(), mergeRow.getRowTo(),
-					mergeRow.getColumnFrom(), mergeRow.getColumnTo()));
+		runMergeCell(worksheet, mergeRow);
+	}
+
+	protected void runMergeCell(Sheet worksheet,  MergeCell mergeCell) throws Exception {
+		setCellValueExcel(mergeCell);
+		if (mergeCell.getRowFrom() < mergeCell.getRowTo() || mergeCell.getColumnFrom() < mergeCell.getColumnTo())
+			worksheet.addMergedRegion(new CellRangeAddress(mergeCell.getRowFrom(), mergeCell.getRowTo(),mergeCell.getColumnFrom(), mergeCell.getColumnTo()));
 	}
 
 	/**
@@ -493,7 +493,8 @@ public class SuperGenerateExcelImpl {
 		while (m.find()) {
 			String keyParameter = m.group().replace($, "").replace(keyPattern + "}", "").trim();
 			if (mapFieldColumn.containsKey(keyParameter))
-				function = function.replace(m.group(),calcoloCoordinateFunction(indexRow + 1, mapFieldColumn.get(keyParameter)));
+				function = function.replace(m.group(),
+						calcoloCoordinateFunction(indexRow + 1, mapFieldColumn.get(keyParameter)));
 		}
 		return function;
 	}
@@ -504,7 +505,7 @@ public class SuperGenerateExcelImpl {
 	 * @param mergeRow the new cell value excel
 	 * @throws Exception the exception
 	 */
-	private void setCellValueExcel(MergeRow mergeRow) throws Exception {
+	private void setCellValueExcel(MergeCell mergeRow) throws Exception {
 		if (StringUtils.isNotBlank(mergeRow.getSheetHeader().getFunction()))
 			setCellFormulaExcel(mergeRow);
 		else
@@ -518,7 +519,7 @@ public class SuperGenerateExcelImpl {
 	 * @param mergeRow the new cell formula excel
 	 * @throws Exception the exception
 	 */
-	private void setCellFormulaExcel(MergeRow mergeRow) throws Exception {
+	private void setCellFormulaExcel(MergeCell mergeRow) throws Exception {
 		SheetHeader sheetHeader = mergeRow.getSheetHeader();
 		CellStyle cellStyle = mergeRow.getCellStyleFrom();
 		Cell cell = mergeRow.getCellFrom();
@@ -551,9 +552,12 @@ public class SuperGenerateExcelImpl {
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
 			cell.setCellValue((Calendar) sheetHeader.getValue());
-		else if (sheetHeader.getValue() instanceof String)
-			cell.setCellValue((String) sheetHeader.getValue());
-		else if (sheetHeader.getValue() instanceof Number)
+		else if (sheetHeader.getValue() instanceof String || sheetHeader.getValue() instanceof Character) {
+			String value = null;
+			if (sheetHeader.getValue() != null)
+				value = "" + sheetHeader.getValue();
+			cell.setCellValue(value);
+		} else if (sheetHeader.getValue() instanceof Number)
 			cell.setCellValue(((Number) sheetHeader.getValue()).doubleValue());
 		else if (sheetHeader.getValue() instanceof Boolean)
 			cell.setCellValue((Boolean) sheetHeader.getValue());

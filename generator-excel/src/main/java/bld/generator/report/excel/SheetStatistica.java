@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * The Interface ExcelStatistico.
  */
-public interface SheetStatistical {
+public interface SheetStatistica {
 
 	/**
 	 * Checks if is grafico.

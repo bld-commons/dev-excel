@@ -137,7 +137,8 @@ public class ReportTest {
 		autoreLibriRow.getMapValue().put("anno3", 22.4);
 		list.add(autoreLibriRow);
 
-		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore");
+		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore","Test di etichetta su report");
+		
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20).getExcelColumn());

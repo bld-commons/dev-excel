@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcelUtils implements ApplicationContextAware {
 
+	private static final String BLD_GENERATOR = "bld.generator";
+
 	/** The logger. */
 	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
@@ -93,7 +95,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					try {
 						classEntity.getMethod(setMethod, classField).invoke(entity, value);
 					} catch (Exception e) {
-						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith("com.dxc.pmg")) {
+						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith(BLD_GENERATOR)) {
 							Annotation fieldAnnotation = (Annotation) value;
 							value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
 							classEntity.getMethod(setMethod, classField).invoke(entity, value);
@@ -140,7 +142,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					try {
 						classEntity.getMethod(setMethod, classField).invoke(entity, value);
 					} catch (Exception e) {
-						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith("com.dxc")) {
+						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith(BLD_GENERATOR)) {
 							Annotation fieldAnnotation = (Annotation) value;
 							value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
 							classEntity.getMethod(setMethod, classField).invoke(entity, value);
