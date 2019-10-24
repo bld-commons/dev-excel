@@ -8,6 +8,7 @@ package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -17,6 +18,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 /**
  * The Interface ExcelBorder.
  */
+@Documented
 @Retention(RUNTIME)
 @Target({})
 public @interface ExcelBorder {

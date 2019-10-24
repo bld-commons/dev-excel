@@ -63,7 +63,7 @@ public class ReportTest {
 		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Rosso", "Sentimentale", 2, 42.0, 6.94));
 		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Arancio", "Sentimentale", 2, 23.24, 3.0));
 
-		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore");
+		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		autoreLibriSheet.setListRowSheet(list);
 
 		listBaseSheet.add(autoreLibriSheet);

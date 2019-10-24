@@ -61,6 +61,7 @@ import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
@@ -216,7 +217,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getNameSheet().replace("/", ""));
 			} else
 				worksheet = workbook.createSheet("Don't defined" + (indiceNomeSheet++));
-
+			
 			Footer footer = worksheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 			if (sheet instanceof MergeSheet) {
@@ -334,6 +335,10 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		}
 
 		// int i=0;
+		if(!isMergeSheet && sheetData.getClass().isAnnotationPresent(ExcelFreezePane.class)) {
+			ExcelFreezePane excelFreezePane=sheetData.getClass().getAnnotation(ExcelFreezePane.class);
+			worksheet.createFreezePane(excelFreezePane.columnFreez(), excelFreezePane.rowFreez());
+		}
 
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			Row row = worksheet.createRow(indexRow);

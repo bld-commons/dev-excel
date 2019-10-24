@@ -8,15 +8,16 @@ package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import bld.generator.report.excel.constant.UnderlineType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelFont.
  */
+@Documented
 @Retention(RUNTIME)
 @Target({})
 public @interface ExcelFont {
