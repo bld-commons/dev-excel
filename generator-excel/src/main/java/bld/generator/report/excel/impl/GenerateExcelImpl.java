@@ -307,7 +307,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData,
 			Integer indexRow, boolean isMergeSheet) throws Exception {
 		this.mapFieldColumn = sheetData.getMapFieldColumn();
-		indexRow=writeLabel(workbook, worksheet, sheetData, indexRow);
+		indexRow = writeLabel(workbook, worksheet, sheetData, indexRow);
 		int startRowSheet = indexRow + 1;
 		Row rowHeader = worksheet.createRow(indexRow);
 		List<SheetHeader> listSheetHeader = generateHeaderSheetData(workbook, worksheet, rowHeader, sheetData,
@@ -442,7 +442,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			// i++;
 		}
 		for (Integer numColumn : mapMergeRow.keySet())
-			super.mergeRow( worksheet, indexRow, mapMergeRow, numColumn);
+			super.mergeRow(worksheet, indexRow, mapMergeRow, numColumn);
 
 		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
 			String generaColonna = calcoloCoordinateFunction(indexRow, listSheetHeader.size() - 1);
@@ -521,42 +521,43 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 	}
 
-	private Integer writeLabel(Workbook workbook, Sheet worksheet, BaseSheet sheet, Integer indexRow)throws Exception {
+	private Integer writeLabel(Workbook workbook, Sheet worksheet, BaseSheet sheet, Integer indexRow) throws Exception {
 		List<Field> listField = new ArrayList<>();
-		Class<? extends BaseSheet> classSheet=sheet.getClass();
+		Class<? extends BaseSheet> classSheet = sheet.getClass();
 		if (classSheet.getDeclaredFields().length > 0)
 			listField.addAll(Arrays.asList(classSheet.getDeclaredFields()));
 		if (classSheet.getSuperclass().getDeclaredFields().length > 0)
 			listField.addAll(Arrays.asList(classSheet.getSuperclass().getDeclaredFields()));
-		for(Field field:listField) {
-			if(field.isAnnotationPresent(ExcelLabel.class)) {
+		for (Field field : listField) {
+			if (field.isAnnotationPresent(ExcelLabel.class)) {
 				Row row = worksheet.createRow(indexRow);
-				ExcelLabel excelLabel=field.getAnnotation(ExcelLabel.class);
-				Object value=new PropertyDescriptor(field.getName(), classSheet).getReadMethod()
-						.invoke(sheet);
-				if(!(value instanceof String))
-					throw new Exception(field.getName()+" field type is not supported: required String");
+				ExcelLabel excelLabel = field.getAnnotation(ExcelLabel.class);
+				Object value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(sheet);
+				if (!(value instanceof String))
+					throw new Exception(field.getName() + " field type is not supported: required String");
 				CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(), null);
-				SheetHeader sheetHeader=new SheetHeader();
+				SheetHeader sheetHeader = new SheetHeader();
 				sheetHeader.setValue(value);
 				sheetHeader.setExcelCellLayout(excelLabel.labelLayout());
 				Cell cellStart = row.createCell(0);
-				MergeCell mergeColumn=new MergeCell();
+				MergeCell mergeColumn = new MergeCell();
 				mergeColumn.setCellFrom(cellStart);
 				mergeColumn.setCellStyleFrom(cellStype);
 				mergeColumn.setSheetHeader(sheetHeader);
 				mergeColumn.setRowFrom(indexRow);
 				mergeColumn.setRowTo(indexRow);
 				mergeColumn.setColumnFrom(0);
-				mergeColumn.setColumnTo(excelLabel.columnMerge()-1);
-				for(int indexColumn=1;indexColumn<excelLabel.columnMerge();indexColumn++) 
-					 row.createCell(indexColumn);
-				runMergeCell(worksheet, mergeColumn);	
-				indexRow+=2;
+				mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
+				for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {
+					Cell cell=row.createCell(indexColumn);
+					cell.setCellStyle(cellStype);
+				}
+				runMergeCell(worksheet, mergeColumn);
+				indexRow += 2;
 				break;
 			}
 		}
-		
+
 		return indexRow;
 	}
 
