@@ -73,19 +73,22 @@ import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SuperGenerateExcelImpl.
  */
 @SuppressWarnings({ "deprecation", "unchecked" })
 public class SuperGenerateExcelImpl {
 
+	/** The Constant TO. */
 	private static final String TO = "To";
 
+	/** The Constant FROM. */
 	private static final String FROM = "From";
 
+	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
 
+	/** The Constant $. */
 	private static final String $ = "${";
 
 	/** The Constant SDF. */
@@ -106,8 +109,10 @@ public class SuperGenerateExcelImpl {
 	/** The Constant WIDTH_CELL_STANDARD. */
 	private static final int WIDTH_CELL_STANDARD = 22;
 
+	/** The Constant ROW_START. */
 	private static final String ROW_START = "RowStart";
 
+	/** The Constant ROW_END. */
 	private static final String ROW_END = "RowEnd";
 
 	/** The map field column. */
@@ -338,10 +343,20 @@ public class SuperGenerateExcelImpl {
 //		return repeat;
 //	}
 
+	/**
+	 * Sets the cell value will merged.
+	 *
+	 * @param cellStyle   the cell style
+	 * @param cell        the cell
+	 * @param sheetHeader the sheet header
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	protected boolean setCellValueWillMerged(CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
 		this.setCellValueExcel(cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
 		return false;
 	}
+
 
 	/**
 	 * Merge row and remove map.
@@ -362,7 +377,6 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Merge row.
 	 *
-	 * @param workbook    the workbook
 	 * @param worksheet   the worksheet
 	 * @param indexRow    the index row
 	 * @param mapMergeRow the map merge row
@@ -379,10 +393,18 @@ public class SuperGenerateExcelImpl {
 		runMergeCell(worksheet, mergeRow);
 	}
 
-	protected void runMergeCell(Sheet worksheet,  MergeCell mergeCell) throws Exception {
+	/**
+	 * Run merge cell.
+	 *
+	 * @param worksheet the worksheet
+	 * @param mergeCell the merge cell
+	 * @throws Exception the exception
+	 */
+	protected void runMergeCell(Sheet worksheet, MergeCell mergeCell) throws Exception {
 		setCellValueExcel(mergeCell);
 		if (mergeCell.getRowFrom() < mergeCell.getRowTo() || mergeCell.getColumnFrom() < mergeCell.getColumnTo())
-			worksheet.addMergedRegion(new CellRangeAddress(mergeCell.getRowFrom(), mergeCell.getRowTo(),mergeCell.getColumnFrom(), mergeCell.getColumnTo()));
+			worksheet.addMergedRegion(new CellRangeAddress(mergeCell.getRowFrom(), mergeCell.getRowTo(),
+					mergeCell.getColumnFrom(), mergeCell.getColumnTo()));
 	}
 
 	/**
@@ -446,8 +468,8 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
-	 * @param calRowEnd
-	 * @param calRowStart
+	 * @param calRowStart the cal row start
+	 * @param calRowEnd   the cal row end
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,
@@ -466,8 +488,8 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
-	 * @param calRowEnd
-	 * @param calRowStart
+	 * @param calRowStart the cal row start
+	 * @param calRowEnd   the cal row end
 	 * @throws Exception the exception
 	 */
 	private void setCellFormulaExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,
@@ -487,6 +509,14 @@ public class SuperGenerateExcelImpl {
 
 	}
 
+	/**
+	 * Make function.
+	 *
+	 * @param indexRow   the index row
+	 * @param function   the function
+	 * @param keyPattern the key pattern
+	 * @return the string
+	 */
 	private String makeFunction(Integer indexRow, String function, String keyPattern) {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
