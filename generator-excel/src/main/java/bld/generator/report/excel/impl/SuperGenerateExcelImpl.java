@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HSSFComment;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
@@ -36,6 +37,7 @@ import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -46,6 +48,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bld.generator.report.excel.DynamicRowSheet;
+import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
@@ -352,8 +355,8 @@ public class SuperGenerateExcelImpl {
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	protected boolean setCellValueWillMerged(CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
-		this.setCellValueExcel(cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
+	protected boolean setCellValueWillMerged(Workbook workbook,CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
+		this.setCellValueExcel(workbook,cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
 		return false;
 	}
 
@@ -370,7 +373,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void mergeRowAndRemoveMap(Workbook workbook, Sheet worksheet, Integer indexRow,
 			Map<Integer, MergeCell> mapMergeRow, int numColumn) throws Exception {
-		mergeRow(worksheet, indexRow, mapMergeRow, numColumn);
+		mergeRow(workbook,worksheet, indexRow, mapMergeRow, numColumn);
 		mapMergeRow.remove(numColumn);
 	}
 
@@ -383,14 +386,14 @@ public class SuperGenerateExcelImpl {
 	 * @param numColumn   the num column
 	 * @throws Exception the exception
 	 */
-	protected void mergeRow(Sheet worksheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn)
+	protected void mergeRow(Workbook workbook,Sheet worksheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn)
 			throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
 		mergeRow.setRowTo(indexRow - 1);
 		// setCellValueExcel(mergeRow.getCellFrom(),
 		// mergeRow.getCellStyleFrom(),
 		// mergeRow.getSheetHeader());
-		runMergeCell(worksheet, mergeRow);
+		runMergeCell(workbook,worksheet, mergeRow);
 	}
 
 	/**
@@ -400,8 +403,8 @@ public class SuperGenerateExcelImpl {
 	 * @param mergeCell the merge cell
 	 * @throws Exception the exception
 	 */
-	protected void runMergeCell(Sheet worksheet, MergeCell mergeCell) throws Exception {
-		setCellValueExcel(mergeCell);
+	protected void runMergeCell(Workbook workbook,Sheet worksheet, MergeCell mergeCell) throws Exception {
+		setCellValueExcel(workbook,mergeCell);
 		if (mergeCell.getRowFrom() < mergeCell.getRowTo() || mergeCell.getColumnFrom() < mergeCell.getColumnTo())
 			worksheet.addMergedRegion(new CellRangeAddress(mergeCell.getRowFrom(), mergeCell.getRowTo(),
 					mergeCell.getColumnFrom(), mergeCell.getColumnTo()));
@@ -457,7 +460,7 @@ public class SuperGenerateExcelImpl {
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate);
 		Cell cellColumn1 = row.createCell(1);
-		setCellValueExcel(cellColumn1, cellStyleColumn1, sheetHeader);
+		setCellValueExcel(workbook,cellColumn1, cellStyleColumn1, sheetHeader);
 
 	}
 
@@ -472,12 +475,12 @@ public class SuperGenerateExcelImpl {
 	 * @param calRowEnd   the cal row end
 	 * @throws Exception the exception
 	 */
-	protected void setCellValueExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,
+	protected void setCellValueExcel(Workbook workbook,Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,
 			Integer calRowStart, Integer calRowEnd) throws Exception {
 		if (StringUtils.isNotBlank(sheetHeader.getFunction())) {
 			setCellFormulaExcel(cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
 		} else
-			setCellValueExcel(cell, cellStyle, sheetHeader);
+			setCellValueExcel(workbook,cell, cellStyle, sheetHeader);
 
 	}
 
@@ -535,11 +538,11 @@ public class SuperGenerateExcelImpl {
 	 * @param mergeRow the new cell value excel
 	 * @throws Exception the exception
 	 */
-	private void setCellValueExcel(MergeCell mergeRow) throws Exception {
+	private void setCellValueExcel(Workbook workbook,MergeCell mergeRow) throws Exception {
 		if (StringUtils.isNotBlank(mergeRow.getSheetHeader().getFunction()))
 			setCellFormulaExcel(mergeRow);
 		else
-			setCellValueExcel(mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader());
+			setCellValueExcel(workbook,mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader());
 
 	}
 
@@ -575,7 +578,7 @@ public class SuperGenerateExcelImpl {
 	 * @param sheetHeader the sheet header
 	 * @throws Exception the exception
 	 */
-	protected void setCellValueExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader) throws Exception {
+	protected void setCellValueExcel(Workbook workbook,Cell cell, CellStyle cellStyle, SheetHeader sheetHeader) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		if (sheetHeader.getValue() instanceof Date)
@@ -591,6 +594,21 @@ public class SuperGenerateExcelImpl {
 			cell.setCellValue(((Number) sheetHeader.getValue()).doubleValue());
 		else if (sheetHeader.getValue() instanceof Boolean)
 			cell.setCellValue((Boolean) sheetHeader.getValue());
+		else if(sheetHeader.getValue() instanceof ExcelHyperlink) {
+			ExcelHyperlink excelHyperlink=(ExcelHyperlink)sheetHeader.getValue();
+			CreationHelper createHelper = workbook.getCreationHelper();
+			if(excelHyperlink.getHyperlinkType()==null)
+				throw new Exception("The field hyperlinkType is null");
+			if(StringUtils.isEmpty(excelHyperlink.getAddress()))
+				throw new Exception("The field address is null or is empty");
+			Hyperlink hyperlink = createHelper.createHyperlink(excelHyperlink.getHyperlinkType());
+			String address=excelHyperlink.getAddress();
+			if(HyperlinkType.DOCUMENT.equals(excelHyperlink.getHyperlinkType())) 
+				address=excelHyperlink.getAddressDocument();
+			hyperlink.setAddress(address);
+			cell.setHyperlink(hyperlink);
+			cell.setCellValue(excelHyperlink.getValue());
+		}
 
 	}
 

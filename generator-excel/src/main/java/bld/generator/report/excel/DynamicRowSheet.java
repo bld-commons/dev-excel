@@ -22,7 +22,6 @@ import bld.generator.report.excel.annotation.impl.ExcelFunctionRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionRowsImpl;
 import bld.generator.report.utils.ExcelUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DynamicRowSheet.
  */

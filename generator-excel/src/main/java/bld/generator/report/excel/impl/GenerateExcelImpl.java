@@ -398,7 +398,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 							mapMergeRow.put(numColumn, mergeRow);
 						} else
-							super.setCellValueExcel(cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
+							super.setCellValueExcel(workbook,cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
 						repeat = false;
 					} else {
 						if (numColumn > 0 && StringUtils.isBlank(sheetHeader.getExcelMergeColumn().referenceField()))
@@ -411,7 +411,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = setCellValueWillMerged(cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook,cellStyle, cell, sheetHeader);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeColumn().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeColumn().referenceField();
@@ -425,7 +425,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 											|| sheetHeader.getValue().equals(valueBefore)))
 								mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 							else {
-								repeat = setCellValueWillMerged(cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook,cellStyle, cell, sheetHeader);
 							}
 						}
 
@@ -447,7 +447,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			// i++;
 		}
 		for (Integer numColumn : mapMergeRow.keySet())
-			super.mergeRow(worksheet, indexRow, mapMergeRow, numColumn);
+			super.mergeRow(workbook,worksheet, indexRow, mapMergeRow, numColumn);
 
 		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
 			String generaColonna = calcoloCoordinateFunction(indexRow, listSheetHeader.size() - 1);
@@ -557,7 +557,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 					Cell cell=row.createCell(indexColumn);
 					cell.setCellStyle(cellStype);
 				}
-				runMergeCell(worksheet, mergeColumn);
+				runMergeCell(workbook,worksheet, mergeColumn);
 				indexRow += 2;
 				break;
 			}

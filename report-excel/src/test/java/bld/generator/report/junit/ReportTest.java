@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import bld.generator.report.excel.BaseSheet;
+import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
@@ -32,6 +34,8 @@ import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
 import bld.generator.report.junit.entity.CasaEditrice;
+import bld.generator.report.junit.entity.IndexRow;
+import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 
@@ -52,6 +56,13 @@ public class ReportTest {
 	@Test
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
+		IndexSheet indexSheet=new IndexSheet("Indice");
+		List<IndexRow> listIndice=new ArrayList<>();
+		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"), "Casa Editrice"));
+		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
+		indexSheet.setListRowSheet(listIndice);
+		listBaseSheet.add(indexSheet);
+		
 		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
 		listBaseSheet.add(casaEditrice);
 
