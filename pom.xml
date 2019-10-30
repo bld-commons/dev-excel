@@ -7,7 +7,7 @@
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
 	<version>1.1.1-SNAPSHOT</version>
-	<name>Generator Excel</name>
+	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
 	<licenses>
@@ -46,13 +46,10 @@
 	</parent>
 
 	<properties>
-		<org.apache.poi-version>4.1.0</org.apache.poi-version>
+		<org.apache.poi-version>4.1.1</org.apache.poi-version>
 		<commons-compress.version>1.19</commons-compress.version>
 		<org.apache.commons-version>3.9</org.apache.commons-version>
 		<javax.validation-version>2.0.1.Final</javax.validation-version>
-		<commons-lang.version>2.6</commons-lang.version>
-		<project.version>0.0.1-SNAPSHOT</project.version>
-
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<java.version>1.8</java.version>
@@ -74,6 +71,7 @@
 
 	<modules>
 		<module>generator-excel</module>
+                <module>read-excel</module>
 		<module>report-excel</module>
 	</modules>
 
@@ -103,11 +101,6 @@
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>${javax.validation-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>${commons-lang.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.github.bld-commons.excel</groupId>

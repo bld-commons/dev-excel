@@ -15,5 +15,15 @@ public class ExcelConfiguration {
 	@Autowired
 	private ValueProps valueProps;
 
+	protected GenerateExcel getGenerateExcel() {
+		return generateExcel;
+	}
+
+	protected ValueProps getValueProps() {
+		return valueProps;
+	}
+
+	
+	
 	
 }
