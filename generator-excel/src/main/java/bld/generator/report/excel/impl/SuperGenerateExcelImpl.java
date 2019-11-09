@@ -660,7 +660,7 @@ public class SuperGenerateExcelImpl {
 		worksheet.getPrintSetup().setLandscape(layoutSheet.landscape());
 		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
 		worksheet.setDefaultRowHeight((short) (layoutHeader.cmHeightCell() * 568));
-		return manageCellStyleHeader(workbook, layoutHeader);
+		return manageCellStyleHeader(workbook,worksheet, layoutHeader,null);
 	}
 
 	/**
@@ -670,13 +670,15 @@ public class SuperGenerateExcelImpl {
 	 * @param layoutHeader the layout header
 	 * @return the cell style
 	 */
-	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderLayout layoutHeader) {
+	private CellStyle manageCellStyleHeader(Workbook workbook,Sheet worksheet, ExcelHeaderLayout layoutHeader,Integer numColumn) {
 		CellStyle cellStyleHeader = null;
 		LayoutCell layoutCellHeader = ExcelUtils.reflectionAnnotation(new LayoutCell(), layoutHeader);
 		if (this.mapCellHeaderStyle.containsKey(layoutCellHeader))
 			cellStyleHeader = this.mapCellHeaderStyle.get(layoutCellHeader);
 		else {
 			cellStyleHeader = createCellStyle(workbook, layoutHeader);
+			if(numColumn!=null && layoutHeader.cmWidthCell()!=5)
+				worksheet.setColumnWidth(numColumn, 1306 *layoutHeader.cmWidthCell());
 			this.mapCellHeaderStyle.put(layoutCellHeader, cellStyleHeader);
 		}
 
@@ -721,7 +723,7 @@ public class SuperGenerateExcelImpl {
 			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderLayout.class)) {
 				ExcelHeaderLayout layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(),
 						ExcelHeaderLayout.class);
-				CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
+				CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook,worksheet, layoutHeader,numColumn);
 				cellHeader.setCellStyle(differentCellStyleHeader);
 			} else
 				cellHeader.setCellStyle(cellStyleHeader);

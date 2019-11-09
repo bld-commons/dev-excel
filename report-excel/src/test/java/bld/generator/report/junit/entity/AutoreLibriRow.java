@@ -57,7 +57,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelMergeRow(referenceField = "")
 	private Integer matricola;
 	
-	@ExcelHeaderLayout(rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
+	@ExcelHeaderLayout(cmWidthCell = 10,rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
 	@ExcelColumn(nameColumn = "Prezzo",indexColumn = 7)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
 	private Double prezzo;

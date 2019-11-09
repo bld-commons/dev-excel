@@ -58,6 +58,7 @@
 		<org.apache.maven.shared-version>3.2.1</org.apache.maven.shared-version>
 		<org.codehaus.plexus-version>3.0.5</org.codehaus.plexus-version>
 		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+		<commons-text.version>1.8</commons-text.version>
 		<!-- PLUGIN FINE -->
 
 	</properties>
@@ -71,7 +72,7 @@
 
 	<modules>
 		<module>generator-excel</module>
-                <module>read-excel</module>
+		<module>read-excel</module>
 		<module>report-excel</module>
 	</modules>
 
@@ -98,6 +99,11 @@
 				<version>${org.apache.commons-version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>${commons-text.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>${javax.validation-version}</version>
@@ -105,6 +111,11 @@
 			<dependency>
 				<groupId>com.github.bld-commons.excel</groupId>
 				<artifactId>generator-excel</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.bld-commons.excel</groupId>
+				<artifactId>read-excel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>

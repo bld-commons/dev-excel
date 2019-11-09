@@ -1,5 +1,6 @@
 package bld.generator.report.junit;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,10 +37,19 @@ import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
 import bld.generator.report.junit.entity.CasaEditrice;
+import bld.generator.report.junit.entity.GenereRow;
+import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.IndexRow;
 import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
+import bld.read.report.excel.ReadExcel;
+import bld.read.report.excel.domain.ExcelRead;
+import bld.read.report.junit.entity.ReadAutoreLibriRow;
+import bld.read.report.junit.entity.ReadAutoreLibriSheet;
+import bld.read.report.junit.entity.ReadGenereRow;
+import bld.read.report.junit.entity.ReadGenereSheet;
+import bld.read.report.utils.ExcelType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -49,6 +60,9 @@ public class ReportTest {
 
 	@Autowired
 	private GenerateExcel generateExcel;
+	
+	@Autowired
+	private ReadExcel readExcel;
 	
 
 	@Before
@@ -88,6 +102,15 @@ public class ReportTest {
 		mergeSheet.getListSheet().add(casaEditrice);
 
 		listBaseSheet.add(mergeSheet);
+		
+		GenereSheet genereSheet=new GenereSheet("Genere");
+		List<GenereRow>listGenere=new ArrayList<>();
+		listGenere.add(new GenereRow("Giallo",23));
+		listGenere.add(new GenereRow("Romanzi",17));
+		genereSheet.setListRowSheet(listGenere);
+		
+		listBaseSheet.add(genereSheet);
+		
 		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
@@ -247,5 +270,28 @@ public class ReportTest {
 		}
 
 	}
+	
+	@Test
+	public void testRead() throws Exception{
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori.xlsx");
+		byte[] report=IOUtils.toByteArray(inputStream);
+		ExcelRead excelRead=new ExcelRead();
+		excelRead.setReportExcel(report);
+		excelRead.setExcelType(ExcelType.XLSX);
+		excelRead.getListClassSheet().add(ReadAutoreLibriSheet.class);
+		excelRead.getListClassSheet().add(ReadGenereSheet.class);
+		excelRead=this.readExcel.convertExcelToEntity(excelRead);
+		ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+		for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+			System.out.println(row.toString());
+		
+		ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+		for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
+			System.out.println(row.toString());
+		
+		
+	}
+	
+	
 
 }

@@ -1,0 +1,224 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
+package bld.read.report.excel.impl;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
+
+import bld.generator.report.utils.ExcelUtils;
+import bld.read.report.excel.ReadExcel;
+import bld.read.report.excel.annotation.ExcelReadColumn;
+import bld.read.report.excel.annotation.ExcelReadSheet;
+import bld.read.report.excel.domain.ExcelRead;
+import bld.read.report.excel.domain.RowSheetRead;
+import bld.read.report.excel.domain.SheetRead;
+import bld.read.report.utils.ExcelType;
+
+/**
+ * The Class ReadExcelImpl.
+ */
+@SuppressWarnings({ "resource", "unchecked" })
+@Component
+public class ReadExcelImpl implements ReadExcel {
+
+	/** The Constant SET. */
+	private static final String SET = "set";
+
+	/** The Constant log. */
+	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
+
+	/**
+	 * Convert excel to entity.
+	 *
+	 * @param excelRead the excel read
+	 * @return the excel read
+	 * @throws Exception the exception
+	 */
+	@Override
+	public ExcelRead convertExcelToEntity(ExcelRead excelRead) throws Exception {
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(excelRead.getReportExcel());
+		return this.convertExcelToEntity(excelRead, inputStream);
+	}
+
+	/**
+	 * Convert excel to entity.
+	 *
+	 * @param excelRead the excel read
+	 * @param pathFile  the path file
+	 * @return the excel read
+	 * @throws Exception the exception
+	 */
+	@Override
+	public ExcelRead convertExcelToEntity(ExcelRead excelRead, String pathFile) throws Exception {
+		FileInputStream inputStream = new FileInputStream(pathFile);
+		return this.convertExcelToEntity(excelRead, inputStream);
+	}
+
+	/**
+	 * Convert excel to entity.
+	 *
+	 * @param <T>         the generic type
+	 * @param excelRead   the excel read
+	 * @param inputStream the input stream
+	 * @return the excel read
+	 * @throws Exception the exception
+	 */
+	private <T extends RowSheetRead>ExcelRead convertExcelToEntity(ExcelRead excelRead, InputStream inputStream)
+			throws Exception {
+		Workbook workbook = null;
+		if (ExcelType.XLS.equals(excelRead.getExcelType())) {
+			workbook = new HSSFWorkbook(inputStream);
+		} else {
+			workbook = new XSSFWorkbook(inputStream);
+		}
+		for (Class<? extends SheetRead<? extends RowSheetRead>> classSheet : excelRead.getListClassSheet()) {
+			SheetRead<T>sheetType=(SheetRead<T>) classSheet.newInstance();
+			excelRead.getMapSheet().put(classSheet, sheetType);
+			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
+			logger.info("Sheet: " + excelReadSheet.nameSheet());
+			Sheet worksheet = workbook.getSheet(excelReadSheet.nameSheet());
+			Row header = worksheet.getRow(excelReadSheet.startRow());
+			Map<String, Integer> mapColumns = this.getMapColumns(header, excelReadSheet);
+			int startRow = excelReadSheet.startRow() + 1;
+			ParameterizedType classType = (ParameterizedType) classSheet.getGenericSuperclass();
+			Class<T> genericClassType = (Class<T>) classType.getActualTypeArguments()[0];
+			Map<String,Method>mapMethod=new HashMap<>();
+			setMapMethod(mapMethod, genericClassType.getSuperclass().getMethods());
+			setMapMethod(mapMethod, genericClassType.getMethods());
+			logger.info("Generic class type: " + genericClassType.getName());
+			for (int indexRow = startRow; indexRow <= worksheet.getPhysicalNumberOfRows(); indexRow++) {
+				T rowSheetRead = genericClassType.newInstance();
+				Row row = worksheet.getRow(indexRow);
+				if (row != null) {
+					Set<Field> listField = new HashSet<>(Arrays.asList(rowSheetRead.getClass().getDeclaredFields()));
+					listField.addAll(Arrays.asList(rowSheetRead.getClass().getSuperclass().getDeclaredFields()));
+					boolean rowEmpty=true;
+					for (Field field : listField) {
+						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
+							ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
+							if (!mapColumns.containsKey(excelReadColumn.name()))
+								throw new Exception("Not exist the column: " + excelReadColumn.name());
+							int indexColumn = mapColumns.get(excelReadColumn.name());
+							Cell cell = row.getCell(indexColumn);
+							if (cell != null && cell.getCellType() != CellType.BLANK) {
+								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase()
+										+ field.getName().substring(1);
+								logger.info("Set Function: " + nameMethod);
+								Class<?> classField = field.getType();
+								logger.info("The field " + field.getName() + " is of " + classField.getSimpleName()
+										+ " type");
+								Object value = null;
+								if (Number.class.isAssignableFrom(classField)) {
+									Double numberValue = cell.getNumericCellValue();
+									if (Integer.class.isAssignableFrom(classField))
+										value = numberValue.intValue();
+									else if (BigDecimal.class.isAssignableFrom(classField))
+										value = BigDecimal.valueOf(numberValue);
+									else if (Float.class.isAssignableFrom(classField))
+										value = new Float(numberValue);
+									else if (Long.class.isAssignableFrom(classField))
+										value = numberValue.longValue();
+								} else if (String.class.isAssignableFrom(classField)) {
+									String stringValue = cell.getStringCellValue().trim();
+									value = stringValue.isEmpty() ? null : stringValue;
+								}else if (Calendar.class.isAssignableFrom(classField)) {
+									Calendar calendar=Calendar.getInstance();
+									Date dateValue = cell.getDateCellValue();
+									calendar.setTime(dateValue);
+									value=calendar;
+								} else if (Date.class.isAssignableFrom(classField)) {
+									value = cell.getDateCellValue();
+								} else if (Boolean.class.isAssignableFrom(classField)) {
+									value = cell.getBooleanCellValue();
+								}else if (Character.class.isAssignableFrom(classField)) {
+									String stringValue=cell.getStringCellValue();
+									value = stringValue.length()>0?stringValue.charAt(0):null;
+								}else {
+									logger.info("The type \"" + field.getType().getSimpleName()+ "\" is not manage");
+								}
+								if (value != null) {
+									String nameColumn=(""+field.getName().charAt(0)).toUpperCase()+field.getName().substring(1);
+									logger.info(nameColumn + ": " + value);
+									Method method=mapMethod.get(SET + nameColumn);
+									method.invoke(rowSheetRead, value);
+									rowEmpty = false;
+								}
+							}
+						}
+					}
+					if(rowEmpty)
+						break;
+					else
+						sheetType.getListRowSheet().add(rowSheetRead);
+				}
+				
+			}
+		}
+
+		return excelRead;
+	}
+
+	/**
+	 * Sets the map method.
+	 *
+	 * @param mapMethod  the map method
+	 * @param listMethod the list method
+	 */
+	private void setMapMethod(Map<String,Method>mapMethod,Method[]listMethod) {
+		for(Method method:listMethod)
+			mapMethod.put(method.getName(), method);
+	}
+	
+	
+
+	/**
+	 * Gets the map columns.
+	 *
+	 * @param header         the header
+	 * @param excelReadSheet the excel read sheet
+	 * @return the map columns
+	 */
+	private Map<String, Integer> getMapColumns(Row header, ExcelReadSheet excelReadSheet) {
+
+		Map<String, Integer> mapColumn = new HashMap<>();
+		int i = excelReadSheet.startColumn();
+		Iterator<Cell> cellIterator = header.cellIterator();
+		while (cellIterator.hasNext()) {
+			Cell cell = cellIterator.next();
+			if (cell == null || StringUtils.isEmpty(cell.getStringCellValue()))
+				break;
+			mapColumn.put(cell.getStringCellValue(), i);
+			i++;
+		}
+
+		return mapColumn;
+	}
+
+}
