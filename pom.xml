@@ -6,7 +6,7 @@
 	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.1</version>
 	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
@@ -73,7 +73,7 @@
 	<modules>
 		<module>generator-excel</module>
 		<module>read-excel</module>
-		<module>report-excel</module>
+		<!--<module>report-excel</module>-->
 	</modules>
 
 	<dependencyManagement>
