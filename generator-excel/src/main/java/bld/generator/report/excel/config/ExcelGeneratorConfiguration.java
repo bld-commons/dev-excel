@@ -7,7 +7,7 @@ import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.utils.ValueProps;
 
 @Configuration
-public class ExcelConfiguration {
+public class ExcelGeneratorConfiguration {
 	
 	@Autowired
 	private GenerateExcel generateExcel;
