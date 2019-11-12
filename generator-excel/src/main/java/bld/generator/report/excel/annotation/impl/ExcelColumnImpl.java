@@ -26,6 +26,8 @@ public class ExcelColumnImpl{
 
 	/** The index column. */
 	protected double indexColumn;
+	
+	protected boolean ignore;
 
 	/**
 	 * Gets the excel column.
@@ -56,6 +58,12 @@ public class ExcelColumnImpl{
 					return indexColumn;
 				}
 
+				@Override
+				public boolean ignore() {
+					
+					return ignore;
+				}
+
 			};
 
 		return excelColumn;
@@ -69,11 +77,12 @@ public class ExcelColumnImpl{
 	 * @param indexColumn the index column
 	 * @throws Exception the exception
 	 */
-	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn) throws Exception {
+	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn,boolean ignore) throws Exception {
 		super();
 		this.nameColumn = nameColumn;
 		this.comment = comment;
 		this.indexColumn = indexColumn;
+		this.ignore=ignore;
 	}
 
 	/**
@@ -130,8 +139,14 @@ public class ExcelColumnImpl{
 		this.indexColumn = indexColumn;
 	}
 
-	
-	
+	public boolean isIgnore() {
+		return ignore;
+	}
+
+	public void setIgnore(boolean ignore) {
+		this.ignore = ignore;
+	}
+
 	
 
 }

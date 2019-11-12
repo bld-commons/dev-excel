@@ -12,7 +12,7 @@ public class GenereRow implements RowSheet {
 	@ExcelCellLayout
 	private String genere;
 	
-	@ExcelColumn(indexColumn = 0.5, nameColumn = "Test Remove")
+	@ExcelColumn(indexColumn = 0.5, nameColumn = "Test Remove", ignore = true)
 	@ExcelCellLayout
 	private String test;
 	
@@ -20,7 +20,7 @@ public class GenereRow implements RowSheet {
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private int countLibri;
 	
-	@ExcelColumn(indexColumn = 1.5, nameColumn = "Test Remove 1")
+	@ExcelColumn(indexColumn = 1.5, nameColumn = "Test Remove 1",ignore=true)
 	@ExcelCellLayout
 	private String testRemove;
 	

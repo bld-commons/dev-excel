@@ -48,7 +48,7 @@ public class ExcelDateImpl{
 	 * @param format the format
 	 * @throws Exception the exception
 	 */
-	public ExcelDateImpl(ColumnDateFormat format) throws Exception {
+	public ExcelDateImpl(ColumnDateFormat format){
 		super();
 		this.format = format;
 	}

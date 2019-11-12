@@ -43,4 +43,6 @@ public @interface ExcelColumn {
 	 */
 	public double indexColumn();
 	
+	public boolean ignore() default false;
+	
 }

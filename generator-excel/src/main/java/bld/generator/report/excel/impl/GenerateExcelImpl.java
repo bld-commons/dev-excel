@@ -282,7 +282,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			worksheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, 0, 1));
 			indexRow++;
 		}
-		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary,null);
+		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary);
 		Row row = null;
 
 		for (SheetHeader sheetHeader : listSheetHeader) {
