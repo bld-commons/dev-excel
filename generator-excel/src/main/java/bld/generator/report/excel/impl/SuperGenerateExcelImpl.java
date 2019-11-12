@@ -63,6 +63,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelIgnoreColumns;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
@@ -283,10 +284,11 @@ public class SuperGenerateExcelImpl {
 	 *
 	 * @param classSheet the class sheet
 	 * @param entity     the entity
+	 * @param excelIgnoreColumns 
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
-	protected List<SheetHeader> getListSheetHeader(Class<?> classSheet, Object entity) throws Exception {
+	protected List<SheetHeader> getListSheetHeader(Class<?> classSheet, Object entity, ExcelIgnoreColumns excelIgnoreColumns) throws Exception {
 		logger.info("Sheet: " + classSheet.getSimpleName());
 		Set<String> listTitolo = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
@@ -296,7 +298,7 @@ public class SuperGenerateExcelImpl {
 		if (classSheet.getSuperclass().getDeclaredFields().length > 0)
 			listField.addAll(Arrays.asList(classSheet.getSuperclass().getDeclaredFields()));
 		for (Field field : listField) {
-			if (field.isAnnotationPresent(ExcelColumn.class)) {
+			if (field.isAnnotationPresent(ExcelColumn.class) && (excelIgnoreColumns==null || !Arrays.asList(excelIgnoreColumns.keyColumns()).contains(field.getName()))) {
 				logger.info(field.getName());
 				ExcelColumn sheetColumn = field.getAnnotation(ExcelColumn.class);
 				Object value = null;
@@ -699,18 +701,24 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected <T extends RowSheet> List<SheetHeader> generateHeaderSheetData(Workbook workbook, Sheet worksheet,
 			Row rowHeader, SheetData<T> sheetData, Integer indexRow) throws Exception {
-		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null);
+		ExcelIgnoreColumns excelIgnoreColumns=null;
+		if(sheetData.getClass().isAnnotationPresent(ExcelIgnoreColumns.class))
+			excelIgnoreColumns=sheetData.getClass().getAnnotation(ExcelIgnoreColumns.class);
+		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null,excelIgnoreColumns);
 		if (sheetData instanceof SheetDynamicData) {
 			SheetDynamicData<DynamicRowSheet> sheetDynamicData = (SheetDynamicData<DynamicRowSheet>) sheetData;
 			for (String keyMap : sheetDynamicData.getMapExtraColumnAnnotation().keySet()) {
-				ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()
-						.get(keyMap);
-				SheetHeader sheetHeader = new SheetHeader();
-				sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
-				sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
-				sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
-				sheetHeader.setKeyMap(keyMap);
-				listSheetHeader.add(sheetHeader);
+				if(excelIgnoreColumns==null || !Arrays.asList(excelIgnoreColumns.keyColumns()).contains(keyMap)) {
+					ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()
+							.get(keyMap);
+					SheetHeader sheetHeader = new SheetHeader();
+					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
+					sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
+					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
+					sheetHeader.setKeyMap(keyMap);
+					listSheetHeader.add(sheetHeader);
+				}
+				
 			}
 			Collections.sort(listSheetHeader, new SheetColumnComparator());
 		}

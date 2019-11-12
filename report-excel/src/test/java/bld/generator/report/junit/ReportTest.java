@@ -105,8 +105,8 @@ public class ReportTest {
 		
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		List<GenereRow>listGenere=new ArrayList<>();
-		listGenere.add(new GenereRow("Giallo",23));
-		listGenere.add(new GenereRow("Romanzi",17));
+		listGenere.add(new GenereRow("Giallo","Test remove cell 1:1",23,"Test Remove cell 1:2"));
+		listGenere.add(new GenereRow("Romanzi","Test remove cell 2:1",17,"Test Remove cell 2:2"));
 		genereSheet.setListRowSheet(listGenere);
 		
 		listBaseSheet.add(genereSheet);

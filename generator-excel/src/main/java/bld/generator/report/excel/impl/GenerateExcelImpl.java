@@ -217,7 +217,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getNameSheet().replace("/", ""));
 			} else
 				worksheet = workbook.createSheet("Don't defined" + (indiceNomeSheet++));
-			
+
 			Footer footer = worksheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 			if (sheet instanceof MergeSheet) {
@@ -282,7 +282,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			worksheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, 0, 1));
 			indexRow++;
 		}
-		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary);
+		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary,null);
 		Row row = null;
 
 		for (SheetHeader sheetHeader : listSheetHeader) {
@@ -335,13 +335,13 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		}
 
 		// int i=0;
-		if(!isMergeSheet && sheetData.getClass().isAnnotationPresent(ExcelFreezePane.class)) {
-			ExcelFreezePane excelFreezePane=sheetData.getClass().getAnnotation(ExcelFreezePane.class);
+		if (!isMergeSheet && sheetData.getClass().isAnnotationPresent(ExcelFreezePane.class)) {
+			ExcelFreezePane excelFreezePane = sheetData.getClass().getAnnotation(ExcelFreezePane.class);
 			worksheet.createFreezePane(excelFreezePane.columnFreez(), excelFreezePane.rowFreez());
 		}
-
+		Row row =null;
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
-			Row row = worksheet.createRow(indexRow);
+			row = worksheet.createRow(indexRow);
 			Map<String, Object> mapValue = new HashMap<>();
 			CellStyle cellStyle = null;
 			for (int numColumn = 0; numColumn < listSheetHeader.size(); numColumn++) {
@@ -398,7 +398,8 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 							mapMergeRow.put(numColumn, mergeRow);
 						} else
-							super.setCellValueExcel(workbook,cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
+							super.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, calRowStart,
+									calRowEnd);
 						repeat = false;
 					} else {
 						if (numColumn > 0 && StringUtils.isBlank(sheetHeader.getExcelMergeColumn().referenceField()))
@@ -411,7 +412,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = setCellValueWillMerged(workbook,cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeColumn().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeColumn().referenceField();
@@ -425,7 +426,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 											|| sheetHeader.getValue().equals(valueBefore)))
 								mergeRowAndRemoveMap(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 							else {
-								repeat = setCellValueWillMerged(workbook,cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader);
 							}
 						}
 
@@ -441,13 +442,14 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 				mapChart.put(keyChart, startKey + ":" + endKey);
 
 			}
+			
 
 			start = false;
 			indexRow++;
 			// i++;
 		}
 		for (Integer numColumn : mapMergeRow.keySet())
-			super.mergeRow(workbook,worksheet, indexRow, mapMergeRow, numColumn);
+			super.mergeRow(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 
 		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
 			String generaColonna = calcoloCoordinateFunction(indexRow, listSheetHeader.size() - 1);
@@ -554,10 +556,10 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 				mergeColumn.setColumnFrom(0);
 				mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
 				for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {
-					Cell cell=row.createCell(indexColumn);
+					Cell cell = row.createCell(indexColumn);
 					cell.setCellStyle(cellStype);
 				}
-				runMergeCell(workbook,worksheet, mergeColumn);
+				runMergeCell(workbook, worksheet, mergeColumn);
 				indexRow += 2;
 				break;
 			}
