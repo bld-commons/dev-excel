@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel;
 
@@ -21,6 +19,7 @@ import javax.validation.constraints.Size;
  */
 public abstract class SheetData<T extends RowSheet> extends BaseSheet implements SheetComponent{
 	
+	/** The map field column. */
 	private Map<String, Integer> mapFieldColumn;
 		
 	/**
@@ -39,9 +38,9 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	
 
 	/**
-	 * Gets the list row excel.
+	 * Gets the list row sheet.
 	 *
-	 * @return the list row excel
+	 * @return the list row sheet
 	 */
 	public List<T> getListRowSheet() {
 		if (listRowSheet == null)
@@ -67,12 +66,22 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 */
 	public abstract Class<T> getRowClass();
 
+	/**
+	 * Gets the map field column.
+	 *
+	 * @return the map field column
+	 */
 	public Map<String, Integer> getMapFieldColumn() {
 		if(this.mapFieldColumn==null)
 			this.mapFieldColumn=new HashMap<>();
 		return mapFieldColumn;
 	}
 
+	/**
+	 * Sets the map field column.
+	 *
+	 * @param mapFieldColumn the map field column
+	 */
 	protected void setMapFieldColumn(Map<String, Integer> mapFieldColumn) {
 		this.mapFieldColumn = mapFieldColumn;
 	}	

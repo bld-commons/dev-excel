@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel;
 
@@ -22,23 +20,23 @@ public interface SheetStatistica {
 	public boolean isGrafico();
 
 	/**
-	 * Gets the list charts.
+	 * Gets the map charts.
 	 *
-	 * @return the list charts
+	 * @return the map charts
 	 */
 	public Map<String, List<String[]>> getMapCharts();
 
 	/**
-	 * Gets the asse x.
+	 * Gets the asse X.
 	 *
-	 * @return the asse x
+	 * @return the asse X
 	 */
 	public List<String> getAsseX();
 
 	/**
-	 * Gets the asse y.
+	 * Gets the asse Y.
 	 *
-	 * @return the asse y
+	 * @return the asse Y
 	 */
 	public String getAsseY();
 }

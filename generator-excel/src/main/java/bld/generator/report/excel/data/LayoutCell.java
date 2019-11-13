@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.excel.data;
 
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -127,7 +131,7 @@ public class LayoutCell {
 	/**
 	 * Checks if is wrap.
 	 *
-	 * @return true, if is wrap
+	 * @return the wrap
 	 */
 	public boolean isWrap() {
 		return wrap;

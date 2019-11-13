@@ -1,9 +1,8 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
+
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -11,7 +10,6 @@ import java.lang.annotation.Annotation;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelDateImpl.
  */
@@ -46,7 +44,6 @@ public class ExcelDateImpl{
 	 * Instantiates a new excel date impl.
 	 *
 	 * @param format the format
-	 * @throws Exception the exception
 	 */
 	public ExcelDateImpl(ColumnDateFormat format){
 		super();

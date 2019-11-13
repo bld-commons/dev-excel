@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.utils;
 
 import java.lang.annotation.Annotation;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcelUtils implements ApplicationContextAware {
 
+	/** The Constant BLD_GENERATOR. */
 	private static final String BLD_GENERATOR = "bld.generator";
 
 	/** The logger. */
@@ -181,7 +186,6 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * Sets the application context.
 	 *
 	 * @param ac the new application context
-	 * @throws BeansException the beans exception
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext ac) throws BeansException {

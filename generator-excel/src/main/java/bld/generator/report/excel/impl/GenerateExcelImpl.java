@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel.impl;
 
@@ -528,6 +526,16 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 	}
 
+	/**
+	 * Write label.
+	 *
+	 * @param workbook  the workbook
+	 * @param worksheet the worksheet
+	 * @param sheet     the sheet
+	 * @param indexRow  the index row
+	 * @return the integer
+	 * @throws Exception the exception
+	 */
 	private Integer writeLabel(Workbook workbook, Sheet worksheet, BaseSheet sheet, Integer indexRow) throws Exception {
 		List<Field> listField = new ArrayList<>();
 		Class<? extends BaseSheet> classSheet = sheet.getClass();

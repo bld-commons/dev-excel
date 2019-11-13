@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel;
 
@@ -16,9 +14,9 @@ import java.util.Map;
 public interface ExcelMergeColumn {
 
 	/**
-	 * Gets the merge campo per totale.
+	 * Gets the merge column by field.
 	 *
-	 * @return the merge campo per totale
+	 * @return the merge column by field
 	 */
 	public abstract Map<String, List<String>> getMergeColumnByField();
 
