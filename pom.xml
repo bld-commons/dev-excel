@@ -6,7 +6,11 @@
 	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
+<<<<<<< HEAD
 	<version>1.1.1</version>
+=======
+	<version>1.1.2-SNAPSHOT</version>
+>>>>>>> 1e2248c7fb4f2316c47155e194e4548071edfacf
 	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 

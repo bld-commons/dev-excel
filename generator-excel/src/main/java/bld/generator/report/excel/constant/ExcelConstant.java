@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
+import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFontImpl;
 import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
 
@@ -31,5 +32,11 @@ public class ExcelConstant {
 	
 	/** The Constant EXCEL_CELL_LAYOUT_DOUBLE. */
 	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DOUBLE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), 2, HorizontalAlignment.RIGHT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_STRING=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), -1, HorizontalAlignment.LEFT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DATE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), -1, HorizontalAlignment.CENTER, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	
+	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
 
 }

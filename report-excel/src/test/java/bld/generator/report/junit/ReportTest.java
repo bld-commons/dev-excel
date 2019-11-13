@@ -105,8 +105,8 @@ public class ReportTest {
 		
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		List<GenereRow>listGenere=new ArrayList<>();
-		listGenere.add(new GenereRow("Giallo",23));
-		listGenere.add(new GenereRow("Romanzi",17));
+		listGenere.add(new GenereRow("Giallo","Test remove cell 1:1",23,"Test Remove cell 1:2"));
+		listGenere.add(new GenereRow("Romanzi","Test remove cell 2:1",17,"Test Remove cell 2:2"));
 		genereSheet.setListRowSheet(listGenere);
 		
 		listBaseSheet.add(genereSheet);
@@ -130,9 +130,9 @@ public class ReportTest {
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);
-		ExcelFunctionRowImpl excelFunctionImpl = new ExcelFunctionRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni", null, 21).getExcelColumn(), new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni").getExcelFunction());
+		ExcelFunctionRowImpl excelFunctionImpl = new ExcelFunctionRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni", null, 21,false).getExcelColumn(), new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni").getExcelFunction());
 		ExcelMergeRowImpl excelMergeRowImpl = new ExcelMergeRowImpl("matricola");
-		ExcelFunctionMergeRowImpl excelFunctionMergeImpl = new ExcelFunctionMergeRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22).getExcelColumn(),
+		ExcelFunctionMergeRowImpl excelFunctionMergeImpl = new ExcelFunctionMergeRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false).getExcelColumn(),
 				 excelMergeRowImpl.getExcelMergeRow(),new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore").getExcelFunction());
 		
 		autoreLibriRow.addDynamicExcelFunction(excelFunctionImpl, excelFunctionMergeImpl);
@@ -144,6 +144,7 @@ public class ReportTest {
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto", "Thriller", 1, 30.0, 2.2);
 
 		autoreLibriRow.getMapValue().put("anno1", 34);
+		autoreLibriRow.getMapValue().put("ignoreColumn", "Test");
 		autoreLibriRow.getMapValue().put("anno2", 37.12);
 		autoreLibriRow.getMapValue().put("anno3", 44);
 		list.add(autoreLibriRow);
@@ -177,17 +178,22 @@ public class ReportTest {
 		
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20).getExcelColumn());
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20,false).getExcelColumn());
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_STRING.getExcelCellLayout());
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Ignore Column", null, 20.05,true).getExcelColumn());
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("ignoreColumn", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2016", null, 20.1).getExcelColumn());
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2016", null, 20.1,false).getExcelColumn());
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno2", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2).getExcelColumn());
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2,false).getExcelColumn());
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno3", extraColumnAnnotation);
 
 		autoreLibriSheet.setListRowSheet(list);

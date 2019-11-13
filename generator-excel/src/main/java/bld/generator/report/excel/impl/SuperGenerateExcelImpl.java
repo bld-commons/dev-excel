@@ -283,6 +283,7 @@ public class SuperGenerateExcelImpl {
 	 *
 	 * @param classSheet the class sheet
 	 * @param entity     the entity
+	 * @param excelIgnoreColumns 
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
@@ -296,18 +297,18 @@ public class SuperGenerateExcelImpl {
 		if (classSheet.getSuperclass().getDeclaredFields().length > 0)
 			listField.addAll(Arrays.asList(classSheet.getSuperclass().getDeclaredFields()));
 		for (Field field : listField) {
-			if (field.isAnnotationPresent(ExcelColumn.class)) {
 				logger.info(field.getName());
 				ExcelColumn sheetColumn = field.getAnnotation(ExcelColumn.class);
-				Object value = null;
-				if (entity != null)
-					value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(entity);
-				listSheetHeader.add(new SheetHeader(field, value));
-				if (listTitolo.contains(sheetColumn.nameColumn()))
-					logger.warn("Exist another equal column with nameColum= \"" + sheetColumn.nameColumn()
-							+ "\" for the same sheet!!!");
-				listTitolo.add(sheetColumn.nameColumn());
-			}
+				if(sheetColumn!=null && !sheetColumn.ignore()) {
+					Object value = null;
+					if (entity != null)
+						value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(entity);
+					listSheetHeader.add(new SheetHeader(field, value));
+					if (listTitolo.contains(sheetColumn.nameColumn()))
+						logger.warn("Exist another equal column with nameColum= \"" + sheetColumn.nameColumn()
+								+ "\" for the same sheet!!!");
+					listTitolo.add(sheetColumn.nameColumn());
+				}
 		}
 		if (classSheet.isAnnotationPresent(ExcelFunctionRows.class)) {
 			ExcelFunctionRows excelFunctionRows = classSheet.getAnnotation(ExcelFunctionRows.class);
@@ -699,18 +700,23 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected <T extends RowSheet> List<SheetHeader> generateHeaderSheetData(Workbook workbook, Sheet worksheet,
 			Row rowHeader, SheetData<T> sheetData, Integer indexRow) throws Exception {
+
+			
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null);
 		if (sheetData instanceof SheetDynamicData) {
 			SheetDynamicData<DynamicRowSheet> sheetDynamicData = (SheetDynamicData<DynamicRowSheet>) sheetData;
 			for (String keyMap : sheetDynamicData.getMapExtraColumnAnnotation().keySet()) {
-				ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()
-						.get(keyMap);
-				SheetHeader sheetHeader = new SheetHeader();
-				sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
-				sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
-				sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
-				sheetHeader.setKeyMap(keyMap);
-				listSheetHeader.add(sheetHeader);
+				
+					ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()
+							.get(keyMap);
+					if(!extraColumnAnnotation.getExcelColumn().ignore()) {
+						SheetHeader sheetHeader = new SheetHeader();
+						sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
+						sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
+						sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
+						sheetHeader.setKeyMap(keyMap);
+						listSheetHeader.add(sheetHeader);
+					}
 			}
 			Collections.sort(listSheetHeader, new SheetColumnComparator());
 		}
