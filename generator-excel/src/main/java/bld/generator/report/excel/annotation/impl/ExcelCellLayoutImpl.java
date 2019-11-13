@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel.annotation.impl;
 
@@ -221,7 +219,7 @@ public class ExcelCellLayoutImpl {
 	/**
 	 * Checks if is wrap.
 	 *
-	 * @return true, if is wrap
+	 * @return the wrap
 	 */
 	public boolean isWrap() {
 		return wrap;
@@ -345,18 +343,18 @@ public class ExcelCellLayoutImpl {
 	}
 
 	/**
-	 * Gets the fill pattern type.
+	 * Gets the fill patter type.
 	 *
-	 * @return the fill pattern type
+	 * @return the fill patter type
 	 */
 	public FillPatternType getFillPatternType() {
 		return fillPatternType;
 	}
 
 	/**
-	 * Sets the fill pattern type.
+	 * Sets the fill patter type.
 	 *
-	 * @param fillPatternType the new fill pattern type
+	 * @param fillPatternType the new fill patter type
 	 */
 	public void setFillPatternType(FillPatternType fillPatternType) {
 		this.fillPatternType = fillPatternType;

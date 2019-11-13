@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.excel.data;
 
 import bld.generator.report.excel.constant.UnderlineType;
@@ -44,7 +48,7 @@ public class ExceltFont {
 	/**
 	 * Checks if is bold.
 	 *
-	 * @return true, if is bold
+	 * @return the bold
 	 */
 	public boolean isBold() {
 		return bold;
@@ -62,7 +66,7 @@ public class ExceltFont {
 	/**
 	 * Checks if is italic.
 	 *
-	 * @return true, if is italic
+	 * @return the italic
 	 */
 	public boolean isItalic() {
 		return italic;

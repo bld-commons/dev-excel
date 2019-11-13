@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel.annotation.impl;
 
@@ -12,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelColumnImpl.
  */
@@ -27,6 +24,7 @@ public class ExcelColumnImpl{
 	/** The index column. */
 	protected double indexColumn;
 	
+	/** The ignore. */
 	protected boolean ignore;
 
 	/**
@@ -69,12 +67,14 @@ public class ExcelColumnImpl{
 		return excelColumn;
 	}
 
+
 	/**
 	 * Instantiates a new excel column impl.
 	 *
-	 * @param nameColumn the name column
-	 * @param comment the comment
+	 * @param nameColumn  the name column
+	 * @param comment     the comment
 	 * @param indexColumn the index column
+	 * @param ignore      the ignore
 	 * @throws Exception the exception
 	 */
 	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn,boolean ignore) throws Exception {
@@ -139,10 +139,20 @@ public class ExcelColumnImpl{
 		this.indexColumn = indexColumn;
 	}
 
+	/**
+	 * Checks if is ignore.
+	 *
+	 * @return the ignore
+	 */
 	public boolean isIgnore() {
 		return ignore;
 	}
 
+	/**
+	 * Sets the ignore.
+	 *
+	 * @param ignore the new ignore
+	 */
 	public void setIgnore(boolean ignore) {
 		this.ignore = ignore;
 	}

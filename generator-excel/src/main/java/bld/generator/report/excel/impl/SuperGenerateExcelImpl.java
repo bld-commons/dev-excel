@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel.impl;
 
@@ -283,7 +281,6 @@ public class SuperGenerateExcelImpl {
 	 *
 	 * @param classSheet the class sheet
 	 * @param entity     the entity
-	 * @param excelIgnoreColumns 
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
@@ -348,14 +345,15 @@ public class SuperGenerateExcelImpl {
 //	}
 
 	/**
-	 * Sets the cell value will merged.
-	 *
-	 * @param cellStyle   the cell style
-	 * @param cell        the cell
-	 * @param sheetHeader the sheet header
-	 * @return true, if successful
-	 * @throws Exception the exception
-	 */
+ * Sets the cell value will merged.
+ *
+ * @param workbook    the workbook
+ * @param cellStyle   the cell style
+ * @param cell        the cell
+ * @param sheetHeader the sheet header
+ * @return true, if successful
+ * @throws Exception the exception
+ */
 	protected boolean setCellValueWillMerged(Workbook workbook,CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
 		this.setCellValueExcel(workbook,cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
 		return false;
@@ -381,6 +379,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Merge row.
 	 *
+	 * @param workbook    the workbook
 	 * @param worksheet   the worksheet
 	 * @param indexRow    the index row
 	 * @param mapMergeRow the map merge row
@@ -400,6 +399,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Run merge cell.
 	 *
+	 * @param workbook  the workbook
 	 * @param worksheet the worksheet
 	 * @param mergeCell the merge cell
 	 * @throws Exception the exception
@@ -468,6 +468,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Sets the cell value excel.
 	 *
+	 * @param workbook    the workbook
 	 * @param cell        the cell
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
@@ -536,6 +537,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Sets the cell value excel.
 	 *
+	 * @param workbook the workbook
 	 * @param mergeRow the new cell value excel
 	 * @throws Exception the exception
 	 */
@@ -574,6 +576,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Sets the cell value excel.
 	 *
+	 * @param workbook    the workbook
 	 * @param cell        the cell
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
@@ -668,7 +671,9 @@ public class SuperGenerateExcelImpl {
 	 * Manage cell style header.
 	 *
 	 * @param workbook     the workbook
+	 * @param worksheet    the worksheet
 	 * @param layoutHeader the layout header
+	 * @param numColumn    the num column
 	 * @return the cell style
 	 */
 	private CellStyle manageCellStyleHeader(Workbook workbook,Sheet worksheet, ExcelHeaderLayout layoutHeader,Integer numColumn) {

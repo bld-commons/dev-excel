@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.excel.constant;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -33,10 +37,13 @@ public class ExcelConstant {
 	/** The Constant EXCEL_CELL_LAYOUT_DOUBLE. */
 	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DOUBLE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), 2, HorizontalAlignment.RIGHT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
 	
+	/** The Constant EXCEL_CELL_LAYOUT_STRING. */
 	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_STRING=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), -1, HorizontalAlignment.LEFT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
 	
+	/** The Constant EXCEL_CELL_LAYOUT_DATE. */
 	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DATE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), -1, HorizontalAlignment.CENTER, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
 	
+	/** The Constant EXCEL_DATE_DD_MM_YYYY. */
 	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
 
 }

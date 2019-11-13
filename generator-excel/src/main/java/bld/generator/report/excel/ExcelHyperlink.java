@@ -89,6 +89,11 @@ public class ExcelHyperlink {
 		return column;
 	}
 	
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -101,6 +106,12 @@ public class ExcelHyperlink {
 		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -135,6 +146,11 @@ public class ExcelHyperlink {
 		return true;
 	}
 
+	/**
+	 * Gets the address document.
+	 *
+	 * @return the address document
+	 */
 	public String getAddressDocument() {
 		return "'"+this.address.replace("'", "''")+"'!"+this.column+this.row;
 	}

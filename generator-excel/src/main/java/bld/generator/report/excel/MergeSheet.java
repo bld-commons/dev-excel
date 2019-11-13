@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel;
 
@@ -39,9 +37,9 @@ public class MergeSheet extends BaseSheet {
 	}
 
 	/**
-	 * Gets the list sheet.
+	 * Gets the excel dati.
 	 *
-	 * @return the list sheet
+	 * @return the excel dati
 	 */
 	public List<SheetComponent> getListSheet() {
 		if(this.listSheet==null)
@@ -50,9 +48,9 @@ public class MergeSheet extends BaseSheet {
 	}
 
 	/**
-	 * Sets the list sheet.
+	 * Sets the excel dati.
 	 *
-	 * @param listSheet the new list sheet
+	 * @param listSheet the new excel dati
 	 */
 	public void setListSheet(List<SheetComponent> listSheet) {
 		this.listSheet = listSheet;

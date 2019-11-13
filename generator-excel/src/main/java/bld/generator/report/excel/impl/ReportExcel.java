@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 
 package bld.generator.report.excel.impl;
@@ -61,18 +59,18 @@ public class ReportExcel {
 	}
 
 	/**
-	 * Gets the list base sheet.
+	 * Gets the list sheet.
 	 *
-	 * @return the list base sheet
+	 * @return the list sheet
 	 */
 	public List<BaseSheet> getListBaseSheet() {
 		return listBaseSheet;
 	}
 
 	/**
-	 * Sets the list base sheet.
+	 * Sets the list sheet.
 	 *
-	 * @param listBaseSheet the new list base sheet
+	 * @param listBaseSheet the new list sheet
 	 */
 	public void setListBaseSheet(List<BaseSheet> listBaseSheet) {
 		this.listBaseSheet = listBaseSheet;

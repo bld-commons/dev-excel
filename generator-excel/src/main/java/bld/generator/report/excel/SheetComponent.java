@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel;
 
@@ -11,5 +9,10 @@ package bld.generator.report.excel;
  */
 public interface SheetComponent {
 
+	/**
+	 * Sets the name sheet.
+	 *
+	 * @param nameSheet the new name sheet
+	 */
 	public void setNameSheet(String nameSheet);
 }

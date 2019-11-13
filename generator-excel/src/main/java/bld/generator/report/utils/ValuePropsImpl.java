@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.utils;
 
 import org.apache.commons.lang3.StringUtils;

@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 
 package bld.generator.report.excel;
@@ -56,7 +54,7 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	/**
 	 * Sets the map extra column annotation.
 	 *
-	 * @param mapExtraColumnAnnotation the map extra column annotation
+	 * @param mapExtraColumnAnnotation the new map extra column annotation
 	 */
 	public void setMapExtraColumnAnnotation(Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation) {
 		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;

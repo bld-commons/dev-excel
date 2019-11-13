@@ -1,8 +1,6 @@
 /**
  * @author Francesco Baldi
- *
  * @mail francesco.baldi1987@gmail.com
- * @date 3-ago-2019
  */
 package bld.generator.report.excel.annotation.impl;
 
@@ -183,7 +181,7 @@ public class ExcelFontImpl{
 	/**
 	 * Checks if is italic.
 	 *
-	 * @return true, if is italic
+	 * @return the italic
 	 */
 	public boolean isItalic() {
 		return italic;
@@ -219,7 +217,7 @@ public class ExcelFontImpl{
 	/**
 	 * Checks if is bold.
 	 *
-	 * @return true, if is bold
+	 * @return the bold
 	 */
 	public boolean isBold() {
 		return bold;
