@@ -81,11 +81,20 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 	/** The copertina xls. */
 	@Value("${path.xls:}")
-	private String copertinaXls;
+	private String pathCopertinaXls;
 
 	/** The copertina xlsx. */
 	@Value("${path.xlsx:}")
-	private String copertinaXlsx;
+	private String pathCopertinaXlsx;
+	
+	
+	/** The copertina xls. */
+	@Value("${resource.path.xls:}")
+	private String resourcePathCopertinaXls;
+
+	/** The copertina xlsx. */
+	@Value("${resource.path.xlsx:}")
+	private String resourcePathCopertinaXlsx;
 
 	/**
 	 * Creates the file xls.
@@ -101,9 +110,11 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		try {
 			boolean isCopertina = true;
 			Workbook workbook = null;
-			if (StringUtils.isNotBlank(this.copertinaXls)) {
-				// InputStream inputstream = getClass().getResourceAsStream(this.copertinaXls);
-				InputStream inputstream = new FileInputStream(this.copertinaXls);
+			if (StringUtils.isNotBlank(this.pathCopertinaXls)) {
+				InputStream inputstream = new FileInputStream(this.pathCopertinaXls);
+				workbook = new HSSFWorkbook(inputstream);
+			}else if(StringUtils.isNotBlank(this.resourcePathCopertinaXls)) {
+				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXls);
 				workbook = new HSSFWorkbook(inputstream);
 			} else {
 				workbook = new HSSFWorkbook();
@@ -136,9 +147,12 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		try {
 			boolean isCopertina = true;
 			Workbook workbook = null;
-			if (StringUtils.isNotBlank(this.copertinaXlsx)) {
-				InputStream inputstream = new FileInputStream(this.copertinaXlsx);
+			if (StringUtils.isNotBlank(this.pathCopertinaXlsx)) {
+				InputStream inputstream = new FileInputStream(this.pathCopertinaXlsx);
 				// getClass().getResourceAsStream();
+				workbook = new XSSFWorkbook(inputstream);
+			}else if(StringUtils.isNotBlank(this.resourcePathCopertinaXlsx)) {
+				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXlsx);
 				workbook = new XSSFWorkbook(inputstream);
 			} else {
 				workbook = new XSSFWorkbook();
