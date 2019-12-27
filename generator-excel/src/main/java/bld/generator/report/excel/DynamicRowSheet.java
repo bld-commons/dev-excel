@@ -67,11 +67,25 @@ public abstract class DynamicRowSheet implements RowSheet {
 			ExcelFunctionRows excelFunctionRow = this.getClass().getAnnotation(ExcelFunctionRows.class);
 			List<ExcelFunctionRow> listExcelFunctions = new ArrayList<>();
 			listExcelFunctions.addAll(Arrays.asList(excelFunctionRow.excelFunctions()));
-			if (excelFunctionImpl != null)
+			boolean checkKey=true;
+			for(ExcelFunctionRow excelFunction:listExcelFunctions) {
+				if(excelFunction.excelFunction().nameFunction().equals(excelFunctionImpl.getExcelFunction().excelFunction().nameFunction())) {
+					checkKey=false;
+					break;
+				}
+			}
+			if (excelFunctionImpl != null && checkKey)
 				listExcelFunctions.add(excelFunctionImpl.getExcelFunction());
 			List<ExcelFunctionMergeRow> listExcelFunctionMerges = new ArrayList<>();
 			listExcelFunctionMerges.addAll(Arrays.asList(excelFunctionRow.excelFunctionMerges()));
-			if(excelFunctionMergeImpl!=null)
+			checkKey=true;
+			for(ExcelFunctionMergeRow excelFunction:listExcelFunctionMerges) {
+				if(excelFunction.excelFunction().nameFunction().equals(excelFunctionImpl.getExcelFunction().excelFunction().nameFunction())) {
+					checkKey=false;
+					break;
+				}
+			}
+			if(excelFunctionMergeImpl!=null && checkKey)
 				listExcelFunctionMerges.add(excelFunctionMergeImpl.getExcelFunctionMerge());
 			ExcelFunctionRowsImpl excelFunctionRowImpl = new ExcelFunctionRowsImpl(listExcelFunctions.toArray(new ExcelFunctionRow[listExcelFunctions.size()]), listExcelFunctionMerges.toArray(new ExcelFunctionMergeRow[listExcelFunctionMerges.size()]));
 			addAnnotation(ExcelFunctionRows.class,excelFunctionRowImpl.getExcelFunctionRow());
