@@ -730,8 +730,9 @@ public class SuperGenerateExcelImpl {
 		CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetData);
 		int maxColumn=listSheetHeader.size()+ excelSheetLayout.startColumn();
 		for (int numColumn = excelSheetLayout.startColumn(); numColumn < maxColumn; numColumn++) {
+			int indexHeader=numColumn-excelSheetLayout.startColumn();
 			Cell cellHeader = rowHeader.createCell(numColumn);
-			SheetHeader sheetHeader = listSheetHeader.get(numColumn);
+			SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
 			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderLayout.class)) {
 				ExcelHeaderLayout layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(),
 						ExcelHeaderLayout.class);
@@ -740,8 +741,8 @@ public class SuperGenerateExcelImpl {
 			} else
 				cellHeader.setCellStyle(cellStyleHeader);
 
-			ExcelColumn excelColumn = listSheetHeader.get(numColumn).getExcelColumn();
-			listSheetHeader.get(numColumn).setNumColumn(numColumn);
+			ExcelColumn excelColumn = listSheetHeader.get(indexHeader).getExcelColumn();
+			listSheetHeader.get(indexHeader).setNumColumn(numColumn);
 			cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.nameColumn()));
 			if (StringUtils.isNoneBlank(excelColumn.comment()))
 				addComment(workbook, worksheet, rowHeader, cellHeader, excelColumn.comment());

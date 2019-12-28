@@ -359,9 +359,10 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			Map<String, Object> mapValue = new HashMap<>();
 			CellStyle cellStyle = null;
 			for (int numColumn = excelSheetLayout.startColumn(); numColumn < maxColumn; numColumn++) {
+				int indexHeader=numColumn-excelSheetLayout.startColumn();
 				Cell cell = row.createCell(numColumn);
-				SheetHeader sheetHeader = listSheetHeader.get(numColumn);
-				Field field = listSheetHeader.get(numColumn).getField();
+				SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
+				Field field = listSheetHeader.get(indexHeader).getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
 					value = new PropertyDescriptor(field.getName(), rowSheet.getClass()).getReadMethod()
@@ -416,7 +417,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 									calRowEnd);
 						repeat = false;
 					} else {
-						if (numColumn > 0 && StringUtils.isBlank(sheetHeader.getExcelMergeColumn().referenceField()))
+						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeColumn().referenceField()))
 							throw new Exception(
 									"Only first column can have the propetie \"referenceColumn\" is blank!!!");
 						if (field != null)
@@ -466,9 +467,10 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			super.mergeRow(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 
 		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
-			String generaColonna = calcoloCoordinateFunction(indexRow, listSheetHeader.size() - 1);
-			logger.info(sheetData.getClass().getSimpleName() + "- " + "A" + startRowSheet + ":" + generaColonna);
-			worksheet.setAutoFilter(CellRangeAddress.valueOf("A" + startRowSheet + ":" + generaColonna));
+			String startCell = calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn());
+			String endCell = calcoloCoordinateFunction(indexRow, listSheetHeader.size()+excelSheetLayout.startColumn() - 1);
+			logger.info(sheetData.getClass().getSimpleName() + "- " + startCell+ ":" + endCell);
+			worksheet.setAutoFilter(CellRangeAddress.valueOf(startCell + ":" + endCell));
 		}
 
 		if (sheetData instanceof FunctionsTotal) {
