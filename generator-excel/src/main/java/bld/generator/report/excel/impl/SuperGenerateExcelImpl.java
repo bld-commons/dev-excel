@@ -706,7 +706,7 @@ public class SuperGenerateExcelImpl {
 	protected <T extends RowSheet> List<SheetHeader> generateHeaderSheetData(Workbook workbook, Sheet worksheet,
 			Row rowHeader, SheetData<T> sheetData, Integer indexRow) throws Exception {
 
-			
+		ExcelSheetLayout excelSheetLayout=ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);	
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null);
 		if (sheetData instanceof SheetDynamicData) {
 			SheetDynamicData<DynamicRowSheet> sheetDynamicData = (SheetDynamicData<DynamicRowSheet>) sheetData;
@@ -728,7 +728,8 @@ public class SuperGenerateExcelImpl {
 		int idRowHeader = indexRow + 1;
 		worksheet.setRepeatingRows(CellRangeAddress.valueOf(idRowHeader + ":" + idRowHeader));
 		CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetData);
-		for (int numColumn = 0; numColumn < listSheetHeader.size(); numColumn++) {
+		int maxColumn=listSheetHeader.size()+ excelSheetLayout.startColumn();
+		for (int numColumn = excelSheetLayout.startColumn(); numColumn < maxColumn; numColumn++) {
 			Cell cellHeader = rowHeader.createCell(numColumn);
 			SheetHeader sheetHeader = listSheetHeader.get(numColumn);
 			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderLayout.class)) {

@@ -352,11 +352,13 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			worksheet.createFreezePane(excelFreezePane.columnFreez(), excelFreezePane.rowFreez());
 		}
 		Row row =null;
+		int maxColumn=listSheetHeader.size()+excelSheetLayout.startColumn();
+		
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			row = worksheet.createRow(indexRow);
 			Map<String, Object> mapValue = new HashMap<>();
 			CellStyle cellStyle = null;
-			for (int numColumn = 0; numColumn < listSheetHeader.size(); numColumn++) {
+			for (int numColumn = excelSheetLayout.startColumn(); numColumn < maxColumn; numColumn++) {
 				Cell cell = row.createCell(numColumn);
 				SheetHeader sheetHeader = listSheetHeader.get(numColumn);
 				Field field = listSheetHeader.get(numColumn).getField();

@@ -41,4 +41,6 @@ public @interface ExcelSheetLayout {
 	 */
 	public boolean sortAndFilter() default true;
 	
+	public int startColumn()default 0;
+	
 }
