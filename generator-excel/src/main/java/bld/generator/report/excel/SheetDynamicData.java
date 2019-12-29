@@ -17,7 +17,7 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
  *
  * @param <T> the generic type
  */
-public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T>{
+public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn{
 		
 	/** The map extra column annotation. */
 	private Map<String,ExtraColumnAnnotation> mapExtraColumnAnnotation;

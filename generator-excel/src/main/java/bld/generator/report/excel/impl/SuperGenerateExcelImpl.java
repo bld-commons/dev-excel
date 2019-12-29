@@ -45,12 +45,11 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import bld.generator.report.excel.DynamicRowSheet;
+import bld.generator.report.excel.DynamicColumn;
 import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
-import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -78,7 +77,7 @@ import bld.generator.report.utils.ValueProps;
 /**
  * The Class SuperGenerateExcelImpl.
  */
-@SuppressWarnings({ "deprecation", "unchecked" })
+@SuppressWarnings({ "deprecation"})
 public class SuperGenerateExcelImpl {
 
 	/** The Constant TO. */
@@ -86,6 +85,12 @@ public class SuperGenerateExcelImpl {
 
 	/** The Constant FROM. */
 	private static final String FROM = "From";
+	
+	/** The Constant ROW_START. */
+	private static final String ROW_START = "RowStart";
+
+	/** The Constant ROW_END. */
+	private static final String ROW_END = "RowEnd";
 
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
@@ -111,11 +116,6 @@ public class SuperGenerateExcelImpl {
 	/** The Constant WIDTH_CELL_STANDARD. */
 	private static final int WIDTH_CELL_STANDARD = 22;
 
-	/** The Constant ROW_START. */
-	private static final String ROW_START = "RowStart";
-
-	/** The Constant ROW_END. */
-	private static final String ROW_END = "RowEnd";
 
 	/** The map field column. */
 	protected Map<String, Integer> mapFieldColumn = new HashMap<>();
@@ -709,8 +709,8 @@ public class SuperGenerateExcelImpl {
 
 		ExcelSheetLayout excelSheetLayout=ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);	
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null);
-		if (sheetData instanceof SheetDynamicData) {
-			SheetDynamicData<DynamicRowSheet> sheetDynamicData = (SheetDynamicData<DynamicRowSheet>) sheetData;
+		if (sheetData instanceof DynamicColumn) {
+			DynamicColumn sheetDynamicData = (DynamicColumn) sheetData;
 			for (String keyMap : sheetDynamicData.getMapExtraColumnAnnotation().keySet()) {
 				
 					ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()
