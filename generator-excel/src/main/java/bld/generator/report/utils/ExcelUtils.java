@@ -30,7 +30,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	/** The Constant BLD_GENERATOR. */
 	private static final String BLD_GENERATOR = "bld.generator";
 
-	/** The logger. */
+	/** The Constant logger. */
 	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
 	/** The Constant ANNOTATIONS. */
@@ -47,8 +47,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 *
 	 * @param <T>             the generic type
 	 * @param classExcel      the class excel
-	 * @param classAnnotation the class
-	 *                        annotation
+	 * @param classAnnotation the class annotation
 	 * @return the annotation
 	 * @throws Exception the exception
 	 */
@@ -62,8 +61,8 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Gets the annotation.
 	 *
-	 * @param <T> the generic type
-	 * @param field the field
+	 * @param <T>             the generic type
+	 * @param field           the field
 	 * @param classAnnotation the class annotation
 	 * @return the annotation
 	 * @throws Exception the exception
@@ -78,9 +77,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Reflection annotation 2.
 	 *
-	 * @param <T> the generic type
-	 * @param <K> the key type
-	 * @param entity the entity
+	 * @param <T>        the generic type
+	 * @param <K>        the key type
+	 * @param entity     the entity
 	 * @param annotation the annotation
 	 * @return the t
 	 */
@@ -120,9 +119,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Reflection annotation.
 	 *
-	 * @param <T> the generic type
-	 * @param <K> the key type
-	 * @param entity the entity
+	 * @param <T>        the generic type
+	 * @param <K>        the key type
+	 * @param entity     the entity
 	 * @param annotation the annotation
 	 * @return the t
 	 */
@@ -167,9 +166,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Adds the annotation.
 	 *
-	 * @param classe the classe
+	 * @param classe          the classe
 	 * @param classAnnotation the class annotation
-	 * @param annotation the annotation
+	 * @param annotation      the annotation
 	 * @throws Exception the exception
 	 */
 	public static void addAnnotation(Class<?>classe,Class<? extends Annotation>classAnnotation,Annotation annotation) throws Exception {

@@ -80,10 +80,10 @@ public class ExcelFontImpl{
 	 * Instantiates a new excel font impl.
 	 *
 	 * @param underline the underline
-	 * @param size the size
-	 * @param italic the italic
-	 * @param font the font
-	 * @param bold the bold
+	 * @param size      the size
+	 * @param italic    the italic
+	 * @param font      the font
+	 * @param bold      the bold
 	 */
 	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, String font, boolean bold) {
 		super();

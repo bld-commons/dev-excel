@@ -42,7 +42,7 @@ public class ExcelCellLayoutImpl {
 	/** The font. */
 	protected ExcelFont font;
 	
-	/** The fill patter type. */
+	/** The fill pattern type. */
 	protected FillPatternType fillPatternType;
 	
 	/** The border. */
@@ -112,15 +112,15 @@ public class ExcelCellLayoutImpl {
 	/**
 	 * Instantiates a new excel cell layout impl.
 	 *
-	 * @param wrap the wrap
-	 * @param verticalAlignment the vertical alignment
-	 * @param rgbForeground the rgb foreground
-	 * @param rgbFont the rgb font
-	 * @param precision the precision
+	 * @param wrap                the wrap
+	 * @param verticalAlignment   the vertical alignment
+	 * @param rgbForeground       the rgb foreground
+	 * @param rgbFont             the rgb font
+	 * @param precision           the precision
 	 * @param horizontalAlignment the horizontal alignment
-	 * @param font the font
-	 * @param fillPatternType the fill patter type
-	 * @param border the border
+	 * @param font                the font
+	 * @param fillPatternType     the fill pattern type
+	 * @param border              the border
 	 */
 	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
 			ExcelBorder border)  {

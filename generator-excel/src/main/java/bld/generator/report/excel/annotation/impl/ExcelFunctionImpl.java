@@ -50,7 +50,7 @@ public class ExcelFunctionImpl {
 	/**
 	 * Instantiates a new excel function impl.
 	 *
-	 * @param function the function
+	 * @param function     the function
 	 * @param nameFunction the name function
 	 */
 	public ExcelFunctionImpl(String function, String nameFunction) {

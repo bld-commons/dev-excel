@@ -76,10 +76,10 @@ public class ExcelFunctionMergeImpl{
 	 * Instantiates a new excel function merge impl.
 	 *
 	 * @param excelCellsLayout the excel cells layout
-	 * @param excelColumn the excel column
-	 * @param function the function
-	 * @param excelMergeRow the excel merge row
-	 * @param nameFunction the name function
+	 * @param excelColumn      the excel column
+	 * @param function         the function
+	 * @param excelMergeRow    the excel merge row
+	 * @param nameFunction     the name function
 	 */
 	public ExcelFunctionMergeImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, String function, ExcelMergeRow excelMergeRow, String nameFunction) {
 		super();

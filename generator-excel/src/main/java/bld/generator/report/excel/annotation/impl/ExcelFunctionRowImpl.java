@@ -61,8 +61,8 @@ public class ExcelFunctionRowImpl {
 	 * Instantiates a new excel function row impl.
 	 *
 	 * @param excelCellsLayout the excel cells layout
-	 * @param excelColumn the excel column
-	 * @param excelFunction the excel function
+	 * @param excelColumn      the excel column
+	 * @param excelFunction    the excel function
 	 */
 	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn,
 			ExcelFunction excelFunction) {

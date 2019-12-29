@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.SheetDynamicData;
+import bld.generator.report.excel.DynamicChart;
 import bld.generator.report.excel.FunctionsTotal;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelSheetLayout(notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDynamic> implements FunctionsTotal<TotaleAutoreLibriSheet>{
+public class AutoreLibriSheetDynamic extends DynamicChart<AutoreLibriRowDynamic> implements FunctionsTotal<TotaleAutoreLibriSheet>{
 
 	private TotaleAutoreLibriSheet sheetFunctionsTotal;
 	

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelColumnImpl.
  */
@@ -139,6 +140,11 @@ public class ExcelColumnImpl{
 		this.indexColumn = indexColumn;
 	}
 
+	/**
+	 * Checks if is ignore.
+	 *
+	 * @return the ignore
+	 */
 	public boolean isIgnore() {
 		return ignore;
 	}

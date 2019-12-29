@@ -58,8 +58,8 @@ public class ExcelRgbColorImpl {
 	/**
 	 * Instantiates a new excel rgb color impl.
 	 *
-	 * @param blue the blue
-	 * @param red the red
+	 * @param blue  the blue
+	 * @param red   the red
 	 * @param green the green
 	 */
 	public ExcelRgbColorImpl(byte blue, byte red, byte green) {

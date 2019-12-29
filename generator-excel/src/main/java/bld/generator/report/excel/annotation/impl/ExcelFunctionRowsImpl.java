@@ -50,7 +50,7 @@ public class ExcelFunctionRowsImpl {
 	/**
 	 * Instantiates a new excel function rows impl.
 	 *
-	 * @param excelFunctions the excel functions
+	 * @param excelFunctions      the excel functions
 	 * @param excelFunctionMerges the excel function merges
 	 */
 	public ExcelFunctionRowsImpl(ExcelFunctionRow[] excelFunctions, ExcelFunctionMergeRow[] excelFunctionMerges) {

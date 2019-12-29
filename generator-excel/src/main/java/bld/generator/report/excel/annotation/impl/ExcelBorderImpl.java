@@ -68,9 +68,9 @@ public class ExcelBorderImpl {
 	/**
 	 * Instantiates a new excel border impl.
 	 *
-	 * @param left the left
-	 * @param top the top
-	 * @param right the right
+	 * @param left   the left
+	 * @param top    the top
+	 * @param right  the right
 	 * @param bottom the bottom
 	 */
 	public ExcelBorderImpl(BorderStyle left, BorderStyle top, BorderStyle right, BorderStyle bottom){
