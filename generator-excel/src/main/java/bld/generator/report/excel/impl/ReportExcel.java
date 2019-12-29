@@ -9,7 +9,6 @@ import java.util.List;
 
 import bld.generator.report.excel.BaseSheet;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportExcel.
  */
@@ -59,18 +58,18 @@ public class ReportExcel {
 	}
 
 	/**
-	 * Gets the list sheet.
+	 * Gets the list base sheet.
 	 *
-	 * @return the list sheet
+	 * @return the list base sheet
 	 */
 	public List<BaseSheet> getListBaseSheet() {
 		return listBaseSheet;
 	}
 
 	/**
-	 * Sets the list sheet.
+	 * Sets the list base sheet.
 	 *
-	 * @param listBaseSheet the new list sheet
+	 * @param listBaseSheet the new list base sheet
 	 */
 	public void setListBaseSheet(List<BaseSheet> listBaseSheet) {
 		this.listBaseSheet = listBaseSheet;

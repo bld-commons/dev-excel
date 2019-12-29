@@ -8,7 +8,6 @@ import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelMergeRowImpl.
  */

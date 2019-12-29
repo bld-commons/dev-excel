@@ -37,9 +37,9 @@ public class MergeSheet extends BaseSheet {
 	}
 
 	/**
-	 * Gets the excel dati.
+	 * Gets the list sheet.
 	 *
-	 * @return the excel dati
+	 * @return the list sheet
 	 */
 	public List<SheetComponent> getListSheet() {
 		if(this.listSheet==null)
@@ -48,9 +48,9 @@ public class MergeSheet extends BaseSheet {
 	}
 
 	/**
-	 * Sets the excel dati.
+	 * Sets the list sheet.
 	 *
-	 * @param listSheet the new excel dati
+	 * @param listSheet the new list sheet
 	 */
 	public void setListSheet(List<SheetComponent> listSheet) {
 		this.listSheet = listSheet;

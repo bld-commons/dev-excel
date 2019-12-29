@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelChart.
  */
