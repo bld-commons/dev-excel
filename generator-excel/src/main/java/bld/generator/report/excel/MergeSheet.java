@@ -9,11 +9,11 @@ import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ExcelStatisticoDati.
+ * The Class MergeSheet.
  */
 public class MergeSheet extends BaseSheet {
 
-	/** The excel dati. */
+	/** The list sheet. */
 	private List<SheetComponent> listSheet;
 
 	/**

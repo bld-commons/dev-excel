@@ -86,12 +86,12 @@ public class ExcelChartImpl{
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
-	 * @param fieldTitle the field title
+	 * @param fieldTitle    the field title
 	 * @param startKeyChart the start key chart
-	 * @param endKeyChart the end key chart
-	 * @param chartTypes the chart types
-	 * @param sizeRow the size row
-	 * @param sizeColumn the size column
+	 * @param endKeyChart   the end key chart
+	 * @param chartTypes    the chart types
+	 * @param sizeRow       the size row
+	 * @param sizeColumn    the size column
 	 */
 	public ExcelChartImpl(String fieldTitle, String startKeyChart, String endKeyChart, ChartTypes chartTypes, int sizeRow, int sizeColumn) {
 		super();

@@ -70,9 +70,9 @@ public class ExcelFunctionMergeRowImpl {
 	 * Instantiates a new excel function merge row impl.
 	 *
 	 * @param excelCellsLayout the excel cells layout
-	 * @param excelColumn the excel column
-	 * @param excelMergeRow the excel merge row
-	 * @param excelFunction the excel function
+	 * @param excelColumn      the excel column
+	 * @param excelMergeRow    the excel merge row
+	 * @param excelFunction    the excel function
 	 */
 	public ExcelFunctionMergeRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn,
 			ExcelMergeRow excelMergeRow, ExcelFunction excelFunction) {

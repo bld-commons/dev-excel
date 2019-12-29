@@ -6,6 +6,7 @@ package bld.generator.report.excel;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelHyperlink.
  */
@@ -29,11 +30,11 @@ public class ExcelHyperlink {
 	/**
 	 * Instantiates a new excel hyperlink.
 	 *
-	 * @param value the value
-	 * @param address the address
+	 * @param value         the value
+	 * @param address       the address
 	 * @param hyperlinkType the hyperlink type
-	 * @param row the row
-	 * @param column the column
+	 * @param row           the row
+	 * @param column        the column
 	 */
 	public ExcelHyperlink(String value, String address, HyperlinkType hyperlinkType, Integer row, String column) {
 		super();

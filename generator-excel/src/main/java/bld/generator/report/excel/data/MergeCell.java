@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class MergeRow.
+ * The Class MergeCell.
  */
 public class MergeCell {
 

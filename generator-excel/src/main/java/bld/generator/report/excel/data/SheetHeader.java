@@ -38,8 +38,8 @@ public class SheetHeader implements Cloneable {
 	/** The excel cell layout. */
 	private ExcelCellLayout excelCellLayout;
 
-	/** The excel merge column. */
-	private ExcelMergeRow excelMergeColumn;
+	/** The excel merge row. */
+	private ExcelMergeRow excelMergeRow;
 	
 	/** The function. */
 	private String function;
@@ -72,7 +72,7 @@ public class SheetHeader implements Cloneable {
 		this.value = value;
 		
 		if (field.isAnnotationPresent(ExcelMergeRow.class))
-			this.setExcelMergeColumn(field.getAnnotation(ExcelMergeRow.class));
+			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		this.getExcelColumn();
 	}
 	
@@ -206,17 +206,17 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @return the excel merge column
 	 */
-	public ExcelMergeRow getExcelMergeColumn() {
-		return excelMergeColumn;
+	public ExcelMergeRow getExcelMergeRow() {
+		return excelMergeRow;
 	}
 
 	/**
 	 * Sets the excel merge column.
 	 *
-	 * @param excelMergeColumn the new excel merge column
+	 * @param excelMergeRow the new excel merge column
 	 */
-	public void setExcelMergeColumn(ExcelMergeRow excelMergeColumn) {
-		this.excelMergeColumn = excelMergeColumn;
+	public void setExcelMergeRow(ExcelMergeRow excelMergeRow) {
+		this.excelMergeRow = excelMergeRow;
 	}
 	
 	

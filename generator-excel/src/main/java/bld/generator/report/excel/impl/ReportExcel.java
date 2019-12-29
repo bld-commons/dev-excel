@@ -18,13 +18,13 @@ public class ReportExcel {
 	/** The titolo. */
 	private String titolo;
 
-	/** The list sheet. */
+	/** The list base sheet. */
 	private List<BaseSheet> listBaseSheet;
 
 	/**
 	 * Instantiates a new report excel.
 	 *
-	 * @param titolo the titolo
+	 * @param titolo        the titolo
 	 * @param listBaseSheet the list base sheet
 	 */
 	public ReportExcel(String titolo, List<BaseSheet> listBaseSheet) {

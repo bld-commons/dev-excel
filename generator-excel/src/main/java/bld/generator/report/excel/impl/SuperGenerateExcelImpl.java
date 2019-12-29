@@ -74,6 +74,7 @@ import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SuperGenerateExcelImpl.
  */
@@ -104,7 +105,7 @@ public class SuperGenerateExcelImpl {
 	/** The map cell header style. */
 	protected Map<LayoutCell, CellStyle> mapCellHeaderStyle = new HashMap<>();
 
-	/** The logger. */
+	/** The Constant logger. */
 	private final static Log logger = LogFactory.getLog(SuperGenerateExcelImpl.class);
 
 	/** The Constant WIDTH_CELL_STANDARD. */
@@ -131,11 +132,11 @@ public class SuperGenerateExcelImpl {
 	}
 
 	/**
-	 * Gets the font and color.
+	 * Creates the cell style.
 	 *
 	 * @param workbook the workbook
 	 * @param layout   the layout
-	 * @return the font and color
+	 * @return the cell style
 	 */
 	protected CellStyle createCellStyle(Workbook workbook, ExcelHeaderLayout layout) {
 		CellStyle cellStyleHeader = workbook.createCellStyle();
@@ -323,7 +324,7 @@ public class SuperGenerateExcelImpl {
 				sheetHeader.setExcelColumn(excelFunctionMerge.excelColumn());
 				sheetHeader.setExcelCellLayout(excelFunctionMerge.excelCellsLayout());
 				sheetHeader.setFunction(excelFunctionMerge.excelFunction().function());
-				sheetHeader.setExcelMergeColumn(excelFunctionMerge.excelMergeRow());
+				sheetHeader.setExcelMergeRow(excelFunctionMerge.excelMergeRow());
 				sheetHeader.setNameFunction(excelFunctionMerge.excelFunction().nameFunction());
 				listSheetHeader.add(sheetHeader);
 
@@ -538,7 +539,7 @@ public class SuperGenerateExcelImpl {
 	 * Sets the cell value excel.
 	 *
 	 * @param workbook the workbook
-	 * @param mergeRow the new cell value excel
+	 * @param mergeRow the merge row
 	 * @throws Exception the exception
 	 */
 	private void setCellValueExcel(Workbook workbook,MergeCell mergeRow) throws Exception {
@@ -692,7 +693,7 @@ public class SuperGenerateExcelImpl {
 	}
 
 	/**
-	 * Sets the header excel dati.
+	 * Generate header sheet data.
 	 *
 	 * @param <T>       the generic type
 	 * @param workbook  the workbook
@@ -719,6 +720,11 @@ public class SuperGenerateExcelImpl {
 						sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
 						sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
 						sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
+						sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
+						if(extraColumnAnnotation.getExcelFunction()!=null) {
+							sheetHeader.setFunction(extraColumnAnnotation.getExcelFunction().function());
+							sheetHeader.setNameFunction(extraColumnAnnotation.getExcelFunction().nameFunction());
+						}
 						sheetHeader.setKeyMap(keyMap);
 						listSheetHeader.add(sheetHeader);
 					}
@@ -757,7 +763,7 @@ public class SuperGenerateExcelImpl {
 	}
 
 	/**
-	 * Calcolo cordinate function.
+	 * Calcolo coordinate function.
 	 *
 	 * @param row    the row
 	 * @param column the column

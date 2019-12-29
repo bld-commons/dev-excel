@@ -12,8 +12,9 @@ import java.util.Map;
 import javax.validation.constraints.Size;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class ExcelDati.
+ * The Class SheetData.
  *
  * @param <T> the generic type
  */
@@ -80,7 +81,7 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	/**
 	 * Sets the map field column.
 	 *
-	 * @param mapFieldColumn the map field column
+	 * @param mapFieldColumn the new map field column
 	 */
 	protected void setMapFieldColumn(Map<String, Integer> mapFieldColumn) {
 		this.mapFieldColumn = mapFieldColumn;

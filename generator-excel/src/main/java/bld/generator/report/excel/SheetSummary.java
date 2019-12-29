@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ExcelSommario.
+ * The Class SheetSummary.
  */
 public abstract class SheetSummary extends BaseSheet implements SheetComponent{
 

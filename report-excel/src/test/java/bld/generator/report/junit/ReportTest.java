@@ -26,8 +26,6 @@ import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionMergeRowImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
@@ -130,14 +128,7 @@ public class ReportTest {
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);
-		ExcelFunctionRowImpl excelFunctionImpl = new ExcelFunctionRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni", null, 21,false).getExcelColumn(), new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni").getExcelFunction());
-		ExcelMergeRowImpl excelMergeRowImpl = new ExcelMergeRowImpl("matricola");
-		ExcelFunctionMergeRowImpl excelFunctionMergeImpl = new ExcelFunctionMergeRowImpl(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout(), new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false).getExcelColumn(),
-				 excelMergeRowImpl.getExcelMergeRow(),new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore").getExcelFunction());
-		
-		autoreLibriRow.addDynamicExcelFunction(excelFunctionImpl, excelFunctionMergeImpl);
-		
-		
+
 		
 		list.add(autoreLibriRow);
 
@@ -177,29 +168,43 @@ public class ReportTest {
 		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore","Test di etichetta su report");
 		
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20,false).getExcelColumn());
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_STRING.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Ignore Column", null, 20.05,true).getExcelColumn());
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn( new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore"));
+		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20,false));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
+		
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_STRING);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Ignore Column", null, 20.05,true));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("ignoreColumn", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2016", null, 20.1,false).getExcelColumn());
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2016", null, 20.1,false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno2", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.getExcelCellLayout());
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2,false).getExcelColumn());
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2,false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno3", extraColumnAnnotation);
 
 		autoreLibriSheet.setListRowSheet(list);
 
 		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,10,10);
-		autoreLibriSheet.addExcelChart(excelChartImpl);
+		autoreLibriSheet.setExcelChart(excelChartImpl);
 		
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);
 		

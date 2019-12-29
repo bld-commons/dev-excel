@@ -6,7 +6,7 @@
 package bld.generator.report.excel;
 
 /**
- * The Interface RowExcel.
+ * The Interface RowSheet.
  */
 public interface RowSheet {
 	

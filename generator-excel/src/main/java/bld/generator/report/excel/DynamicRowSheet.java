@@ -4,22 +4,10 @@
  */
 package bld.generator.report.excel;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionMergeRowImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionRowImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionRowsImpl;
-import bld.generator.report.utils.ExcelUtils;
-
+// TODO: Auto-generated Javadoc
 /**
  * The Class DynamicRowSheet.
  */
@@ -54,59 +42,6 @@ public abstract class DynamicRowSheet implements RowSheet {
 		this.mapValue = mapValue;
 	}
 
-	/**
-	 * Adds the dynamic excel function.
-	 *
-	 * @param excelFunctionImpl      the excel function impl
-	 * @param excelFunctionMergeImpl the excel function merge impl
-	 * @throws Exception the exception
-	 */
-	public void addDynamicExcelFunction(ExcelFunctionRowImpl excelFunctionImpl, ExcelFunctionMergeRowImpl excelFunctionMergeImpl) throws Exception {
-		if (this.getClass().isAnnotationPresent(ExcelFunctionRows.class)) {
-			ExcelFunctionRows excelFunctionRow = this.getClass().getAnnotation(ExcelFunctionRows.class);
-			List<ExcelFunctionRow> listExcelFunctions = new ArrayList<>();
-			listExcelFunctions.addAll(Arrays.asList(excelFunctionRow.excelFunctions()));
-			if (excelFunctionImpl != null) {
-				for (int i = 0; i < listExcelFunctions.size(); i++) {
-					if (listExcelFunctions.get(i).excelFunction().nameFunction().equals(excelFunctionImpl.getExcelFunction().excelFunction().nameFunction()))
-						listExcelFunctions.remove(i--);
-				}
-				listExcelFunctions.add(excelFunctionImpl.getExcelFunction());
-			}
-			List<ExcelFunctionMergeRow> listExcelFunctionMerges = new ArrayList<>();
-			listExcelFunctionMerges.addAll(Arrays.asList(excelFunctionRow.excelFunctionMerges()));
-			if (excelFunctionMergeImpl != null) {
-				for (int i = 0; i < listExcelFunctionMerges.size(); i++) {
-					if (listExcelFunctionMerges.get(i).excelFunction().nameFunction().equals(excelFunctionImpl.getExcelFunction().excelFunction().nameFunction()))
-						listExcelFunctionMerges.remove(i--);
-				}
-				listExcelFunctionMerges.add(excelFunctionMergeImpl.getExcelFunctionMerge());
-			}
-			ExcelFunctionRowsImpl excelFunctionRowImpl = new ExcelFunctionRowsImpl(listExcelFunctions.toArray(new ExcelFunctionRow[listExcelFunctions.size()]),
-					listExcelFunctionMerges.toArray(new ExcelFunctionMergeRow[listExcelFunctionMerges.size()]));
-			addAnnotation(ExcelFunctionRows.class, excelFunctionRowImpl.getExcelFunctionRow());
-		}
-
-	}
-
-	/**
-	 * Adds the annotation.
-	 *
-	 * @param classAnnotation the class annotation
-	 * @param annotation      the annotation
-	 * @throws Exception the exception
-	 */
-	@SuppressWarnings("unchecked")
-	private void addAnnotation(Class<? extends Annotation> classAnnotation, Annotation annotation) throws Exception {
-		Field annotationFieldData = Class.class.getDeclaredField(ExcelUtils.ANNOTATION_DATA);
-		annotationFieldData.setAccessible(true);
-		Object annotationData = annotationFieldData.get(this.getClass());
-		Field annotationsField = annotationData.getClass().getDeclaredField(ExcelUtils.ANNOTATIONS);
-		annotationsField.setAccessible(true);
-		Map<Class<? extends Annotation>, Annotation> annotations = (Map<Class<? extends Annotation>, Annotation>) annotationsField.get(annotationData);
-		annotations.put(classAnnotation, annotation);
-		annotationFieldData.setAccessible(false);
-		annotationsField.setAccessible(false);
-	}
+	
 
 }
