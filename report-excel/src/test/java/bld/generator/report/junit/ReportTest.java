@@ -28,6 +28,7 @@ import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
+import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.impl.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriRow;
@@ -170,13 +171,13 @@ public class ReportTest {
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("anno3")+")", "totalePrezzoAnni"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn( new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_START.getParameter("totalePrezzoAnni")+":"+RowStartEndType.ROW_END.getParameter("totalePrezzoAnni")+")", "totalePrezzoAnniAutore"));
 		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 		
