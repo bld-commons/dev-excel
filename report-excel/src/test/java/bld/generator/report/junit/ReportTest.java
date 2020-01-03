@@ -1,7 +1,6 @@
 package bld.generator.report.junit;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -28,6 +27,7 @@ import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
+import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.impl.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriRow;
@@ -41,6 +41,7 @@ import bld.generator.report.junit.entity.IndexRow;
 import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
+import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.junit.entity.ReadAutoreLibriRow;
@@ -55,6 +56,8 @@ import bld.read.report.utils.ExcelType;
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
 //@EnableAutoConfiguration(exclude=ExcelConfiguration.class)
 public class ReportTest {
+
+	private static final String PATH_FILE = "/mnt/report/";
 
 	@Autowired
 	private GenerateExcel generateExcel;
@@ -113,7 +116,7 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		writeToFile(excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
 
 	}
 
@@ -170,13 +173,13 @@ public class ReportTest {
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${anno1}:${anno3})", "totalePrezzoAnni"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("anno3")+")", "totalePrezzoAnni"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn( new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(${totalePrezzoAnniFrom}:${totalePrezzoAnniTo})", "totalePrezzoAnniAutore"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_START.getParameter("totalePrezzoAnni")+":"+RowStartEndType.ROW_END.getParameter("totalePrezzoAnni")+")", "totalePrezzoAnniAutore"));
 		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 		
@@ -223,64 +226,11 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		writeToFile(excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
 
 	}
 
-//	private static final Object[][] plotData = { { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" }, { 1, 2, 3, 10, 5, 3, 7, 10, 9, 10 },{ 12, 20, 33, 14, 15, 23, 4, 1, 29, 1 } };
 
-//	@Test
-//	public void testOneSeriePlot() throws IOException {
-//		
-//		
-//		
-//		
-//		
-//		
-//		XSSFWorkbook wb = new XSSFWorkbook();
-//		XSSFSheet sheet = (XSSFSheet) new SheetBuilder(wb, plotData).build();
-//		XSSFDrawing drawing = sheet.createDrawingPatriarch();
-//		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 5, 5, 10, 30);
-//		XSSFChart chart = drawing.createChart(anchor);
-//
-//		XDDFCategoryAxis bottomAxis = chart.createCategoryAxis(AxisPosition.BOTTOM);
-//		XDDFValueAxis leftAxis = chart.createValueAxis(AxisPosition.LEFT);
-//
-//		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(sheet, CellRangeAddress.valueOf("A1:J1"));
-//		XDDFNumericalDataSource<Double> ys = XDDFDataSourcesFactory.fromNumericCellRange(sheet, CellRangeAddress.valueOf("A2:J2"));
-//		XDDFNumericalDataSource<Double> ys1 = XDDFDataSourcesFactory.fromNumericCellRange(sheet, CellRangeAddress.valueOf("A3:J3"));
-//		
-//		XDDFChartData lineChartData = chart.createData(ChartTypes.LINE, bottomAxis, leftAxis);
-//		XDDFChartData.Series series = lineChartData.addSeries(xs, ys);
-//		series.setTitle("Test", null);
-//		series = lineChartData.addSeries(xs, ys1);
-//		series.setTitle("Test2", null);
-//		chart.getOrCreateLegend();
-//		chart.plot(lineChartData);
-//		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//		wb.write(byteArrayOutputStream);
-//		byte[] byteExcel = byteArrayOutputStream.toByteArray();
-//		writeToFile("Test", ".xlsx", byteExcel);
-//		wb.close();
-//	}
-
-	/**
-	 * Write to file.
-	 *
-	 * @param filename the filename
-	 * @param dati     the dati
-	 */
-	private void writeToFile(String fileName, String typeFile, byte[] dati) {
-		FileOutputStream fos;
-		try {
-			fos = new FileOutputStream("/mnt/report/" + fileName + typeFile);
-			fos.write(dati);
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 	
 	@Test
 	public void testRead() throws Exception{

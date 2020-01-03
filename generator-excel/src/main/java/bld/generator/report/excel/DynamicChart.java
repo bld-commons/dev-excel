@@ -19,6 +19,7 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 
 	/** The excel chart. */
 	private ExcelChart excelChart;
+	
 
 	/**
 	 * Instantiates a new dynamic chart.
@@ -27,7 +28,6 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 */
 	public DynamicChart(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

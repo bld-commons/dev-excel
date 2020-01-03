@@ -202,18 +202,18 @@ public class SheetHeader implements Cloneable {
 	}
 
 	/**
-	 * Gets the excel merge column.
+	 * Gets the excel merge row.
 	 *
-	 * @return the excel merge column
+	 * @return the excel merge row
 	 */
 	public ExcelMergeRow getExcelMergeRow() {
 		return excelMergeRow;
 	}
 
 	/**
-	 * Sets the excel merge column.
+	 * Sets the excel merge row.
 	 *
-	 * @param excelMergeRow the new excel merge column
+	 * @param excelMergeRow the new excel merge row
 	 */
 	public void setExcelMergeRow(ExcelMergeRow excelMergeRow) {
 		this.excelMergeRow = excelMergeRow;

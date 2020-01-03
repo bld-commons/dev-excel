@@ -22,7 +22,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale"))},
 excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
 						excelColumn = @ExcelColumn(indexColumn = 7.1, nameColumn = "Prezzo Totale per Autore"), 
-						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoFrom}:${prezzoTo})",nameFunction = "prezzoTotalePerAutore"))})
+						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",nameFunction = "prezzoTotalePerAutore"))})
 
 public class AutoreLibriRow implements RowSheet {
 

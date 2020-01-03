@@ -45,12 +45,11 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import bld.generator.report.excel.DynamicRowSheet;
+import bld.generator.report.excel.DynamicColumn;
 import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
-import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -67,6 +66,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.comparator.SheetColumnComparator;
 import bld.generator.report.excel.constant.ColumnDateFormat;
+import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
@@ -78,14 +78,9 @@ import bld.generator.report.utils.ValueProps;
 /**
  * The Class SuperGenerateExcelImpl.
  */
-@SuppressWarnings({ "deprecation", "unchecked" })
+@SuppressWarnings({ "deprecation"})
 public class SuperGenerateExcelImpl {
 
-	/** The Constant TO. */
-	private static final String TO = "To";
-
-	/** The Constant FROM. */
-	private static final String FROM = "From";
 
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
@@ -111,11 +106,6 @@ public class SuperGenerateExcelImpl {
 	/** The Constant WIDTH_CELL_STANDARD. */
 	private static final int WIDTH_CELL_STANDARD = 22;
 
-	/** The Constant ROW_START. */
-	private static final String ROW_START = "RowStart";
-
-	/** The Constant ROW_END. */
-	private static final String ROW_END = "RowEnd";
 
 	/** The map field column. */
 	protected Map<String, Integer> mapFieldColumn = new HashMap<>();
@@ -503,13 +493,14 @@ public class SuperGenerateExcelImpl {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		String function = sheetHeader.getFunction();
-		function = makeFunction(indexRow, function, "");
-		function = makeFunction(indexRow, function, FROM);
-		function = makeFunction(indexRow, function, TO);
+		function = makeFunction(indexRow, function, RowStartEndType.ROW_EMPTY);
 		if (calRowStart != null && calRowEnd != null) {
-			function = makeFunction(calRowStart, function, ROW_START);
-			function = makeFunction(calRowEnd, function, ROW_END);
+			function = makeFunction(calRowStart, function, RowStartEndType.ROW_START);
+			function = makeFunction(calRowEnd, function, RowStartEndType.ROW_END);
 		}
+		function = makeFunction(indexRow, function, RowStartEndType.ROW_START);
+		function = makeFunction(indexRow, function, RowStartEndType.ROW_END);
+		
 		// cell.setCellType(CellType.FORMULA);
 		cell.setCellFormula(function);
 
@@ -518,16 +509,16 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Make function.
 	 *
-	 * @param indexRow   the index row
-	 * @param function   the function
-	 * @param keyPattern the key pattern
+	 * @param indexRow        the index row
+	 * @param function        the function
+	 * @param rowStartEndType the row start end type
 	 * @return the string
 	 */
-	private String makeFunction(Integer indexRow, String function, String keyPattern) {
+	private String makeFunction(Integer indexRow, String function, RowStartEndType rowStartEndType) {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
-			String keyParameter = m.group().replace($, "").replace(keyPattern + "}", "").trim();
+			String keyParameter = m.group().replace($, "").replace(rowStartEndType.getValue() + "}", "").trim();
 			if (mapFieldColumn.containsKey(keyParameter))
 				function = function.replace(m.group(),
 						calcoloCoordinateFunction(indexRow + 1, mapFieldColumn.get(keyParameter)));
@@ -563,13 +554,14 @@ public class SuperGenerateExcelImpl {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		String function = sheetHeader.getFunction();
-		function = makeFunction(mergeRow.getRowFrom(), function, FROM);
-		function = makeFunction(mergeRow.getRowTo(), function, TO);
 		if (mergeRow.getCalRowStart() != null && mergeRow.getCalRowEnd() != null) {
-			function = makeFunction(mergeRow.getCalRowStart(), function, ROW_START);
-			function = makeFunction(mergeRow.getCalRowEnd(), function, ROW_END);
+			function = makeFunction(mergeRow.getCalRowStart(), function, RowStartEndType.ROW_START);
+			function = makeFunction(mergeRow.getCalRowEnd(), function, RowStartEndType.ROW_END);
 		}
 
+		function = makeFunction(mergeRow.getRowFrom(), function, RowStartEndType.ROW_START);
+		function = makeFunction(mergeRow.getRowTo(), function, RowStartEndType.ROW_END);
+		
 		// cell.setCellType(CellType.FORMULA);
 		cell.setCellFormula(function);
 	}
@@ -709,8 +701,8 @@ public class SuperGenerateExcelImpl {
 
 		ExcelSheetLayout excelSheetLayout=ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);	
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null);
-		if (sheetData instanceof SheetDynamicData) {
-			SheetDynamicData<DynamicRowSheet> sheetDynamicData = (SheetDynamicData<DynamicRowSheet>) sheetData;
+		if (sheetData instanceof DynamicColumn) {
+			DynamicColumn sheetDynamicData = (DynamicColumn) sheetData;
 			for (String keyMap : sheetDynamicData.getMapExtraColumnAnnotation().keySet()) {
 				
 					ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation()

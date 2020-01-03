@@ -343,18 +343,18 @@ public class ExcelCellLayoutImpl {
 	}
 
 	/**
-	 * Gets the fill patter type.
+	 * Gets the fill pattern type.
 	 *
-	 * @return the fill patter type
+	 * @return the fill pattern type
 	 */
 	public FillPatternType getFillPatternType() {
 		return fillPatternType;
 	}
 
 	/**
-	 * Sets the fill patter type.
+	 * Sets the fill pattern type.
 	 *
-	 * @param fillPatternType the new fill patter type
+	 * @param fillPatternType the new fill pattern type
 	 */
 	public void setFillPatternType(FillPatternType fillPatternType) {
 		this.fillPatternType = fillPatternType;
