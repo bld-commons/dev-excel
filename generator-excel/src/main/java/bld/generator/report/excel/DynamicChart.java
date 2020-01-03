@@ -28,7 +28,6 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 */
 	public DynamicChart(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

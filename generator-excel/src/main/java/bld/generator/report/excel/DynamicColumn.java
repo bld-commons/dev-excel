@@ -1,9 +1,16 @@
+/**
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+*/
 package bld.generator.report.excel;
 
 import java.util.Map;
 
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
+/**
+ * The Interface DynamicColumn.
+ */
 public interface DynamicColumn {
 
 	
@@ -18,7 +25,7 @@ public interface DynamicColumn {
 	/**
 	 * Sets the map extra column annotation.
 	 *
-	 * @param mapExtraColumnAnnotation the new map extra column annotation
+	 * @param mapExtraColumnAnnotation the map extra column annotation
 	 */
 	public void setMapExtraColumnAnnotation(Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation);
 	
