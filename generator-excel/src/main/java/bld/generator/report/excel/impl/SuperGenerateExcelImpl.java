@@ -509,9 +509,9 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Make function.
 	 *
-	 * @param indexRow   the index row
-	 * @param function   the function
-	 * @param keyPattern the key pattern
+	 * @param indexRow        the index row
+	 * @param function        the function
+	 * @param rowStartEndType the row start end type
 	 * @return the string
 	 */
 	private String makeFunction(Integer indexRow, String function, RowStartEndType rowStartEndType) {

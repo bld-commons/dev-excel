@@ -4,6 +4,7 @@
  */
 package bld.generator.report.utils;
 
+import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -19,7 +20,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelUtils.
  */
@@ -198,6 +198,26 @@ public class ExcelUtils implements ApplicationContextAware {
 	 */
 	public static ApplicationContext getApplicationContext() {
 		return applicationContext;
+	}
+	
+	/**
+	 * Write to file.
+	 *
+	 * @param pathFile the path file
+	 * @param fileName the file name
+	 * @param typeFile the type file
+	 * @param dati     the dati
+	 */
+	public static void writeToFile(String pathFile,String fileName, String typeFile, byte[] dati) {
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(pathFile + fileName + typeFile);
+			fos.write(dati);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 
