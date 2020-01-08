@@ -3,6 +3,7 @@ package bld.generator.report.junit;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -35,6 +36,8 @@ import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
 import bld.generator.report.junit.entity.CasaEditrice;
+import bld.generator.report.junit.entity.DateRow;
+import bld.generator.report.junit.entity.DateSheet;
 import bld.generator.report.junit.entity.GenereRow;
 import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.IndexRow;
@@ -111,6 +114,13 @@ public class ReportTest {
 		genereSheet.setListRowSheet(listGenere);
 		
 		listBaseSheet.add(genereSheet);
+		
+		DateSheet dateSheet=new DateSheet("Test Date");
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		
+		listBaseSheet.add(dateSheet);
 		
 		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 
