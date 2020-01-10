@@ -17,15 +17,17 @@ public interface GenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
+	 * @throws Exception 
 	 */
-	public byte[] createFileXls(ReportExcel report);
+	public byte[] createFileXls(ReportExcel report) throws Exception;
 
 	/**
 	 * Creates the file xlsx.
 	 *
 	 * @param report the report
 	 * @return the byte[]
+	 * @throws Exception 
 	 */
-	public byte[] createFileXlsx(ReportExcel report);
+	public byte[] createFileXlsx(ReportExcel report) throws Exception;
 
 }

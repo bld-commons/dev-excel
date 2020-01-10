@@ -103,33 +103,25 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	 * @return the byte[]
 	 */
 	@Override
-	public byte[] createFileXls(ReportExcel report) {
+	public byte[] createFileXls(ReportExcel report) throws Exception{
 		this.mergeCalcoloCells = null;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] byteExcel = null;
-		try {
-			boolean isCopertina = true;
-			Workbook workbook = null;
-			if (StringUtils.isNotBlank(this.pathCopertinaXls)) {
-				InputStream inputstream = new FileInputStream(this.pathCopertinaXls);
-				workbook = new HSSFWorkbook(inputstream);
-			} else if (StringUtils.isNotBlank(this.resourcePathCopertinaXls)) {
-				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXls);
-				workbook = new HSSFWorkbook(inputstream);
-			} else {
-				workbook = new HSSFWorkbook();
-				isCopertina = false;
-			}
-
-			setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
-			byteExcel = byteArrayOutputStream.toByteArray();
-		} catch (FileNotFoundException e) {
-			logger.error(e);
-		} catch (IOException e) {
-			logger.error(e);
-		} catch (Exception e) {
-			logger.error(e);
+		boolean isCopertina = true;
+		Workbook workbook = null;
+		if (StringUtils.isNotBlank(this.pathCopertinaXls)) {
+			InputStream inputstream = new FileInputStream(this.pathCopertinaXls);
+			workbook = new HSSFWorkbook(inputstream);
+		} else if (StringUtils.isNotBlank(this.resourcePathCopertinaXls)) {
+			InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXls);
+			workbook = new HSSFWorkbook(inputstream);
+		} else {
+			workbook = new HSSFWorkbook();
+			isCopertina = false;
 		}
+		setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
+		byteExcel = byteArrayOutputStream.toByteArray();
+
 		return byteExcel;
 	}
 
@@ -140,7 +132,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	 * @return the byte[]
 	 */
 	@Override
-	public byte[] createFileXlsx(ReportExcel report) {
+	public byte[] createFileXlsx(ReportExcel report)throws Exception{
 		this.mergeCalcoloCells = null;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] byteExcel = null;
@@ -469,7 +461,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			}
 		}
 
-		if (!isMergeSheet && worksheet instanceof XSSFSheet && (sheetData.getClass().isAnnotationPresent(ExcelChart.class)|| (sheetData instanceof DynamicChart && ((DynamicChart<? extends DynamicRowSheet>) sheetData).getExcelChart() != null))) {
+		if (!isMergeSheet && worksheet instanceof XSSFSheet && (sheetData.getClass().isAnnotationPresent(ExcelChart.class) || (sheetData instanceof DynamicChart && ((DynamicChart<? extends DynamicRowSheet>) sheetData).getExcelChart() != null))) {
 			ExcelChart excelChart = getExcelChart(sheetData);
 			startKey = calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(excelChart.startKeyChart()));
 			endKey = calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(excelChart.endKeyChart()));
