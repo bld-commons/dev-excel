@@ -99,11 +99,12 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Creates the file xls.
 	 *
-	 * @param report the report
+	 * @param report
+	 *            the report
 	 * @return the byte[]
 	 */
 	@Override
-	public byte[] createFileXls(ReportExcel report) throws Exception{
+	public byte[] createFileXls(ReportExcel report) throws Exception {
 		this.mergeCalcoloCells = null;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] byteExcel = null;
@@ -128,52 +129,48 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Creates the file xlsx.
 	 *
-	 * @param report the report
+	 * @param report
+	 *            the report
 	 * @return the byte[]
 	 */
 	@Override
-	public byte[] createFileXlsx(ReportExcel report)throws Exception{
+	public byte[] createFileXlsx(ReportExcel report) throws Exception {
 		this.mergeCalcoloCells = null;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] byteExcel = null;
-		try {
-			boolean isCopertina = true;
-			Workbook workbook = null;
-			if (StringUtils.isNotBlank(this.pathCopertinaXlsx)) {
-				InputStream inputstream = new FileInputStream(this.pathCopertinaXlsx);
-				// getClass().getResourceAsStream();
-				workbook = new XSSFWorkbook(inputstream);
-			} else if (StringUtils.isNotBlank(this.resourcePathCopertinaXlsx)) {
-				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXlsx);
-				workbook = new XSSFWorkbook(inputstream);
-			} else {
-				workbook = new XSSFWorkbook();
-				isCopertina = false;
-			}
-
-			setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
-			byteExcel = byteArrayOutputStream.toByteArray();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			logger.error(e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+		boolean isCopertina = true;
+		Workbook workbook = null;
+		if (StringUtils.isNotBlank(this.pathCopertinaXlsx)) {
+			InputStream inputstream = new FileInputStream(this.pathCopertinaXlsx);
+			// getClass().getResourceAsStream();
+			workbook = new XSSFWorkbook(inputstream);
+		} else if (StringUtils.isNotBlank(this.resourcePathCopertinaXlsx)) {
+			InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXlsx);
+			workbook = new XSSFWorkbook(inputstream);
+		} else {
+			workbook = new XSSFWorkbook();
+			isCopertina = false;
 		}
+
+		setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
+		byteExcel = byteArrayOutputStream.toByteArray();
+
 		return byteExcel;
 	}
 
 	/**
 	 * Sets the parametri copertina.
 	 *
-	 * @param report                the report
-	 * @param byteArrayOutputStream the byte array output stream
-	 * @param workbook              the workbook
-	 * @param isCopertina           the is copertina
-	 * @throws Exception the exception
+	 * @param report
+	 *            the report
+	 * @param byteArrayOutputStream
+	 *            the byte array output stream
+	 * @param workbook
+	 *            the workbook
+	 * @param isCopertina
+	 *            the is copertina
+	 * @throws Exception
+	 *             the exception
 	 */
 	private void setParametriCopertina(ReportExcel report, ByteArrayOutputStream byteArrayOutputStream, Workbook workbook, boolean isCopertina) throws Exception {
 		if (isCopertina) {
@@ -186,10 +183,12 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			cell.setCellValue(SDF.format(new Date()));
 		}
 
-//		if (CommonUtil.isNotNullAndIsNotEmpty(report.getListBaseSheet()) && report.getListBaseSheet().get(0) instanceof ExcelSommario) {
-//			cell = worksheet.getRow(7).getCell(0);
-//			cell.setCellValue(((ExcelSommario) report.getListBaseSheet().get(0)).getListCampi().get(0));
-//		}
+		// if (CommonUtil.isNotNullAndIsNotEmpty(report.getListBaseSheet()) &&
+		// report.getListBaseSheet().get(0) instanceof ExcelSommario) {
+		// cell = worksheet.getRow(7).getCell(0);
+		// cell.setCellValue(((ExcelSommario)
+		// report.getListBaseSheet().get(0)).getListCampi().get(0));
+		// }
 		workbook = createSheet(report, workbook);
 		workbook.write(byteArrayOutputStream);
 		workbook.close();
@@ -198,10 +197,13 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Creates the sheet.
 	 *
-	 * @param report   the report
-	 * @param workbook the workbook
+	 * @param report
+	 *            the report
+	 * @param workbook
+	 *            the workbook
 	 * @return the workbook
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	private Workbook createSheet(ReportExcel report, Workbook workbook) throws Exception {
 
@@ -239,10 +241,14 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Generate merge sheet.
 	 *
-	 * @param workbook   the workbook
-	 * @param worksheet  the worksheet
-	 * @param mergeSheet the merge sheet
-	 * @throws Exception the exception
+	 * @param workbook
+	 *            the workbook
+	 * @param worksheet
+	 *            the worksheet
+	 * @param mergeSheet
+	 *            the merge sheet
+	 * @throws Exception
+	 *             the exception
 	 */
 	private void generateMergeSheet(Workbook workbook, Sheet worksheet, MergeSheet mergeSheet) throws Exception {
 		Integer indexRow = new Integer(0);
@@ -259,12 +265,17 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Generate sheet sommario.
 	 *
-	 * @param workbook     the workbook
-	 * @param worksheet    the worksheet
-	 * @param sheetSummary the sheet summary
-	 * @param indexRow     the index row
+	 * @param workbook
+	 *            the workbook
+	 * @param worksheet
+	 *            the worksheet
+	 * @param sheetSummary
+	 *            the sheet summary
+	 * @param indexRow
+	 *            the index row
 	 * @return the integer
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	private Integer generateSheetSommario(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, Integer indexRow) throws Exception {
 		Class<? extends SheetSummary> classSheet = sheetSummary.getClass();
@@ -298,13 +309,19 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Generate sheet data.
 	 *
-	 * @param workbook     the workbook
-	 * @param worksheet    the worksheet
-	 * @param sheetData    the sheet data
-	 * @param indexRow     the index row
-	 * @param isMergeSheet the is merge sheet
+	 * @param workbook
+	 *            the workbook
+	 * @param worksheet
+	 *            the worksheet
+	 * @param sheetData
+	 *            the sheet data
+	 * @param indexRow
+	 *            the index row
+	 * @param isMergeSheet
+	 *            the is merge sheet
 	 * @return the integer
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData, Integer indexRow, boolean isMergeSheet) throws Exception {
 		this.mapFieldColumn = sheetData.getMapFieldColumn();
@@ -366,7 +383,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 					ExcelDate excelDate = null;
 
 					LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
-					if (field.getType()!=null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
+					if ((Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
 						excelDate = sheetHeader.getExcelDate();
 						layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
 					}
@@ -477,7 +494,8 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Gets the excel chart.
 	 *
-	 * @param sheetData the sheet data
+	 * @param sheetData
+	 *            the sheet data
 	 * @return the excel chart
 	 */
 	private ExcelChart getExcelChart(SheetData<? extends RowSheet> sheetData) {
@@ -492,16 +510,22 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Generate chart.
 	 *
-	 * @param worksheet  the worksheet
-	 * @param mapChart   the map chart
-	 * @param excelChart the excel chart
-	 * @param indexRow   the index row
-	 * @param xAxis      the x axis
+	 * @param worksheet
+	 *            the worksheet
+	 * @param mapChart
+	 *            the map chart
+	 * @param excelChart
+	 *            the excel chart
+	 * @param indexRow
+	 *            the index row
+	 * @param xAxis
+	 *            the x axis
 	 * @return the integer
 	 */
 	@SuppressWarnings("deprecation")
 	private Integer generateChart(XSSFSheet worksheet, Map<String, String> mapChart, ExcelChart excelChart, Integer indexRow, String xAxis) {
-		// ExcelChart excelChart=sheetData.getClass().getAnnotation(ExcelChart.class)
+		// ExcelChart
+		// excelChart=sheetData.getClass().getAnnotation(ExcelChart.class)
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
 		Integer startChart = indexRow;
 		indexRow += excelChart.sizeRow();
@@ -533,12 +557,17 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	/**
 	 * Write label.
 	 *
-	 * @param workbook  the workbook
-	 * @param worksheet the worksheet
-	 * @param sheet     the sheet
-	 * @param indexRow  the index row
+	 * @param workbook
+	 *            the workbook
+	 * @param worksheet
+	 *            the worksheet
+	 * @param sheet
+	 *            the sheet
+	 * @param indexRow
+	 *            the index row
 	 * @return the integer
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	private Integer writeLabel(Workbook workbook, Sheet worksheet, BaseSheet sheet, Integer indexRow) throws Exception {
 		List<Field> listField = new ArrayList<>();
