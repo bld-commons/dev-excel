@@ -383,7 +383,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 					ExcelDate excelDate = null;
 
 					LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
-					if ((Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
+					if (field.getType()!=null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
 						excelDate = sheetHeader.getExcelDate();
 						layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
 					}
