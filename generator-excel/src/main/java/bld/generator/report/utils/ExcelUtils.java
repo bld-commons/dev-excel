@@ -155,7 +155,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					}
 
 				} catch (Exception e) {
-					logger.error("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
+					logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
 		}

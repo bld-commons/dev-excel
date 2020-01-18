@@ -270,27 +270,28 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Gets the list sheet header.
 	 *
-	 * @param classSheet the class sheet
+	 * @param classRow the class sheet
 	 * @param entity     the entity
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
-	protected List<SheetHeader> getListSheetHeader(Class<?> classSheet, Object entity) throws Exception {
-		logger.info("Sheet: " + classSheet.getSimpleName());
+	protected List<SheetHeader> getListSheetHeader(Class<?> classRow, Object entity) throws Exception {
+		logger.info("Row: " + classRow.getSimpleName());
 		Set<String> listTitolo = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
-		List<Field> listField = new ArrayList<>();
-		if (classSheet.getDeclaredFields().length > 0)
-			listField.addAll(Arrays.asList(classSheet.getDeclaredFields()));
-		if (classSheet.getSuperclass().getDeclaredFields().length > 0)
-			listField.addAll(Arrays.asList(classSheet.getSuperclass().getDeclaredFields()));
+		Set<Field> listField = new HashSet<>();
+		Class<?>classApp=classRow;
+		do {
+			listField.addAll(Arrays.asList(classApp.getDeclaredFields()));
+			classApp=classApp.getSuperclass();
+		}while(classApp.getSuperclass()!=null && !classApp.getName().equals(Object.class.getName()));
 		for (Field field : listField) {
 				logger.info(field.getName());
 				ExcelColumn sheetColumn = field.getAnnotation(ExcelColumn.class);
 				if(sheetColumn!=null && !sheetColumn.ignore()) {
 					Object value = null;
 					if (entity != null)
-						value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(entity);
+						value = new PropertyDescriptor(field.getName(), classRow).getReadMethod().invoke(entity);
 					listSheetHeader.add(new SheetHeader(field, value));
 					if (listTitolo.contains(sheetColumn.nameColumn()))
 						logger.warn("Exist another equal column with nameColum= \"" + sheetColumn.nameColumn()
@@ -298,8 +299,8 @@ public class SuperGenerateExcelImpl {
 					listTitolo.add(sheetColumn.nameColumn());
 				}
 		}
-		if (classSheet.isAnnotationPresent(ExcelFunctionRows.class)) {
-			ExcelFunctionRows excelFunctionRows = classSheet.getAnnotation(ExcelFunctionRows.class);
+		if (classRow.isAnnotationPresent(ExcelFunctionRows.class)) {
+			ExcelFunctionRows excelFunctionRows = classRow.getAnnotation(ExcelFunctionRows.class);
 			for (ExcelFunctionRow excelFunction : excelFunctionRows.excelFunctions()) {
 				SheetHeader sheetHeader = new SheetHeader();
 				sheetHeader.setExcelColumn(excelFunction.excelColumn());
