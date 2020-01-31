@@ -167,6 +167,12 @@ public class ExcelUtils implements ApplicationContextAware {
 	}
 	
 	
+	/**
+	 * Gets the name parameter.
+	 *
+	 * @param parameter the parameter
+	 * @return the name parameter
+	 */
 	public static String getNameParameter(String parameter) {
 		parameter=WordUtils.capitalize(parameter.replace("_", " ")).replace(" ", "");
 		return (parameter.charAt(0)+"").toLowerCase()+parameter.substring(1);
