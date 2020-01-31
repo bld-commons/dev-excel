@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelHyperlink;
-import bld.generator.report.excel.GenerateExcel;
+import bld.generator.report.excel.ScopeGenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
@@ -63,7 +63,7 @@ public class ReportTest {
 	private static final String PATH_FILE = "/mnt/report/";
 
 	@Autowired
-	private GenerateExcel generateExcel;
+	private ScopeGenerateExcel generateExcel;
 	
 	@Autowired
 	private ReadExcel readExcel;
@@ -86,6 +86,14 @@ public class ReportTest {
 		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
 		listBaseSheet.add(casaEditrice);
 
+		DateSheet dateSheet=new DateSheet("Test Date");
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		
+		listBaseSheet.add(dateSheet);
+		
+		
 		List<AutoreLibriRow> list = new ArrayList<>();
 		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Profondo Rosso", "Thriller", 1, 25.5, 3.0));
 		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto", "Thriller", 1, 30.0, 2.2));
@@ -115,12 +123,7 @@ public class ReportTest {
 		
 		listBaseSheet.add(genereSheet);
 		
-		DateSheet dateSheet=new DateSheet("Test Date");
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		
-		listBaseSheet.add(dateSheet);
+	
 		
 		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 

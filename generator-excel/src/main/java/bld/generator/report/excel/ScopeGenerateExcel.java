@@ -10,7 +10,7 @@ import bld.generator.report.excel.impl.ReportExcel;
 /**
  * The Interface GenerateExcel.
  */
-public interface GenerateExcel {
+public interface ScopeGenerateExcel {
 
 	/**
 	 * Creates the file xls.

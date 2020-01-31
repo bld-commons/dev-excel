@@ -42,15 +42,16 @@ import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.DynamicChart;
 import bld.generator.report.excel.DynamicRowSheet;
 import bld.generator.report.excel.FunctionsTotal;
-import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.RowSheet;
+import bld.generator.report.excel.ScopeGenerateExcel;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.SheetFunctionTotal;
@@ -73,10 +74,11 @@ import bld.generator.report.utils.ExcelUtils;
  */
 @Component
 @SuppressWarnings("unchecked")
-public class GenerateExcelImpl extends SuperGenerateExcelImpl implements GenerateExcel {
+@Scope("prototype")
+public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements ScopeGenerateExcel {
 
 	/** The Constant logger. */
-	private final static Log logger = LogFactory.getLog(GenerateExcelImpl.class);
+	private final static Log logger = LogFactory.getLog(ScopeGenerateExcelImpl.class);
 
 	/** The path copertina xls. */
 	@Value("${path.xls:}")
@@ -210,7 +212,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 		this.mapCellStyle = new HashMap<>();
 		this.mapCellHeaderStyle = new HashMap<>();
-
+		this.mapFieldColumn = new HashMap<>();
 		for (BaseSheet sheet : listSheet) {
 			Sheet worksheet = null;
 			if (sheet.getNameSheet() != null) {
@@ -233,8 +235,11 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
 			worksheet.setForceFormulaRecalculation(true);
 		}
+		
+	
 		return workbook;
 	}
+
 
 	/**
 	 * Generate merge sheet.
@@ -322,7 +327,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 	 *             the exception
 	 */
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData, Integer indexRow, boolean isMergeSheet) throws Exception {
-		this.mapFieldColumn = sheetData.getMapFieldColumn();
+		//this.mapFieldColumn = sheetData.getMapFieldColumn();
 		indexRow = writeLabel(workbook, worksheet, sheetData, indexRow);
 		int startRowSheet = indexRow + 1;
 		Row rowHeader = worksheet.createRow(indexRow);
@@ -377,9 +382,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 				sheetHeader.setValue(value);
 				if (start) {
 					ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
-					logger.info(this.valueProps.valueProps(sheetHeader.getExcelColumn().nameColumn()) + " " + excelCellLayout.toString());
 					ExcelDate excelDate = null;
-
 					LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
 					if (field!=null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
 						excelDate = sheetHeader.getExcelDate();
@@ -413,7 +416,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 							mapMergeRow.put(numColumn, mergeRow);
 						} else
-							super.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
+							super.setCellValueExcel(workbook, worksheet, cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
 						repeat = false;
 					} else {
 						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField()))
@@ -443,8 +446,8 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			lastRowSheet = rowSheet;
 			if (sheetData.getClass().isAnnotationPresent(ExcelChart.class) || (sheetData instanceof DynamicChart && ((DynamicChart<? extends DynamicRowSheet>) sheetData).getExcelChart() != null)) {
 				ExcelChart excelChart = getExcelChart(sheetData);
-				startKey = calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(excelChart.startKeyChart()));
-				endKey = calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(excelChart.endKeyChart()));
+				startKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(getKeyColumn(worksheet,excelChart.startKeyChart())));
+				endKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(getKeyColumn(worksheet,excelChart.endKeyChart())));
 				String keyChart = mapValue.get(excelChart.fieldTitle()).toString();
 				mapChart.put(keyChart, startKey + ":" + endKey);
 
@@ -458,9 +461,9 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			super.mergeRow(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 
 		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
-			String startCell = calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn());
-			String endCell = calcoloCoordinateFunction(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn() - 1);
-			logger.info(sheetData.getClass().getSimpleName() + "- " + startCell + ":" + endCell);
+			String startCell = ExcelUtils.calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn());
+			String endCell = ExcelUtils.calcoloCoordinateFunction(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn() - 1);
+			logger.debug(sheetData.getClass().getSimpleName() + "- " + startCell + ":" + endCell);
 			worksheet.setAutoFilter(CellRangeAddress.valueOf(startCell + ":" + endCell));
 		}
 
@@ -468,7 +471,7 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal = (FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>) sheetData;
 			if (functionsTotal.getSheetFunctionsTotal() != null) {
 				SheetFunctionTotal<? extends RowSheet> functionSheetData = functionsTotal.getSheetFunctionsTotal();
-				functionSheetData.setMapFieldColumn(this.mapFieldColumn);
+				//functionSheetData.setMapFieldColumn(this.mapFieldColumn);
 				functionSheetData.setCalRowStart(startRowSheet);
 				functionSheetData.setCalRowEnd(indexRow - 1);
 				indexRow += 2;
@@ -478,8 +481,8 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 
 		if (!isMergeSheet && worksheet instanceof XSSFSheet && (sheetData.getClass().isAnnotationPresent(ExcelChart.class) || (sheetData instanceof DynamicChart && ((DynamicChart<? extends DynamicRowSheet>) sheetData).getExcelChart() != null))) {
 			ExcelChart excelChart = getExcelChart(sheetData);
-			startKey = calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(excelChart.startKeyChart()));
-			endKey = calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(excelChart.endKeyChart()));
+			startKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(getKeyColumn(worksheet,excelChart.startKeyChart())));
+			endKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(getKeyColumn(worksheet,excelChart.endKeyChart())));
 			String xAxis = startKey + ":" + endKey;
 			indexRow += 2;
 			indexRow = generateChart((XSSFSheet) worksheet, mapChart, excelChart, indexRow, xAxis);
@@ -527,20 +530,20 @@ public class GenerateExcelImpl extends SuperGenerateExcelImpl implements Generat
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
 		Integer startChart = indexRow;
 		indexRow += excelChart.sizeRow();
-		logger.info("Start Chart: " + startChart);
+		logger.debug("Start Chart: " + startChart);
 		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, startChart, excelChart.sizeColumn(), indexRow);
 		XSSFChart chart = drawing.createChart(anchor);
 
 		XDDFCategoryAxis bottomAxis = chart.createCategoryAxis(AxisPosition.BOTTOM);
 		XDDFValueAxis leftAxis = chart.createValueAxis(AxisPosition.LEFT);
-		logger.info("xAxis: " + xAxis);
+		logger.debug("xAxis: " + xAxis);
 		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(worksheet, CellRangeAddress.valueOf(xAxis));
 		XDDFChartData lineChartData = chart.createData(excelChart.chartTypes(), bottomAxis, leftAxis);
 		XDDFChartData.Series series = null;
 
 		for (String keyChart : mapChart.keySet()) {
 			String seriesChart = mapChart.get(keyChart);
-			logger.info("seriesChart: " + seriesChart);
+			logger.debug("seriesChart: " + seriesChart);
 			series = lineChartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(worksheet, CellRangeAddress.valueOf(seriesChart)));
 			series.setTitle(keyChart, null);
 		}
