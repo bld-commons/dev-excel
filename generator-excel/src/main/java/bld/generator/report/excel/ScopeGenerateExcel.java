@@ -8,7 +8,7 @@ import bld.generator.report.excel.impl.ReportExcel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface GenerateExcel.
+ * The Interface ScopeGenerateExcel.
  */
 public interface ScopeGenerateExcel {
 
@@ -17,7 +17,7 @@ public interface ScopeGenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception 
+	 * @throws Exception the exception
 	 */
 	public byte[] createFileXls(ReportExcel report) throws Exception;
 
@@ -26,7 +26,7 @@ public interface ScopeGenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception 
+	 * @throws Exception the exception
 	 */
 	public byte[] createFileXlsx(ReportExcel report) throws Exception;
 

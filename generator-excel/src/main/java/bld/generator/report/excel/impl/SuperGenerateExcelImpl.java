@@ -267,7 +267,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Gets the list sheet header.
 	 *
-	 * @param classRow the class sheet
+	 * @param classRow the class row
 	 * @param entity   the entity
 	 * @return the list sheet header
 	 * @throws Exception the exception
@@ -332,15 +332,15 @@ public class SuperGenerateExcelImpl {
 //	}
 
 	/**
-	 * Sets the cell value will merged.
-	 *
-	 * @param workbook    the workbook
-	 * @param cellStyle   the cell style
-	 * @param cell        the cell
-	 * @param sheetHeader the sheet header
-	 * @return true, if successful
-	 * @throws Exception the exception
-	 */
+ * Sets the cell value will merged.
+ *
+ * @param workbook    the workbook
+ * @param cellStyle   the cell style
+ * @param cell        the cell
+ * @param sheetHeader the sheet header
+ * @return true, if successful
+ * @throws Exception the exception
+ */
 	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader) throws Exception {
 		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader); // writeCellEmpty(workbook, cellStyle, cell, sheetHeader);
 		return false;
@@ -451,6 +451,7 @@ public class SuperGenerateExcelImpl {
 	 * Sets the cell value excel.
 	 *
 	 * @param workbook    the workbook
+	 * @param worksheet   the worksheet
 	 * @param cell        the cell
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
@@ -476,6 +477,7 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow    the index row
 	 * @param calRowStart the cal row start
 	 * @param calRowEnd   the cal row end
+	 * @param worksheet   the worksheet
 	 * @throws Exception the exception
 	 */
 	private void setCellFormulaExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Integer calRowStart, Integer calRowEnd, Sheet worksheet) throws Exception {
@@ -498,6 +500,7 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Make function.
 	 *
+	 * @param worksheet       the worksheet
 	 * @param indexRow        the index row
 	 * @param function        the function
 	 * @param rowStartEndType the row start end type
@@ -524,8 +527,9 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Sets the cell value excel.
 	 *
-	 * @param workbook the workbook
-	 * @param mergeRow the merge row
+	 * @param workbook  the workbook
+	 * @param worksheet the worksheet
+	 * @param mergeRow  the merge row
 	 * @throws Exception the exception
 	 */
 	private void setCellValueExcel(Workbook workbook, Sheet worksheet, MergeCell mergeRow) throws Exception {
@@ -539,7 +543,8 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Sets the cell formula excel.
 	 *
-	 * @param mergeRow the new cell formula excel
+	 * @param worksheet the worksheet
+	 * @param mergeRow  the merge row
 	 * @throws Exception the exception
 	 */
 	private void setCellFormulaExcel(Sheet worksheet, MergeCell mergeRow) throws Exception {
@@ -746,6 +751,13 @@ public class SuperGenerateExcelImpl {
 		return listSheetHeader;
 	}
 
+	/**
+	 * Gets the key column.
+	 *
+	 * @param sheet the sheet
+	 * @param key   the key
+	 * @return the key column
+	 */
 	protected String getKeyColumn(Sheet sheet, String key) {
 		if (!key.contains("."))
 			key = sheet.getSheetName()+ "." + key;

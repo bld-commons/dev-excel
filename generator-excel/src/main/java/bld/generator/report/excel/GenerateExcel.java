@@ -1,7 +1,14 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.generator.report.excel;
 
 import bld.generator.report.excel.impl.ReportExcel;
 
+/**
+ * The Interface GenerateExcel.
+ */
 public interface GenerateExcel {
 
 	
@@ -10,7 +17,7 @@ public interface GenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception 
+	 * @throws Exception the exception
 	 */
 	public byte[] createFileXls(ReportExcel report) throws Exception;
 
@@ -19,7 +26,7 @@ public interface GenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception 
+	 * @throws Exception the exception
 	 */
 	public byte[] createFileXlsx(ReportExcel report) throws Exception;
 }
