@@ -11,6 +11,7 @@ import java.util.Date;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.utils.ExcelUtils;
 
@@ -40,6 +41,8 @@ public class SheetHeader implements Cloneable {
 
 	/** The excel merge row. */
 	private ExcelMergeRow excelMergeRow;
+	
+	private ExcelHeaderLayout excelHeaderLayout; 
 	
 	/** The function. */
 	private String function;
@@ -306,5 +309,15 @@ public class SheetHeader implements Cloneable {
 	public void setNameFunction(String nameFunction) {
 		this.nameFunction = nameFunction;
 	}
+
+	public ExcelHeaderLayout getExcelHeaderLayout() {
+		return excelHeaderLayout;
+	}
+
+	public void setExcelHeaderLayout(ExcelHeaderLayout excelHeaderLayout) {
+		this.excelHeaderLayout = excelHeaderLayout;
+	}
+	
+	
 
 }

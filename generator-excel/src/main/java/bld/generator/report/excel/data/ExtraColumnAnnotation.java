@@ -10,11 +10,13 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
+import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
+import bld.generator.report.excel.annotation.impl.ExcelHeaderLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 
 // TODO: Auto-generated Javadoc
@@ -38,7 +40,10 @@ public class ExtraColumnAnnotation {
 	private ExcelMergeRow excelMergeRow;
 
 	/** The excel function. */
-	public ExcelFunction excelFunction;
+	private ExcelFunction excelFunction;
+
+	/** The excel header layout. */
+	private ExcelHeaderLayout excelHeaderLayout;
 
 	/**
 	 * Gets the excel cell layout.
@@ -52,7 +57,8 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel cell layout.
 	 *
-	 * @param excelCellLayoutImpl the new excel cell layout
+	 * @param excelCellLayoutImpl
+	 *            the new excel cell layout
 	 */
 	public void setExcelCellLayout(ExcelCellLayoutImpl excelCellLayoutImpl) {
 		if (excelCellLayoutImpl != null)
@@ -71,7 +77,8 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel date.
 	 *
-	 * @param excelDateImpl the new excel date
+	 * @param excelDateImpl
+	 *            the new excel date
 	 */
 	public void setExcelDate(ExcelDateImpl excelDateImpl) {
 		if (excelDateImpl != null)
@@ -90,7 +97,8 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel column.
 	 *
-	 * @param excelColumnImpl the new excel column
+	 * @param excelColumnImpl
+	 *            the new excel column
 	 */
 	public void setExcelColumn(ExcelColumnImpl excelColumnImpl) {
 		if (excelColumnImpl != null)
@@ -109,7 +117,8 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel function.
 	 *
-	 * @param excelFunctionImpl the new excel function
+	 * @param excelFunctionImpl
+	 *            the new excel function
 	 */
 	public void setExcelFunction(ExcelFunctionImpl excelFunctionImpl) {
 		if (excelFunctionImpl != null)
@@ -128,11 +137,31 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel merge row.
 	 *
-	 * @param excelMergeRowImpl the new excel merge row
+	 * @param excelMergeRowImpl
+	 *            the new excel merge row
 	 */
 	public void setExcelMergeRow(ExcelMergeRowImpl excelMergeRowImpl) {
 		if (excelMergeRowImpl != null)
 			this.excelMergeRow = excelMergeRowImpl.getExcelMergeRow();
+	}
+
+	/**
+	 * Gets the excel header layout.
+	 *
+	 * @return the excel header layout
+	 */
+	public ExcelHeaderLayout getExcelHeaderLayout() {
+		return excelHeaderLayout;
+	}
+
+	/**
+	 * Sets the excel header layout.
+	 *
+	 * @param excelHeaderLayoutImpl the new excel header layout
+	 */
+	public void setExcelHeaderLayout(ExcelHeaderLayoutImpl excelHeaderLayoutImpl) {
+		if (excelHeaderLayoutImpl != null)
+			this.excelHeaderLayout = excelHeaderLayoutImpl.getExcelHeaderLayout();
 	}
 
 }

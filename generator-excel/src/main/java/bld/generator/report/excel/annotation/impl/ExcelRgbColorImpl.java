@@ -67,7 +67,7 @@ public class ExcelRgbColorImpl implements Cloneable{
 	 * @param red   the red
 	 * @param green the green
 	 */
-	public ExcelRgbColorImpl(byte blue, byte red, byte green) {
+	public ExcelRgbColorImpl(byte red, byte green,byte blue) {
 		super();
 		this.blue = blue;
 		this.red = red;
