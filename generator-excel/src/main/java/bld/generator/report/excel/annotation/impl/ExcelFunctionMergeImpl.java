@@ -15,7 +15,7 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 /**
  * The Class ExcelFunctionMergeImpl.
  */
-public class ExcelFunctionMergeImpl{
+public class ExcelFunctionMergeImpl implements Cloneable{
 
 	
 	/** The excel cells layout. */
@@ -32,6 +32,11 @@ public class ExcelFunctionMergeImpl{
 	
 	/** The name function. */
 	protected String nameFunction;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function merge.

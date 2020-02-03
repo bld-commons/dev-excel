@@ -15,7 +15,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRow;
 /**
  * The Class ExcelFunctionRowImpl.
  */
-public class ExcelFunctionRowImpl {
+public class ExcelFunctionRowImpl implements Cloneable{
 
 	/** The excel cells layout. */
 	protected ExcelCellLayout excelCellsLayout;
@@ -25,6 +25,11 @@ public class ExcelFunctionRowImpl {
 	
 	/** The excel function. */
 	protected ExcelFunction excelFunction;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function.

@@ -15,7 +15,7 @@ import bld.generator.report.excel.constant.UnderlineType;
 /**
  * The Class ExcelFontImpl.
  */
-public class ExcelFontImpl{
+public class ExcelFontImpl implements Cloneable{
 
 	
 	/** The underline. */
@@ -32,6 +32,11 @@ public class ExcelFontImpl{
 	
 	/** The bold. */
 	protected boolean bold;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel font.

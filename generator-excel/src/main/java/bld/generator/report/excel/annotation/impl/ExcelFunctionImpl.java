@@ -12,7 +12,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 /**
  * The Class ExcelFunctionImpl.
  */
-public class ExcelFunctionImpl {
+public class ExcelFunctionImpl implements Cloneable{
 
 	
 	/** The function. */
@@ -20,6 +20,11 @@ public class ExcelFunctionImpl {
 	
 	/** The name function. */
 	protected String nameFunction;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function.

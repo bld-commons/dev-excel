@@ -19,7 +19,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 /**
  * The Class ExcelCellLayoutImpl.
  */
-public class ExcelCellLayoutImpl {
+public class ExcelCellLayoutImpl implements Cloneable{
 
 	/** The wrap. */
 	protected boolean wrap;
@@ -379,9 +379,10 @@ public class ExcelCellLayoutImpl {
 	}
 
 	
-	
-	
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 	
 }

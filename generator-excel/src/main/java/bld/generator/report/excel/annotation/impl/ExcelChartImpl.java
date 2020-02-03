@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelChart;
 /**
  * The Class ExcelChartImpl.
  */
-public class ExcelChartImpl{
+public class ExcelChartImpl implements Cloneable{
 
 	
 	/** The field title. */
@@ -222,7 +222,10 @@ public class ExcelChartImpl{
 	}
 
 
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 	
 }

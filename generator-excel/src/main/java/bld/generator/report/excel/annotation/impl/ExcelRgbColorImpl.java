@@ -12,7 +12,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 /**
  * The Class ExcelRgbColorImpl.
  */
-public class ExcelRgbColorImpl {
+public class ExcelRgbColorImpl implements Cloneable{
 
 	/** The blue. */
 	protected byte blue;
@@ -22,6 +22,11 @@ public class ExcelRgbColorImpl {
 	
 	/** The green. */
 	protected byte green;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel rgb color.

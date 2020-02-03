@@ -16,7 +16,7 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 /**
  * The Class ExcelFunctionMergeRowImpl.
  */
-public class ExcelFunctionMergeRowImpl {
+public class ExcelFunctionMergeRowImpl implements Cloneable{
 
 	/** The excel cells layout. */
 	protected ExcelCellLayout excelCellsLayout;
@@ -29,6 +29,11 @@ public class ExcelFunctionMergeRowImpl {
 	
 	/** The excel function. */
 	protected ExcelFunction excelFunction;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function merge.

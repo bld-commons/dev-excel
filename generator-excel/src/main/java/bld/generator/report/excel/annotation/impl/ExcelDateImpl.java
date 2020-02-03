@@ -14,11 +14,16 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 /**
  * The Class ExcelDateImpl.
  */
-public class ExcelDateImpl{
+public class ExcelDateImpl implements Cloneable{
 
 	
 	/** The format. */
 	protected ColumnDateFormat format;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel date.

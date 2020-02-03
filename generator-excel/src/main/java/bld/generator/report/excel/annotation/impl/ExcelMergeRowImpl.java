@@ -11,11 +11,16 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 /**
  * The Class ExcelMergeRowImpl.
  */
-public class ExcelMergeRowImpl {
+public class ExcelMergeRowImpl implements Cloneable{
 
 	
 	/** The reference field. */
 	protected String referenceField;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel merge row.

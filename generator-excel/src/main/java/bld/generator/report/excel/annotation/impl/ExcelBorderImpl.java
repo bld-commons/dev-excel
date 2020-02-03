@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 /**
  * The Class ExcelBorderImpl.
  */
-public class ExcelBorderImpl {
+public class ExcelBorderImpl implements Cloneable{
 
 	
 	/** The left. */
@@ -193,6 +193,11 @@ public class ExcelBorderImpl {
 	 */
 	public void setBottom(BorderStyle bottom) {
 		this.bottom = bottom;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 

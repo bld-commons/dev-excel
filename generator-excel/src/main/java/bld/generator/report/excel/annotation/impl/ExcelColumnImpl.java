@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 /**
  * The Class ExcelColumnImpl.
  */
-public class ExcelColumnImpl{
+public class ExcelColumnImpl implements Cloneable{
 
 	/** The name column. */
 	protected String nameColumn;
@@ -27,6 +27,11 @@ public class ExcelColumnImpl{
 	
 	/** The ignore. */
 	protected boolean ignore;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel column.

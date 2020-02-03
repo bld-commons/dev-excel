@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 /**
  * The Class ExcelFunctionRowsImpl.
  */
-public class ExcelFunctionRowsImpl {
+public class ExcelFunctionRowsImpl implements Cloneable{
 
 	
 	/** The excel functions. */
@@ -22,6 +22,11 @@ public class ExcelFunctionRowsImpl {
 	
 	/** The excel function merges. */
 	protected ExcelFunctionMergeRow[] excelFunctionMerges;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function row.
