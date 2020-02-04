@@ -6,9 +6,8 @@ package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
 
-import org.apache.commons.lang3.StringUtils;
-
 import bld.generator.report.excel.annotation.ExcelFont;
+import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.UnderlineType;
 
 // TODO: Auto-generated Javadoc
@@ -28,7 +27,7 @@ public class ExcelFontImpl implements Cloneable{
 	protected boolean italic;
 	
 	/** The font. */
-	protected String font;
+	protected FontType font;
 	
 	/** The bold. */
 	protected boolean bold;
@@ -45,7 +44,7 @@ public class ExcelFontImpl implements Cloneable{
 	 */
 	public ExcelFont getExcelFont() {
 		ExcelFont excelFont=null;
-		if(underline!=null && StringUtils.isNotBlank(font))
+		if(underline!=null && font!=null)
 		excelFont=new ExcelFont() {
 			
 			@Override
@@ -69,7 +68,7 @@ public class ExcelFontImpl implements Cloneable{
 			}
 			
 			@Override
-			public String font() {
+			public FontType font() {
 				return font;
 			}
 			
@@ -90,7 +89,7 @@ public class ExcelFontImpl implements Cloneable{
 	 * @param font      the font
 	 * @param bold      the bold
 	 */
-	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, String font, boolean bold) {
+	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, FontType font, boolean bold) {
 		super();
 		this.underline = underline;
 		this.size = size;
@@ -206,7 +205,7 @@ public class ExcelFontImpl implements Cloneable{
 	 *
 	 * @return the font
 	 */
-	public String getFont() {
+	public FontType getFont() {
 		return font;
 	}
 
@@ -215,7 +214,7 @@ public class ExcelFontImpl implements Cloneable{
 	 *
 	 * @param font the new font
 	 */
-	public void setFont(String font) {
+	public void setFont(FontType font) {
 		this.font = font;
 	}
 

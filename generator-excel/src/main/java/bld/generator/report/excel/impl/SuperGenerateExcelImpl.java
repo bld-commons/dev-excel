@@ -240,7 +240,7 @@ public class SuperGenerateExcelImpl {
 	protected Font getFont(Workbook workbook, ExcelFont excelFont) {
 		Font font = workbook.createFont();
 		font.setBold(excelFont.bold());
-		font.setFontName(excelFont.font());
+		font.setFontName(excelFont.font().getValue());
 		font.setItalic(excelFont.italic());
 		font.setUnderline(excelFont.underline().getValue());
 		font.setFontHeight((short) (excelFont.size() * 20));

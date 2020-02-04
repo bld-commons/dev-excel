@@ -29,7 +29,7 @@ public class ExcelConstant {
 	public final static ExcelRgbColorImpl RGB_FONT=new ExcelRgbColorImpl((byte)0, (byte)0, (byte)0); 
 	
 	/** The Constant FONT. */
-	public final static ExcelFontImpl FONT=new ExcelFontImpl(UnderlineType.NONE, (short)11, false, "Arial", false);
+	public final static ExcelFontImpl FONT=new ExcelFontImpl(UnderlineType.NONE, (short)11, false, FontType.CALIBRI, false);
 	
 	/** The Constant BORDER. */
 	public final static ExcelBorderImpl BORDER=new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);

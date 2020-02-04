@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelHyperlink;
-import bld.generator.report.excel.ScopeGenerateExcel;
+import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
@@ -63,7 +63,7 @@ public class ReportTest {
 	private static final String PATH_FILE = "/mnt/report/";
 
 	@Autowired
-	private ScopeGenerateExcel generateExcel;
+	private GenerateExcel generateExcel;
 	
 	@Autowired
 	private ReadExcel readExcel;

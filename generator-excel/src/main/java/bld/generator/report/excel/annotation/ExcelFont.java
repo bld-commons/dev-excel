@@ -10,6 +10,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.UnderlineType;
 
 // TODO: Auto-generated Javadoc
@@ -26,7 +27,7 @@ public @interface ExcelFont {
 	 *
 	 * @return the string
 	 */
-	public String font() default "Arial";
+	public FontType font() default FontType.CALIBRI;
 
 	/**
 	 * Bold.
