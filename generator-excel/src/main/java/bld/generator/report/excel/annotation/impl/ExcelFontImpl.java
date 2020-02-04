@@ -32,6 +32,12 @@ public class ExcelFontImpl implements Cloneable{
 	/** The bold. */
 	protected boolean bold;
 	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

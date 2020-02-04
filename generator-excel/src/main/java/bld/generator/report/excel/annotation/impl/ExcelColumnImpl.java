@@ -28,6 +28,12 @@ public class ExcelColumnImpl implements Cloneable{
 	/** The ignore. */
 	protected boolean ignore;
 	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

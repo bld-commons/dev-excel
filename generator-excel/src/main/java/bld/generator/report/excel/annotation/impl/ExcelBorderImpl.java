@@ -195,6 +195,12 @@ public class ExcelBorderImpl implements Cloneable{
 		this.bottom = bottom;
 	}
 
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

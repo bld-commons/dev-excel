@@ -23,6 +23,12 @@ public class ExcelRgbColorImpl implements Cloneable{
 	/** The green. */
 	protected byte green;
 	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
@@ -63,9 +69,9 @@ public class ExcelRgbColorImpl implements Cloneable{
 	/**
 	 * Instantiates a new excel rgb color impl.
 	 *
-	 * @param blue  the blue
 	 * @param red   the red
 	 * @param green the green
+	 * @param blue  the blue
 	 */
 	public ExcelRgbColorImpl(byte red, byte green,byte blue) {
 		super();

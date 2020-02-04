@@ -21,6 +21,12 @@ public class ExcelFunctionImpl implements Cloneable{
 	/** The name function. */
 	protected String nameFunction;
 	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

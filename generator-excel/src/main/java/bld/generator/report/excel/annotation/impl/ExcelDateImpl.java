@@ -20,6 +20,12 @@ public class ExcelDateImpl implements Cloneable{
 	/** The format. */
 	protected ColumnDateFormat format;
 	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

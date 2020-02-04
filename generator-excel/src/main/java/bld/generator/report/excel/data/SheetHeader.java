@@ -42,6 +42,7 @@ public class SheetHeader implements Cloneable {
 	/** The excel merge row. */
 	private ExcelMergeRow excelMergeRow;
 	
+	/** The excel header layout. */
 	private ExcelHeaderLayout excelHeaderLayout; 
 	
 	/** The function. */
@@ -310,10 +311,20 @@ public class SheetHeader implements Cloneable {
 		this.nameFunction = nameFunction;
 	}
 
+	/**
+	 * Gets the excel header layout.
+	 *
+	 * @return the excel header layout
+	 */
 	public ExcelHeaderLayout getExcelHeaderLayout() {
 		return excelHeaderLayout;
 	}
 
+	/**
+	 * Sets the excel header layout.
+	 *
+	 * @param excelHeaderLayout the new excel header layout
+	 */
 	public void setExcelHeaderLayout(ExcelHeaderLayout excelHeaderLayout) {
 		this.excelHeaderLayout = excelHeaderLayout;
 	}

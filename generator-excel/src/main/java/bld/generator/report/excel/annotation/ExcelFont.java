@@ -25,7 +25,7 @@ public @interface ExcelFont {
 	/**
 	 * Font.
 	 *
-	 * @return the string
+	 * @return the font type
 	 */
 	public FontType font() default FontType.CALIBRI;
 

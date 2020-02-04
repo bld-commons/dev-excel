@@ -57,8 +57,7 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel cell layout.
 	 *
-	 * @param excelCellLayoutImpl
-	 *            the new excel cell layout
+	 * @param excelCellLayoutImpl the new excel cell layout
 	 */
 	public void setExcelCellLayout(ExcelCellLayoutImpl excelCellLayoutImpl) {
 		if (excelCellLayoutImpl != null)
@@ -77,8 +76,7 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel date.
 	 *
-	 * @param excelDateImpl
-	 *            the new excel date
+	 * @param excelDateImpl the new excel date
 	 */
 	public void setExcelDate(ExcelDateImpl excelDateImpl) {
 		if (excelDateImpl != null)
@@ -97,8 +95,7 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel column.
 	 *
-	 * @param excelColumnImpl
-	 *            the new excel column
+	 * @param excelColumnImpl the new excel column
 	 */
 	public void setExcelColumn(ExcelColumnImpl excelColumnImpl) {
 		if (excelColumnImpl != null)
@@ -117,8 +114,7 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel function.
 	 *
-	 * @param excelFunctionImpl
-	 *            the new excel function
+	 * @param excelFunctionImpl the new excel function
 	 */
 	public void setExcelFunction(ExcelFunctionImpl excelFunctionImpl) {
 		if (excelFunctionImpl != null)
@@ -137,8 +133,7 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel merge row.
 	 *
-	 * @param excelMergeRowImpl
-	 *            the new excel merge row
+	 * @param excelMergeRowImpl the new excel merge row
 	 */
 	public void setExcelMergeRow(ExcelMergeRowImpl excelMergeRowImpl) {
 		if (excelMergeRowImpl != null)
