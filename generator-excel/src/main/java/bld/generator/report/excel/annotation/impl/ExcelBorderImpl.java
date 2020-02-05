@@ -80,6 +80,14 @@ public class ExcelBorderImpl implements Cloneable{
 		this.right = right;
 		this.bottom = bottom;
 	}
+	
+	public ExcelBorderImpl(){
+		super();
+		this.left = BorderStyle.THIN;
+		this.top = BorderStyle.THIN;
+		this.right = BorderStyle.THIN;
+		this.bottom = BorderStyle.THIN;
+	}
 
 	/**
 	 * Hash code.

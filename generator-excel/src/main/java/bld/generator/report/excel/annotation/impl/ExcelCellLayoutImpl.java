@@ -14,6 +14,7 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.constant.ExcelConstant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -134,6 +135,19 @@ public class ExcelCellLayoutImpl implements Cloneable{
 		this.font = font;
 		this.fillPatternType = fillPatternType;
 		this.border = border;
+	}
+	
+	public ExcelCellLayoutImpl()  {
+		super();
+		this.wrap = true;
+		this.verticalAlignment = VerticalAlignment.CENTER;
+		this.rgbForeground = ExcelConstant.RGB_FOREGROUND.getExcelRgbColor();
+		this.rgbFont = ExcelConstant.RGB_FONT.getExcelRgbColor();
+		this.precision = -1;
+		this.horizontalAlignment = HorizontalAlignment.RIGHT;
+		this.font = ExcelConstant.FONT.getExcelFont();
+		this.fillPatternType = FillPatternType.SOLID_FOREGROUND;
+		this.border = ExcelConstant.BORDER.getExcelBorder();
 	}
 
 	/**

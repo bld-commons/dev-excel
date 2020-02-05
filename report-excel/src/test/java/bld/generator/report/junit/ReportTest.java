@@ -219,7 +219,7 @@ public class ReportTest {
 
 		autoreLibriSheet.setListRowSheet(list);
 
-		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,10,10);
+		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.PIE,10,10);
 		autoreLibriSheet.setExcelChart(excelChartImpl);
 		
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);

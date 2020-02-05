@@ -103,6 +103,15 @@ public class ExcelFontImpl implements Cloneable{
 		this.font = font;
 		this.bold = bold;
 	}
+	
+	public ExcelFontImpl() {
+		super();
+		this.underline = UnderlineType.NONE;
+		this.size = 11;
+		this.italic = false;
+		this.font = FontType.CALIBRI;
+		this.bold = false;
+	}
 
 	/**
 	 * Hash code.
