@@ -4,6 +4,9 @@
 */
 package bld.generator.report.excel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.annotation.ExcelChart;
@@ -18,7 +21,7 @@ import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynamicData<T> {
 
 	/** The excel chart. */
-	private ExcelChart excelChart;
+	private List<ExcelChart> listExcelChart;
 	
 
 	/**
@@ -28,25 +31,31 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 */
 	public DynamicChart(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
+		this.listExcelChart=new ArrayList<>();
 	}
 
-	/**
-	 * Gets the excel chart.
-	 *
-	 * @return the excel chart
-	 */
-	public ExcelChart getExcelChart() {
-		return excelChart;
+	
+
+	public List<ExcelChart> getListExcelChart() {
+		return listExcelChart;
 	}
+
+
+
+	public void setListExcelChart(List<ExcelChart> listExcelChart) {
+		this.listExcelChart = listExcelChart;
+	}
+
+
 
 	/**
 	 * Sets the excel chart.
 	 *
 	 * @param excelChartImpl the new excel chart
 	 */
-	public void setExcelChart(ExcelChartImpl excelChartImpl) {
+	public void addExcelChart(ExcelChartImpl excelChartImpl) {
 		if (excelChartImpl != null)
-			this.excelChart = excelChartImpl.getExcelChart();
+			this.listExcelChart.add(excelChartImpl.getExcelChart());
 	}
 
 }

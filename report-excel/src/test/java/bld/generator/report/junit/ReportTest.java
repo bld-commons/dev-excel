@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
+import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -216,11 +217,37 @@ public class ReportTest {
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2,false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno3", extraColumnAnnotation);
+		
+		
+		
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2015", null, 30,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno1")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno1"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno1", extraColumnAnnotation);
+		
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2016", null, 30.1,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno2")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno2"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno2", extraColumnAnnotation);
+
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2017", null, 30.2,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno3", extraColumnAnnotation);
 
 		autoreLibriSheet.setListRowSheet(list);
 
-		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.PIE,10,10);
-		autoreLibriSheet.setExcelChart(excelChartImpl);
+		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "percAnno1", "percAnno3", ChartTypes.PIE,10,10,LegendPosition.TOP_RIGHT);
+		autoreLibriSheet.addExcelChart(excelChartImpl);
+		
+		excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,20,20,LegendPosition.TOP_RIGHT);
+		autoreLibriSheet.addExcelChart(excelChartImpl);
+		
 		
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);
 		

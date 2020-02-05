@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
+import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
 /**
  * The Interface ExcelChart.
@@ -61,6 +62,7 @@ public @interface ExcelChart {
 	 */
 	public int sizeColumn();
 	
+	public LegendPosition legendPosition() default LegendPosition.TOP_RIGHT;
 	
 	
 }
