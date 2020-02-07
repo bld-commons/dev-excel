@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.WordUtils;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -221,4 +222,17 @@ public class ExcelUtils implements ApplicationContextAware {
 	}
 
 
+	/**
+	 * Gets the key column.
+	 *
+	 * @param sheet the sheet
+	 * @param key   the key
+	 * @return the key column
+	 */
+	public static String getKeyColumn(Sheet sheet, String key) {
+		if (!key.contains("."))
+			key = sheet.getSheetName() + "." + key;
+		return key;
+	}
+	
 }

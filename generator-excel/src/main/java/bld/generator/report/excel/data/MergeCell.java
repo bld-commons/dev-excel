@@ -14,10 +14,10 @@ import org.apache.poi.ss.usermodel.CellStyle;
 public class MergeCell {
 
 	/** The row from. */
-	private int rowFrom;
+	private int rowStart;
 
 	/** The row to. */
-	private int rowTo;
+	private int rowEnd;
 
 	/** The column from. */
 	private int columnFrom;
@@ -82,17 +82,17 @@ public class MergeCell {
 	 *
 	 * @return the row from
 	 */
-	public int getRowFrom() {
-		return rowFrom;
+	public int getRowStart() {
+		return rowStart;
 	}
 
 	/**
 	 * Sets the row from.
 	 *
-	 * @param rowFrom the new row from
+	 * @param rowStart the new row from
 	 */
-	public void setRowFrom(int rowFrom) {
-		this.rowFrom = rowFrom;
+	public void setRowStart(int rowStart) {
+		this.rowStart = rowStart;
 	}
 
 	/**
@@ -100,17 +100,17 @@ public class MergeCell {
 	 *
 	 * @return the row to
 	 */
-	public int getRowTo() {
-		return rowTo;
+	public int getRowEnd() {
+		return rowEnd;
 	}
 
 	/**
 	 * Sets the row to.
 	 *
-	 * @param rowTo the new row to
+	 * @param rowEnd the new row to
 	 */
-	public void setRowTo(int rowTo) {
-		this.rowTo = rowTo;
+	public void setRowEnd(int rowEnd) {
+		this.rowEnd = rowEnd;
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class MergeCell {
 	 */
 	@Override
 	public String toString() {
-		return "MergeColumn [rowFrom=" + rowFrom + ", rowTo=" + rowTo + ", columnFrom=" + columnFrom + ", columnTo=" + columnTo + "]";
+		return "MergeColumn [rowFrom=" + rowStart + ", rowTo=" + rowEnd + ", columnFrom=" + columnFrom + ", columnTo=" + columnTo + "]";
 	}
 
 }

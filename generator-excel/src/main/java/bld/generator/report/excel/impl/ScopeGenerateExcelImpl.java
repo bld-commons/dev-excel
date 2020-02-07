@@ -379,7 +379,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (excelSheetLayout.notMerge() || !mapMergeRow.containsKey(numColumn)) {
 						if (!excelSheetLayout.notMerge() && sheetHeader.getExcelMergeRow() != null) {
 							mergeRow = new MergeCell();
-							mergeRow.setRowFrom(indexRow);
+							mergeRow.setRowStart(indexRow);
 							mergeRow.setColumnFrom(numColumn);
 							mergeRow.setColumnTo(numColumn);
 							mergeRow.setSheetHeader((SheetHeader) sheetHeader.clone());
@@ -425,8 +425,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (sheetData.getClass().isAnnotationPresent(ExcelCharts.class) || (sheetData instanceof DynamicChart && CollectionUtils.isNotEmpty(((DynamicChart<? extends DynamicRowSheet>) sheetData).getListExcelChart()))) {
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
-					startKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(getKeyColumn(worksheet, excelChart.startKeyChart())));
-					endKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(getKeyColumn(worksheet, excelChart.endKeyChart())));
+					startKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
+					endKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
 					String keyChart = mapValue.get(excelChart.fieldTitle()).toString();
 					mapChart.put(keyChart, startKey + ":" + endKey);
 				}
@@ -463,8 +463,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				&& (sheetData.getClass().isAnnotationPresent(ExcelCharts.class) || (sheetData instanceof DynamicChart && CollectionUtils.isNotEmpty(((DynamicChart<? extends DynamicRowSheet>) sheetData).getListExcelChart())))) {
 			List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 			for (ExcelChart excelChart : listExcelChart) {
-				startKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(getKeyColumn(worksheet, excelChart.startKeyChart())));
-				endKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(getKeyColumn(worksheet, excelChart.endKeyChart())));
+				startKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
+				endKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
 				String xAxis = startKey + ":" + endKey;
 				indexRow += 2;
 				indexRow = generateChart((XSSFSheet) worksheet, mapChart, excelChart, indexRow, xAxis);
@@ -571,8 +571,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				mergeColumn.setCellFrom(cellStart);
 				mergeColumn.setCellStyleFrom(cellStype);
 				mergeColumn.setSheetHeader(sheetHeader);
-				mergeColumn.setRowFrom(indexRow);
-				mergeColumn.setRowTo(indexRow);
+				mergeColumn.setRowStart(indexRow);
+				mergeColumn.setRowEnd(indexRow);
 				mergeColumn.setColumnFrom(0);
 				mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
 				for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {

@@ -4,6 +4,7 @@
  */
 package bld.generator.report.excel.constant;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Enum RowStartEndType.
  */
@@ -14,6 +15,9 @@ public enum RowStartEndType {
 	
 	/** The row end. */
 	ROW_END("RowEnd"),
+	
+	/** The row header. */
+	ROW_HEADER("RowHeader"),
 	
 	/** The row empty. */
 	ROW_EMPTY("");
