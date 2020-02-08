@@ -11,6 +11,7 @@ import java.util.Date;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.utils.ExcelUtils;
@@ -41,26 +42,22 @@ public class SheetHeader implements Cloneable {
 
 	/** The excel merge row. */
 	private ExcelMergeRow excelMergeRow;
-	
+
 	/** The excel header layout. */
-	private ExcelHeaderLayout excelHeaderLayout; 
-	
-	/** The function. */
-	private String function;
-	
+	private ExcelHeaderLayout excelHeaderLayout;
+
+	/** The excel function. */
+	private ExcelFunction excelFunction;
+
 	/** The key map. */
 	private String keyMap;
-	
-	/** The name function. */
-	private String nameFunction;
-	
 
 	/**
 	 * Instantiates a new sheet header.
 	 */
 	public SheetHeader() {
 		super();
-		
+
 	}
 
 	/**
@@ -74,13 +71,11 @@ public class SheetHeader implements Cloneable {
 		super();
 		this.field = field;
 		this.value = value;
-		
+
 		if (field.isAnnotationPresent(ExcelMergeRow.class))
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		this.getExcelColumn();
 	}
-	
-	
 
 	/**
 	 * Sets the excel date.
@@ -222,28 +217,6 @@ public class SheetHeader implements Cloneable {
 	public void setExcelMergeRow(ExcelMergeRow excelMergeRow) {
 		this.excelMergeRow = excelMergeRow;
 	}
-	
-	
-
-	/**
-	 * Gets the function.
-	 *
-	 * @return the function
-	 */
-	public String getFunction() {
-		return function;
-	}
-
-
-	/**
-	 * Sets the function.
-	 *
-	 * @param function the new function
-	 */
-	public void setFunction(String function) {
-		this.function = function;
-	}
-
 
 	/**
 	 * Gets the key map.
@@ -294,21 +267,21 @@ public class SheetHeader implements Cloneable {
 	}
 
 	/**
-	 * Gets the name function.
+	 * Gets the excel function.
 	 *
-	 * @return the name function
+	 * @return the excel function
 	 */
-	public String getNameFunction() {
-		return nameFunction;
+	public ExcelFunction getExcelFunction() {
+		return excelFunction;
 	}
 
 	/**
-	 * Sets the name function.
+	 * Sets the excel function.
 	 *
-	 * @param nameFunction the new name function
+	 * @param excelFunction the new excel function
 	 */
-	public void setNameFunction(String nameFunction) {
-		this.nameFunction = nameFunction;
+	public void setExcelFunction(ExcelFunction excelFunction) {
+		this.excelFunction = excelFunction;
 	}
 
 	/**
@@ -328,7 +301,5 @@ public class SheetHeader implements Cloneable {
 	public void setExcelHeaderLayout(ExcelHeaderLayout excelHeaderLayout) {
 		this.excelHeaderLayout = excelHeaderLayout;
 	}
-	
-	
 
 }

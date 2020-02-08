@@ -11,12 +11,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelChart.
+ * The Interface ExcelCharts.
  */
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface ExcelCharts {
 
+	/**
+	 * Excel charts.
+	 *
+	 * @return the excel chart[]
+	 */
 	public ExcelChart[] excelCharts()default {};
 	
 }

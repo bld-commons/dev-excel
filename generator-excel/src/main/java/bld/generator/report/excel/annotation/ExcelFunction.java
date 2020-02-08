@@ -34,4 +34,11 @@ public @interface ExcelFunction {
 	 */
 	public String nameFunction();
 	
+	/**
+	 * Another table.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean anotherTable() default true;
+	
 }

@@ -7,8 +7,6 @@ package bld.generator.report.excel;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.constraints.Size;
-
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
@@ -16,19 +14,17 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
  *
  * @param <T> the generic type
  */
-public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> extends SheetFunctionTotal<T> implements DynamicColumn{
+public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> extends SheetFunctionTotal<T> implements DynamicColumn {
 
 	/** The map extra column annotation. */
-	private Map<String,ExtraColumnAnnotation> mapExtraColumnAnnotation;
-	
+	private Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation;
+
 	/**
 	 * Instantiates a new sheet dynamic function total.
-	 *
-	 * @param nameSheet the name sheet
 	 */
-	public SheetDynamicFunctionTotal(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
-		this.mapExtraColumnAnnotation=new HashMap<>();
+	public SheetDynamicFunctionTotal() {
+		super();
+		this.mapExtraColumnAnnotation = new HashMap<>();
 	}
 
 	/**
@@ -49,6 +45,4 @@ public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> exten
 		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;
 	}
 
-	
-	
 }

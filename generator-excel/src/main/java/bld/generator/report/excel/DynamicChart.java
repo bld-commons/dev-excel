@@ -20,7 +20,7 @@ import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
  */
 public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynamicData<T> {
 
-	/** The excel chart. */
+	/** The list excel chart. */
 	private List<ExcelChart> listExcelChart;
 	
 
@@ -36,12 +36,22 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 
 	
 
+	/**
+	 * Gets the list excel chart.
+	 *
+	 * @return the list excel chart
+	 */
 	public List<ExcelChart> getListExcelChart() {
 		return listExcelChart;
 	}
 
 
 
+	/**
+	 * Sets the list excel chart.
+	 *
+	 * @param listExcelChart the new list excel chart
+	 */
 	public void setListExcelChart(List<ExcelChart> listExcelChart) {
 		this.listExcelChart = listExcelChart;
 	}
@@ -49,9 +59,9 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 
 
 	/**
-	 * Sets the excel chart.
+	 * Adds the excel chart.
 	 *
-	 * @param excelChartImpl the new excel chart
+	 * @param excelChartImpl the excel chart impl
 	 */
 	public void addExcelChart(ExcelChartImpl excelChartImpl) {
 		if (excelChartImpl != null)

@@ -137,6 +137,9 @@ public class ExcelCellLayoutImpl implements Cloneable{
 		this.border = border;
 	}
 	
+	/**
+	 * Instantiates a new excel cell layout impl.
+	 */
 	public ExcelCellLayoutImpl()  {
 		super();
 		this.wrap = true;

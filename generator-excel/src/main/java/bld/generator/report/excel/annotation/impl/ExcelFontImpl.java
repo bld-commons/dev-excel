@@ -104,6 +104,9 @@ public class ExcelFontImpl implements Cloneable{
 		this.bold = bold;
 	}
 	
+	/**
+	 * Instantiates a new excel font impl.
+	 */
 	public ExcelFontImpl() {
 		super();
 		this.underline = UnderlineType.NONE;

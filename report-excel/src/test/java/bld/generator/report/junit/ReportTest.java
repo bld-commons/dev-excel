@@ -249,7 +249,7 @@ public class ReportTest {
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
 		
-		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);
+		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
 		
 		TotaleAutoreLibriRow totaleAutoreLibriRow=new TotaleAutoreLibriRow(1);
 		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);

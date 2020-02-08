@@ -161,7 +161,7 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	/**
 	 * Checks if is wrap.
 	 *
-	 * @return true, if is wrap
+	 * @return the wrap
 	 */
 	public boolean isWrap() {
 		return wrap;

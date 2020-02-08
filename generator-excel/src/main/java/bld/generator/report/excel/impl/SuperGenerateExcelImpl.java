@@ -56,6 +56,7 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFont;
+import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
@@ -301,8 +302,7 @@ public class SuperGenerateExcelImpl {
 				SheetHeader sheetHeader = new SheetHeader();
 				sheetHeader.setExcelColumn(excelFunction.excelColumn());
 				sheetHeader.setExcelCellLayout(excelFunction.excelCellsLayout());
-				sheetHeader.setFunction(excelFunction.excelFunction().function());
-				sheetHeader.setNameFunction(excelFunction.excelFunction().nameFunction());
+				sheetHeader.setExcelFunction(excelFunction.excelFunction());
 				listSheetHeader.add(sheetHeader);
 
 			}
@@ -310,9 +310,8 @@ public class SuperGenerateExcelImpl {
 				SheetHeader sheetHeader = new SheetHeader();
 				sheetHeader.setExcelColumn(excelFunctionMerge.excelColumn());
 				sheetHeader.setExcelCellLayout(excelFunctionMerge.excelCellsLayout());
-				sheetHeader.setFunction(excelFunctionMerge.excelFunction().function());
+				sheetHeader.setExcelFunction(excelFunctionMerge.excelFunction());
 				sheetHeader.setExcelMergeRow(excelFunctionMerge.excelMergeRow());
-				sheetHeader.setNameFunction(excelFunctionMerge.excelFunction().nameFunction());
 				listSheetHeader.add(sheetHeader);
 
 			}
@@ -466,7 +465,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Sheet worksheet, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Integer calRowStart, Integer calRowEnd) throws Exception {
-		if (StringUtils.isNotBlank(sheetHeader.getFunction())) {
+		if (sheetHeader.getExcelFunction()!=null) {
 			setCellFormulaExcel(cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd, worksheet);
 		} else
 			setCellValueExcel(workbook, cell, cellStyle, sheetHeader);
@@ -488,9 +487,10 @@ public class SuperGenerateExcelImpl {
 	private void setCellFormulaExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Integer calRowStart, Integer calRowEnd, Sheet worksheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
-		String function = sheetHeader.getFunction();
+		ExcelFunction excelFunction=sheetHeader.getExcelFunction();
+		String function=excelFunction.function();
 		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_EMPTY);
-		if (calRowStart != null && calRowEnd != null) {
+		if (excelFunction.anotherTable() && calRowStart != null && calRowEnd != null) {
 			function = makeFunction(worksheet, calRowStart, function, RowStartEndType.ROW_START);
 			function = makeFunction(worksheet, calRowEnd, function, RowStartEndType.ROW_END);
 		}
@@ -543,7 +543,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	private void setCellValueExcel(Workbook workbook, Sheet worksheet, MergeCell mergeRow) throws Exception {
-		if (StringUtils.isNotBlank(mergeRow.getSheetHeader().getFunction()))
+		if (mergeRow.getSheetHeader().getExcelFunction()!=null)
 			setCellFormulaExcel(worksheet, mergeRow);
 		else
 			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader());
@@ -563,15 +563,17 @@ public class SuperGenerateExcelImpl {
 		Cell cell = mergeRow.getCellFrom();
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
-		String function = sheetHeader.getFunction();
-		if (mergeRow.getCalRowStart() != null && mergeRow.getCalRowEnd() != null) {
+		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
+		String function=excelFunction.function();
+		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
+		if (excelFunction.anotherTable() && mergeRow.getCalRowStart() != null && mergeRow.getCalRowEnd() != null) {
 			function = makeFunction(worksheet, mergeRow.getCalRowStart(), function, RowStartEndType.ROW_START);
 			function = makeFunction(worksheet, mergeRow.getCalRowEnd(), function, RowStartEndType.ROW_END);
 		}
 
 		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
 		function = makeFunction(worksheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
-		function = makeFunction(worksheet, null, function, RowStartEndType.ROW_HEADER);
+		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
 		logger.debug("Function: "+function);
 		
 		// cell.setCellType(CellType.FORMULA);
@@ -724,10 +726,8 @@ public class SuperGenerateExcelImpl {
 					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
 					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
 					sheetHeader.setExcelHeaderLayout(extraColumnAnnotation.getExcelHeaderLayout());
-					if (extraColumnAnnotation.getExcelFunction() != null) {
-						sheetHeader.setFunction(extraColumnAnnotation.getExcelFunction().function());
-						sheetHeader.setNameFunction(extraColumnAnnotation.getExcelFunction().nameFunction());
-					}
+					if (extraColumnAnnotation.getExcelFunction() != null) 
+						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
 
 					sheetHeader.setKeyMap(keyMap);
 					listSheetHeader.add(sheetHeader);
@@ -764,8 +764,8 @@ public class SuperGenerateExcelImpl {
 				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getField().getName()), infoColumn);
 			else if (StringUtils.isNotBlank(sheetHeader.getKeyMap()))
 				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getKeyMap()), infoColumn);
-			else if (StringUtils.isNotBlank(sheetHeader.getNameFunction()))
-				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getNameFunction()), infoColumn);
+			else if (sheetHeader.getExcelFunction()!=null)
+				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getExcelFunction().nameFunction()), infoColumn);
 		}
 		return listSheetHeader;
 	}

@@ -13,10 +13,10 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public class MergeCell {
 
-	/** The row from. */
+	/** The row start. */
 	private int rowStart;
 
-	/** The row to. */
+	/** The row end. */
 	private int rowEnd;
 
 	/** The column from. */
@@ -78,36 +78,36 @@ public class MergeCell {
 	}
 
 	/**
-	 * Gets the row from.
+	 * Gets the row start.
 	 *
-	 * @return the row from
+	 * @return the row start
 	 */
 	public int getRowStart() {
 		return rowStart;
 	}
 
 	/**
-	 * Sets the row from.
+	 * Sets the row start.
 	 *
-	 * @param rowStart the new row from
+	 * @param rowStart the new row start
 	 */
 	public void setRowStart(int rowStart) {
 		this.rowStart = rowStart;
 	}
 
 	/**
-	 * Gets the row to.
+	 * Gets the row end.
 	 *
-	 * @return the row to
+	 * @return the row end
 	 */
 	public int getRowEnd() {
 		return rowEnd;
 	}
 
 	/**
-	 * Sets the row to.
+	 * Sets the row end.
 	 *
-	 * @param rowEnd the new row to
+	 * @param rowEnd the new row end
 	 */
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;

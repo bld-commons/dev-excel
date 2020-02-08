@@ -6,8 +6,6 @@ package bld.generator.report.excel;
 
 import java.util.Map;
 
-import javax.validation.constraints.Size;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class SheetFunctionTotal.
@@ -21,7 +19,6 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 	
 	/** The cal row end. */
 	private Integer calRowEnd;
-	
 	
 
 	/**
@@ -37,11 +34,9 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 
 	/**
 	 * Instantiates a new sheet function total.
-	 *
-	 * @param nameSheet the name sheet
 	 */
-	public SheetFunctionTotal(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
+	public SheetFunctionTotal() {
+		super("");
 	}
 
 	/**

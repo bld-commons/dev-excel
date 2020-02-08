@@ -36,6 +36,7 @@ public class ExcelChartImpl implements Cloneable{
 	/** The size column. */
 	protected int sizeColumn;
 	
+	/** The legend position. */
 	protected LegendPosition legendPosition;
 
 	/**
@@ -93,6 +94,17 @@ public class ExcelChartImpl implements Cloneable{
 
 
 
+	/**
+	 * Instantiates a new excel chart impl.
+	 *
+	 * @param fieldTitle     the field title
+	 * @param startKeyChart  the start key chart
+	 * @param endKeyChart    the end key chart
+	 * @param chartTypes     the chart types
+	 * @param sizeRow        the size row
+	 * @param sizeColumn     the size column
+	 * @param legendPosition the legend position
+	 */
 	public ExcelChartImpl(String fieldTitle, String startKeyChart, String endKeyChart, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition) {
 		super();
 		this.fieldTitle = fieldTitle;
@@ -227,6 +239,11 @@ public class ExcelChartImpl implements Cloneable{
 	
 
 
+	/**
+	 * Gets the legend position.
+	 *
+	 * @return the legend position
+	 */
 	public LegendPosition getLegendPosition() {
 		return legendPosition;
 	}
@@ -235,6 +252,11 @@ public class ExcelChartImpl implements Cloneable{
 
 
 
+	/**
+	 * Sets the legend position.
+	 *
+	 * @param legendPosition the new legend position
+	 */
 	public void setLegendPosition(LegendPosition legendPosition) {
 		this.legendPosition = legendPosition;
 	}

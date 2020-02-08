@@ -383,7 +383,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							mergeRow.setColumnFrom(numColumn);
 							mergeRow.setColumnTo(numColumn);
 							mergeRow.setSheetHeader((SheetHeader) sheetHeader.clone());
-							if (StringUtils.isBlank(sheetHeader.getFunction()))
+							if (sheetHeader.getExcelFunction()==null)
 								mergeRow.getSheetHeader().setValue(value);
 							mergeRow.setCellFrom(cell);
 							mergeRow.setCellStyleFrom(cellStyle);

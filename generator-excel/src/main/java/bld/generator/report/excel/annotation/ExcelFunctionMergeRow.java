@@ -48,4 +48,5 @@ public @interface ExcelFunctionMergeRow {
 	 */
 	public ExcelFunction excelFunction();
 	
+	
 }

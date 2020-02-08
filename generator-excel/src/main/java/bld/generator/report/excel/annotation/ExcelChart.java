@@ -62,6 +62,11 @@ public @interface ExcelChart {
 	 */
 	public int sizeColumn();
 	
+	/**
+	 * Legend position.
+	 *
+	 * @return the legend position
+	 */
 	public LegendPosition legendPosition() default LegendPosition.TOP_RIGHT;
 	
 	

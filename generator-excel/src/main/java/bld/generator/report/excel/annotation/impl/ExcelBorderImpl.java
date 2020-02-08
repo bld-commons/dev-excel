@@ -81,6 +81,9 @@ public class ExcelBorderImpl implements Cloneable{
 		this.bottom = bottom;
 	}
 	
+	/**
+	 * Instantiates a new excel border impl.
+	 */
 	public ExcelBorderImpl(){
 		super();
 		this.left = BorderStyle.THIN;
