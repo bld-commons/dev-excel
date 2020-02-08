@@ -527,7 +527,7 @@ public class SuperGenerateExcelImpl {
 					String nameSheet = keyParameter.substring(0, keyParameter.lastIndexOf("."));
 					function = "'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum());
 				} else
-					function = function.replace(parameter, "'" + worksheet.getSheetName().replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
+					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 			}
 
 		}
