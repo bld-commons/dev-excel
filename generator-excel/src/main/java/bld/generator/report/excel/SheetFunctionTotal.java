@@ -4,8 +4,6 @@
  */
 package bld.generator.report.excel;
 
-import java.util.Map;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class SheetFunctionTotal.
@@ -20,17 +18,6 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 	/** The cal row end. */
 	private Integer calRowEnd;
 	
-
-	/**
-	 * Sets the map field column.
-	 *
-	 * @param mapFieldColumn the map field column
-	 */
-	@Override
-	public void setMapFieldColumn(Map<String, Integer> mapFieldColumn) {
-		super.setMapFieldColumn(mapFieldColumn);
-		
-	}
 
 	/**
 	 * Instantiates a new sheet function total.

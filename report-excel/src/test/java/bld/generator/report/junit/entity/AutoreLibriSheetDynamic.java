@@ -40,13 +40,6 @@ public class AutoreLibriSheetDynamic extends DynamicChart<AutoreLibriRowDynamic>
 		this.sheetFunctionsTotal = sheetFunctionsTotal;
 	}
 
-
-
-	@Override
-	public void setMapFieldColumn(Map<String, Integer> mapFieldColumn) {
-		super.setMapFieldColumn(mapFieldColumn);
-	}
-
 	@Override
 	public Class<AutoreLibriRowDynamic> getRowClass() {
 		return AutoreLibriRowDynamic.class;
