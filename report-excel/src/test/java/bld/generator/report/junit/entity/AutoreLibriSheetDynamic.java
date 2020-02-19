@@ -1,7 +1,5 @@
 package bld.generator.report.junit.entity;
 
-import java.util.Map;
-
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.DynamicChart;

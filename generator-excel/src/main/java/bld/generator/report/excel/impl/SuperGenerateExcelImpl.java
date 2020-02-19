@@ -8,7 +8,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -278,12 +277,7 @@ public class SuperGenerateExcelImpl {
 		logger.debug("Row: " + classRow.getSimpleName());
 		Set<String> listTitolo = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
-		Set<Field> listField = new HashSet<>();
-		Class<?> classApp = classRow;
-		do {
-			listField.addAll(Arrays.asList(classApp.getDeclaredFields()));
-			classApp = classApp.getSuperclass();
-		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
+		Set<Field> listField = ExcelUtils.getListField(classRow);
 		for (Field field : listField) {
 			ExcelColumn sheetColumn = field.getAnnotation(ExcelColumn.class);
 			if (sheetColumn != null && !sheetColumn.ignore()) {
@@ -525,7 +519,7 @@ public class SuperGenerateExcelImpl {
 					row=infoColumn.getRowHeader();
 				if (keyParameter.contains(".")) {
 					String nameSheet = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = "'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum());
+					function = function.replace(parameter,"'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 				} else
 					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 			}
