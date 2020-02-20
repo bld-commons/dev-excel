@@ -82,6 +82,8 @@ import bld.generator.report.utils.ValueProps;
 @SuppressWarnings({"deprecation"})
 public class SuperGenerateExcelImpl {
 
+	private static final int FLAT_ANGLE = 180;
+
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
 
@@ -150,6 +152,7 @@ public class SuperGenerateExcelImpl {
 			((XSSFCellStyle) cellStyleHeader).setFillForegroundColor(colorForeground);
 			((XSSFFont) font).setColor(colorFont);
 		}
+		cellStyleHeader.setRotation((short)(layout.rotation()%FLAT_ANGLE));
 		cellStyleHeader.setFont(font);
 		cellStyleHeader.setFillPattern(layout.fillPatternType());
 		cellStyleHeader.setAlignment(layout.horizontalAlignment());
@@ -665,6 +668,8 @@ public class SuperGenerateExcelImpl {
 		worksheet.getPrintSetup().setLandscape(layoutSheet.landscape());
 		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
 		worksheet.setDefaultRowHeight((short) (layoutHeader.cmHeightCell() * 568));
+		if(layoutSheet.order()>-1)
+			workbook.setSheetOrder(worksheet.getSheetName(), layoutSheet.order());
 		return manageCellStyleHeader(workbook, worksheet, layoutHeader, null);
 	}
 

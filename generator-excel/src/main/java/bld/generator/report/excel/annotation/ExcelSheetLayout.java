@@ -48,4 +48,6 @@ public @interface ExcelSheetLayout {
 	 */
 	public int startColumn()default 0;
 	
+	public int order()default -1;
+	
 }

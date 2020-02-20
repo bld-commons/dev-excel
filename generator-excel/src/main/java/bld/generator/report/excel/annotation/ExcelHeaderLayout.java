@@ -96,4 +96,6 @@ public @interface ExcelHeaderLayout {
 	 */
 	public FillPatternType fillPatternType() default FillPatternType.SOLID_FOREGROUND;
 	
+	public int rotation() default 0;
+	
 }

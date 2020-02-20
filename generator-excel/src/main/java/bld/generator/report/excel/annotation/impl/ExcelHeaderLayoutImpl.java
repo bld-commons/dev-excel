@@ -50,6 +50,8 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	/** The border. */
 	private ExcelBorder border;
 	
+	private int rotation;
+	
 	
 
 	/**
@@ -125,6 +127,11 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 			public ExcelBorder border() {
 				return border;
 			}
+
+			@Override
+			public int rotation() {
+				return rotation;
+			}
 		};
 		return excelHeaderLayout;
 	}
@@ -144,7 +151,7 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	 * @param border              the border
 	 */
 	public ExcelHeaderLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType, int cmWidthCell,
-			short cmHeightCell, ExcelBorder border) {
+			short cmHeightCell, ExcelBorder border,int rotation) {
 		super();
 		this.wrap = wrap;
 		this.verticalAlignment = verticalAlignment;
@@ -156,6 +163,7 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		this.cmWidthCell = cmWidthCell;
 		this.cmHeightCell = cmHeightCell;
 		this.border = border;
+		this.rotation=rotation;
 	}
 
 	/**
@@ -338,11 +346,6 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		this.border = border;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -355,17 +358,12 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
 		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
 		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
+		result = prime * result + rotation;
 		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
 		result = prime * result + (wrap ? 1231 : 1237);
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -403,11 +401,27 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 				return false;
 		} else if (!rgbForeground.equals(other.rgbForeground))
 			return false;
+		if (rotation != other.rotation)
+			return false;
 		if (verticalAlignment != other.verticalAlignment)
 			return false;
 		if (wrap != other.wrap)
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the rotation
+	 */
+	public int getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * @param rotation the rotation to set
+	 */
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
 	}
 	
 	

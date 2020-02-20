@@ -229,7 +229,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getNameSheet().replace("/", ""));
 			} else
 				worksheet = workbook.createSheet("Don't defined" + (indiceNomeSheet++));
-
+			
 			Footer footer = worksheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 			if (sheet instanceof MergeSheet) {
@@ -594,28 +594,30 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Row row = worksheet.createRow(indexRow);
 				ExcelLabel excelLabel = field.getAnnotation(ExcelLabel.class);
 				Object value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(sheet);
-				if (!(value instanceof String))
-					throw new Exception(field.getName() + " field type is not supported: required String");
-				if (value != null && StringUtils.isNotBlank(value.toString())) {
-					CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(), null);
-					SheetHeader sheetHeader = new SheetHeader();
-					sheetHeader.setValue(value);
-					sheetHeader.setExcelCellLayout(excelLabel.labelLayout());
-					Cell cellStart = row.createCell(0);
-					MergeCell mergeColumn = new MergeCell();
-					mergeColumn.setCellFrom(cellStart);
-					mergeColumn.setCellStyleFrom(cellStype);
-					mergeColumn.setSheetHeader(sheetHeader);
-					mergeColumn.setRowStart(indexRow);
-					mergeColumn.setRowEnd(indexRow);
-					mergeColumn.setColumnFrom(0);
-					mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
-					for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {
-						Cell cell = row.createCell(indexColumn);
-						cell.setCellStyle(cellStype);
+				if (value != null) {
+					if (!(value instanceof String))
+						throw new Exception(field.getName() + " field type is not supported: required String");
+					if (StringUtils.isNotBlank(value.toString())) {
+						CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(), null);
+						SheetHeader sheetHeader = new SheetHeader();
+						sheetHeader.setValue(value);
+						sheetHeader.setExcelCellLayout(excelLabel.labelLayout());
+						Cell cellStart = row.createCell(0);
+						MergeCell mergeColumn = new MergeCell();
+						mergeColumn.setCellFrom(cellStart);
+						mergeColumn.setCellStyleFrom(cellStype);
+						mergeColumn.setSheetHeader(sheetHeader);
+						mergeColumn.setRowStart(indexRow);
+						mergeColumn.setRowEnd(indexRow);
+						mergeColumn.setColumnFrom(0);
+						mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
+						for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {
+							Cell cell = row.createCell(indexColumn);
+							cell.setCellStyle(cellStype);
+						}
+						runMergeCell(workbook, worksheet, mergeColumn);
+						indexRow += 2;
 					}
-					runMergeCell(workbook, worksheet, mergeColumn);
-					indexRow += 2;
 				}
 				break;
 			}
