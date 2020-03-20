@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -61,8 +62,9 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelMergeRow(referenceField = "")
 	private Integer matricola;
 	
-	@ExcelHeaderLayout(cmWidthCell = 10,rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
+	@ExcelHeaderLayout(rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
 	@ExcelColumn(nameColumn = "Prezzo",indexColumn = 7)
+	@ExcelColumnWidth(width=31)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
 	private Double prezzo;
 	

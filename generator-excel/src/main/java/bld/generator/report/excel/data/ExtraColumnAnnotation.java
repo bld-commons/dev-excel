@@ -1,19 +1,22 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.ExtraColumnAnnotation.java
+*/
 package bld.generator.report.excel.data;
 
 import javax.validation.constraints.NotNull;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
+import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderLayoutImpl;
@@ -35,6 +38,8 @@ public class ExtraColumnAnnotation {
 
 	/** The excel date. */
 	private ExcelDate excelDate;
+
+	private ExcelColumnWidth excelColumnWidth;
 
 	/** The excel merge row. */
 	private ExcelMergeRow excelMergeRow;
@@ -157,6 +162,15 @@ public class ExtraColumnAnnotation {
 	public void setExcelHeaderLayout(ExcelHeaderLayoutImpl excelHeaderLayoutImpl) {
 		if (excelHeaderLayoutImpl != null)
 			this.excelHeaderLayout = excelHeaderLayoutImpl.getExcelHeaderLayout();
+	}
+
+	public ExcelColumnWidth getExcelColumnWidth() {
+		return excelColumnWidth;
+	}
+
+	public void setExcelColumnWidth(ExcelColumnWidthImpl excelColumnWidthImpl) {
+		if (excelColumnWidthImpl != null)
+			this.excelColumnWidth = excelColumnWidthImpl.getExcelColumnWidth();
 	}
 
 }

@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.utils.ExcelUtils.java
+*/
 package bld.generator.report.utils;
 
 import java.io.FileOutputStream;
@@ -33,7 +34,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	/** The Constant BLD_GENERATOR. */
 	private static final String BLD_GENERATOR = "bld.generator";
 
-	/** The Constant logger. */
+	/** The Constant ANNOTATIONS. */
 //	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
 	/** The Constant ANNOTATIONS. */
@@ -41,6 +42,8 @@ public class ExcelUtils implements ApplicationContextAware {
 	
 	/** The Constant ANNOTATION_DATA. */
 	public static final String ANNOTATION_DATA = "annotationData";
+	
+	
 	
 	/** The application context. */
 	private static ApplicationContext applicationContext;
@@ -237,6 +240,12 @@ public class ExcelUtils implements ApplicationContextAware {
 	
 	
 	
+	/**
+	 * Gets the list field.
+	 *
+	 * @param classComponentExcel the class component excel
+	 * @return the list field
+	 */
 	public static Set<Field>getListField(Class<?> classComponentExcel){
 		Set<Field> listField = new HashSet<>();
 		Class<?> classApp = classComponentExcel;
@@ -245,5 +254,26 @@ public class ExcelUtils implements ApplicationContextAware {
 			classApp = classApp.getSuperclass();
 		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
 		return listField;
+	}
+	
+	
+	/**
+	 * Width column.
+	 *
+	 * @param widthColumn the width column
+	 * @return the short
+	 */
+	public static short widthColumn(int widthColumn) {
+		return (short)(widthColumn*1036);
+	}
+	
+	/**
+	 * Hight row.
+	 *
+	 * @param hightRow the hight row
+	 * @return the short
+	 */
+	public static short hightRow(int hightRow) {
+		return (short)(hightRow*568);
 	}
 }

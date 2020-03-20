@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelColumnImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -9,6 +10,7 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -27,6 +29,7 @@ public class ExcelColumnImpl implements Cloneable{
 	
 	/** The ignore. */
 	protected boolean ignore;
+	
 	
 	/**
 	 * Clone.
@@ -48,6 +51,7 @@ public class ExcelColumnImpl implements Cloneable{
 		ExcelColumn excelColumn = null;
 		if (StringUtils.isNotBlank(nameColumn) )
 			excelColumn = new ExcelColumn() {
+
 				@Override
 				public Class<? extends Annotation> annotationType() {
 					return ExcelColumn.class;
@@ -74,11 +78,15 @@ public class ExcelColumnImpl implements Cloneable{
 					return ignore;
 				}
 
+			
+
 			};
 
 		return excelColumn;
 	}
 
+	
+	
 
 	/**
 	 * Instantiates a new excel column impl.
@@ -87,15 +95,16 @@ public class ExcelColumnImpl implements Cloneable{
 	 * @param comment     the comment
 	 * @param indexColumn the index column
 	 * @param ignore      the ignore
-	 * @throws Exception the exception
 	 */
-	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn,boolean ignore) throws Exception {
+	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn, boolean ignore) {
 		super();
 		this.nameColumn = nameColumn;
 		this.comment = comment;
 		this.indexColumn = indexColumn;
-		this.ignore=ignore;
+		this.ignore = ignore;
 	}
+
+	
 
 	/**
 	 * Gets the name column.
@@ -168,6 +177,47 @@ public class ExcelColumnImpl implements Cloneable{
 	public void setIgnore(boolean ignore) {
 		this.ignore = ignore;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + (ignore ? 1231 : 1237);
+		long temp;
+		temp = Double.doubleToLongBits(indexColumn);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((nameColumn == null) ? 0 : nameColumn.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelColumnImpl other = (ExcelColumnImpl) obj;
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
+			return false;
+		if (ignore != other.ignore)
+			return false;
+		if (Double.doubleToLongBits(indexColumn) != Double.doubleToLongBits(other.indexColumn))
+			return false;
+		if (nameColumn == null) {
+			if (other.nameColumn != null)
+				return false;
+		} else if (!nameColumn.equals(other.nameColumn))
+			return false;
+		return true;
+	}
+
+	
 
 	
 

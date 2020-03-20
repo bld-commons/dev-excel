@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelColumn.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -11,7 +12,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelColumn.
  */
@@ -47,5 +47,7 @@ public @interface ExcelColumn {
 	 * @return true, if successful
 	 */
 	public boolean ignore() default false;
+	
+	
 	
 }

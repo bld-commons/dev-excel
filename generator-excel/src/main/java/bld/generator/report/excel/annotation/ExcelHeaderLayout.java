@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelHeaderLayout.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -75,19 +76,13 @@ public @interface ExcelHeaderLayout {
 	 */
 	public VerticalAlignment verticalAlignment() default VerticalAlignment.CENTER;
 	
-	/**
-	 * Cm width cell.
-	 *
-	 * @return the int
-	 */
-	public int cmWidthCell() default 5;
 	
 	/**
-	 * Cm height cell.
+	 * Height row.
 	 *
 	 * @return the short
 	 */
-	public short cmHeightCell() default 1;
+	public short heightRow() default 2;
 	
 	/**
 	 * Fill pattern type.
@@ -96,6 +91,11 @@ public @interface ExcelHeaderLayout {
 	 */
 	public FillPatternType fillPatternType() default FillPatternType.SOLID_FOREGROUND;
 	
+	/**
+	 * Rotation.
+	 *
+	 * @return the int
+	 */
 	public int rotation() default 0;
 	
 }

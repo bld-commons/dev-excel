@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.constant.ExcelConstant.java
+*/
 package bld.generator.report.excel.constant;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -11,6 +12,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
+import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFontImpl;
 import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
@@ -34,6 +36,7 @@ public class ExcelConstant {
 	/** The Constant BORDER. */
 	public final static ExcelBorderImpl BORDER=new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 	
+	/** The Constant EXCEL_CELL_LAYOUT_INTEGER. */
 	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_INTEGER=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, RGB_FOREGROUND.getExcelRgbColor(), RGB_FONT.getExcelRgbColor(), -1, HorizontalAlignment.RIGHT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
 	
 	/** The Constant EXCEL_CELL_LAYOUT_DOUBLE. */
@@ -47,5 +50,10 @@ public class ExcelConstant {
 	
 	/** The Constant EXCEL_DATE_DD_MM_YYYY. */
 	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
+	
+	/** The Constant DEFAULT_WIDTH_COLUMN. */
+	public static final int DEFAULT_WIDTH_COLUMN=7;
+	
+	public final static ExcelColumnWidthImpl EXCEL_COLUMN_WIDTH=new ExcelColumnWidthImpl(DEFAULT_WIDTH_COLUMN);
 
 }

@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,13 +42,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.6.RELEASE</version>
+		<version>2.2.5.RELEASE</version>
 		<relativePath />
 	</parent>
 
 	<properties>
-		<org.apache.poi-version>4.1.1</org.apache.poi-version>
-		<commons-compress.version>1.19</commons-compress.version>
+		<org.apache.poi-version>4.1.2</org.apache.poi-version>
+		<commons-compress.version>1.20</commons-compress.version>
 		<org.apache.commons-version>3.9</org.apache.commons-version>
 		<javax.validation-version>2.0.1.Final</javax.validation-version>
 		<!-- PLUGIN INIZIO -->

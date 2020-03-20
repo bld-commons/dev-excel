@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;

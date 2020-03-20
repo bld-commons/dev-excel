@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.SheetHeader.java
+*/
 package bld.generator.report.excel.data;
 
 import java.lang.reflect.Field;
@@ -10,10 +11,12 @@ import java.util.Date;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
@@ -49,6 +52,8 @@ public class SheetHeader implements Cloneable {
 	/** The excel function. */
 	private ExcelFunction excelFunction;
 
+	private ExcelColumnWidth excelColumnWidth;
+
 	/** The key map. */
 	private String keyMap;
 
@@ -71,9 +76,10 @@ public class SheetHeader implements Cloneable {
 		super();
 		this.field = field;
 		this.value = value;
-
 		if (field.isAnnotationPresent(ExcelMergeRow.class))
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
+		if (field.isAnnotationPresent(ExcelColumnWidth.class))
+			this.setExcelColumnWidth(field.getAnnotation(ExcelColumnWidth.class));
 		this.getExcelColumn();
 	}
 
@@ -84,6 +90,16 @@ public class SheetHeader implements Cloneable {
 	 */
 	public void setExcelDate(ExcelDate excelDate) {
 		this.excelDate = excelDate;
+	}
+
+	public ExcelColumnWidth getExcelColumnWidth() {
+		if (excelColumnWidth == null)
+			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getExcelColumnWidth();
+		return excelColumnWidth;
+	}
+
+	public void setExcelColumnWidth(ExcelColumnWidth excelColumnWidth) {
+		this.excelColumnWidth = excelColumnWidth;
 	}
 
 	/**

@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.utils.ValuePropsImpl.java
+*/
 package bld.generator.report.utils;
 
 import org.apache.commons.lang3.StringUtils;

@@ -8,7 +8,9 @@ import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelRowHeight;
 
+@ExcelRowHeight(height = 5)
 public class DateRow implements RowSheet {
 
 	@ExcelColumn(indexColumn = 0, nameColumn = "Data da")

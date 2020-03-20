@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelFunctionImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -135,7 +136,7 @@ public class ExcelFunctionImpl implements Cloneable{
 	/**
 	 * Checks if is another table.
 	 *
-	 * @return true, if is another table
+	 * @return the another table
 	 */
 	public boolean isAnotherTable() {
 		return anotherTable;

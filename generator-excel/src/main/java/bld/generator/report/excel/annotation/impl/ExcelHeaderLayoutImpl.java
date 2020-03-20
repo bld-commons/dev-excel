@@ -1,6 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelHeaderLayoutImpl.java
 */
 package bld.generator.report.excel.annotation.impl;
 
@@ -41,15 +42,14 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	/** The fill pattern type. */
 	private FillPatternType fillPatternType;
 	
-	/** The cm width cell. */
-	private int cmWidthCell;
 	
-	/** The cm height cell. */
-	private short cmHeightCell;
+	/** The height row. */
+	private short heightRow;
 	
 	/** The border. */
 	private ExcelBorder border;
 	
+	/** The rotation. */
 	private int rotation;
 	
 	
@@ -113,15 +113,6 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 				return fillPatternType;
 			}
 
-			@Override
-			public int cmWidthCell() {
-				return cmWidthCell;
-			}
-
-			@Override
-			public short cmHeightCell() {
-				return cmHeightCell;
-			}
 
 			@Override
 			public ExcelBorder border() {
@@ -131,6 +122,11 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 			@Override
 			public int rotation() {
 				return rotation;
+			}
+
+			@Override
+			public short heightRow() {
+				return heightRow;
 			}
 		};
 		return excelHeaderLayout;
@@ -146,12 +142,11 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	 * @param horizontalAlignment the horizontal alignment
 	 * @param font                the font
 	 * @param fillPatternType     the fill pattern type
-	 * @param cmWidthCell         the cm width cell
-	 * @param cmHeightCell        the cm height cell
+	 * @param heightRow           the height row
 	 * @param border              the border
+	 * @param rotation            the rotation
 	 */
-	public ExcelHeaderLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType, int cmWidthCell,
-			short cmHeightCell, ExcelBorder border,int rotation) {
+	public ExcelHeaderLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType, short heightRow, ExcelBorder border,int rotation) {
 		super();
 		this.wrap = wrap;
 		this.verticalAlignment = verticalAlignment;
@@ -160,8 +155,7 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		this.horizontalAlignment = horizontalAlignment;
 		this.font = font;
 		this.fillPatternType = fillPatternType;
-		this.cmWidthCell = cmWidthCell;
-		this.cmHeightCell = cmHeightCell;
+		this.heightRow = heightRow;
 		this.border = border;
 		this.rotation=rotation;
 	}
@@ -292,40 +286,24 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		this.fillPatternType = fillPatternType;
 	}
 
+	
+
 	/**
-	 * Gets the cm width cell.
+	 * Gets the height row.
 	 *
-	 * @return the cm width cell
+	 * @return the height row
 	 */
-	public int getCmWidthCell() {
-		return cmWidthCell;
+	public short getHeightRow() {
+		return heightRow;
 	}
 
 	/**
-	 * Sets the cm width cell.
+	 * Sets the height row.
 	 *
-	 * @param cmWidthCell the new cm width cell
+	 * @param heightRow the new height row
 	 */
-	public void setCmWidthCell(int cmWidthCell) {
-		this.cmWidthCell = cmWidthCell;
-	}
-
-	/**
-	 * Gets the cm height cell.
-	 *
-	 * @return the cm height cell
-	 */
-	public short getCmHeightCell() {
-		return cmHeightCell;
-	}
-
-	/**
-	 * Sets the cm height cell.
-	 *
-	 * @param cmHeightCell the new cm height cell
-	 */
-	public void setCmHeightCell(short cmHeightCell) {
-		this.cmHeightCell = cmHeightCell;
+	public void setHeightRow(short heightRow) {
+		this.heightRow = heightRow;
 	}
 
 	/**
@@ -346,16 +324,38 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		this.border = border;
 	}
 
+	/**
+	 * Gets the rotation.
+	 *
+	 * @return the rotation
+	 */
+	public int getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * Sets the rotation.
+	 *
+	 * @param rotation the new rotation
+	 */
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((border == null) ? 0 : border.hashCode());
-		result = prime * result + cmHeightCell;
-		result = prime * result + cmWidthCell;
 		result = prime * result + ((fillPatternType == null) ? 0 : fillPatternType.hashCode());
 		result = prime * result + ((font == null) ? 0 : font.hashCode());
 		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
+		result = prime * result + heightRow;
 		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
 		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
 		result = prime * result + rotation;
@@ -364,6 +364,12 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -378,10 +384,6 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 				return false;
 		} else if (!border.equals(other.border))
 			return false;
-		if (cmHeightCell != other.cmHeightCell)
-			return false;
-		if (cmWidthCell != other.cmWidthCell)
-			return false;
 		if (fillPatternType != other.fillPatternType)
 			return false;
 		if (font == null) {
@@ -390,6 +392,8 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		} else if (!font.equals(other.font))
 			return false;
 		if (horizontalAlignment != other.horizontalAlignment)
+			return false;
+		if (heightRow != other.heightRow)
 			return false;
 		if (rgbFont == null) {
 			if (other.rgbFont != null)
@@ -410,19 +414,6 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 		return true;
 	}
 
-	/**
-	 * @return the rotation
-	 */
-	public int getRotation() {
-		return rotation;
-	}
-
-	/**
-	 * @param rotation the rotation to set
-	 */
-	public void setRotation(int rotation) {
-		this.rotation = rotation;
-	}
 	
 	
 	

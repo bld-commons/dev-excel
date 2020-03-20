@@ -10,7 +10,7 @@ import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 @ExcelSheetLayout
-@ExcelHeaderLayout(cmWidthCell=5)
+@ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
 @ExcelFreezePane(rowFreez = 3, columnFreez = 1)
 public class AutoreLibriSheet extends SheetData<AutoreLibriRow>{
