@@ -44,8 +44,18 @@ public @interface ExcelSummary {
 	 */
 	public ExcelCellLayout layout() default @ExcelCellLayout;
 	
+	/**
+	 * Width column 1.
+	 *
+	 * @return the int
+	 */
 	public int widthColumn1() default ExcelConstant.DEFAULT_WIDTH_COLUMN;
 	
+	/**
+	 * Width column 2.
+	 *
+	 * @return the int
+	 */
 	public int widthColumn2() default ExcelConstant.DEFAULT_WIDTH_COLUMN;
 	
 }

@@ -1,3 +1,8 @@
+/**
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.junit.ReportTest.java
+*/
 package bld.generator.report.junit;
 
 import java.io.FileInputStream;
@@ -54,6 +59,9 @@ import bld.read.report.junit.entity.ReadGenereRow;
 import bld.read.report.junit.entity.ReadGenereSheet;
 import bld.read.report.utils.ExcelType;
 
+/**
+ * The Class ReportTest.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ConfigurationProperties
@@ -61,19 +69,32 @@ import bld.read.report.utils.ExcelType;
 //@EnableAutoConfiguration(exclude=ExcelConfiguration.class)
 public class ReportTest {
 
+	/** The Constant PATH_FILE. */
 	private static final String PATH_FILE = "/mnt/report/";
 
+	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
 	
+	/** The read excel. */
 	@Autowired
 	private ReadExcel readExcel;
 	
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Test.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
@@ -134,6 +155,11 @@ public class ReportTest {
 
 	}
 
+	/**
+	 * Test dynamic.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testDynamic() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
@@ -272,6 +298,11 @@ public class ReportTest {
 
 
 	
+	/**
+	 * Test read.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testRead() throws Exception{
 		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori.xlsx");

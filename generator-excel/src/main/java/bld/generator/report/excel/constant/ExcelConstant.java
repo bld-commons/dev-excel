@@ -54,6 +54,7 @@ public class ExcelConstant {
 	/** The Constant DEFAULT_WIDTH_COLUMN. */
 	public static final int DEFAULT_WIDTH_COLUMN=7;
 	
+	/** The Constant EXCEL_COLUMN_WIDTH. */
 	public final static ExcelColumnWidthImpl EXCEL_COLUMN_WIDTH=new ExcelColumnWidthImpl(DEFAULT_WIDTH_COLUMN);
 
 }

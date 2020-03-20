@@ -113,6 +113,7 @@ public class SuperGenerateExcelImpl {
 	/** The map field column. */
 	protected Map<String, InfoColumn> mapFieldColumn = new HashMap<>();
 	
+	/** The map width column. */
 	protected Map<Integer,Integer>mapWidthColumn=new HashMap<>();
 
 	/** The value props. */
@@ -779,6 +780,14 @@ public class SuperGenerateExcelImpl {
 		return listSheetHeader;
 	}
 
+	/**
+	 * Sets the column width.
+	 *
+	 * @param worksheet   the worksheet
+	 * @param indexColumn the index column
+	 * @param width       the width
+	 * @throws Exception the exception
+	 */
 	protected void setColumnWidth(Sheet worksheet, Integer indexColumn, Integer width) throws Exception {
 		if(!this.mapWidthColumn.containsKey(indexColumn)|| this.mapWidthColumn.get(indexColumn)<width) {
 			this.mapWidthColumn.put(new Integer(indexColumn), new Integer(width));

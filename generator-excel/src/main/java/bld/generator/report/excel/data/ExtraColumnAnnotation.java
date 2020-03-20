@@ -39,6 +39,7 @@ public class ExtraColumnAnnotation {
 	/** The excel date. */
 	private ExcelDate excelDate;
 
+	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
 
 	/** The excel merge row. */
@@ -164,10 +165,20 @@ public class ExtraColumnAnnotation {
 			this.excelHeaderLayout = excelHeaderLayoutImpl.getExcelHeaderLayout();
 	}
 
+	/**
+	 * Gets the excel column width.
+	 *
+	 * @return the excel column width
+	 */
 	public ExcelColumnWidth getExcelColumnWidth() {
 		return excelColumnWidth;
 	}
 
+	/**
+	 * Sets the excel column width.
+	 *
+	 * @param excelColumnWidthImpl the new excel column width
+	 */
 	public void setExcelColumnWidth(ExcelColumnWidthImpl excelColumnWidthImpl) {
 		if (excelColumnWidthImpl != null)
 			this.excelColumnWidth = excelColumnWidthImpl.getExcelColumnWidth();

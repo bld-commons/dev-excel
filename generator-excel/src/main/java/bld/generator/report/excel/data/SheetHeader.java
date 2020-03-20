@@ -52,6 +52,7 @@ public class SheetHeader implements Cloneable {
 	/** The excel function. */
 	private ExcelFunction excelFunction;
 
+	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
 
 	/** The key map. */
@@ -92,12 +93,22 @@ public class SheetHeader implements Cloneable {
 		this.excelDate = excelDate;
 	}
 
+	/**
+	 * Gets the excel column width.
+	 *
+	 * @return the excel column width
+	 */
 	public ExcelColumnWidth getExcelColumnWidth() {
 		if (excelColumnWidth == null)
 			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getExcelColumnWidth();
 		return excelColumnWidth;
 	}
 
+	/**
+	 * Sets the excel column width.
+	 *
+	 * @param excelColumnWidth the new excel column width
+	 */
 	public void setExcelColumnWidth(ExcelColumnWidth excelColumnWidth) {
 		this.excelColumnWidth = excelColumnWidth;
 	}

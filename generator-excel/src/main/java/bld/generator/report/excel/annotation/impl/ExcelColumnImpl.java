@@ -178,6 +178,11 @@ public class ExcelColumnImpl implements Cloneable{
 		this.ignore = ignore;
 	}
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -191,6 +196,12 @@ public class ExcelColumnImpl implements Cloneable{
 		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
