@@ -11,6 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
@@ -27,48 +28,49 @@ public @interface ExcelChart {
 	 * @return the string
 	 */
 	public String fieldTitle();
-	
-	/**
-	 * Start key chart.
-	 *
-	 * @return the string
-	 */
-	public String startKeyChart();
-	
-	/**
-	 * End key chart.
-	 *
-	 * @return the string
-	 */
-	public String endKeyChart();
-	
+
+	public String function();
+
 	/**
 	 * Chart types.
 	 *
 	 * @return the chart types
 	 */
 	public ChartTypes chartTypes() default ChartTypes.LINE;
-	
+
 	/**
 	 * Size row.
 	 *
 	 * @return the int
 	 */
 	public int sizeRow();
-	
+
 	/**
 	 * Size column.
 	 *
 	 * @return the int
 	 */
 	public int sizeColumn();
-	
+
 	/**
 	 * Legend position.
 	 *
 	 * @return the legend position
 	 */
 	public LegendPosition legendPosition() default LegendPosition.TOP_RIGHT;
-	
-	
+
+	/**
+	 * Category axis.
+	 *
+	 * @return the axis position
+	 */
+	public AxisPosition categoryAxis() default AxisPosition.BOTTOM;
+
+	/**
+	 * Value axis.
+	 *
+	 * @return the axis position
+	 */
+	public AxisPosition valueAxis() default AxisPosition.LEFT;
+
 }

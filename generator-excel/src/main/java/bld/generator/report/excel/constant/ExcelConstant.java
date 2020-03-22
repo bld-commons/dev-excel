@@ -52,7 +52,7 @@ public class ExcelConstant {
 	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
 	
 	/** The Constant DEFAULT_WIDTH_COLUMN. */
-	public static final int DEFAULT_WIDTH_COLUMN=7;
+	public static final int DEFAULT_WIDTH_COLUMN=5;
 	
 	/** The Constant EXCEL_COLUMN_WIDTH. */
 	public final static ExcelColumnWidthImpl EXCEL_COLUMN_WIDTH=new ExcelColumnWidthImpl(DEFAULT_WIDTH_COLUMN);

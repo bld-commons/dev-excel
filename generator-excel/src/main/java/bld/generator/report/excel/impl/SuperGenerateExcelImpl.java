@@ -43,7 +43,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bld.generator.report.excel.DynamicColumn;
@@ -64,6 +63,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.comparator.SheetColumnComparator;
@@ -80,7 +80,7 @@ import bld.generator.report.utils.ValueProps;
 /**
  * The Class SuperGenerateExcelImpl.
  */
-@SuppressWarnings({"deprecation"})
+@SuppressWarnings({ "deprecation" })
 public class SuperGenerateExcelImpl {
 
 	/** The Constant FLAT_ANGLE. */
@@ -112,13 +112,16 @@ public class SuperGenerateExcelImpl {
 
 	/** The map field column. */
 	protected Map<String, InfoColumn> mapFieldColumn = new HashMap<>();
-	
+
 	/** The map width column. */
-	protected Map<Integer,Integer>mapWidthColumn=new HashMap<>();
+	protected Map<Integer, Integer> mapWidthColumn = new HashMap<>();
 
 	/** The value props. */
 	@Autowired
 	protected ValueProps valueProps;
+	
+	/** The Constant AUTO_SIZE_HEIGHT. */
+	protected final static short AUTO_SIZE_HEIGHT = -1;
 
 	/**
 	 * Instantiates a new super generate excel impl.
@@ -157,7 +160,7 @@ public class SuperGenerateExcelImpl {
 			((XSSFCellStyle) cellStyleHeader).setFillForegroundColor(colorForeground);
 			((XSSFFont) font).setColor(colorFont);
 		}
-		cellStyleHeader.setRotation((short)(layout.rotation()%FLAT_ANGLE));
+		cellStyleHeader.setRotation((short) (layout.rotation() % FLAT_ANGLE));
 		cellStyleHeader.setFont(font);
 		cellStyleHeader.setFillPattern(layout.fillPatternType());
 		cellStyleHeader.setAlignment(layout.horizontalAlignment());
@@ -437,6 +440,13 @@ public class SuperGenerateExcelImpl {
 	protected void setCellSommario(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row) throws Exception {
 		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
 		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
+		 short heightRow=AUTO_SIZE_HEIGHT;
+		if (sheetHeader.getField().isAnnotationPresent(ExcelRowHeight.class)) {
+			ExcelRowHeight excelRowHeight = sheetHeader.getField().getAnnotation(ExcelRowHeight.class);
+			if (excelRowHeight.height() != AUTO_SIZE_HEIGHT)
+				heightRow = ExcelUtils.hightRow(excelRowHeight.height());
+		}
+		row.setHeight(heightRow);
 		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout());
 		Cell cellColumn0 = row.createCell(0);
 		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary);
@@ -467,7 +477,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Sheet worksheet, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Integer calRowStart, Integer calRowEnd) throws Exception {
-		if (sheetHeader.getExcelFunction()!=null) {
+		if (sheetHeader.getExcelFunction() != null) {
 			setCellFormulaExcel(cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd, worksheet);
 		} else
 			setCellValueExcel(workbook, cell, cellStyle, sheetHeader);
@@ -489,8 +499,8 @@ public class SuperGenerateExcelImpl {
 	private void setCellFormulaExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Integer calRowStart, Integer calRowEnd, Sheet worksheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
-		ExcelFunction excelFunction=sheetHeader.getExcelFunction();
-		String function=excelFunction.function();
+		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
+		String function = excelFunction.function();
 		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable() && calRowStart != null && calRowEnd != null) {
 			function = makeFunction(worksheet, calRowStart, function, RowStartEndType.ROW_START);
@@ -499,7 +509,7 @@ public class SuperGenerateExcelImpl {
 		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_START);
 		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_END);
 		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_HEADER);
-		logger.debug("Function: "+function);
+		logger.debug("Function: " + function);
 		// cell.setCellType(CellType.FORMULA);
 		cell.setCellFormula(function);
 
@@ -514,20 +524,20 @@ public class SuperGenerateExcelImpl {
 	 * @param rowStartEndType the row start end type
 	 * @return the string
 	 */
-	private String makeFunction(Sheet worksheet, Integer indexRow, String function, RowStartEndType rowStartEndType) {
+	protected String makeFunction(Sheet worksheet, Integer indexRow, String function, RowStartEndType rowStartEndType) {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
 			String parameter = m.group();
 			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue() + "}", "").trim();
 			if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(worksheet, keyParameter))) {
-				InfoColumn infoColumn=mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, keyParameter));
-				int row=indexRow;
-				if(RowStartEndType.ROW_HEADER.equals(rowStartEndType))
-					row=infoColumn.getRowHeader();
+				InfoColumn infoColumn = mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, keyParameter));
+				int row = indexRow;
+				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType))
+					row = infoColumn.getRowHeader();
 				if (keyParameter.contains(".")) {
 					String nameSheet = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = function.replace(parameter,"'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
+					function = function.replace(parameter, "'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 				} else
 					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 			}
@@ -545,7 +555,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	private void setCellValueExcel(Workbook workbook, Sheet worksheet, MergeCell mergeRow) throws Exception {
-		if (mergeRow.getSheetHeader().getExcelFunction()!=null)
+		if (mergeRow.getSheetHeader().getExcelFunction() != null)
 			setCellFormulaExcel(worksheet, mergeRow);
 		else
 			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader());
@@ -566,7 +576,7 @@ public class SuperGenerateExcelImpl {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
-		String function=excelFunction.function();
+		String function = excelFunction.function();
 		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable() && mergeRow.getCalRowStart() != null && mergeRow.getCalRowEnd() != null) {
 			function = makeFunction(worksheet, mergeRow.getCalRowStart(), function, RowStartEndType.ROW_START);
@@ -576,8 +586,8 @@ public class SuperGenerateExcelImpl {
 		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
 		function = makeFunction(worksheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
 		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
-		logger.debug("Function: "+function);
-		
+		logger.debug("Function: " + function);
+
 		// cell.setCellType(CellType.FORMULA);
 		cell.setCellFormula(function);
 	}
@@ -675,7 +685,7 @@ public class SuperGenerateExcelImpl {
 		rowHeader.setHeight(ExcelUtils.hightRow(layoutHeader.heightRow()));
 //		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
 //		worksheet.setDefaultRowHeight((short)(layoutHeader.cmHeightCell() * 568));
-		if(layoutSheet.order()>-1)
+		if (layoutSheet.order() > -1)
 			workbook.setSheetOrder(worksheet.getSheetName(), layoutSheet.order());
 		return manageCellStyleHeader(workbook, worksheet, layoutHeader, null);
 	}
@@ -727,15 +737,18 @@ public class SuperGenerateExcelImpl {
 				ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation().get(keyMap);
 				if (!extraColumnAnnotation.getExcelColumn().ignore()) {
 					SheetHeader sheetHeader = new SheetHeader();
-					BeanUtils.copyProperties(sheetHeader, extraColumnAnnotation);
-//					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
-//					sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
-//					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
-//					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
-//					sheetHeader.setExcelHeaderLayout(extraColumnAnnotation.getExcelHeaderLayout());
-//					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
-//					if (extraColumnAnnotation.getExcelFunction() != null) 
-//						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
+					if (extraColumnAnnotation.getExcelCellLayout() == null)
+						throw new Exception("Annotation " + ExcelCellLayout.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
+					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
+					if (extraColumnAnnotation.getExcelColumn() == null)
+						throw new Exception("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
+					sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
+					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
+					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
+					sheetHeader.setExcelHeaderLayout(extraColumnAnnotation.getExcelHeaderLayout());
+					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
+					if (extraColumnAnnotation.getExcelFunction() != null)
+						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
 
 					sheetHeader.setKeyMap(keyMap);
 					listSheetHeader.add(sheetHeader);
@@ -745,9 +758,9 @@ public class SuperGenerateExcelImpl {
 		}
 		int idRowHeader = indexRow + 1;
 		worksheet.setRepeatingRows(CellRangeAddress.valueOf(idRowHeader + ":" + idRowHeader));
-		CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetData,rowHeader);
+		CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetData, rowHeader);
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
-		
+
 		for (int columnNum = excelSheetLayout.startColumn(); columnNum < maxColumn; columnNum++) {
 			int indexHeader = columnNum - excelSheetLayout.startColumn();
 			Cell cellHeader = rowHeader.createCell(columnNum);
@@ -764,17 +777,17 @@ public class SuperGenerateExcelImpl {
 				cellHeader.setCellStyle(cellStyleHeader);
 
 			ExcelColumn excelColumn = listSheetHeader.get(indexHeader).getExcelColumn();
-			setColumnWidth(worksheet,columnNum,sheetHeader.getExcelColumnWidth().width());
+			setColumnWidth(worksheet, columnNum, sheetHeader.getExcelColumnWidth().width());
 			listSheetHeader.get(indexHeader).setNumColumn(columnNum);
 			cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.nameColumn()));
 			if (StringUtils.isNoneBlank(excelColumn.comment()))
 				addComment(workbook, worksheet, rowHeader, cellHeader, excelColumn.comment());
-			InfoColumn infoColumn=new InfoColumn(worksheet, sheetHeader, columnNum, indexRow);
+			InfoColumn infoColumn = new InfoColumn(worksheet, sheetHeader, columnNum, indexRow);
 			if (sheetHeader.getField() != null)
 				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getField().getName()), infoColumn);
 			else if (StringUtils.isNotBlank(sheetHeader.getKeyMap()))
 				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getKeyMap()), infoColumn);
-			else if (sheetHeader.getExcelFunction()!=null)
+			else if (sheetHeader.getExcelFunction() != null)
 				this.mapFieldColumn.put(ExcelUtils.getKeyColumn(worksheet, sheetHeader.getExcelFunction().nameFunction()), infoColumn);
 		}
 		return listSheetHeader;
@@ -789,7 +802,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setColumnWidth(Sheet worksheet, Integer indexColumn, Integer width) throws Exception {
-		if(!this.mapWidthColumn.containsKey(indexColumn)|| this.mapWidthColumn.get(indexColumn)<width) {
+		if (!this.mapWidthColumn.containsKey(indexColumn) || this.mapWidthColumn.get(indexColumn) < width) {
 			this.mapWidthColumn.put(new Integer(indexColumn), new Integer(width));
 			worksheet.setColumnWidth(indexColumn, ExcelUtils.widthColumn(width));
 		}

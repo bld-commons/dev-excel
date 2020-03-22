@@ -17,6 +17,7 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
 
@@ -44,6 +45,7 @@ public class CasaEditrice extends SheetSummary {
 	/** The citta. */
 	@ExcelColumn(nameColumn = "Città", indexColumn = 2)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	@ExcelRowHeight(height = 5)
 	private String citta;
 
 	/**

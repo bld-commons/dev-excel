@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import org.junit.Before;
@@ -31,6 +32,7 @@ import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
+import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
@@ -221,6 +223,7 @@ public class ReportTest {
 		extraColumnAnnotation.setExcelColumn( new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false));
 		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_START.getParameter("totalePrezzoAnni")+":"+RowStartEndType.ROW_END.getParameter("totalePrezzoAnni")+")", "totalePrezzoAnniAutore"));
 		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
+		extraColumnAnnotation.setExcelColumnWidth(new ExcelColumnWidthImpl(10));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
@@ -268,11 +271,12 @@ public class ReportTest {
 
 		autoreLibriSheet.setListRowSheet(list);
 
-		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "percAnno1", "percAnno3", ChartTypes.PIE,10,10,LegendPosition.TOP_RIGHT);
+		ExcelChartImpl excelChartImpl=null;
+		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE,10,3,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
-		excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,20,20,LegendPosition.TOP_RIGHT);
-		autoreLibriSheet.addExcelChart(excelChartImpl);
+//		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.LINE,20,5,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"));
+//		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
 		
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();

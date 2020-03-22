@@ -7,6 +7,7 @@ package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
 
+import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
@@ -16,29 +17,31 @@ import bld.generator.report.excel.annotation.ExcelChart;
 /**
  * The Class ExcelChartImpl.
  */
-public class ExcelChartImpl implements Cloneable{
+public class ExcelChartImpl implements Cloneable {
 
-	
 	/** The field title. */
 	protected String fieldTitle;
-	
-	/** The start key chart. */
-	protected String startKeyChart;
-	
-	/** The end key chart. */
-	protected String endKeyChart;
-	
+
 	/** The chart types. */
 	protected ChartTypes chartTypes;
-	
+
 	/** The size row. */
 	protected int sizeRow;
-	
+
 	/** The size column. */
 	protected int sizeColumn;
-	
+
 	/** The legend position. */
 	protected LegendPosition legendPosition;
+
+	/** The category axis. */
+	protected AxisPosition categoryAxis;
+
+	/** The value axis. */
+	protected AxisPosition valueAxis;
+
+	/** The function. */
+	protected String function;
 
 	/**
 	 * Gets the excel chart.
@@ -56,16 +59,6 @@ public class ExcelChartImpl implements Cloneable{
 			@Override
 			public String fieldTitle() {
 				return fieldTitle;
-			}
-
-			@Override
-			public String startKeyChart() {
-				return startKeyChart;
-			}
-
-			@Override
-			public String endKeyChart() {
-				return endKeyChart;
 			}
 
 			@Override
@@ -87,39 +80,48 @@ public class ExcelChartImpl implements Cloneable{
 			public LegendPosition legendPosition() {
 				return legendPosition;
 			}
-			
+
+			@Override
+			public AxisPosition categoryAxis() {
+				return categoryAxis;
+			}
+
+			@Override
+			public AxisPosition valueAxis() {
+				return valueAxis;
+			}
+
+			@Override
+			public String function() {
+				return function;
+			}
+
 		};
 	}
-
-	
-
-
 
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
 	 * @param fieldTitle     the field title
-	 * @param startKeyChart  the start key chart
-	 * @param endKeyChart    the end key chart
 	 * @param chartTypes     the chart types
 	 * @param sizeRow        the size row
 	 * @param sizeColumn     the size column
 	 * @param legendPosition the legend position
+	 * @param categoryAxis   the category axis
+	 * @param valueAxis      the value axis
+	 * @param function       the function
 	 */
-	public ExcelChartImpl(String fieldTitle, String startKeyChart, String endKeyChart, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition) {
+	public ExcelChartImpl(String fieldTitle, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function) {
 		super();
 		this.fieldTitle = fieldTitle;
-		this.startKeyChart = startKeyChart;
-		this.endKeyChart = endKeyChart;
 		this.chartTypes = chartTypes;
 		this.sizeRow = sizeRow;
 		this.sizeColumn = sizeColumn;
 		this.legendPosition = legendPosition;
+		this.categoryAxis = categoryAxis;
+		this.valueAxis = valueAxis;
+		this.function = function;
 	}
-
-
-
-
 
 	/**
 	 * Gets the field title.
@@ -140,42 +142,6 @@ public class ExcelChartImpl implements Cloneable{
 	}
 
 	/**
-	 * Gets the start key chart.
-	 *
-	 * @return the start key chart
-	 */
-	public String getStartKeyChart() {
-		return startKeyChart;
-	}
-
-	/**
-	 * Sets the start key chart.
-	 *
-	 * @param startKeyChart the new start key chart
-	 */
-	public void setStartKeyChart(String startKeyChart) {
-		this.startKeyChart = startKeyChart;
-	}
-
-	/**
-	 * Gets the end key chart.
-	 *
-	 * @return the end key chart
-	 */
-	public String getEndKeyChart() {
-		return endKeyChart;
-	}
-
-	/**
-	 * Sets the end key chart.
-	 *
-	 * @param endKeyChart the new end key chart
-	 */
-	public void setEndKeyChart(String endKeyChart) {
-		this.endKeyChart = endKeyChart;
-	}
-
-	/**
 	 * Gets the chart types.
 	 *
 	 * @return the chart types
@@ -193,8 +159,6 @@ public class ExcelChartImpl implements Cloneable{
 		this.chartTypes = chartTypes;
 	}
 
-
-
 	/**
 	 * Gets the size row.
 	 *
@@ -203,8 +167,6 @@ public class ExcelChartImpl implements Cloneable{
 	public int getSizeRow() {
 		return sizeRow;
 	}
-
-
 
 	/**
 	 * Sets the size row.
@@ -215,8 +177,6 @@ public class ExcelChartImpl implements Cloneable{
 		this.sizeRow = sizeRow;
 	}
 
-
-
 	/**
 	 * Gets the size column.
 	 *
@@ -226,8 +186,6 @@ public class ExcelChartImpl implements Cloneable{
 		return sizeColumn;
 	}
 
-
-
 	/**
 	 * Sets the size column.
 	 *
@@ -236,9 +194,6 @@ public class ExcelChartImpl implements Cloneable{
 	public void setSizeColumn(int sizeColumn) {
 		this.sizeColumn = sizeColumn;
 	}
-	
-	
-
 
 	/**
 	 * Gets the legend position.
@@ -249,10 +204,6 @@ public class ExcelChartImpl implements Cloneable{
 		return legendPosition;
 	}
 
-
-
-
-
 	/**
 	 * Sets the legend position.
 	 *
@@ -262,9 +213,59 @@ public class ExcelChartImpl implements Cloneable{
 		this.legendPosition = legendPosition;
 	}
 
+	/**
+	 * Gets the category axis.
+	 *
+	 * @return the category axis
+	 */
+	public AxisPosition getCategoryAxis() {
+		return categoryAxis;
+	}
 
+	/**
+	 * Sets the category axis.
+	 *
+	 * @param categoryAxis the new category axis
+	 */
+	public void setCategoryAxis(AxisPosition categoryAxis) {
+		this.categoryAxis = categoryAxis;
+	}
 
+	/**
+	 * Gets the value axis.
+	 *
+	 * @return the value axis
+	 */
+	public AxisPosition getValueAxis() {
+		return valueAxis;
+	}
 
+	/**
+	 * Sets the value axis.
+	 *
+	 * @param valueAxis the new value axis
+	 */
+	public void setValueAxis(AxisPosition valueAxis) {
+		this.valueAxis = valueAxis;
+	}
+
+	/**
+	 * Gets the function.
+	 *
+	 * @return the function
+	 */
+	public String getFunction() {
+		return function;
+	}
+
+	/**
+	 * Sets the function.
+	 *
+	 * @param function the new function
+	 */
+	public void setFunction(String function) {
+		this.function = function;
+	}
 
 	/**
 	 * Clone.
@@ -276,6 +277,5 @@ public class ExcelChartImpl implements Cloneable{
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
-	
-	
+
 }

@@ -10,9 +10,7 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.utils.ExcelUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelColumnImpl.
  */
