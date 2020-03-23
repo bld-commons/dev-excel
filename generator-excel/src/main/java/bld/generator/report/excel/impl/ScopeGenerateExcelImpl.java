@@ -543,8 +543,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, startChart, excelChart.sizeColumn(), indexRow);
 
 		XSSFChart chart = drawing.createChart(anchor);
-		chart.setTitleText("Area-wise Top Seven Countries");
-		chart.setTitleOverlay(false);
 
 		XDDFChartLegend legend = chart.getOrAddLegend();
 		legend.setPosition(excelChart.legendPosition());
