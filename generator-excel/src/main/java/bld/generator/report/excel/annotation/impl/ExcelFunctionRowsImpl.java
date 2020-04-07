@@ -10,11 +10,12 @@ import java.lang.annotation.Annotation;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
+import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionRowsImpl.
  */
+@Data
 public class ExcelFunctionRowsImpl implements Cloneable{
 
 	
@@ -71,41 +72,4 @@ public class ExcelFunctionRowsImpl implements Cloneable{
 		this.excelFunctionMerges = excelFunctionMerges;
 	}
 
-	/**
-	 * Gets the excel functions.
-	 *
-	 * @return the excel functions
-	 */
-	public ExcelFunctionRow[] getExcelFunctions() {
-		return excelFunctions;
-	}
-
-	/**
-	 * Sets the excel functions.
-	 *
-	 * @param excelFunctions the new excel functions
-	 */
-	public void setExcelFunctions(ExcelFunctionRow[] excelFunctions) {
-		this.excelFunctions = excelFunctions;
-	}
-
-	/**
-	 * Gets the excel function merges.
-	 *
-	 * @return the excel function merges
-	 */
-	public ExcelFunctionMergeRow[] getExcelFunctionMerges() {
-		return excelFunctionMerges;
-	}
-
-	/**
-	 * Sets the excel function merges.
-	 *
-	 * @param excelFunctionMerges the new excel function merges
-	 */
-	public void setExcelFunctionMerges(ExcelFunctionMergeRow[] excelFunctionMerges) {
-		this.excelFunctionMerges = excelFunctionMerges;
-	}
-	
-	
 }

@@ -12,13 +12,16 @@ import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DynamicChart.
  *
  * @param <T> the generic type
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynamicData<T> {
 
 	/** The list excel chart. */
@@ -37,28 +40,7 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 
 	
 
-	/**
-	 * Gets the list excel chart.
-	 *
-	 * @return the list excel chart
-	 */
-	public List<ExcelChart> getListExcelChart() {
-		return listExcelChart;
-	}
-
-
-
-	/**
-	 * Sets the list excel chart.
-	 *
-	 * @param listExcelChart the new list excel chart
-	 */
-	public void setListExcelChart(List<ExcelChart> listExcelChart) {
-		this.listExcelChart = listExcelChart;
-	}
-
-
-
+	
 	/**
 	 * Adds the excel chart.
 	 *

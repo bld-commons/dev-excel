@@ -6,7 +6,7 @@
 	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0.5</version>
+	<version>2.1.0</version>
 	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
@@ -48,7 +48,7 @@
 	<properties>
 		<org.apache.poi-version>4.1.2</org.apache.poi-version>
 		<commons-compress.version>1.20</commons-compress.version>
-		<org.apache.commons-version>3.9</org.apache.commons-version>
+		<org.apache.commons-version>4.4</org.apache.commons-version>
 		<javax.validation-version>2.0.1.Final</javax.validation-version>
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
@@ -95,7 +95,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
+				<artifactId>commons-collections4</artifactId>
 				<version>${org.apache.commons-version}</version>
 			</dependency>
 			<dependency>

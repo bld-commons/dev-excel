@@ -4,15 +4,17 @@
 * @class bld.generator.report.excel.impl.ReportExcel.java
 */
 
-package bld.generator.report.excel.impl;
+package bld.generator.report.excel.data;
 
 import java.util.List;
 
 import bld.generator.report.excel.BaseSheet;
+import lombok.Data;
 
 /**
  * The Class ReportExcel.
  */
+@Data
 public class ReportExcel {
 
 	/** The titolo. */
@@ -40,40 +42,5 @@ public class ReportExcel {
 		super();
 	}
 
-	/**
-	 * Gets the titolo.
-	 *
-	 * @return the titolo
-	 */
-	public String getTitolo() {
-		return titolo;
-	}
-
-	/**
-	 * Sets the titolo.
-	 *
-	 * @param titolo the new titolo
-	 */
-	public void setTitolo(String titolo) {
-		this.titolo = titolo;
-	}
-
-	/**
-	 * Gets the list base sheet.
-	 *
-	 * @return the list base sheet
-	 */
-	public List<BaseSheet> getListBaseSheet() {
-		return listBaseSheet;
-	}
-
-	/**
-	 * Sets the list base sheet.
-	 *
-	 * @param listBaseSheet the new list base sheet
-	 */
-	public void setListBaseSheet(List<BaseSheet> listBaseSheet) {
-		this.listBaseSheet = listBaseSheet;
-	}
-
+	
 }

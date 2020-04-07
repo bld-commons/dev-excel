@@ -21,11 +21,12 @@ import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
+import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExtraColumnAnnotation.
  */
+@Data
 public class ExtraColumnAnnotation {
 
 	/** The excel column. */
@@ -51,14 +52,6 @@ public class ExtraColumnAnnotation {
 	/** The excel header layout. */
 	private ExcelHeaderLayout excelHeaderLayout;
 
-	/**
-	 * Gets the excel cell layout.
-	 *
-	 * @return the excel cell layout
-	 */
-	public ExcelCellLayout getExcelCellLayout() {
-		return excelCellLayout;
-	}
 
 	/**
 	 * Sets the excel cell layout.
@@ -71,15 +64,6 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Gets the excel date.
-	 *
-	 * @return the excel date
-	 */
-	public ExcelDate getExcelDate() {
-		return excelDate;
-	}
-
-	/**
 	 * Sets the excel date.
 	 *
 	 * @param excelDateImpl the new excel date
@@ -89,15 +73,7 @@ public class ExtraColumnAnnotation {
 			this.excelDate = excelDateImpl.getExcelDate();
 	}
 
-	/**
-	 * Gets the excel column.
-	 *
-	 * @return the excel column
-	 */
-	public ExcelColumn getExcelColumn() {
-		return excelColumn;
-	}
-
+	
 	/**
 	 * Sets the excel column.
 	 *
@@ -108,15 +84,7 @@ public class ExtraColumnAnnotation {
 			this.excelColumn = excelColumnImpl.getExcelColumn();
 	}
 
-	/**
-	 * Gets the excel function.
-	 *
-	 * @return the excel function
-	 */
-	public ExcelFunction getExcelFunction() {
-		return excelFunction;
-	}
-
+	
 	/**
 	 * Sets the excel function.
 	 *
@@ -127,15 +95,7 @@ public class ExtraColumnAnnotation {
 			this.excelFunction = excelFunctionImpl.getExcelFunction();
 	}
 
-	/**
-	 * Gets the excel merge row.
-	 *
-	 * @return the excel merge row
-	 */
-	public ExcelMergeRow getExcelMergeRow() {
-		return excelMergeRow;
-	}
-
+	
 	/**
 	 * Sets the excel merge row.
 	 *
@@ -146,14 +106,6 @@ public class ExtraColumnAnnotation {
 			this.excelMergeRow = excelMergeRowImpl.getExcelMergeRow();
 	}
 
-	/**
-	 * Gets the excel header layout.
-	 *
-	 * @return the excel header layout
-	 */
-	public ExcelHeaderLayout getExcelHeaderLayout() {
-		return excelHeaderLayout;
-	}
 
 	/**
 	 * Sets the excel header layout.
@@ -163,15 +115,6 @@ public class ExtraColumnAnnotation {
 	public void setExcelHeaderLayout(ExcelHeaderLayoutImpl excelHeaderLayoutImpl) {
 		if (excelHeaderLayoutImpl != null)
 			this.excelHeaderLayout = excelHeaderLayoutImpl.getExcelHeaderLayout();
-	}
-
-	/**
-	 * Gets the excel column width.
-	 *
-	 * @return the excel column width
-	 */
-	public ExcelColumnWidth getExcelColumnWidth() {
-		return excelColumnWidth;
 	}
 
 	/**

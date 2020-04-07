@@ -8,10 +8,13 @@ package bld.generator.report.excel;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Data;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class DynamicRowSheet.
  */
+@Data
 public abstract class DynamicRowSheet implements RowSheet {
 
 	/** The map value. */
@@ -25,24 +28,5 @@ public abstract class DynamicRowSheet implements RowSheet {
 		this.mapValue = new HashMap<>();
 	}
 
-	/**
-	 * Gets the map value.
-	 *
-	 * @return the map value
-	 */
-	public Map<String, Object> getMapValue() {
-		return mapValue;
-	}
-
-	/**
-	 * Sets the map value.
-	 *
-	 * @param mapValue the new map value
-	 */
-	public void setMapValue(Map<String, Object> mapValue) {
-		this.mapValue = mapValue;
-	}
-
-	
 
 }

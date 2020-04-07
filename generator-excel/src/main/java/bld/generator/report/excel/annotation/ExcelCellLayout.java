@@ -88,5 +88,8 @@ public @interface ExcelCellLayout {
 	 * @return the int
 	 */
 	public int precision() default -1;
+	
+	
+	public boolean locked() default false;
 
 }

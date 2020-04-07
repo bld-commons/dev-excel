@@ -38,7 +38,7 @@ import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
-import bld.generator.report.excel.impl.ReportExcel;
+import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriRow;
 import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
@@ -132,10 +132,10 @@ public class ReportTest {
 		listBaseSheet.add(autoreLibriSheet);
 
 		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
-		mergeSheet.getListSheet().add(casaEditrice);
+		
 		mergeSheet.getListSheet().add(autoreLibriSheet);
 		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(casaEditrice);
+		mergeSheet.getListSheet().add(dateSheet);
 
 		listBaseSheet.add(mergeSheet);
 		

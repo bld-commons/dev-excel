@@ -5,7 +5,7 @@
 */
 package bld.generator.report.excel;
 
-import bld.generator.report.excel.impl.ReportExcel;
+import bld.generator.report.excel.data.ReportExcel;
 
 /**
  * The Interface GenerateExcel.

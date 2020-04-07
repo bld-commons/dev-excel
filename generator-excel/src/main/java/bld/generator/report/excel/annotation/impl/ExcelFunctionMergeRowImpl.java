@@ -12,11 +12,13 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionMergeRowImpl.
  */
+@Data
 public class ExcelFunctionMergeRowImpl implements Cloneable{
 
 	/** The excel cells layout. */
@@ -92,78 +94,6 @@ public class ExcelFunctionMergeRowImpl implements Cloneable{
 		this.excelCellsLayout = excelCellsLayout;
 		this.excelColumn = excelColumn;
 		this.excelMergeRow = excelMergeRow;
-		this.excelFunction = excelFunction;
-	}
-
-	/**
-	 * Gets the excel cells layout.
-	 *
-	 * @return the excel cells layout
-	 */
-	public ExcelCellLayout getExcelCellsLayout() {
-		return excelCellsLayout;
-	}
-
-	/**
-	 * Sets the excel cells layout.
-	 *
-	 * @param excelCellsLayout the new excel cells layout
-	 */
-	public void setExcelCellsLayout(ExcelCellLayout excelCellsLayout) {
-		this.excelCellsLayout = excelCellsLayout;
-	}
-
-	/**
-	 * Gets the excel column.
-	 *
-	 * @return the excel column
-	 */
-	public ExcelColumn getExcelColumn() {
-		return excelColumn;
-	}
-
-	/**
-	 * Sets the excel column.
-	 *
-	 * @param excelColumn the new excel column
-	 */
-	public void setExcelColumn(ExcelColumn excelColumn) {
-		this.excelColumn = excelColumn;
-	}
-
-	/**
-	 * Gets the excel merge row.
-	 *
-	 * @return the excel merge row
-	 */
-	public ExcelMergeRow getExcelMergeRow() {
-		return excelMergeRow;
-	}
-
-	/**
-	 * Sets the excel merge row.
-	 *
-	 * @param excelMergeRow the new excel merge row
-	 */
-	public void setExcelMergeRow(ExcelMergeRow excelMergeRow) {
-		this.excelMergeRow = excelMergeRow;
-	}
-
-	/**
-	 * Gets the excel function.
-	 *
-	 * @return the excel function
-	 */
-	public ExcelFunction getExcelFunction() {
-		return excelFunction;
-	}
-
-	/**
-	 * Sets the excel function.
-	 *
-	 * @param excelFunction the new excel function
-	 */
-	public void setExcelFunction(ExcelFunction excelFunction) {
 		this.excelFunction = excelFunction;
 	}
 

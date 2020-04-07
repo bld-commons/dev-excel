@@ -8,33 +8,23 @@ package bld.generator.report.excel;
 
 import javax.validation.constraints.Size;
 
-// TODO: Auto-generated Javadoc
+import lombok.Data;
+
 /**
  * The Class BaseSheet.
  */
+
+/**
+ * To string.
+ *
+ * @return the java.lang. string
+ */
+@Data
 public  abstract class BaseSheet{
 	
 	/** The name sheet. */
 	@Size(max = 30)
 	private String nameSheet;
-
-	/**
-	 * Gets the name sheet.
-	 *
-	 * @return the name sheet
-	 */
-	public String getNameSheet() {
-		return nameSheet;
-	}
-
-	/**
-	 * Sets the name sheet.
-	 *
-	 * @param nameSheet the new name sheet
-	 */
-	public void setNameSheet(String nameSheet) {
-		this.nameSheet = nameSheet;
-	}
 
 	/**
 	 * Instantiates a new base sheet.

@@ -8,7 +8,6 @@ package bld.generator.report.excel;
 
 import javax.validation.constraints.Size;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SheetSummary.
  */

@@ -10,11 +10,12 @@ import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.constant.ColumnDateFormat;
+import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelDateImpl.
  */
+@Data
 public class ExcelDateImpl implements Cloneable{
 
 	
@@ -63,57 +64,5 @@ public class ExcelDateImpl implements Cloneable{
 		this.format = format;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((format == null) ? 0 : format.hashCode());
-		return result;
-	}
-
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExcelDateImpl other = (ExcelDateImpl) obj;
-		if (format != other.format)
-			return false;
-		return true;
-	}
-
-	/**
-	 * Gets the format.
-	 *
-	 * @return the format
-	 */
-	public ColumnDateFormat getFormat() {
-		return format;
-	}
-
-	/**
-	 * Sets the format.
-	 *
-	 * @param format the new format
-	 */
-	public void setFormat(ColumnDateFormat format) {
-		this.format = format;
-	}
-
-	
 	
 }

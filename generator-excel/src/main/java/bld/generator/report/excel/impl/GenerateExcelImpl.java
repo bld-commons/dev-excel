@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import bld.generator.report.excel.GenerateExcel;
+import bld.generator.report.excel.data.ReportExcel;
 
 /**
  * The Class GenerateExcelImpl.

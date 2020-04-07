@@ -8,11 +8,12 @@ package bld.generator.report.excel.annotation.impl;
 import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelFunction;
+import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionImpl.
  */
+@Data
 public class ExcelFunctionImpl implements Cloneable{
 
 	
@@ -97,59 +98,7 @@ public class ExcelFunctionImpl implements Cloneable{
 		this.anotherTable = anotherTable;
 	}
 
-	/**
-	 * Gets the function.
-	 *
-	 * @return the function
-	 */
-	public String getFunction() {
-		return function;
-	}
-
-	/**
-	 * Sets the function.
-	 *
-	 * @param function the new function
-	 */
-	public void setFunction(String function) {
-		this.function = function;
-	}
-
-	/**
-	 * Gets the name function.
-	 *
-	 * @return the name function
-	 */
-	public String getNameFunction() {
-		return nameFunction;
-	}
-
-	/**
-	 * Sets the name function.
-	 *
-	 * @param nameFunction the new name function
-	 */
-	public void setNameFunction(String nameFunction) {
-		this.nameFunction = nameFunction;
-	}
-
-	/**
-	 * Checks if is another table.
-	 *
-	 * @return the another table
-	 */
-	public boolean isAnotherTable() {
-		return anotherTable;
-	}
-
-	/**
-	 * Sets the another table.
-	 *
-	 * @param anotherTable the new another table
-	 */
-	public void setAnotherTable(boolean anotherTable) {
-		this.anotherTable = anotherTable;
-	} 
+	
 	
 	
 }

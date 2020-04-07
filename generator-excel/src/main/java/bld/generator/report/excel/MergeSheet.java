@@ -8,10 +8,14 @@ package bld.generator.report.excel;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * The Class MergeSheet.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class MergeSheet extends BaseSheet {
 
 	/** The list sheet. */
@@ -35,26 +39,8 @@ public class MergeSheet extends BaseSheet {
 	 */
 	public MergeSheet(String nameSheet) {
 		super(nameSheet);
+		this.listSheet=new ArrayList<>();
 	}
 
-	/**
-	 * Gets the list sheet.
-	 *
-	 * @return the list sheet
-	 */
-	public List<SheetComponent> getListSheet() {
-		if(this.listSheet==null)
-			this.listSheet=new ArrayList<>();
-		return listSheet;
-	}
-
-	/**
-	 * Sets the list sheet.
-	 *
-	 * @param listSheet the new list sheet
-	 */
-	public void setListSheet(List<SheetComponent> listSheet) {
-		this.listSheet = listSheet;
-	}
 
 }

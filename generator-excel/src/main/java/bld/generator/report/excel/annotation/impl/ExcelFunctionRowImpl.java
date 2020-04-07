@@ -11,11 +11,13 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
+import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionRowImpl.
  */
+@Data
 public class ExcelFunctionRowImpl implements Cloneable{
 
 	/** The excel cells layout. */
@@ -84,51 +86,6 @@ public class ExcelFunctionRowImpl implements Cloneable{
 		this.excelFunction = excelFunction;
 	}
 
-	/**
-	 * Gets the excel cells layout.
-	 *
-	 * @return the excel cells layout
-	 */
-	public ExcelCellLayout getExcelCellsLayout() {
-		return excelCellsLayout;
-	}
 
-	/**
-	 * Sets the excel cells layout.
-	 *
-	 * @param excelCellsLayout the new excel cells layout
-	 */
-	public void setExcelCellsLayout(ExcelCellLayout excelCellsLayout) {
-		this.excelCellsLayout = excelCellsLayout;
-	}
-
-	/**
-	 * Gets the excel column.
-	 *
-	 * @return the excel column
-	 */
-	public ExcelColumn getExcelColumn() {
-		return excelColumn;
-	}
-
-	/**
-	 * Sets the excel column.
-	 *
-	 * @param excelColumn the new excel column
-	 */
-	public void setExcelColumn(ExcelColumn excelColumn) {
-		this.excelColumn = excelColumn;
-	}
-
-	/**
-	 * Sets the excel function.
-	 *
-	 * @param excelFunction the new excel function
-	 */
-	public void setExcelFunction(ExcelFunction excelFunction) {
-		this.excelFunction = excelFunction;
-	}
-
-	
 	
 }

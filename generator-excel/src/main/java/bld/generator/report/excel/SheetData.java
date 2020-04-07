@@ -10,13 +10,23 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 
 /**
  * The Class SheetData.
  *
  * @param <T> the generic type
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class SheetData<T extends RowSheet> extends BaseSheet implements SheetComponent{
+	
+
+	/** The list row sheet. */
+	protected List<T> listRowSheet;
+	
 	
 		
 	/**
@@ -26,33 +36,10 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 */
 	public SheetData(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
+		listRowSheet = new ArrayList<T>();
 	}
 
 
-
-	/** The list row sheet. */
-	protected List<T> listRowSheet;
-	
-
-	/**
-	 * Gets the list row sheet.
-	 *
-	 * @return the list row sheet
-	 */
-	public List<T> getListRowSheet() {
-		if (listRowSheet == null)
-			listRowSheet = new ArrayList<T>();
-		return listRowSheet;
-	}
-	
-	/**
-	 * Sets the list row sheet.
-	 *
-	 * @param listRowSheet the new list row sheet
-	 */
-	public void setListRowSheet(List<T> listRowSheet) {
-		this.listRowSheet = listRowSheet;
-	}
 
 
 	

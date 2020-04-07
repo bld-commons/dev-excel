@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * The Class SheetDynamicFunctionTotal.
  *
  * @param <T> the generic type
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> extends SheetFunctionTotal<T> implements DynamicColumn {
 
 	/** The map extra column annotation. */
@@ -28,22 +32,6 @@ public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> exten
 		this.mapExtraColumnAnnotation = new HashMap<>();
 	}
 
-	/**
-	 * Gets the map extra column annotation.
-	 *
-	 * @return the map extra column annotation
-	 */
-	public Map<String, ExtraColumnAnnotation> getMapExtraColumnAnnotation() {
-		return mapExtraColumnAnnotation;
-	}
-
-	/**
-	 * Sets the map extra column annotation.
-	 *
-	 * @param mapExtraColumnAnnotation the new map extra column annotation
-	 */
-	public void setMapExtraColumnAnnotation(Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation) {
-		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;
-	}
+	
 
 }

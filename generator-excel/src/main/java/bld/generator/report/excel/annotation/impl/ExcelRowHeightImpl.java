@@ -6,12 +6,18 @@
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 
+import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
+import bld.generator.report.excel.data.ExtraColumnAnnotation;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * The Class ExcelRowHeightImpl.
  */
+@Data
 public class ExcelRowHeightImpl {
 
 	/** The height. */
@@ -48,24 +54,5 @@ public class ExcelRowHeightImpl {
 		this.height = height;
 	}
 
-	/**
-	 * Gets the height.
-	 *
-	 * @return the height
-	 */
-	public short getHeight() {
-		return height;
-	}
-
-	/**
-	 * Sets the height.
-	 *
-	 * @param height the new height
-	 */
-	public void setHeight(short height) {
-		this.height = height;
-	}
-	
-	
 	
 }

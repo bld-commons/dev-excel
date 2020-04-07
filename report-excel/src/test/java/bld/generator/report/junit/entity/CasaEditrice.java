@@ -15,6 +15,9 @@ import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelFunction;
+import bld.generator.report.excel.annotation.ExcelFunctionRow;
+import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
@@ -27,26 +30,36 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 @ExcelSheetLayout
 @ExcelSummary(title = "Casa Editrice")
 @ExcelHeaderLayout
-@ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
+@ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
+@ExcelFunctionRows(excelFunctions = {
+		@ExcelFunctionRow(excelFunction = @ExcelFunction(function = "sum(${Libri d'autore.prezzoRowStart}:${Libri d'autore.prezzoRowEnd})", nameFunction = "sommaAutore"), excelColumn = @ExcelColumn(indexColumn = 7, nameColumn = "test somma"))
+})
 public class CasaEditrice extends SheetSummary {
 
-	
 	/** The nome. */
-	@ExcelColumn(nameColumn = "Nome", indexColumn = 1,comment = "Test comment")
+	@ExcelColumn(nameColumn = "Nome", indexColumn = 1, comment = "Test comment")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private String nome;
-	
+
 	/** The data di nascita. */
 	@ExcelColumn(nameColumn = "Data di nascita", indexColumn = 2)
-	@ExcelDate	
+	@ExcelDate
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Calendar dataDiNascita;
-	
+
 	/** The citta. */
-	@ExcelColumn(nameColumn = "Città", indexColumn = 2)
+	@ExcelColumn(nameColumn = "Città", indexColumn = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	@ExcelRowHeight(height = 5)
 	private String citta;
+
+	@ExcelColumn(nameColumn = "Genere A", indexColumn = 4)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	private Integer generaA;
+
+	@ExcelColumn(nameColumn = "Genere B", indexColumn = 5)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	private Integer genereB;
 
 	/**
 	 * Gets the nome.
@@ -65,8 +78,6 @@ public class CasaEditrice extends SheetSummary {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	
 
 	/**
 	 * Gets the data di nascita.
@@ -112,7 +123,7 @@ public class CasaEditrice extends SheetSummary {
 	 * @param citta         the citta
 	 * @param nameSheet     the name sheet
 	 */
-	public CasaEditrice(String nome, Calendar dataDiNascita, String citta,String nameSheet) {
+	public CasaEditrice(String nome, Calendar dataDiNascita, String citta, String nameSheet) {
 		super(nameSheet);
 		this.nome = nome;
 		this.dataDiNascita = dataDiNascita;
@@ -128,6 +139,20 @@ public class CasaEditrice extends SheetSummary {
 		super(nameSheet);
 	}
 
-	
-	
+	public Integer getGeneraA() {
+		return generaA;
+	}
+
+	public void setGeneraA(Integer generaA) {
+		this.generaA = generaA;
+	}
+
+	public Integer getGenereB() {
+		return genereB;
+	}
+
+	public void setGenereB(Integer genereB) {
+		this.genereB = genereB;
+	}
+
 }

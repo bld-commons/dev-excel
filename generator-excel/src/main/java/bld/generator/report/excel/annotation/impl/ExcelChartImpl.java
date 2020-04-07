@@ -12,11 +12,13 @@ import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
 import bld.generator.report.excel.annotation.ExcelChart;
+import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExcelChartImpl.
  */
+@Data
 public class ExcelChartImpl implements Cloneable {
 
 	/** The field title. */
@@ -123,149 +125,7 @@ public class ExcelChartImpl implements Cloneable {
 		this.function = function;
 	}
 
-	/**
-	 * Gets the field title.
-	 *
-	 * @return the field title
-	 */
-	public String getFieldTitle() {
-		return fieldTitle;
-	}
-
-	/**
-	 * Sets the field title.
-	 *
-	 * @param fieldTitle the new field title
-	 */
-	public void setFieldTitle(String fieldTitle) {
-		this.fieldTitle = fieldTitle;
-	}
-
-	/**
-	 * Gets the chart types.
-	 *
-	 * @return the chart types
-	 */
-	public ChartTypes getChartTypes() {
-		return chartTypes;
-	}
-
-	/**
-	 * Sets the chart types.
-	 *
-	 * @param chartTypes the new chart types
-	 */
-	public void setChartTypes(ChartTypes chartTypes) {
-		this.chartTypes = chartTypes;
-	}
-
-	/**
-	 * Gets the size row.
-	 *
-	 * @return the size row
-	 */
-	public int getSizeRow() {
-		return sizeRow;
-	}
-
-	/**
-	 * Sets the size row.
-	 *
-	 * @param sizeRow the new size row
-	 */
-	public void setSizeRow(int sizeRow) {
-		this.sizeRow = sizeRow;
-	}
-
-	/**
-	 * Gets the size column.
-	 *
-	 * @return the size column
-	 */
-	public int getSizeColumn() {
-		return sizeColumn;
-	}
-
-	/**
-	 * Sets the size column.
-	 *
-	 * @param sizeColumn the new size column
-	 */
-	public void setSizeColumn(int sizeColumn) {
-		this.sizeColumn = sizeColumn;
-	}
-
-	/**
-	 * Gets the legend position.
-	 *
-	 * @return the legend position
-	 */
-	public LegendPosition getLegendPosition() {
-		return legendPosition;
-	}
-
-	/**
-	 * Sets the legend position.
-	 *
-	 * @param legendPosition the new legend position
-	 */
-	public void setLegendPosition(LegendPosition legendPosition) {
-		this.legendPosition = legendPosition;
-	}
-
-	/**
-	 * Gets the category axis.
-	 *
-	 * @return the category axis
-	 */
-	public AxisPosition getCategoryAxis() {
-		return categoryAxis;
-	}
-
-	/**
-	 * Sets the category axis.
-	 *
-	 * @param categoryAxis the new category axis
-	 */
-	public void setCategoryAxis(AxisPosition categoryAxis) {
-		this.categoryAxis = categoryAxis;
-	}
-
-	/**
-	 * Gets the value axis.
-	 *
-	 * @return the value axis
-	 */
-	public AxisPosition getValueAxis() {
-		return valueAxis;
-	}
-
-	/**
-	 * Sets the value axis.
-	 *
-	 * @param valueAxis the new value axis
-	 */
-	public void setValueAxis(AxisPosition valueAxis) {
-		this.valueAxis = valueAxis;
-	}
-
-	/**
-	 * Gets the function.
-	 *
-	 * @return the function
-	 */
-	public String getFunction() {
-		return function;
-	}
-
-	/**
-	 * Sets the function.
-	 *
-	 * @param function the new function
-	 */
-	public void setFunction(String function) {
-		this.function = function;
-	}
+	
 
 	/**
 	 * Clone.

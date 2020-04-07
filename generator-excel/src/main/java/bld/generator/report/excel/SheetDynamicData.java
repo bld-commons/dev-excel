@@ -11,13 +11,16 @@ import java.util.Map;
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SheetDynamicData.
  *
  * @param <T> the generic type
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn{
 		
 	/** The map extra column annotation. */
@@ -32,26 +35,6 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	public SheetDynamicData(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
 		this.mapExtraColumnAnnotation=new HashMap<>();
-	}
-
-
-	/**
-	 * Gets the map extra column annotation.
-	 *
-	 * @return the map extra column annotation
-	 */
-	public Map<String, ExtraColumnAnnotation> getMapExtraColumnAnnotation() {
-		return mapExtraColumnAnnotation;
-	}
-
-
-	/**
-	 * Sets the map extra column annotation.
-	 *
-	 * @param mapExtraColumnAnnotation the new map extra column annotation
-	 */
-	public void setMapExtraColumnAnnotation(Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation) {
-		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;
 	}
 
 

@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,8 +69,11 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.constant.RowStartEndType;
+import bld.generator.report.excel.data.FunctionCell;
+import bld.generator.report.excel.data.InfoColumn;
 import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
+import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.utils.ExcelUtils;
 
@@ -225,6 +229,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		this.mapCellStyle = new HashMap<>();
 		this.mapCellHeaderStyle = new HashMap<>();
 		this.mapFieldColumn = new HashMap<>();
+		this.listFunctionCell=new ArrayList<>();
 		for (BaseSheet sheet : listSheet) {
 			Sheet worksheet = null;
 			this.mapWidthColumn = new HashMap<>();
@@ -249,6 +254,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			worksheet.setForceFormulaRecalculation(true);
 		}
 
+		for(FunctionCell functionCell:listFunctionCell) {
+			Sheet worksheet = functionCell.getWorksheet();
+			if(functionCell.getMergeRow()!=null) {
+				this.setCellFormulaExcel(worksheet, functionCell.getMergeRow());
+			}else {
+				this.setCellFormulaExcel(functionCell.getCell(), functionCell.getCellStyle(), functionCell.getSheetHeader(), functionCell.getIndexRow(), worksheet);
+			}
+			workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
+			worksheet.setForceFormulaRecalculation(true);
+		}
+		
 		return workbook;
 	}
 
@@ -262,6 +278,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 */
 	private void generateMergeSheet(Workbook workbook, Sheet worksheet, MergeSheet mergeSheet) throws Exception {
 		Integer indexRow = new Integer(0);
+		if (mergeSheet.getClass().isAnnotationPresent(ExcelFreezePane.class)) {
+			ExcelFreezePane excelFreezePane = mergeSheet.getClass().getAnnotation(ExcelFreezePane.class);
+			worksheet.createFreezePane(excelFreezePane.columnFreez(), excelFreezePane.rowFreez());
+		}
 		for (SheetComponent sheetComponent : mergeSheet.getListSheet()) {
 			sheetComponent.setNameSheet(worksheet.getSheetName());
 			if (sheetComponent instanceof SheetSummary)
@@ -326,9 +346,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData, Integer indexRow, boolean isMergeSheet) throws Exception {
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
 		indexRow = writeLabel(workbook, worksheet, sheetData, indexRow);
-		int startRowSheet = indexRow + 1;
-		Row rowHeader = worksheet.createRow(indexRow);
-		List<SheetHeader> listSheetHeader = generateHeaderSheetData(workbook, worksheet, rowHeader, sheetData, indexRow);
+		int startRowSheet = indexRow + 1;//verficare su header
+		List<SheetHeader> listSheetHeader = generateHeaderSheetData(workbook, worksheet, sheetData, indexRow);
 		indexRow++;
 		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
 		boolean start = true;
@@ -342,14 +361,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 //		String startKey = null;
 //		String endKey = null;
 
-		Integer calRowStart = null;
-		Integer calRowEnd = null;
-
-		if (sheetData instanceof SheetFunctionTotal) {
-			SheetFunctionTotal<? extends RowSheet> functionSheetData = (SheetFunctionTotal<? extends RowSheet>) sheetData;
-			calRowStart = functionSheetData.getCalRowStart();
-			calRowEnd = functionSheetData.getCalRowEnd();
-		}
+		
 
 		// int i=0;
 		if (!isMergeSheet && sheetData.getClass().isAnnotationPresent(ExcelFreezePane.class)) {
@@ -374,6 +386,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				int indexHeader = numColumn - excelSheetLayout.startColumn();
 				Cell cell = row.createCell(numColumn);
 				SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
+				InfoColumn infoColumn =(InfoColumn) mapFieldColumn.get(sheetHeader.getKey());
+				
 				Field field = listSheetHeader.get(indexHeader).getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
@@ -396,7 +410,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (!this.mapCellStyle.containsKey(layoutCell))
 						this.mapCellStyle.put(layoutCell, createCellStyle(workbook, excelCellLayout, excelDate));
 					cellStyle = this.mapCellStyle.get(layoutCell);
-
+					infoColumn.setFirstRow(indexRow);
+					infoColumn.setLastRow(indexRow+sheetData.getListRowSheet().size()-1);
 				}
 				boolean repeat = true;
 				do {
@@ -414,18 +429,16 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								mergeRow.getSheetHeader().setValue(value);
 							mergeRow.setCellFrom(cell);
 							mergeRow.setCellStyleFrom(cellStyle);
-							if (sheetData instanceof SheetFunctionTotal) {
-								mergeRow.setCalRowStart(calRowStart);
-								mergeRow.setCalRowEnd(calRowEnd);
-							}
-
+							
+							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 							mapMergeRow.put(numColumn, mergeRow);
 						} else
-							super.setCellValueExcel(workbook, worksheet, cell, cellStyle, sheetHeader, indexRow, calRowStart, calRowEnd);
+							super.setCellValueExcel(workbook, worksheet, cell, cellStyle, sheetHeader, indexRow);
 						repeat = false;
 					} else {
+						infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField()))
-							throw new Exception("Only first column can have the propetie \"referenceColumn\" is blank!!!");
+							throw new Exception("Only first column can have the propertie \"referenceColumn\" is blank!!!");
 						if (field != null)
 							valueBefore = new PropertyDescriptor(field.getName(), lastRowSheet.getClass()).getReadMethod().invoke(lastRowSheet);
 						if (StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField())) {
@@ -452,7 +465,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (sheetData.getClass().isAnnotationPresent(ExcelCharts.class) || (sheetData instanceof DynamicChart && CollectionUtils.isNotEmpty(((DynamicChart<? extends DynamicRowSheet>) sheetData).getListExcelChart()))) {
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
-					functionChart = makeFunction(worksheet, indexRow, excelChart.function(), RowStartEndType.ROW_EMPTY);
+					functionChart = makeFunction(worksheet, indexRow, excelChart.function(), RowStartEndType.ROW_EMPTY,true);
 //					startKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
 //					endKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
 					String keyChart = mapValue.get(excelChart.fieldTitle()).toString();
@@ -494,7 +507,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 //				startKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
 //				endKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
-				String xAxis = makeFunction(worksheet, startRowSheet-1, excelChart.function(), RowStartEndType.ROW_EMPTY);
+				String xAxis = makeFunction(worksheet, startRowSheet-1, excelChart.function(), RowStartEndType.ROW_EMPTY,true);
 				indexRow += 2;
 				for (String keyChart : mapChart.keySet()) 
 					indexRow = generateChart((XSSFSheet) worksheet, mapChart.get(keyChart), keyChart, excelChart, indexRow, xAxis);

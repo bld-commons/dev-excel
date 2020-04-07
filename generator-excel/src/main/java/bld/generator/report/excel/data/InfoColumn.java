@@ -5,26 +5,35 @@
 */
 package bld.generator.report.excel.data;
 
+import java.util.Map;
+
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import bld.generator.report.utils.ExcelUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * The Class InfoColumn.
  */
-public class InfoColumn {
-	
-	/** The key column. */
-	private String keyColumn;
-	
-	
-	
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class InfoColumn extends InfoField {
+
 	/** The column num. */
 	private int columnNum;
-	
+
 	/** The row header. */
 	private int rowHeader;
+	
+	private Integer firstRow;
+	
+	private Integer lastRow;
+	
+	
+	private Map<Integer,MergeCell>mapRowMergeRow;
 	
 
 	/**
@@ -35,75 +44,17 @@ public class InfoColumn {
 	 * @param columnNum   the column num
 	 * @param rowHeader   the row header
 	 */
-	public InfoColumn(Sheet worksheet,SheetHeader sheetHeader, int columnNum, int rowHeader) {
+	public InfoColumn(Sheet worksheet, SheetHeader sheetHeader, int columnNum, int rowHeader) {
 		super();
 		if (sheetHeader.getField() != null)
-			this.keyColumn=ExcelUtils.getKeyColumn(worksheet, sheetHeader.getField().getName());
+			this.key = ExcelUtils.getKeyColumn(worksheet, sheetHeader.getField().getName());
 		else if (StringUtils.isNotBlank(sheetHeader.getKeyMap()))
-			this.keyColumn=ExcelUtils.getKeyColumn(worksheet, sheetHeader.getKeyMap());
-		else if (sheetHeader.getExcelFunction()!=null)
-			this.keyColumn=ExcelUtils.getKeyColumn(worksheet, sheetHeader.getExcelFunction().nameFunction());
+			this.key = ExcelUtils.getKeyColumn(worksheet, sheetHeader.getKeyMap());
+		else if (sheetHeader.getExcelFunction() != null)
+			this.key = ExcelUtils.getKeyColumn(worksheet, sheetHeader.getExcelFunction().nameFunction());
 		this.columnNum = columnNum;
 		this.rowHeader = rowHeader;
+		this.mapRowMergeRow=new HashedMap<>();
 	}
 
-	
-
-	/**
-	 * Gets the key column.
-	 *
-	 * @return the key column
-	 */
-	public String getKeyColumn() {
-		return keyColumn;
-	}
-
-	/**
-	 * Sets the key column.
-	 *
-	 * @param keyColumn the new key column
-	 */
-	public void setKeyColumn(String keyColumn) {
-		this.keyColumn = keyColumn;
-	}
-
-	/**
-	 * Gets the column num.
-	 *
-	 * @return the column num
-	 */
-	public int getColumnNum() {
-		return columnNum;
-	}
-
-	/**
-	 * Sets the column num.
-	 *
-	 * @param columnNum the new column num
-	 */
-	public void setColumnNum(int columnNum) {
-		this.columnNum = columnNum;
-	}
-
-	/**
-	 * Gets the row header.
-	 *
-	 * @return the row header
-	 */
-	public int getRowHeader() {
-		return rowHeader;
-	}
-
-	/**
-	 * Sets the row header.
-	 *
-	 * @param rowHeader the new row header
-	 */
-	public void setRowHeader(int rowHeader) {
-		this.rowHeader = rowHeader;
-	}
-	
-	
-	
-	
 }
