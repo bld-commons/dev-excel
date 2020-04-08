@@ -516,14 +516,14 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_EMPTY,false);
+		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable() ) {
-			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_START,false);
-			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_END,false);
+			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_START);
+			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_END);
 		}
-		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_START,false);
-		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_END,false);
-		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_HEADER,false);
+		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_START);
+		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_END);
+		function = makeFunction(worksheet, indexRow, function, RowStartEndType.ROW_HEADER);
 		logger.debug("Function: " + function);
 		// cell.setCellType(CellType.FORMULA);
 		cell.setCellFormula(function);
@@ -539,7 +539,7 @@ public class SuperGenerateExcelImpl {
 	 * @param rowStartEndType the row start end type
 	 * @return the string
 	 */
-	protected String makeFunction(Sheet worksheet, Integer indexRow, String function, RowStartEndType rowStartEndType,boolean isMerged) {
+	protected String makeFunction(Sheet worksheet, Integer indexRow, String function, RowStartEndType rowStartEndType) {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
@@ -551,7 +551,7 @@ public class SuperGenerateExcelImpl {
 				
 				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType))
 					row = infoColumn.getRowHeader();
-				else if(isMerged && RowStartEndType.ROW_EMPTY.equals(rowStartEndType) &&  !infoColumn.getMapRowMergeRow().isEmpty())
+				else if(RowStartEndType.ROW_EMPTY.equals(rowStartEndType) &&  !infoColumn.getMapRowMergeRow().isEmpty())
 					row=infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
 				else if(row==null && RowStartEndType.ROW_START.equals(rowStartEndType))
 					row=infoColumn.getFirstRow();
@@ -606,15 +606,15 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY,true);
+		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable() ) {
-			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_START,true);
-			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_END,true);
+			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_START);
+			function = makeFunction(worksheet, null, function, RowStartEndType.ROW_END);
 		}
 
-		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START,true);
-		function = makeFunction(worksheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END,true);
-		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER,true);
+		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
+		function = makeFunction(worksheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
+		function = makeFunction(worksheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
 		logger.debug("Function: " + function);
 
 		// cell.setCellType(CellType.FORMULA);

@@ -32,6 +32,7 @@ public class InfoColumn extends InfoField {
 	
 	private Integer lastRow;
 	
+	private Integer lastRowReference;
 	
 	private Map<Integer,MergeCell>mapRowMergeRow;
 	
@@ -55,6 +56,16 @@ public class InfoColumn extends InfoField {
 		this.columnNum = columnNum;
 		this.rowHeader = rowHeader;
 		this.mapRowMergeRow=new HashedMap<>();
+	}
+	
+	
+	
+	
+	public MergeCell getMergeCell() {
+		MergeCell mergeCell=null;
+		if(this.lastRowReference!=null && this.mapRowMergeRow.containsKey(lastRowReference))
+			mergeCell=this.mapRowMergeRow.get(this.lastRowReference);
+		return mergeCell;
 	}
 
 }

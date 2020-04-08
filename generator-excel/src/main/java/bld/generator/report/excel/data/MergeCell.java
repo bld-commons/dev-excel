@@ -37,6 +37,4 @@ public class MergeCell {
 	/** The cell style from. */
 	private CellStyle cellStyleFrom;
 	
-	
-
 }

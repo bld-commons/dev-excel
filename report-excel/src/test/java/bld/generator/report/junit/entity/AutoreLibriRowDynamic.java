@@ -26,7 +26,11 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 		excelFunctions = {
 				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
 						excelColumn = @ExcelColumn(indexColumn = 9, nameColumn = "Prezzo Totale"), 
-						excelFunction = @ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")) 
+						excelFunction = @ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")),
+				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
+				excelColumn = @ExcelColumn(indexColumn = 10, nameColumn = "Test Sum on Merged Cell"), 
+				excelFunction = @ExcelFunction(function = "sum(${prezzoTotalePerAutore},${prezzoTotale})", nameFunction = "testSumMergedCell"))
+				
 				}, 
 		excelFunctionMerges = {
 				@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
