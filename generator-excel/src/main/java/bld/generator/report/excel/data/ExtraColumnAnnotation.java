@@ -26,6 +26,10 @@ import lombok.Data;
 /**
  * The Class ExtraColumnAnnotation.
  */
+
+/**
+ * Instantiates a new extra column annotation.
+ */
 @Data
 public class ExtraColumnAnnotation {
 

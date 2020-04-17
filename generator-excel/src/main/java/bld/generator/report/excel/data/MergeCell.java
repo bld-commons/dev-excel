@@ -13,6 +13,10 @@ import lombok.Data;
 /**
  * The Class MergeCell.
  */
+
+/**
+ * Instantiates a new merge cell.
+ */
 @Data
 public class MergeCell {
 

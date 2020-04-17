@@ -15,6 +15,10 @@ import lombok.Data;
 /**
  * The Class LayoutCell.
  */
+
+/**
+ * Instantiates a new layout cell.
+ */
 @Data
 public class LayoutCell {
 	

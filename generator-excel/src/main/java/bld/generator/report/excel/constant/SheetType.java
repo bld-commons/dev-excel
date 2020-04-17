@@ -10,7 +10,10 @@ package bld.generator.report.excel.constant;
  */
 public enum SheetType {
 
+	/** The data. */
 	DATA,
+	
+	/** The summary. */
 	SUMMARY;
 	
 }

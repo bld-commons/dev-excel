@@ -13,12 +13,6 @@ import lombok.Data;
 /**
  * The Class BaseSheet.
  */
-
-/**
- * To string.
- *
- * @return the java.lang. string
- */
 @Data
 public  abstract class BaseSheet{
 	

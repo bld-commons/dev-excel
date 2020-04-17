@@ -539,11 +539,12 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Generate chart.
 	 *
-	 * @param worksheet  the worksheet
-	 * @param mapChart   the map chart
-	 * @param excelChart the excel chart
-	 * @param indexRow   the index row
-	 * @param xAxis      the x axis
+	 * @param worksheet   the worksheet
+	 * @param seriesChart the series chart
+	 * @param keyChart    the key chart
+	 * @param excelChart  the excel chart
+	 * @param indexRow    the index row
+	 * @param xAxis       the x axis
 	 * @return the integer
 	 */
 	private Integer generateChart(XSSFSheet worksheet, String seriesChart, String keyChart, ExcelChart excelChart, Integer indexRow, String xAxis) {

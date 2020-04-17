@@ -117,6 +117,7 @@ public class SuperGenerateExcelImpl {
 	/** The map width column. */
 	protected Map<Integer, Integer> mapWidthColumn = new HashMap<>();
 	
+	/** The list function cell. */
 	protected List<FunctionCell>listFunctionCell=new ArrayList<>();
 
 	/** The value props. */
@@ -478,8 +479,6 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
-	 * @param calRowStart the cal row start
-	 * @param calRowEnd   the cal row end
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Sheet worksheet, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
@@ -506,8 +505,6 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
-	 * @param calRowStart the cal row start
-	 * @param calRowEnd   the cal row end
 	 * @param worksheet   the worksheet
 	 * @throws Exception the exception
 	 */
@@ -749,7 +746,6 @@ public class SuperGenerateExcelImpl {
 	 * @param <T>       the generic type
 	 * @param workbook  the workbook
 	 * @param worksheet the worksheet
-	 * @param rowHeader the row header
 	 * @param sheetData the sheet data
 	 * @param indexRow  the index row
 	 * @return the list

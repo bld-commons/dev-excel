@@ -17,7 +17,6 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelCellLayout.
  */
@@ -90,6 +89,11 @@ public @interface ExcelCellLayout {
 	public int precision() default -1;
 	
 	
+	/**
+	 * Locked.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean locked() default false;
 
 }

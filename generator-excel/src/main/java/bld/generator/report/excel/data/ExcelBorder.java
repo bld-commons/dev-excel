@@ -12,6 +12,10 @@ import lombok.Data;
 /**
  * The Class ExcelBorder.
  */
+
+/**
+ * Instantiates a new excel border.
+ */
 @Data
 public class ExcelBorder {
 

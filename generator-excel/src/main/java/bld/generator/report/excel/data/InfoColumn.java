@@ -28,12 +28,16 @@ public class InfoColumn extends InfoField {
 	/** The row header. */
 	private int rowHeader;
 	
+	/** The first row. */
 	private Integer firstRow;
 	
+	/** The last row. */
 	private Integer lastRow;
 	
+	/** The last row reference. */
 	private Integer lastRowReference;
 	
+	/** The map row merge row. */
 	private Map<Integer,MergeCell>mapRowMergeRow;
 	
 
@@ -61,6 +65,11 @@ public class InfoColumn extends InfoField {
 	
 	
 	
+	/**
+	 * Gets the merge cell.
+	 *
+	 * @return the merge cell
+	 */
 	public MergeCell getMergeCell() {
 		MergeCell mergeCell=null;
 		if(this.lastRowReference!=null && this.mapRowMergeRow.containsKey(lastRowReference))

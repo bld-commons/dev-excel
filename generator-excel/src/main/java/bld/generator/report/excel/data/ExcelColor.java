@@ -10,6 +10,10 @@ import lombok.Data;
 /**
  * The Class ExcelColor.
  */
+
+/**
+ * Instantiates a new excel color.
+ */
 @Data
 public class ExcelColor {
 

@@ -29,6 +29,11 @@ public @interface ExcelChart {
 	 */
 	public String fieldTitle();
 
+	/**
+	 * Function.
+	 *
+	 * @return the string
+	 */
 	public String function();
 
 	/**

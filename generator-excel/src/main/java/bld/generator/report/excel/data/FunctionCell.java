@@ -12,6 +12,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import lombok.Data;
 
 /**
+ * The Class FunctionCell.
+ */
+
+/**
  * Instantiates a new function cell.
  */
 @Data

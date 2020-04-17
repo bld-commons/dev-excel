@@ -12,6 +12,10 @@ import lombok.Data;
 /**
  * The Class ExceltFont.
  */
+
+/**
+ * Instantiates a new excelt font.
+ */
 @Data
 public class ExceltFont {
 

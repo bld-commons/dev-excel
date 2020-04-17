@@ -51,6 +51,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	/** The border. */
 	protected ExcelBorder border;
 	
+	/** The locked. */
 	protected boolean locked;
 
 	/**
@@ -147,6 +148,20 @@ public class ExcelCellLayoutImpl implements Cloneable{
 		this.locked=false;
 	}
 	
+	/**
+	 * Instantiates a new excel cell layout impl.
+	 *
+	 * @param wrap                the wrap
+	 * @param verticalAlignment   the vertical alignment
+	 * @param rgbForeground       the rgb foreground
+	 * @param rgbFont             the rgb font
+	 * @param precision           the precision
+	 * @param horizontalAlignment the horizontal alignment
+	 * @param font                the font
+	 * @param fillPatternType     the fill pattern type
+	 * @param border              the border
+	 * @param locked              the locked
+	 */
 	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
 			ExcelBorder border, boolean locked) {
 		super();

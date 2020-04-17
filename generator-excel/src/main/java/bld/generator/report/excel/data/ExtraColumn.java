@@ -11,6 +11,10 @@ import lombok.Data;
 /**
  * The Class ExtraColumn.
  */
+
+/**
+ * Instantiates a new extra column.
+ */
 @Data
 public class ExtraColumn {
 	
