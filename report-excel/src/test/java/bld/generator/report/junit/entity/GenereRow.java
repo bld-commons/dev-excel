@@ -17,22 +17,22 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 public class GenereRow implements RowSheet {
 
 	/** The genere. */
-	@ExcelColumn(indexColumn = 0, nameColumn = "Genere")
+	@ExcelColumn(indexColumn = 0, columnName = "Genere")
 	@ExcelCellLayout
 	private String genere;
 	
 	/** The test. */
-	@ExcelColumn(indexColumn = 0.5, nameColumn = "Test Remove", ignore = true)
+	@ExcelColumn(indexColumn = 0.5, columnName = "Test Remove", ignore = true)
 	@ExcelCellLayout
 	private String test;
 	
 	/** The count libri. */
-	@ExcelColumn(indexColumn = 1, nameColumn = "Totale Libri")
+	@ExcelColumn(indexColumn = 1, columnName = "Totale Libri")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private int countLibri;
 	
 	/** The test remove. */
-	@ExcelColumn(indexColumn = 1.5, nameColumn = "Test Remove 1",ignore=true)
+	@ExcelColumn(indexColumn = 1.5, columnName = "Test Remove 1",ignore=true)
 	@ExcelCellLayout
 	private String testRemove;
 	

@@ -19,12 +19,12 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
  */
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-				excelColumn = @ExcelColumn(indexColumn = 2, nameColumn = "Totale per matricola"), 
+				excelColumn = @ExcelColumn(indexColumn = 2, columnName = "Totale per matricola"), 
 				excelFunction = @ExcelFunction(function = "sumif(${matricolaRowStart}:${matricolaRowEnd},${totMatricola},${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePerMatricola")) })
 public class TotaleAutoreLibriRow implements RowSheet {
 
 	/** The tot matricola. */
-	@ExcelColumn(nameColumn = "Matricola", indexColumn = 1)
+	@ExcelColumn(columnName = "Matricola", indexColumn = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer totMatricola;
 

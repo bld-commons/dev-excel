@@ -19,12 +19,12 @@ import bld.generator.report.excel.constant.UnderlineType;
 public class IndexRow implements RowSheet {
 
 	/** The excel hyperlink. */
-	@ExcelColumn(indexColumn = 0, nameColumn = "Indice")
+	@ExcelColumn(indexColumn = 0, columnName = "Indice")
 	@ExcelCellLayout(font = @ExcelFont(underline=UnderlineType.SINGLE, italic = true), rgbFont=@ExcelRgbColor(red=0,green=0,blue=(byte)255))
 	private ExcelHyperlink excelHyperlink;
 	
 	/** The descrizione. */
-	@ExcelColumn(indexColumn = 1, nameColumn = "Descrizione")
+	@ExcelColumn(indexColumn = 1, columnName = "Descrizione")
 	@ExcelCellLayout
 	private String descrizione;
 	

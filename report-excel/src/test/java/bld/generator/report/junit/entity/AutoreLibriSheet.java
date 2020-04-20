@@ -9,19 +9,30 @@ import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
+import bld.generator.report.excel.annotation.ExcelHeaderGroup;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import bld.generator.report.excel.annotation.ExcelSuperHeader;
+import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 
 /**
  * The Class AutoreLibriSheet.
  */
 @ExcelSheetLayout
 @ExcelHeaderLayout
-@ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-@ExcelFreezePane(rowFreez = 3, columnFreez = 1)
-public class AutoreLibriSheet extends SheetData<AutoreLibriRow>{
+@ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
+@ExcelFreezePane(rowFreez = 5, columnFreez = 1)
+@ExcelSuperHeaders(superHeaders = { @ExcelSuperHeader(headerGroups = {
+				@ExcelHeaderGroup(columnName = "Anagrafica", columnRange = "${matricola}:${dataDiNascita}"),
+				@ExcelHeaderGroup(columnName = "Libri", columnRange = "${genere}:${supplemento}")
+		}),
+		@ExcelSuperHeader(headerGroups = {
+				@ExcelHeaderGroup(columnName = "Test", columnRange = "${matricola}:${cognome}"),
+				@ExcelHeaderGroup(columnName = "test1", columnRange = "${dataDiNascita}:${test}")})
+})
+public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 
 	/**
 	 * Instantiates a new autore libri sheet.
@@ -30,10 +41,8 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow>{
 	 */
 	public AutoreLibriSheet(@Size(max = 30) String nameSheet) {
 		super(nameSheet);
-		
+
 	}
-	
-	
 
 	/**
 	 * Instantiates a new autore libri sheet.
@@ -45,8 +54,6 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow>{
 		super(nameSheet);
 		this.label = label;
 	}
-
-
 
 	/**
 	 * Gets the row class.
@@ -79,7 +86,5 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow>{
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	
-	
+
 }

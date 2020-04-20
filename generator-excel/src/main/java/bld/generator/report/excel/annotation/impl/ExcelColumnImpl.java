@@ -18,8 +18,8 @@ import lombok.Data;
 @Data
 public class ExcelColumnImpl implements Cloneable{
 
-	/** The name column. */
-	protected String nameColumn;
+	/** The column name. */
+	protected String columnName;
 
 	/** The comment. */
 	protected String comment;
@@ -49,7 +49,7 @@ public class ExcelColumnImpl implements Cloneable{
 	 */
 	public ExcelColumn getExcelColumn() {
 		ExcelColumn excelColumn = null;
-		if (StringUtils.isNotBlank(nameColumn) )
+		if (StringUtils.isNotBlank(columnName) )
 			excelColumn = new ExcelColumn() {
 
 				@Override
@@ -58,8 +58,8 @@ public class ExcelColumnImpl implements Cloneable{
 				}
 
 				@Override
-				public String nameColumn() {
-					return nameColumn;
+				public String columnName() {
+					return columnName;
 				}
 
 				@Override
@@ -98,7 +98,7 @@ public class ExcelColumnImpl implements Cloneable{
 	 */
 	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn, boolean ignore) {
 		super();
-		this.nameColumn = nameColumn;
+		this.columnName = nameColumn;
 		this.comment = comment;
 		this.indexColumn = indexColumn;
 		this.ignore = ignore;

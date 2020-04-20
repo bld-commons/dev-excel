@@ -18,7 +18,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 
@@ -27,64 +27,64 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
  */
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
-					excelColumn = @ExcelColumn(indexColumn = 9, nameColumn = "Prezzo Totale"), 
+					excelColumn = @ExcelColumn(indexColumn = 9, columnName = "Prezzo Totale"), 
 					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")),
 		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER), 
-				excelColumn = @ExcelColumn(indexColumn = 10, nameColumn = "Test"), 
+				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test"), 
 				excelFunction=@ExcelFunction(function = "${Test Date.dataA}", nameFunction = "test"))
 		},
 excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
-						excelColumn = @ExcelColumn(indexColumn = 7.1, nameColumn = "Prezzo Totale per Autore"), 
+						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"), 
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",nameFunction = "prezzoTotalePerAutore"))})
 
 public class AutoreLibriRow implements RowSheet {
 
 	
 	/** The nome. */
-	@ExcelColumn(nameColumn = "${autore-libri-row.nome.name-column}",indexColumn = 2)
+	@ExcelColumn(columnName = "${autore-libri-row.nome.name-column}",indexColumn = 2)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "matricola")
 	private String nome;
 	
 	/** The cognome. */
-	@ExcelColumn(nameColumn = "${autore-libri-row.cognome.name-column}",indexColumn = 3)
+	@ExcelColumn(columnName = "${autore-libri-row.cognome.name-column}",indexColumn = 3)
 	@ExcelCellLayout(rgbForeground = @ExcelRgbColor(green=0,red=0))
 	@ExcelMergeRow(referenceField = "matricola")
 	private String cognome;
 	
 	/** The data di nascita. */
-	@ExcelColumn(nameColumn = "Data di Nascita",indexColumn = 4)
+	@ExcelColumn(columnName = "Data di Nascita",indexColumn = 4)
 	@ExcelDate
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
 	private Calendar dataDiNascita;
 	
 	/** The titolo. */
-	@ExcelColumn(nameColumn = "Titolo",indexColumn = 6)
+	@ExcelColumn(columnName = "Titolo",indexColumn = 6)
 	@ExcelCellLayout
 	private String titolo;
 	
 	/** The genere. */
-	@ExcelColumn(nameColumn = "Genere",indexColumn = 5)
+	@ExcelColumn(columnName = "Genere",indexColumn = 5)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "cognome")
 	private String genere;
 	
 	/** The matricola. */
-	@ExcelColumn(nameColumn = "${autore-libri-row.matricola.name-column}",indexColumn = 1)
+	@ExcelColumn(columnName = "${autore-libri-row.matricola.name-column}",indexColumn = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	@ExcelMergeRow(referenceField = "")
 	private Integer matricola;
 	
 	/** The prezzo. */
-	@ExcelHeaderLayout(rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
-	@ExcelColumn(nameColumn = "Prezzo",indexColumn = 7)
+	@ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
+	@ExcelColumn(columnName = "Prezzo",indexColumn = 7)
 	@ExcelColumnWidth(width=31)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
 	private Double prezzo;
 	
 	/** The supplemento. */
-	@ExcelColumn(nameColumn = "Supplemento",indexColumn = 8)
+	@ExcelColumn(columnName = "Supplemento",indexColumn = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
 	private Double supplemento;
 

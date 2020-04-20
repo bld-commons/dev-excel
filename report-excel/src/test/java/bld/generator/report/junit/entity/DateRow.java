@@ -22,14 +22,14 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 public class DateRow implements RowSheet {
 
 	/** The data da. */
-	@ExcelColumn(indexColumn = 0, nameColumn = "Data da")
+	@ExcelColumn(indexColumn = 0, columnName = "Data da")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelDate
 	private Date dataDa;
 	
 	
 	/** The data A. */
-	@ExcelColumn(indexColumn = 1, nameColumn = "Data a")
+	@ExcelColumn(indexColumn = 1, columnName = "Data a")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelDate
 	private Date dataA;

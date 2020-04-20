@@ -21,11 +21,11 @@ import java.lang.annotation.Target;
 public @interface ExcelColumn {
 
 	/**
-	 * Name column.
+	 * Column name.
 	 *
 	 * @return the string
 	 */
-	public String nameColumn();
+	public String columnName();
 	
 	/**
 	 * Comment.

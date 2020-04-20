@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 import lombok.Data;
 
+
 /**
  * The Class LayoutCell.
  */
@@ -49,6 +50,9 @@ public class LayoutCell {
 	/** The precision. */
 	private Integer precision;
 
+	/** The rotation. */
+	private Integer rotation;
+	
 	
 	/** The format. */
 	private ColumnDateFormat format;
