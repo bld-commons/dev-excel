@@ -47,6 +47,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	
 	/** The application context. */
 	private static ApplicationContext applicationContext;
+	
+	/** The Constant AUTO_SIZE_HEIGHT. */
+	public final static short AUTO_SIZE_HEIGHT = -1;
 
 	/**
 	 * Gets the annotation.
@@ -270,10 +273,12 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Hight row.
 	 *
-	 * @param hightRow the hight row
+	 * @param rowHeight the hight row
 	 * @return the short
 	 */
-	public static short hightRow(int hightRow) {
-		return (short)(hightRow*568);
+	public static short rowHeight(int rowHeight) {
+		if(rowHeight!=AUTO_SIZE_HEIGHT)
+			rowHeight=rowHeight*568;
+		return (short)rowHeight;
 	}
 }

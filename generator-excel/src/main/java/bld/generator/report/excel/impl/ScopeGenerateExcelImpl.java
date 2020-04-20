@@ -372,11 +372,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 		Row row = null;
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
-		short heightRow = AUTO_SIZE_HEIGHT;
+		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;
 		if (sheetData.getRowClass().isAnnotationPresent(ExcelRowHeight.class)) {
 			ExcelRowHeight excelRowHeight = sheetData.getRowClass().getAnnotation(ExcelRowHeight.class);
-			if (excelRowHeight.height() != AUTO_SIZE_HEIGHT)
-				heightRow = ExcelUtils.hightRow(excelRowHeight.height());
+			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
 		
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {

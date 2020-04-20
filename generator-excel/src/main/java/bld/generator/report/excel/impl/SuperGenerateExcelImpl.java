@@ -128,8 +128,6 @@ public class SuperGenerateExcelImpl {
 	@Autowired
 	protected ValueProps valueProps;
 
-	/** The Constant AUTO_SIZE_HEIGHT. */
-	protected final static short AUTO_SIZE_HEIGHT = -1;
 
 	/**
 	 * Instantiates a new super generate excel impl.
@@ -455,11 +453,10 @@ public class SuperGenerateExcelImpl {
 	protected void setCellSommario(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row) throws Exception {
 		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
 		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
-		short heightRow = AUTO_SIZE_HEIGHT;
+		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;
 		if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelRowHeight.class)) {
 			ExcelRowHeight excelRowHeight = sheetHeader.getField().getAnnotation(ExcelRowHeight.class);
-			if (excelRowHeight.height() != AUTO_SIZE_HEIGHT)
-				heightRow = ExcelUtils.hightRow(excelRowHeight.height());
+			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
 		row.setHeight(heightRow);
 		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout());
@@ -718,7 +715,7 @@ public class SuperGenerateExcelImpl {
 		worksheet.setMargin(Sheet.TopMargin, excelMarginSheet.top());
 		worksheet.setMargin(Sheet.BottomMargin, excelMarginSheet.bottom());
 		worksheet.getPrintSetup().setLandscape(layoutSheet.landscape());
-		rowHeader.setHeight(ExcelUtils.hightRow(layoutHeader.rowHeight()));
+		rowHeader.setHeight(ExcelUtils.rowHeight(layoutHeader.rowHeight()));
 //		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
 //		worksheet.setDefaultRowHeight((short)(layoutHeader.cmHeightCell() * 568));
 		if (layoutSheet.order() > -1)
@@ -858,7 +855,7 @@ public class SuperGenerateExcelImpl {
 			ExcelSuperHeaders excelSuperHeaders = sheetData.getClass().getAnnotation(ExcelSuperHeaders.class);
 			for (ExcelSuperHeader superHeader : excelSuperHeaders.superHeaders()) {
 				Row rowSuperHeader = worksheet.createRow(indexStartSuperHeader);
-				rowSuperHeader.setHeight(ExcelUtils.hightRow(superHeader.rowHeight()));
+				rowSuperHeader.setHeight(ExcelUtils.rowHeight(superHeader.rowHeight()));
 				for (ExcelHeaderGroup headerGroup : superHeader.headerGroups()) {
 					String function = headerGroup.columnRange().replace("${", "").replace("}", "");
 					String[] columns = function.split(":");
