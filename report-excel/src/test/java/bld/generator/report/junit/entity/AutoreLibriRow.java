@@ -72,7 +72,7 @@ public class AutoreLibriRow implements RowSheet {
 	
 	/** The matricola. */
 	@ExcelColumn(columnName = "${autore-libri-row.matricola.name-column}",indexColumn = 1)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,locked = true)
 	@ExcelMergeRow(referenceField = "")
 	private Integer matricola;
 	

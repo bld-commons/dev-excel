@@ -9,10 +9,12 @@ import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderGroup;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
@@ -28,9 +30,9 @@ import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 				@ExcelHeaderGroup(columnName = "Anagrafica", columnRange = "${matricola}:${dataDiNascita}"),
 				@ExcelHeaderGroup(columnName = "Libri", columnRange = "${genere}:${supplemento}")
 		}),
-		@ExcelSuperHeader(headerGroups = {
+		@ExcelSuperHeader(rowHeight = -1,headerGroups = {
 				@ExcelHeaderGroup(columnName = "Test", columnRange = "${matricola}:${cognome}"),
-				@ExcelHeaderGroup(columnName = "test1", columnRange = "${dataDiNascita}:${test}")})
+				@ExcelHeaderGroup(columnName = "test1", columnRange = "${dataDiNascita}:${test}",excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(red=(byte)0)))})
 })
 public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 

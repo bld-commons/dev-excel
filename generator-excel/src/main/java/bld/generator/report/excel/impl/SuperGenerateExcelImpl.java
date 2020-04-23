@@ -822,12 +822,12 @@ public class SuperGenerateExcelImpl {
 			int indexHeader = columnNum - excelSheetLayout.startColumn();
 			Cell cellHeader = rowHeader.createCell(columnNum);
 			SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
-			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderLayout.class) || sheetHeader.getExcelHeaderLayout() != null) {
-				ExcelHeaderLayout layoutHeader = null;
+			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderCellLayout.class) || sheetHeader.getExcelHeaderLayout() != null) {
+				ExcelHeaderCellLayout layoutHeader = null;
 				if (sheetHeader.getExcelHeaderLayout() != null)
-					layoutHeader = sheetHeader.getExcelHeaderLayout();
+					layoutHeader = sheetHeader.getExcelHeaderLayout().excelHeaderCellLayout();
 				else
-					layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderLayout.class);
+					layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
 				CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook,layoutHeader);
 				cellHeader.setCellStyle(differentCellStyleHeader);
 			} else
