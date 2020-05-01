@@ -310,7 +310,7 @@ public class SuperGenerateExcelImpl {
 					value = new PropertyDescriptor(field.getName(), classRow).getReadMethod().invoke(entity);
 				listSheetHeader.add(new SheetHeader(field, value));
 				if (listTitolo.contains(column.columnName()))
-					logger.warn("Exist another equal column with nameColum= \"" + column.columnName() + "\" for the same sheet!!!");
+					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
 				listTitolo.add(column.columnName());
 			}
 		}
@@ -797,7 +797,7 @@ public class SuperGenerateExcelImpl {
 					sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
 					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
 					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
-					sheetHeader.setExcelHeaderLayout(extraColumnAnnotation.getExcelHeaderLayout());
+					sheetHeader.setExcelHeaderCellLayout(extraColumnAnnotation.getExcelHeaderCellLayout());
 					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
 					if (extraColumnAnnotation.getExcelFunction() != null)
 						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
@@ -822,10 +822,10 @@ public class SuperGenerateExcelImpl {
 			int indexHeader = columnNum - excelSheetLayout.startColumn();
 			Cell cellHeader = rowHeader.createCell(columnNum);
 			SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
-			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderCellLayout.class) || sheetHeader.getExcelHeaderLayout() != null) {
+			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderCellLayout.class) || sheetHeader.getExcelHeaderCellLayout() != null) {
 				ExcelHeaderCellLayout layoutHeader = null;
-				if (sheetHeader.getExcelHeaderLayout() != null)
-					layoutHeader = sheetHeader.getExcelHeaderLayout().excelHeaderCellLayout();
+				if (sheetHeader.getExcelHeaderCellLayout() != null)
+					layoutHeader = sheetHeader.getExcelHeaderCellLayout();
 				else
 					layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
 				CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook,layoutHeader);

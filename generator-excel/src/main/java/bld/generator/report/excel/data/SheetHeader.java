@@ -1,8 +1,8 @@
-/**
-* @author Francesco Baldi
-* @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.excel.data.SheetHeader.java
-*/
+/*
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ * @class bld.generator.report.excel.data.SheetHeader.java
+ */
 package bld.generator.report.excel.data;
 
 import java.lang.reflect.Field;
@@ -14,63 +14,49 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The Class SheetHeader.
  */
 public class SheetHeader implements Cloneable {
-	
 
 	/** The key. */
 	private String key;
 
-	
 	/** The field. */
 	private Field field;
 
-	
 	/** The value. */
 	private Object value;
-
 
 	/** The num column. */
 	private int numColumn;
 
-	
 	/** The excel date. */
 	private ExcelDate excelDate;
 
-	
 	/** The excel column. */
 	private ExcelColumn excelColumn;
 
-	
 	/** The excel cell layout. */
 	private ExcelCellLayout excelCellLayout;
 
-	
 	/** The excel merge row. */
 	private ExcelMergeRow excelMergeRow;
 
-	
 	/** The excel header layout. */
-	private ExcelHeaderLayout excelHeaderLayout;
+	private ExcelHeaderCellLayout excelHeaderCellLayout;
 
-	
 	/** The excel function. */
 	private ExcelFunction excelFunction;
 
-	
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
 
-	
 	/** The key map. */
 	private String keyMap;
 
@@ -111,15 +97,10 @@ public class SheetHeader implements Cloneable {
 		return excelColumnWidth;
 	}
 
-
-	
-
-
 	/**
 	 * Gets the excel column.
 	 *
 	 * @return the excel column
-	 * @throws Exception the exception
 	 */
 	public ExcelColumn getExcelColumn() throws Exception {
 		if (this.excelColumn == null)
@@ -131,10 +112,10 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel date.
 	 *
 	 * @return the excel date
-	 * @throws Exception the exception
 	 */
 	public ExcelDate getExcelDate() throws Exception {
-		if (this.excelDate == null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType())))
+		if (this.excelDate == null && (Date.class.isAssignableFrom(this.field.getType())
+				|| Calendar.class.isAssignableFrom(this.field.getType())))
 			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
 		return excelDate;
 	}
@@ -143,15 +124,12 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel cell layout.
 	 *
 	 * @return the excel cell layout
-	 * @throws Exception the exception
 	 */
 	public ExcelCellLayout getExcelCellLayout() throws Exception {
 		if (this.excelCellLayout == null)
 			this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		return this.excelCellLayout;
 	}
-
-	
 
 	/**
 	 * Excel column.
@@ -161,7 +139,6 @@ public class SheetHeader implements Cloneable {
 	public ExcelColumn excelColumn() {
 		return this.excelColumn;
 	}
-
 
 	/**
 	 * Clone.
@@ -284,24 +261,6 @@ public class SheetHeader implements Cloneable {
 	}
 
 	/**
-	 * Gets the excel header layout.
-	 *
-	 * @return the excel header layout
-	 */
-	public ExcelHeaderLayout getExcelHeaderLayout() {
-		return excelHeaderLayout;
-	}
-
-	/**
-	 * Sets the excel header layout.
-	 *
-	 * @param excelHeaderLayout the new excel header layout
-	 */
-	public void setExcelHeaderLayout(ExcelHeaderLayout excelHeaderLayout) {
-		this.excelHeaderLayout = excelHeaderLayout;
-	}
-
-	/**
 	 * Gets the excel function.
 	 *
 	 * @return the excel function
@@ -372,8 +331,23 @@ public class SheetHeader implements Cloneable {
 	public void setExcelColumnWidth(ExcelColumnWidth excelColumnWidth) {
 		this.excelColumnWidth = excelColumnWidth;
 	}
-	
-	
 
+	/**
+	 * Gets the excel header layout.
+	 *
+	 * @return the excel header layout
+	 */
+	public ExcelHeaderCellLayout getExcelHeaderCellLayout() {
+		return excelHeaderCellLayout;
+	}
+
+	/**
+	 * Sets the excel header layout.
+	 *
+	 * @param excelHeaderCellLayout the new excel header layout
+	 */
+	public void setExcelHeaderCellLayout(ExcelHeaderCellLayout excelHeaderCellLayout) {
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
+	}
 
 }

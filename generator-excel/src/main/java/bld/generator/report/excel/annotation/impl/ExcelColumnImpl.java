@@ -91,14 +91,14 @@ public class ExcelColumnImpl implements Cloneable{
 	/**
 	 * Instantiates a new excel column impl.
 	 *
-	 * @param nameColumn  the name column
+	 * @param columnName  the name column
 	 * @param comment     the comment
 	 * @param indexColumn the index column
 	 * @param ignore      the ignore
 	 */
-	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn, boolean ignore) {
+	public ExcelColumnImpl(String columnName, String comment, double indexColumn, boolean ignore) {
 		super();
-		this.columnName = nameColumn;
+		this.columnName = columnName;
 		this.comment = comment;
 		this.indexColumn = indexColumn;
 		this.ignore = ignore;

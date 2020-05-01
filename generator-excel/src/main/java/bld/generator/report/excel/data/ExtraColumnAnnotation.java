@@ -12,19 +12,23 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
-import bld.generator.report.excel.annotation.impl.ExcelHeaderLayoutImpl;
+import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import lombok.Data;
 
 /**
  * The Class ExtraColumnAnnotation.
+ */
+
+/**
+ * Instantiates a new extra column annotation.
  */
 
 /**
@@ -54,7 +58,7 @@ public class ExtraColumnAnnotation {
 	private ExcelFunction excelFunction;
 
 	/** The excel header layout. */
-	private ExcelHeaderLayout excelHeaderLayout;
+	private ExcelHeaderCellLayout excelHeaderCellLayout;
 
 
 	/**
@@ -114,11 +118,11 @@ public class ExtraColumnAnnotation {
 	/**
 	 * Sets the excel header layout.
 	 *
-	 * @param excelHeaderLayoutImpl the new excel header layout
+	 * @param excelHeaderCellLayoutImpl the new excel header layout
 	 */
-	public void setExcelHeaderLayout(ExcelHeaderLayoutImpl excelHeaderLayoutImpl) {
-		if (excelHeaderLayoutImpl != null)
-			this.excelHeaderLayout = excelHeaderLayoutImpl.getExcelHeaderLayout();
+	public void setExcelHeaderLayout(ExcelHeaderCellLayoutImpl excelHeaderCellLayoutImpl) {
+		if (excelHeaderCellLayoutImpl != null)
+			this.excelHeaderCellLayout = excelHeaderCellLayoutImpl.getExcelHeaderCellLayout();
 	}
 
 	/**
