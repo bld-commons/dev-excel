@@ -14,7 +14,7 @@ public interface SheetComponent {
 	/**
 	 * Sets the name sheet.
 	 *
-	 * @param nameSheet the new name sheet
+	 * @param sheetName the new name sheet
 	 */
-	public void setNameSheet(String nameSheet);
+	public void setSheetName(String sheetName);
 }

@@ -98,12 +98,13 @@ public class ReadExcelImpl implements ReadExcel {
 		} else {
 			workbook = new XSSFWorkbook(inputStream);
 		}
-		for (Class<? extends SheetRead<? extends RowSheetRead>> classSheet : excelRead.getListClassSheet()) {
-			SheetRead<T>sheetType=(SheetRead<T>) classSheet.newInstance();
+		for (SheetRead<? extends RowSheetRead> sheet: excelRead.getListSheetRead()) {
+			SheetRead<T>sheetType=(SheetRead<T>) sheet;
+			Class<? extends SheetRead<? extends RowSheetRead>> classSheet=(Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
 			excelRead.getMapSheet().put(classSheet, sheetType);
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
-			logger.info("Sheet: " + excelReadSheet.nameSheet());
-			Sheet worksheet = workbook.getSheet(excelReadSheet.nameSheet());
+			logger.info("Sheet: " + sheetType.getSheetName());
+			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
 			Row header = worksheet.getRow(excelReadSheet.startRow());
 			Map<String, Integer> mapColumns = this.getMapColumns(header, excelReadSheet);
 			int startRow = excelReadSheet.startRow() + 1;

@@ -12,22 +12,24 @@ import lombok.Data;
 
 /**
  * The Class BaseSheet.
+ * 
+ * Each generated Sheet will be of BaseSheet type 
  */
 @Data
 public  abstract class BaseSheet{
 	
 	/** The name sheet. */
 	@Size(max = 30)
-	private String nameSheet;
+	private String sheetName;
 
 	/**
 	 * Instantiates a new base sheet.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public BaseSheet(@Size(max = 30) String nameSheet) {
+	public BaseSheet(@Size(max = 30) String sheetName) {
 		super();
-		this.nameSheet = nameSheet;
+		this.sheetName = sheetName;
 	}
 
 	

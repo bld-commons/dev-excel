@@ -10,17 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import bld.read.report.utils.ExcelType;
+import lombok.Data;
 
 /**
  * The Class ExcelRead.
  */
+@Data
 public class ExcelRead {
 
 	/** The report excel. */
 	private byte[] reportExcel;
 	
 	/** The list class sheet. */
-	private List<Class<? extends SheetRead<?>>> listClassSheet;
+	private List<SheetRead<? extends RowSheetRead>> listSheetRead;
 	
 	/** The map sheet. */
 	private Map<Class<? extends SheetRead<?>>,SheetRead<?>> mapSheet;
@@ -36,57 +38,12 @@ public class ExcelRead {
 	public ExcelRead() {
 		super();
 		this.excelType=ExcelType.XLS;
-		this.listClassSheet=new ArrayList<>();
+		this.listSheetRead=new ArrayList<>();
 		this.mapSheet=new HashMap<>();
 		
 	}
 
-	/**
-	 * Gets the report excel.
-	 *
-	 * @return the report excel
-	 */
-	public byte[] getReportExcel() {
-		return reportExcel;
-	}
-
-	/**
-	 * Sets the report excel.
-	 *
-	 * @param reportExcel the new report excel
-	 */
-	public void setReportExcel(byte[] reportExcel) {
-		this.reportExcel = reportExcel;
-	}
-
 	
-
-	/**
-	 * Gets the list class sheet.
-	 *
-	 * @return the list class sheet
-	 */
-	public List<Class<? extends SheetRead<?>>> getListClassSheet() {
-		return listClassSheet;
-	}
-
-	/**
-	 * Sets the list class sheet.
-	 *
-	 * @param listClassSheet the new list class sheet
-	 */
-	public void setListClassSheet(List<Class<? extends SheetRead<?>>> listClassSheet) {
-		this.listClassSheet = listClassSheet;
-	}
-
-	/**
-	 * Gets the map sheet.
-	 *
-	 * @return the map sheet
-	 */
-	public Map<Class<? extends SheetRead<?>>, SheetRead<?>> getMapSheet() {
-		return mapSheet;
-	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends SheetRead<?>> T getSheet(Class<T>classe) {
@@ -94,32 +51,6 @@ public class ExcelRead {
 	}
 	
 
-	/**
-	 * Sets the map sheet.
-	 *
-	 * @param mapSheet the map sheet
-	 */
-	public void setMapSheet(Map<Class<? extends SheetRead<?>>, SheetRead<?>> mapSheet) {
-		this.mapSheet = mapSheet;
-	}
-
-	/**
-	 * Gets the excel type.
-	 *
-	 * @return the excel type
-	 */
-	public ExcelType getExcelType() {
-		return excelType;
-	}
-
-	/**
-	 * Sets the excel type.
-	 *
-	 * @param excelType the new excel type
-	 */
-	public void setExcelType(ExcelType excelType) {
-		this.excelType = excelType;
-	}
 
 	
 }

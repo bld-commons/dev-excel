@@ -16,13 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface ExcelReadSheet {
-
-	/**
-	 * Name sheet.
-	 *
-	 * @return the string
-	 */
-	public String nameSheet();
 	
 	/**
 	 * Start row.

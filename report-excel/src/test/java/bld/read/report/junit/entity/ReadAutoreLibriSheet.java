@@ -11,8 +11,12 @@ import bld.read.report.excel.domain.SheetRead;
 /**
  * The Class ReadAutoreLibriSheet.
  */
-@ExcelReadSheet(nameSheet = "Libri d'autore",startRow = 2)
+@ExcelReadSheet(startRow=4)
 public class ReadAutoreLibriSheet extends SheetRead<ReadAutoreLibriRow>{
+
+	public ReadAutoreLibriSheet(String sheetName) {
+		super(sheetName);
+	}
 
 	
 }

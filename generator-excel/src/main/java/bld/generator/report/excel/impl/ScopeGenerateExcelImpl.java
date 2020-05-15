@@ -267,11 +267,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (BaseSheet sheet : listSheet) {
 			Sheet worksheet = null;
 			this.mapWidthColumn = new HashMap<>();
-			if (sheet.getNameSheet() != null) {
-				if (workbook.getSheet(sheet.getNameSheet()) == null && sheet.getNameSheet().length() <= 30)
-					worksheet = workbook.createSheet(sheet.getNameSheet().replace("/", ""));
+			if (sheet.getSheetName() != null) {
+				if (workbook.getSheet(sheet.getSheetName()) == null && sheet.getSheetName().length() <= 30)
+					worksheet = workbook.createSheet(sheet.getSheetName().replace("/", ""));
 				else
-					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getNameSheet().replace("/", ""));
+					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getSheetName().replace("/", ""));
 			} else
 				worksheet = workbook.createSheet("Don't defined" + (indiceNomeSheet++));
 
@@ -318,7 +318,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			worksheet.createFreezePane(excelFreezePane.columnFreez(), excelFreezePane.rowFreez());
 		}
 		for (SheetComponent sheetComponent : mergeSheet.getListSheet()) {
-			sheetComponent.setNameSheet(worksheet.getSheetName());
+			sheetComponent.setSheetName(worksheet.getSheetName());
 			if (sheetComponent instanceof SheetSummary)
 				indexRow = this.generateSheetSommario(workbook, worksheet, (SheetSummary) sheetComponent, indexRow);
 			else if (sheetComponent instanceof SheetData)

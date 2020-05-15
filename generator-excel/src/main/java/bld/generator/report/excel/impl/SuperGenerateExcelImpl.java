@@ -562,8 +562,8 @@ public class SuperGenerateExcelImpl {
 				else if (row == null && RowStartEndType.ROW_END.equals(rowStartEndType))
 					row = infoColumn.getLastRow();
 				if (keyParameter.contains(".")) {
-					String nameSheet = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = function.replace(parameter, "'" + nameSheet.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
+					String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
+					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 				} else
 					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
 			}

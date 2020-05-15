@@ -12,8 +12,12 @@ import bld.read.report.excel.domain.SheetRead;
 /**
  * The Class ReadGenereSheet.
  */
-@ExcelReadSheet(nameSheet = "Genere")
+@ExcelReadSheet
 public class ReadGenereSheet extends SheetRead<ReadGenereRow> {
+
+	public ReadGenereSheet(String sheetName) {
+		super(sheetName);
+	}
 
 	
 

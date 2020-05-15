@@ -25,20 +25,20 @@ public class MergeSheet extends BaseSheet {
 	 * Instantiates a new merge sheet.
 	 *
 	 * @param listSheet the list sheet
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public MergeSheet(List<SheetComponent> listSheet,String nameSheet) {
-		super(nameSheet);
+	public MergeSheet(List<SheetComponent> listSheet,String sheetName) {
+		super(sheetName);
 		this.listSheet = listSheet;
 	}
 
 	/**
 	 * Instantiates a new merge sheet.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public MergeSheet(String nameSheet) {
-		super(nameSheet);
+	public MergeSheet(String sheetName) {
+		super(sheetName);
 		this.listSheet=new ArrayList<>();
 	}
 

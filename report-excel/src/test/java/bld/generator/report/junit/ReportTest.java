@@ -153,7 +153,7 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
 
 	}
 
@@ -296,7 +296,7 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
 
 	}
 
@@ -314,8 +314,8 @@ public class ReportTest {
 		ExcelRead excelRead=new ExcelRead();
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListClassSheet().add(ReadAutoreLibriSheet.class);
-		excelRead.getListClassSheet().add(ReadGenereSheet.class);
+		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
+		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
 		ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
 		for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 

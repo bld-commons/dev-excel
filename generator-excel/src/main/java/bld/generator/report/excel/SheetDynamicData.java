@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
  * The Class SheetDynamicData.
  *
  * @param <T> the generic type
+ * 
+ * SheetDynamicData extends SheetData, he manages dynamic columns through the mapExtraColumnAnnotation field 
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -30,10 +32,10 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	/**
 	 * Instantiates a new sheet dynamic data.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public SheetDynamicData(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
+	public SheetDynamicData(@Size(max = 30) String sheetName) {
+		super(sheetName);
 		this.mapExtraColumnAnnotation=new HashMap<>();
 	}
 

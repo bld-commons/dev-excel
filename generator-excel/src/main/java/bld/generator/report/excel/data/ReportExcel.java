@@ -23,7 +23,7 @@ public class ReportExcel {
 
 	/** The titolo. */
 	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.titolo}")
-	private String titolo;
+	private String title;
 	
 	/** The date. */
 	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.date}")
@@ -36,12 +36,12 @@ public class ReportExcel {
 	/**
 	 * Instantiates a new report excel.
 	 *
-	 * @param titolo        the titolo
+	 * @param title        the titolo
 	 * @param listBaseSheet the list base sheet
 	 */
-	public ReportExcel(String titolo, List<BaseSheet> listBaseSheet) {
+	public ReportExcel(String title, List<BaseSheet> listBaseSheet) {
 		super();
-		this.titolo = titolo;
+		this.title = title;
 		this.listBaseSheet = listBaseSheet;
 		this.date=new Date();
 	}

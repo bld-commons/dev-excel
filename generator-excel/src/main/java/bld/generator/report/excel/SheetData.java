@@ -15,9 +15,14 @@ import lombok.EqualsAndHashCode;
 
 
 /**
+ * 
+ * 
  * The Class SheetData.
  *
  * @param <T> the generic type
+ * 
+ * SheetData is used for the generation of a table with rows of type RowSheet
+ * 
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -32,10 +37,10 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	/**
 	 * Instantiates a new sheet data.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public SheetData(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
+	public SheetData(@Size(max = 30) String sheetName) {
+		super(sheetName);
 		listRowSheet = new ArrayList<T>();
 	}
 

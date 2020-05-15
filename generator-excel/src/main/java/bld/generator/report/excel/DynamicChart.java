@@ -31,10 +31,10 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	/**
 	 * Instantiates a new dynamic chart.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public DynamicChart(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
+	public DynamicChart(@Size(max = 30) String sheetName) {
+		super(sheetName);
 		this.listExcelChart=new ArrayList<>();
 	}
 

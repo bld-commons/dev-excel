@@ -23,6 +23,7 @@ public enum ColumnDateFormat {
 	/** The yyyy mm dd hh mm ss. */
 	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
 	
+	/** The parameter. */
 	PARAMETER("${bld.commons.date.format}")
 	;
 	
