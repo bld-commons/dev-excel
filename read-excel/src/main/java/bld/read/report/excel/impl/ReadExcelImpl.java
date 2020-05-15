@@ -36,9 +36,11 @@ import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.annotation.ExcelReadSheet;
+import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.excel.domain.RowSheetRead;
 import bld.read.report.excel.domain.SheetRead;
+import bld.read.report.excel.exception.ExcelReaderException;
 import bld.read.report.utils.ExcelType;
 
 /**
@@ -105,6 +107,8 @@ public class ReadExcelImpl implements ReadExcel {
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
 			logger.info("Sheet: " + sheetType.getSheetName());
 			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
+			if(worksheet==null)
+				throw new ExcelReaderException(ExcelExceptionType.SHEET_NOT_FOUND,sheetType.getSheetName());
 			Row header = worksheet.getRow(excelReadSheet.startRow());
 			Map<String, Integer> mapColumns = this.getMapColumns(header, excelReadSheet);
 			int startRow = excelReadSheet.startRow() + 1;
@@ -125,7 +129,7 @@ public class ReadExcelImpl implements ReadExcel {
 						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 							ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
 							if (!mapColumns.containsKey(excelReadColumn.name()))
-								throw new Exception("Not exist the column: " + excelReadColumn.name());
+								throw new ExcelReaderException(ExcelExceptionType.COLUMN_NOT_FOUND,excelReadColumn.name());
 							int indexColumn = mapColumns.get(excelReadColumn.name());
 							Cell cell = row.getCell(indexColumn);
 							if (cell != null && cell.getCellType() != CellType.BLANK) {
