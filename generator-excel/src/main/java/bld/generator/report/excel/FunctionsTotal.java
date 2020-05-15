@@ -8,11 +8,12 @@ package bld.generator.report.excel;
 // TODO: Auto-generated Javadoc
 /**
  * The Interface FunctionsTotal.
+ * 
+ * FunctionsTotal can be implemented by classes of type SheetData, it is used to create a table for totals of the functions.
  *
  * @param <T> the generic type
  * 
  * 
- * FunctionsTotal can be implemented by classes of type SheetData, it is used to create a table for totals of the functions
  */
 public interface FunctionsTotal<T extends SheetFunctionTotal<? extends RowSheet>> {
 	

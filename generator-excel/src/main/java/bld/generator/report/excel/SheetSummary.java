@@ -12,8 +12,8 @@ import javax.validation.constraints.Size;
  * The Class SheetSummary.
  * 
  * SheetSummary is used for the generation of a summary sheet with 2 columns.
- * 1) the name of the field
- * 2) The value
+ * 1) the name of the field.
+ * 2) The value.
  * 
  */
 public abstract class SheetSummary extends BaseSheet implements SheetComponent{

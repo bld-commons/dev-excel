@@ -18,10 +18,11 @@ import lombok.EqualsAndHashCode;
  * 
  * 
  * The Class SheetData.
+ * 
+ * SheetData is used for the generation of a table with rows of type RowSheet.
  *
  * @param <T> the generic type
  * 
- * SheetData is used for the generation of a table with rows of type RowSheet
  * 
  */
 @Data

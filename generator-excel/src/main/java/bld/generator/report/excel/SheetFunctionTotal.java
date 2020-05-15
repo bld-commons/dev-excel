@@ -11,11 +11,12 @@ import lombok.EqualsAndHashCode;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SheetFunctionTotal.
- *
+ * 
+ * SheetFunctionTotal is the object that represent the table for totals of the functions.
+ * 
  * @param <T> the generic type
  * 
  * 
- * SheetFunctionTotal is the object that represent the table for totals of the functions
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
