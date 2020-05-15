@@ -677,9 +677,9 @@ public class SuperGenerateExcelImpl {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	private CellStyle dateCellStyle(Workbook workbook, CellStyle cellStyle, String format) throws Exception {
+	protected  CellStyle dateCellStyle(Workbook workbook, CellStyle cellStyle, String format) throws Exception {
 		CreationHelper helper = workbook.getCreationHelper();
-		cellStyle.setDataFormat(helper.createDataFormat().getFormat(format));
+		cellStyle.setDataFormat(helper.createDataFormat().getFormat(this.valueProps.valueProps(format)));
 		return cellStyle;
 	}
 

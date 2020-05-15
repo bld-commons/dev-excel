@@ -21,7 +21,9 @@ public enum ColumnDateFormat {
 	YYYY_MM_DD("yyyy/mm/dd"),
 	
 	/** The yyyy mm dd hh mm ss. */
-	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss")
+	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
+	
+	PARAMETER("${bld.commons.date.format}")
 	;
 	
 	/** The value. */

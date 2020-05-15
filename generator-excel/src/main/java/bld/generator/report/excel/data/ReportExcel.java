@@ -6,9 +6,13 @@
 
 package bld.generator.report.excel.data;
 
+import java.util.Date;
 import java.util.List;
 
 import bld.generator.report.excel.BaseSheet;
+import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelSelectCell;
+import bld.generator.report.excel.constant.ColumnDateFormat;
 import lombok.Data;
 
 /**
@@ -18,7 +22,13 @@ import lombok.Data;
 public class ReportExcel {
 
 	/** The titolo. */
+	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.titolo}")
 	private String titolo;
+	
+	/** The date. */
+	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.date}")
+	@ExcelDate(format = ColumnDateFormat.PARAMETER)
+	private Date date;
 
 	/** The list base sheet. */
 	private List<BaseSheet> listBaseSheet;
@@ -33,6 +43,7 @@ public class ReportExcel {
 		super();
 		this.titolo = titolo;
 		this.listBaseSheet = listBaseSheet;
+		this.date=new Date();
 	}
 
 	/**
@@ -40,6 +51,7 @@ public class ReportExcel {
 	 */
 	public ReportExcel() {
 		super();
+		this.date=new Date();
 	}
 
 	
