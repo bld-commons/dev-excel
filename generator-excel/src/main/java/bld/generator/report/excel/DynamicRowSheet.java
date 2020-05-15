@@ -10,9 +10,13 @@ import java.util.Map;
 
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DynamicRowSheet.
+ * 
+ * DynamicRowSheet is used by classes of type SheetDynamicData, it manages dynamic columns through the "mapValue" field.
+ * 
+ * mapValue and mapExtraColumnAnnotation(is a field of SheetDynamicData) have the same keys
+ * 
  */
 @Data
 public abstract class DynamicRowSheet implements RowSheet {

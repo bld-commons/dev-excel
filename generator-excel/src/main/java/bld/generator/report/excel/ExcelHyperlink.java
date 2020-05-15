@@ -11,6 +11,8 @@ import lombok.Data;
 
 /**
  * The Class ExcelHyperlink.
+ * 
+ * ExcelHyperlink is used by RowSheet classes, it is used to write a hyperlink field in tables
  */
 @Data
 public class ExcelHyperlink {

@@ -9,6 +9,8 @@ import bld.generator.report.excel.data.ReportExcel;
 
 /**
  * The Interface GenerateExcel.
+ * 
+ * GemerateExcel is an interface for generating Excel reports
  */
 public interface GenerateExcel {
 

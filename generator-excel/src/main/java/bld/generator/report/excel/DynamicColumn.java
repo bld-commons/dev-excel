@@ -11,6 +11,12 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
  * The Interface DynamicColumn.
+ * 
+ * This insterface is implemented by classes that manage the dynamic columns
+ * 
+ * 1) SheetDynamicData
+ * 2) SheetDynamicFunctionTotal
+ * 
  */
 public interface DynamicColumn {
 

@@ -13,6 +13,9 @@ import lombok.EqualsAndHashCode;
  * The Class SheetFunctionTotal.
  *
  * @param <T> the generic type
+ * 
+ * 
+ * SheetFunctionTotal is the object that represent the table for totals of the functions
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

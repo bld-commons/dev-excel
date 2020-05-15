@@ -13,6 +13,12 @@ import lombok.EqualsAndHashCode;
 
 /**
  * The Class MergeSheet.
+ * 
+ * MergeSheet is used to merge different SheetComponent type, through the field listSheet. 
+ * SheetComponent is implemented from: 
+ * 1) SheetData 
+ * 2) SheetSummary
+ * 
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

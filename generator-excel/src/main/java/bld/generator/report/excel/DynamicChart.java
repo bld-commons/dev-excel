@@ -19,6 +19,8 @@ import lombok.EqualsAndHashCode;
  * The Class DynamicChart.
  *
  * @param <T> the generic type
+ * 
+ * DynamicChart is used to generate charts through dynamic columns 
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
