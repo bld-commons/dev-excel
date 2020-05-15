@@ -16,9 +16,9 @@ import lombok.EqualsAndHashCode;
 
 /**
  * The Class SheetDynamicData.
- *
+ * <br>
  * SheetDynamicData extends SheetData, it manages dynamic columns through the mapExtraColumnAnnotation field.
- * 
+ * <br>
  * mapExtraColumnAnnotation and mapValue(is a field of DynamicRowSheet) have the same keys.
  * @param <T> the generic type
  * 

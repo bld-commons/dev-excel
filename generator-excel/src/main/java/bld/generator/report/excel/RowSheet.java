@@ -8,7 +8,7 @@ package bld.generator.report.excel;
 
 /**
  * The Interface RowSheet.
- * 
+ * <br>
  * RowSheet is used to create an object that represents the row of the sheet.
  */
 public interface RowSheet {

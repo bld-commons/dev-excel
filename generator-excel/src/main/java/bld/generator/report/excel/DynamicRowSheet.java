@@ -12,9 +12,9 @@ import lombok.Data;
 
 /**
  * The Class DynamicRowSheet.
- * 
+ * <br>
  * DynamicRowSheet is used by classes of type SheetDynamicData, it manages dynamic columns through the "mapValue" field.
- * 
+ * <br>
  * mapValue and mapExtraColumnAnnotation(is a field of SheetDynamicData) have the same keys
  * 
  */

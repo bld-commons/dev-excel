@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
  * 
  * 
  * The Class DynamicChart.
- * 
+ * <br>
  * DynamicChart is used to generate charts through dynamic columns
  * 
  *

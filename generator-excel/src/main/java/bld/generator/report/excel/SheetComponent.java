@@ -8,11 +8,13 @@ package bld.generator.report.excel;
 // TODO: Auto-generated Javadoc
 /**
  * The Interface SheetComponent.
- * 
- * SheetComponet is implemented from: 
- * 1) SheetData
- * 2) SheetSummary
- * 
+ * <br>
+ * SheetComponet is implemented from:<br>
+ * <ol> 
+ * <li>SheetData</li>
+ * <li>SheetSummary</li>
+ * </ol>
+ * <br>
  * Its is used to merge different sheet through the class MergeSheet 
  */
 public interface SheetComponent {

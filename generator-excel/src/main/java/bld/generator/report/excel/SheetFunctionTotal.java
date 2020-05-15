@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SheetFunctionTotal.
- * 
+ * <br>
  * SheetFunctionTotal is the object that represent the table for totals of the functions.
  * 
  * @param <T> the generic type

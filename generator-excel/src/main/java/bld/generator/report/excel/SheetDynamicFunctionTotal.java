@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * The Class SheetDynamicFunctionTotal.
- *
+ * <br>
  * SheetDynamicFunctionTotal is the object that represent the table for totals of the functions with dynamic columns
  *
  * @param <T> the generic type

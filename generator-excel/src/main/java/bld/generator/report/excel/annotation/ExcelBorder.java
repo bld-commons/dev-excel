@@ -13,7 +13,6 @@ import java.lang.annotation.Target;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelBorder.
  */

@@ -101,6 +101,7 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel column.
 	 *
 	 * @return the excel column
+	 * @throws Exception the exception
 	 */
 	public ExcelColumn getExcelColumn() throws Exception {
 		if (this.excelColumn == null)
@@ -112,6 +113,7 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel date.
 	 *
 	 * @return the excel date
+	 * @throws Exception the exception
 	 */
 	public ExcelDate getExcelDate() throws Exception {
 		if (this.excelDate == null && (Date.class.isAssignableFrom(this.field.getType())
@@ -124,6 +126,7 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel cell layout.
 	 *
 	 * @return the excel cell layout
+	 * @throws Exception the exception
 	 */
 	public ExcelCellLayout getExcelCellLayout() throws Exception {
 		if (this.excelCellLayout == null)
