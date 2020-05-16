@@ -16,10 +16,6 @@ import lombok.Data;
 /**
  * The Class LayoutCell.
  */
-
-/**
- * Instantiates a new layout cell.
- */
 @Data
 public class LayoutCell {
 	
@@ -57,5 +53,7 @@ public class LayoutCell {
 	/** The format. */
 	private ColumnDateFormat format;
 
+	/** The locked. */
+	private boolean locked;
 	
 }

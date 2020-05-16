@@ -204,7 +204,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					ExcelSelectCell excelSelectCell = field.getAnnotation(ExcelSelectCell.class);
 					CellReference cellReference = new CellReference(
 							this.valueProps.valueProps(excelSelectCell.cellReference()));
-					CellStyle cellStyle = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol()).getCellStyle();
+					CellStyle cellStyle = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol())
+							.getCellStyle();
 					cellStyle.setWrapText(true);
 					Cell cell = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
 					Object value = new PropertyDescriptor(field.getName(), report.getClass()).getReadMethod()
@@ -223,7 +224,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							cell.setCellValue((Calendar) value);
 						else if (value instanceof String || value instanceof Character) {
 							value = "" + value;
-							cell.setCellValue((String)value);
+							cell.setCellValue((String) value);
 						} else if (value instanceof Number)
 							cell.setCellValue(((Number) value).doubleValue());
 						else if (value instanceof Boolean)
@@ -358,7 +359,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			setColumnWidth(worksheet, excelSheetLayout.startColumn() + 1, excelSummary.widthColumn2());
 			indexRow++;
 		}
-		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary);
+		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary,worksheet);
 		Row row = null;
 		for (SheetHeader sheetHeader : listSheetHeader) {
 			row = worksheet.createRow(indexRow);
