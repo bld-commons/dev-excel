@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
@@ -271,11 +272,11 @@ public class ReportTest {
 
 		autoreLibriSheet.setListRowSheet(list);
 
-		ExcelChartImpl excelChartImpl=null;
-		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE,10,3,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
-		autoreLibriSheet.addExcelChart(excelChartImpl);
+//		ExcelChartImpl excelChartImpl=null;
+//		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE,10,3,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"));
+//		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
-//		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.LINE,20,5,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"));
+//		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.LINE,20,5,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"));
 //		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
 		
@@ -309,21 +310,27 @@ public class ReportTest {
 	 */
 	@Test
 	public void testRead() throws Exception{
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori.xlsx");
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
 		byte[] report=IOUtils.toByteArray(inputStream);
 		ExcelRead excelRead=new ExcelRead();
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
 		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
-		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
+//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
-		for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
-			System.out.println(row.toString());
+		ReadAutoreLibriSheet sheet;
+		try {
+			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+				System.out.println(row.toString());
+			
+			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
+				System.out.println(row.toString());
+		} catch (Exception e) {
+			ExceptionUtils.getStackTrace(e);
+		}
 		
-		ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
-		for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
-			System.out.println(row.toString());
 		
 		
 	}

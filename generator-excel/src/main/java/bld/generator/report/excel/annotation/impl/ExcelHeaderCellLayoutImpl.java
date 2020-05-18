@@ -17,52 +17,53 @@ import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import lombok.Data;
 
+/**
+ * The Class ExcelHeaderCellLayoutImpl.
+ */
 @Data
-public class ExcelHeaderCellLayoutImpl implements Cloneable{
+public class ExcelHeaderCellLayoutImpl implements Cloneable {
 
-		/** The wrap. */
-		private boolean wrap;
-		
-		/** The vertical alignment. */
-		private VerticalAlignment verticalAlignment;
-		
-		/** The rgb foreground. */
-		private ExcelRgbColor rgbForeground;
-		
-		/** The rgb font. */
-		private ExcelRgbColor rgbFont;
-		
-		/** The horizontal alignment. */
-		private HorizontalAlignment horizontalAlignment;
-		
-		/** The font. */
-		private ExcelFont font;
-		
-		/** The fill pattern type. */
-		private FillPatternType fillPatternType;
-		
-		
-		/** The border. */
-		private ExcelBorder border;
-		
-		/** The rotation. */
-		private int rotation;
-		
-		
+	/** The wrap. */
+	private boolean wrap;
 
-		/**
-		 * Clone.
-		 *
-		 * @return the object
-		 * @throws CloneNotSupportedException the clone not supported exception
-		 */
-		@Override
-		public Object clone() throws CloneNotSupportedException {
-			return super.clone();
-		}
-	
-	
-	
+	/** The vertical alignment. */
+	private VerticalAlignment verticalAlignment;
+
+	/** The rgb foreground. */
+	private ExcelRgbColor rgbForeground;
+
+	/** The rgb font. */
+	private ExcelRgbColor rgbFont;
+
+	/** The horizontal alignment. */
+	private HorizontalAlignment horizontalAlignment;
+
+	/** The font. */
+	private ExcelFont font;
+
+	/** The fill pattern type. */
+	private FillPatternType fillPatternType;
+
+	/** The border. */
+	private ExcelBorder border;
+
+	/** The rotation. */
+	private int rotation;
+
+	/** The locked. */
+	private boolean locked;
+
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
 	/**
 	 * Gets the excel header cell layout.
 	 *
@@ -111,7 +112,6 @@ public class ExcelHeaderCellLayoutImpl implements Cloneable{
 				return fillPatternType;
 			}
 
-
 			@Override
 			public ExcelBorder border() {
 				return border;
@@ -122,11 +122,14 @@ public class ExcelHeaderCellLayoutImpl implements Cloneable{
 				return rotation;
 			}
 
-			
+			@Override
+			public boolean locked() {
+				return locked;
+			}
+
 		};
 		return excelHeaderLayout;
 	}
-	
 
 	/**
 	 * Instantiates a new excel header cell layout impl.
@@ -140,8 +143,11 @@ public class ExcelHeaderCellLayoutImpl implements Cloneable{
 	 * @param fillPatternType     the fill pattern type
 	 * @param border              the border
 	 * @param rotation            the rotation
+	 * @param locked              the locked
 	 */
-	public ExcelHeaderCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType, ExcelBorder border,int rotation) {
+	public ExcelHeaderCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground,
+			ExcelRgbColor rgbFont, HorizontalAlignment horizontalAlignment, ExcelFont font,
+			FillPatternType fillPatternType, ExcelBorder border, int rotation, boolean locked) {
 		super();
 		this.wrap = wrap;
 		this.verticalAlignment = verticalAlignment;
@@ -151,7 +157,8 @@ public class ExcelHeaderCellLayoutImpl implements Cloneable{
 		this.font = font;
 		this.fillPatternType = fillPatternType;
 		this.border = border;
-		this.rotation=rotation;
+		this.rotation = rotation;
+		this.locked = locked;
 	}
 
 }

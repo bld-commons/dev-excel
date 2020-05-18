@@ -22,7 +22,7 @@ import lombok.Data;
 public class ExcelChartImpl implements Cloneable {
 
 	/** The field title. */
-	protected String fieldTitle;
+	protected String fieldKey;
 
 	/** The chart types. */
 	protected ChartTypes chartTypes;
@@ -44,6 +44,9 @@ public class ExcelChartImpl implements Cloneable {
 
 	/** The function. */
 	protected String function;
+	
+	/** The x axis. */
+	private String xAxis;
 
 	/**
 	 * Gets the excel chart.
@@ -59,8 +62,8 @@ public class ExcelChartImpl implements Cloneable {
 			}
 
 			@Override
-			public String fieldTitle() {
-				return fieldTitle;
+			public String fieldKey() {
+				return fieldKey;
 			}
 
 			@Override
@@ -98,13 +101,21 @@ public class ExcelChartImpl implements Cloneable {
 				return function;
 			}
 
+			@Override
+			public String xAxis() {
+				return xAxis;
+			}
+
 		};
 	}
+
+	
+	
 
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
-	 * @param fieldTitle     the field title
+	 * @param fieldKey       the field key
 	 * @param chartTypes     the chart types
 	 * @param sizeRow        the size row
 	 * @param sizeColumn     the size column
@@ -112,10 +123,11 @@ public class ExcelChartImpl implements Cloneable {
 	 * @param categoryAxis   the category axis
 	 * @param valueAxis      the value axis
 	 * @param function       the function
+	 * @param xAxis          the x axis
 	 */
-	public ExcelChartImpl(String fieldTitle, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function) {
+	public ExcelChartImpl(String fieldKey, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function, String xAxis) {
 		super();
-		this.fieldTitle = fieldTitle;
+		this.fieldKey = fieldKey;
 		this.chartTypes = chartTypes;
 		this.sizeRow = sizeRow;
 		this.sizeColumn = sizeColumn;
@@ -123,9 +135,11 @@ public class ExcelChartImpl implements Cloneable {
 		this.categoryAxis = categoryAxis;
 		this.valueAxis = valueAxis;
 		this.function = function;
+		this.xAxis = xAxis;
 	}
 
-	
+
+
 
 	/**
 	 * Clone.

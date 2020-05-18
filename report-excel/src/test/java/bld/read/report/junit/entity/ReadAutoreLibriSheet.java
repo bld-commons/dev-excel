@@ -11,7 +11,7 @@ import bld.read.report.excel.domain.SheetRead;
 /**
  * The Class ReadAutoreLibriSheet.
  */
-@ExcelReadSheet(startRow=4)
+@ExcelReadSheet(startRow=2)
 public class ReadAutoreLibriSheet extends SheetRead<ReadAutoreLibriRow>{
 
 	public ReadAutoreLibriSheet(String sheetName) {

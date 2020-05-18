@@ -17,17 +17,29 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
 /**
  * The Interface ExcelChart.
+ * 
+ * ExcelChart is uset to create charts of different type.
+ * <br>
+ * This annotation is composed from:<br>
+ * <ul>
+ * <li>FieldKey - chart identifier</li>
+ * <li>Function - is the chart function</li>
+ * <li>ChartTypes - to set the chart type</li>
+ * 
+ * </ul>
+ * 
+ * 
  */
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface ExcelChart {
 
 	/**
-	 * Field title.
+	 * Field key.
 	 *
 	 * @return the string
 	 */
-	public String fieldTitle();
+	public String fieldKey();
 
 	/**
 	 * Function.
@@ -77,5 +89,12 @@ public @interface ExcelChart {
 	 * @return the axis position
 	 */
 	public AxisPosition valueAxis() default AxisPosition.LEFT;
+	
+	/**
+	 * X axis.
+	 *
+	 * @return the string
+	 */
+	public String xAxis();
 
 }

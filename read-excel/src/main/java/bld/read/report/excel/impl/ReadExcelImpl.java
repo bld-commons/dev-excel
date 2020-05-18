@@ -29,6 +29,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
@@ -132,6 +133,14 @@ public class ReadExcelImpl implements ReadExcel {
 								throw new ExcelReaderException(ExcelExceptionType.COLUMN_NOT_FOUND,excelReadColumn.name());
 							int indexColumn = mapColumns.get(excelReadColumn.name());
 							Cell cell = row.getCell(indexColumn);
+							for(int indexRegion=0;indexRegion<worksheet.getNumMergedRegions();indexRegion++) {
+								CellRangeAddress mergedCell=worksheet.getMergedRegion(indexRegion);
+								if(mergedCell.isInRange(indexRow, indexColumn)) {
+									cell=worksheet.getRow(mergedCell.getFirstRow()).getCell(indexColumn);
+									break;
+								}
+								
+							}
 							if (cell != null && cell.getCellType() != CellType.BLANK) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase()
 										+ field.getName().substring(1);

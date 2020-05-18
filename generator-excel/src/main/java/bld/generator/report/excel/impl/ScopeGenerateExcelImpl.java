@@ -518,7 +518,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					functionChart = makeFunction(worksheet, indexRow, excelChart.function(), RowStartEndType.ROW_EMPTY);
 //					startKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
 //					endKey = ExcelUtils.calcoloCoordinateFunction(indexRow + 1, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
-					String keyChart = mapValue.get(excelChart.fieldTitle()).toString();
+					String keyChart = mapValue.get(excelChart.fieldKey()).toString();
 					mapChart.put(keyChart, functionChart);
 				}
 
@@ -560,8 +560,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 //				startKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.startKeyChart())).getColumnNum());
 //				endKey = ExcelUtils.calcoloCoordinateFunction(startRowSheet, this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, excelChart.endKeyChart())).getColumnNum());
-				String xAxis = makeFunction(worksheet, startRowSheet - 1, excelChart.function(),
-						RowStartEndType.ROW_EMPTY);
+				String xAxis = makeFunction(worksheet, null, excelChart.xAxis(),RowStartEndType.ROW_HEADER);
 				indexRow += 2;
 				for (String keyChart : mapChart.keySet())
 					indexRow = generateChart((XSSFSheet) worksheet, mapChart.get(keyChart), keyChart, excelChart,

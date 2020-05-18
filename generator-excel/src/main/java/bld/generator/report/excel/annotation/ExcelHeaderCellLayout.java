@@ -87,4 +87,12 @@ public @interface ExcelHeaderCellLayout {
 	 */
 	public int rotation() default 0;
 	
+	
+	/**
+	 * Locked.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean locked()default false;
+	
 }
