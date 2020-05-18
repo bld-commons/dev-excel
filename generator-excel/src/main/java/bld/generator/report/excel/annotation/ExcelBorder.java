@@ -23,7 +23,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
  * <li>left</li>
  * <li>right</li>
  * <li>top</li>
- * <ul>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)

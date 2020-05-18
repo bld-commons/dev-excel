@@ -35,11 +35,11 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 public @interface ExcelChart {
 
 	/**
-	 * Field key.
+	 * Title.
 	 *
 	 * @return the string
 	 */
-	public String fieldKey();
+	public String title();
 
 	/**
 	 * Function.

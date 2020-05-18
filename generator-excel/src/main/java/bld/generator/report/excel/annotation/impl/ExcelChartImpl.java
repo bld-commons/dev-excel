@@ -21,8 +21,8 @@ import lombok.Data;
 @Data
 public class ExcelChartImpl implements Cloneable {
 
-	/** The field title. */
-	protected String fieldKey;
+	/** The title. */
+	protected String title;
 
 	/** The chart types. */
 	protected ChartTypes chartTypes;
@@ -62,8 +62,8 @@ public class ExcelChartImpl implements Cloneable {
 			}
 
 			@Override
-			public String fieldKey() {
-				return fieldKey;
+			public String title() {
+				return title;
 			}
 
 			@Override
@@ -115,7 +115,7 @@ public class ExcelChartImpl implements Cloneable {
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
-	 * @param fieldKey       the field key
+	 * @param title       the field key
 	 * @param chartTypes     the chart types
 	 * @param sizeRow        the size row
 	 * @param sizeColumn     the size column
@@ -125,9 +125,9 @@ public class ExcelChartImpl implements Cloneable {
 	 * @param function       the function
 	 * @param xAxis          the x axis
 	 */
-	public ExcelChartImpl(String fieldKey, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function, String xAxis) {
+	public ExcelChartImpl(String title, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function, String xAxis) {
 		super();
-		this.fieldKey = fieldKey;
+		this.title = title;
 		this.chartTypes = chartTypes;
 		this.sizeRow = sizeRow;
 		this.sizeColumn = sizeColumn;
