@@ -580,7 +580,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, startChart, excelChart.sizeColumn(), indexRow);
 
 		XSSFChart chart = drawing.createChart(anchor);
-
+		chart.setTitleText(title);
 		XDDFChartLegend legend = chart.getOrAddLegend();
 		legend.setPosition(excelChart.legendPosition());
 		XDDFCategoryAxis bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
@@ -593,7 +593,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		series = chartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(worksheet, CellRangeAddress.valueOf(seriesChart)));
 		series.setTitle(title, null);
 		series.setShowLeaderLines(true);
-
+		
 		chartData.setVaryColors(true);
 
 		chart.plot(chartData);
