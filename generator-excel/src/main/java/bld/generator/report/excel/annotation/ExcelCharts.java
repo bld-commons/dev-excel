@@ -13,6 +13,9 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelCharts.
+ * <br>
+ * ExcelCharts is used to manage a list of excelCharts, it must be managed on BaseSheet classes
+ * 
  */
 @Retention(RUNTIME)
 @Target(TYPE)

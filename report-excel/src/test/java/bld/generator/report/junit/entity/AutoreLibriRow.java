@@ -21,6 +21,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
  * The Class AutoreLibriRow.
@@ -54,7 +55,7 @@ public class AutoreLibriRow implements RowSheet {
 	
 	/** The data di nascita. */
 	@ExcelColumn(columnName = "Data di Nascita",indexColumn = 4)
-	@ExcelDate
+	@ExcelDate(format = ColumnDateFormat.YYYY_MM_DD)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
 	private Calendar dataDiNascita;

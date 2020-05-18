@@ -18,14 +18,19 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 /**
  * The Interface ExcelChart.
  * 
- * ExcelChart is uset to create charts of different type.
+ * ExcelChart is used to create different chart types.
  * <br>
  * This annotation is composed from:<br>
  * <ul>
- * <li>FieldKey - chart identifier</li>
+ * <li>Title - chart identifier</li>
  * <li>Function - is the chart function</li>
  * <li>ChartTypes - to set the chart type</li>
- * 
+ * <li>SizeRow - to set height in terms number of rows</li>
+ * <li>SizeColumn - to set width in terms number of columns</li>
+ * <li>LegendPosition - to configure the legend position</li>
+ * <li>CategoryAxis - to set the category position</li>
+ * <li>ValueAxis - to set the value position</li>
+ * <li>xAxis - to set the axis categories description</li>
  * </ul>
  * 
  * 

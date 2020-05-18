@@ -14,6 +14,15 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelColumn.
+ * <br>
+ * ExcelColumn is used to define the header column
+ * It is composed from:
+ * <ul>
+ * <li>ColumnName - to set column name on header</li>
+ * <li>Comment - to add a comment on header</li>
+ * <li>IndexColumn - to set the insertion order of the columns</li>
+ * <li>Ignore - to show or hide the column</li>
+ * </ul> 
  */
 @Documented
 @Retention(RUNTIME)

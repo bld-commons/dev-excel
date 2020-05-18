@@ -12,9 +12,14 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFunction.
+ * The Interface ExcelFunction.<br>
+ * ExcelFunction is used to define the excel functions through:
+ * <ul>
+ * <li>Function - to set function</li>
+ * <li>NameFunction - function identifier</li>
+ * <li>AnotherTable - it is enabled if the function references another table</li>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)

@@ -16,7 +16,15 @@ import bld.generator.report.excel.constant.UnderlineType;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFont.
+ * The Interface ExcelFont.<br>
+ * ExcelFont define the following properties:
+ * <ul>
+ * <li>Font - to set font type</li>
+ * <li>Bold - to enable/disable bold</li>
+ * <li>Italic - to enable/disable italic</li>
+ * <li>Underline - to set underline type</li>
+ * <li>size - to set font size</li>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)

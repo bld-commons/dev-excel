@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFreezePane.
+ * The Interface ExcelFreezePane.<br>
+ * ExcelFreezePane is used to freeze rows and columns
  */
 @Documented
 @Retention(RUNTIME)

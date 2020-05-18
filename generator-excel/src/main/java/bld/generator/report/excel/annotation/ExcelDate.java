@@ -16,7 +16,8 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelDate.
+ * The Interface ExcelDate.<br>
+ * ExcelDate is used to set format date
  */
 @Documented
 @Retention(RUNTIME)
