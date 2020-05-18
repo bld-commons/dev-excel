@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -107,6 +108,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/** The resource path copertina xlsx. */
 	@Value("${bld.commons.resource.path.xlsx:}")
 	private String resourcePathCopertinaXlsx;
+	
+	private final static List<ChartTypes> LIST_CHART_TYPES=listChartTypes();
 
 	/**
 	 * Creates the file xls.
@@ -144,6 +147,14 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 
 		return byteExcel;
+	}
+
+	private static List<ChartTypes> listChartTypes() {
+		List<ChartTypes>list=new ArrayList<>();
+		list.add(ChartTypes.PIE);
+		list.add(ChartTypes.PIE3D);
+		list.add(ChartTypes.DOUGHNUT);
+		return Collections.unmodifiableList(list);
 	}
 
 	/**
@@ -587,7 +598,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		legend.setPosition(excelChart.legendPosition());
 		XDDFCategoryAxis bottomAxis =null;
 		XDDFValueAxis leftAxis=null;
-		if(!ChartTypes.PIE.equals(excelChart.chartTypes())){
+		if(!LIST_CHART_TYPES.contains(excelChart.chartTypes())){
 			bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
 			leftAxis = chart.createValueAxis(excelChart.valueAxis());
 		}
