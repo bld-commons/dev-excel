@@ -34,6 +34,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.XDDFCategoryAxis;
 import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
 import org.apache.poi.xddf.usermodel.chart.XDDFChartLegend;
@@ -581,10 +582,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		XSSFChart chart = drawing.createChart(anchor);
 		chart.setTitleText(title);
+		chart.setTitleOverlay(false);
 		XDDFChartLegend legend = chart.getOrAddLegend();
 		legend.setPosition(excelChart.legendPosition());
-		XDDFCategoryAxis bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
-		XDDFValueAxis leftAxis = chart.createValueAxis(excelChart.valueAxis());
+		XDDFCategoryAxis bottomAxis =null;
+		XDDFValueAxis leftAxis=null;
+		if(!ChartTypes.PIE.equals(excelChart.chartTypes())){
+			bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
+			leftAxis = chart.createValueAxis(excelChart.valueAxis());
+		}
 		logger.debug("-----------------xAxis: " + xAxis);
 		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(worksheet, CellRangeAddress.valueOf(xAxis));
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), bottomAxis, leftAxis);
@@ -601,6 +607,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return indexRow;
 
 	}
+	
+	
 
 	/**
 	 * Write label.
