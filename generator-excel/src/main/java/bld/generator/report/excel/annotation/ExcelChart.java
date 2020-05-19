@@ -31,6 +31,7 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * <li>CategoryAxis - to set the category position</li>
  * <li>ValueAxis - to set the value position</li>
  * <li>xAxis - to set the axis categories description</li>
+ * <li>Group - to group series</li>
  * </ul>
  * 
  * 
@@ -44,7 +45,7 @@ public @interface ExcelChart {
 	 *
 	 * @return the string
 	 */
-	public String title();
+	public String fieldName();
 
 	/**
 	 * Function.
@@ -101,5 +102,17 @@ public @interface ExcelChart {
 	 * @return the string
 	 */
 	public String xAxis();
+	
+	/**
+	 * Group.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean group() default false;
+	
+	
+	public String title()default "";
+	
+	
 
 }

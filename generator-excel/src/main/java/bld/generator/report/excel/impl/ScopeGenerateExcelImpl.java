@@ -507,7 +507,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
 					functionChart = makeFunction(worksheet, indexRow, excelChart.function(), RowStartEndType.ROW_EMPTY);
-					String title = mapValue.get(excelChart.title()).toString();
+					String title = mapValue.get(excelChart.fieldName()).toString();
 					mapChart.put(title, functionChart);
 				}
 
@@ -545,8 +545,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			for (ExcelChart excelChart : listExcelChart) {
 				String xAxis = makeFunction(worksheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER);
 				indexRow += 2;
-				for (String title : mapChart.keySet())
-					indexRow = generateChart((XSSFSheet) worksheet, mapChart.get(title), title, excelChart, indexRow, xAxis);
+				if(excelChart.group()) {
+					indexRow = generateChart((XSSFSheet) worksheet, excelChart, indexRow, xAxis, mapChart);
+				}else {
+					for (String title : mapChart.keySet())
+						indexRow = generateChart((XSSFSheet) worksheet, title, excelChart, indexRow, xAxis, mapChart.get(title));
+				}
+				
 
 			}
 
@@ -571,6 +576,47 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return listExcelChart;
 	}
 
+	
+	private Integer generateChart(XSSFSheet worksheet, ExcelChart excelChart, Integer indexRow, String xAxis, Map<String, String> mapChart) {
+		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
+		Integer startChart = indexRow;
+		indexRow += excelChart.sizeRow();
+		logger.debug("Start Chart: " + startChart);
+		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, startChart, excelChart.sizeColumn(), indexRow);
+
+		XSSFChart chart = drawing.createChart(anchor);
+		chart.setTitleText(excelChart.title());
+		chart.setTitleOverlay(false);
+		XDDFChartLegend legend = chart.getOrAddLegend();
+		legend.setPosition(excelChart.legendPosition());
+		XDDFCategoryAxis bottomAxis =null;
+		XDDFValueAxis leftAxis=null;
+		if(!LIST_CHART_TYPES.contains(excelChart.chartTypes())){
+			bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
+			leftAxis = chart.createValueAxis(excelChart.valueAxis());
+		}
+		logger.debug("-----------------xAxis: " + xAxis);
+		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(worksheet, CellRangeAddress.valueOf(xAxis));
+		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), bottomAxis, leftAxis);
+		XDDFChartData.Series series = null;
+		for (String title : mapChart.keySet()) {
+			String seriesChart= mapChart.get(title);
+			logger.debug("------------seriesChart: " + seriesChart);
+			series = chartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(worksheet, CellRangeAddress.valueOf(seriesChart)));
+			series.setTitle(title, null);
+			series.setShowLeaderLines(true);
+		}
+		
+		
+		chartData.setVaryColors(true);
+
+		chart.plot(chartData);
+
+		return indexRow;
+
+	}
+	
+	
 	/**
 	 * Generate chart.
 	 *
@@ -582,7 +628,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @param xAxis       the x axis
 	 * @return the integer
 	 */
-	private Integer generateChart(XSSFSheet worksheet, String seriesChart, String title, ExcelChart excelChart, Integer indexRow, String xAxis) {
+	private Integer generateChart(XSSFSheet worksheet,  String title, ExcelChart excelChart, Integer indexRow, String xAxis,String seriesChart) {
 		// ExcelChart
 		// excelChart=sheetData.getClass().getAnnotation(ExcelChart.class)
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();

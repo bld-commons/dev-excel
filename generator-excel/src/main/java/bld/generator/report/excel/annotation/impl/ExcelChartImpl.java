@@ -14,15 +14,14 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import bld.generator.report.excel.annotation.ExcelChart;
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelChartImpl.
  */
 @Data
 public class ExcelChartImpl implements Cloneable {
 
-	/** The title. */
-	protected String title;
+	/** The field name. */
+	protected String fieldName;
 
 	/** The chart types. */
 	protected ChartTypes chartTypes;
@@ -47,6 +46,12 @@ public class ExcelChartImpl implements Cloneable {
 	
 	/** The x axis. */
 	private String xAxis;
+	
+	/** The group. */
+	private boolean group;
+	
+	/** The title. */
+	private String title;
 
 	/**
 	 * Gets the excel chart.
@@ -62,8 +67,8 @@ public class ExcelChartImpl implements Cloneable {
 			}
 
 			@Override
-			public String title() {
-				return title;
+			public String fieldName() {
+				return fieldName;
 			}
 
 			@Override
@@ -106,16 +111,24 @@ public class ExcelChartImpl implements Cloneable {
 				return xAxis;
 			}
 
+			@Override
+			public boolean group() {
+				return group;
+			}
+
+			@Override
+			public String title() {
+				return title;
+			}
+
 		};
 	}
 
-	
-	
 
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
-	 * @param title       the field key
+	 * @param fieldName      the field name
 	 * @param chartTypes     the chart types
 	 * @param sizeRow        the size row
 	 * @param sizeColumn     the size column
@@ -124,10 +137,12 @@ public class ExcelChartImpl implements Cloneable {
 	 * @param valueAxis      the value axis
 	 * @param function       the function
 	 * @param xAxis          the x axis
+	 * @param group          the group
+	 * @param title          the title
 	 */
-	public ExcelChartImpl(String title, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function, String xAxis) {
+	public ExcelChartImpl(String fieldName, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function, String xAxis, boolean group, String title) {
 		super();
-		this.title = title;
+		this.fieldName = fieldName;
 		this.chartTypes = chartTypes;
 		this.sizeRow = sizeRow;
 		this.sizeColumn = sizeColumn;
@@ -136,7 +151,15 @@ public class ExcelChartImpl implements Cloneable {
 		this.valueAxis = valueAxis;
 		this.function = function;
 		this.xAxis = xAxis;
+		this.group = group;
+		this.title = title;
 	}
+
+
+
+
+
+
 
 
 

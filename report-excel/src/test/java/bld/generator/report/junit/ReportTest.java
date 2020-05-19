@@ -273,10 +273,10 @@ public class ReportTest {
 		autoreLibriSheet.setListRowSheet(list);
 
 		ExcelChartImpl excelChartImpl=null;
-//		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE3D,10,3,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"));
-//		autoreLibriSheet.addExcelChart(excelChartImpl);
+		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE,10,3,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"),false,null);
+		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
-		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.RADAR,20,5,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"));
+		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.LINE,20,5,LegendPosition.TOP_RIGHT,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"),true,"Titoli");
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
 		
