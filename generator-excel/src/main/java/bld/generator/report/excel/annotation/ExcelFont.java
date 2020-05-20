@@ -25,6 +25,12 @@ import bld.generator.report.excel.constant.UnderlineType;
  * <li>Underline - to set underline type</li>
  * <li>size - to set font size</li>
  * </ul>
+ * <br>
+ * It is a property of the following annotations:
+ * <ul>
+ * <li>ExcelCellLayout</li>
+ * <li>ExcelHeaderCellLayout</li>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)

@@ -14,7 +14,14 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFunctionRows.
+ * The Interface ExcelFunctionRows.<br>
+ * ExcelFunctionRows is used to manage 2 lists:
+ * <ol>
+ * <li>excelFunctions</li>
+ * <li>excelFunctionMerges</li>
+ * <ol> 
+ * 
+ * it must be managed on RowSheet classes.
  */
 @Retention(RUNTIME)
 @Target(TYPE)

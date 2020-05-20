@@ -16,13 +16,20 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 /**
  * The Interface ExcelBorder.
  * <br>
- * ExcelBorder is used to define borders types through enumeration BorderStyle
+ * ExcelBorder is used to define borders types through enumeration BorderStyle.
  * <br>
+ * ExcelBorder is composed of 4 properties and they are:
  * <ul>
  * <li>bottom</li>
  * <li>left</li>
  * <li>right</li>
  * <li>top</li>
+ * </ul>
+ * <br>
+ * It is a property of the following annotations:
+ * <ul>
+ * <li>ExcelCellLayout</li>
+ * <li>ExcelHeaderCellLayout</li>
  * </ul>
  */
 @Documented

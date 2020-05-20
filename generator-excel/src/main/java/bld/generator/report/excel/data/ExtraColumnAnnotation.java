@@ -120,7 +120,7 @@ public class ExtraColumnAnnotation {
 	 *
 	 * @param excelHeaderCellLayoutImpl the new excel header layout
 	 */
-	public void setExcelHeaderLayout(ExcelHeaderCellLayoutImpl excelHeaderCellLayoutImpl) {
+	public void setExcelHeaderCellLayout(ExcelHeaderCellLayoutImpl excelHeaderCellLayoutImpl) {
 		if (excelHeaderCellLayoutImpl != null)
 			this.excelHeaderCellLayout = excelHeaderCellLayoutImpl.getExcelHeaderCellLayout();
 	}

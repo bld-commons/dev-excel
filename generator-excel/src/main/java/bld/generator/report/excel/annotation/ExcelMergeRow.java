@@ -13,7 +13,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelMergeRow.
+ * The Interface ExcelMergeRow.<br>
+ * ExcelMergeRow works like this:<br>
+ * If referenceField is not empty then ExcelMergeRow checks the change another field, if the field changes then it must to change cell.<br>
+ * ReferenceField is empty only to the field identifier of the table and it must be in the first column
+ * 
  */
 @Retention(RUNTIME)
 @Target(FIELD)

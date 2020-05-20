@@ -295,7 +295,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected List<SheetHeader> getListSheetHeader(Class<?> classRow, Object entity, Sheet worksheet) throws Exception {
 		logger.debug("Row: " + classRow.getSimpleName());
-		Set<String> listTitolo = new HashSet<>();
+		Set<String> listTitle = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
 		Set<Field> listField = ExcelUtils.getListField(classRow);
 		for (Field field : listField) {
@@ -308,9 +308,9 @@ public class SuperGenerateExcelImpl {
 				if (entity != null)
 					value = new PropertyDescriptor(field.getName(), classRow).getReadMethod().invoke(entity);
 				listSheetHeader.add(new SheetHeader(field, value));
-				if (listTitolo.contains(column.columnName()))
+				if (listTitle.contains(column.columnName()))
 					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
-				listTitolo.add(column.columnName());
+				listTitle.add(column.columnName());
 			}
 		}
 		if (classRow.isAnnotationPresent(ExcelFunctionRows.class)) {
@@ -449,7 +449,7 @@ public class SuperGenerateExcelImpl {
 	 * @param row          the row
 	 * @throws Exception the exception
 	 */
-	protected void setCellSommario(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row) throws Exception {
+	protected void setCellSummary(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row) throws Exception {
 		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
 		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
 		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;

@@ -21,6 +21,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * The Interface ExcelCellLayout.
  * <br>
  * ExcelCellLayout is used to define the cell style.<br>
+ * It is set on fields of RowSheet and SheetSummary classes.<br>
  * The cell style is composed: <br>
  * <ul>
  * <li>Border - to set borders types</li>

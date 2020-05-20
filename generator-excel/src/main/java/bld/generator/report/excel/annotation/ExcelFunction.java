@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.annotation;
 
-import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -20,10 +19,17 @@ import java.lang.annotation.Target;
  * <li>NameFunction - function identifier</li>
  * <li>AnotherTable - it is enabled if the function references another table</li>
  * </ul>
+ * 
+ * it is a property of the following annotations:
+ * <ul>
+ * <li>ExcelFunctionMergeRow</li>
+ * <li>ExcelFunctionRow</li>
+ * </ul>
+ * or it is set on field of SheetField classes
  */
 @Documented
 @Retention(RUNTIME)
-@Target(FIELD)
+@Target({})
 public @interface ExcelFunction {
 
 	/**

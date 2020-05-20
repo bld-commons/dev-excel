@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.annotation;
 
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
@@ -34,10 +33,10 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * <li>Group - to group series</li>
  * </ul>
  * 
- * 
+ * It is a property of the annotation ExcelCharts 
  */
 @Retention(RUNTIME)
-@Target(TYPE)
+@Target({})
 public @interface ExcelChart {
 
 	/**
@@ -80,7 +79,7 @@ public @interface ExcelChart {
 	 *
 	 * @return the legend position
 	 */
-	public LegendPosition legendPosition() default LegendPosition.TOP_RIGHT;
+	public LegendPosition legendPosition() default LegendPosition.BOTTOM;
 
 	/**
 	 * Category axis.

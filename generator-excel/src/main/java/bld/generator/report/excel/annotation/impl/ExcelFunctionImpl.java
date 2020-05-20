@@ -63,7 +63,9 @@ public class ExcelFunctionImpl implements Cloneable{
 			@Override
 			public boolean anotherTable() {
 				return anotherTable;
-			}};
+			}
+			
+		};
 	}
 
 	

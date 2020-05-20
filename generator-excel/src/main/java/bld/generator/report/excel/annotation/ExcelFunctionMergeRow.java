@@ -12,9 +12,19 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFunctionMergeRow.
+ * The Interface ExcelFunctionMergeRow.<br>
+ * ExcelFunctionMergeRow is used to configure the cell layout merged and define the excel function.<br>
+ * It is composed from:
+ * <ul>
+ * <li>ExcelCellsLayout - to define cell layout</li>
+ * <li>ExcelColumn - to define the header of column</li>
+ * <li>ExcelMergeRow - to check another field if the field changes then it must to change cell</li>
+ * <li>ExcelFunction - to define the function</li>
+ * </ul>
+ *  
+ *  It is parameter of the annotation ExcelFunctionRows.
+ *  
  */
 @Retention(RUNTIME)
 @Target(TYPE)
