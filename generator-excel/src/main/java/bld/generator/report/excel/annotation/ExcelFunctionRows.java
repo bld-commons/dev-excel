@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * <ol>
  * <li>excelFunctions</li>
  * <li>excelFunctionMerges</li>
- * <ol> 
+ * </ol> 
  * 
  * it must be managed on RowSheet classes.
  */
