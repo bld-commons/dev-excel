@@ -5,9 +5,13 @@
 */
 package bld.generator.report.excel.constant;
 
+import lombok.Getter;
+
 // TODO: Auto-generated Javadoc
 /**
- * The Enum ColumnDateFormat.
+ * The Enum ColumnDateFormat.<br>
+ * ColumnDateFormat is used to set the format type on the property format on annotation ExcelDate.
+ * 
  */
 public enum ColumnDateFormat {
 
@@ -23,11 +27,14 @@ public enum ColumnDateFormat {
 	/** The yyyy mm dd hh mm ss. */
 	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
 	
-	/** The parameter. */
+	/** The parameter. <br>
+	 * This option is set on properties file
+	 * */
 	PARAMETER("${bld.commons.date.format}")
 	;
 	
 	/** The value. */
+	@Getter
 	private String value;
 
 	/**
@@ -39,14 +46,7 @@ public enum ColumnDateFormat {
 		this.value = value;
 	}
 
-	/**
-	 * Gets the value.
-	 *
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+	
 	
 	
 	

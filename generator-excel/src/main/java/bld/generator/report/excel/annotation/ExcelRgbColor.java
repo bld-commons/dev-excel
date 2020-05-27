@@ -13,7 +13,19 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelRgbColor.
+ * The Interface ExcelRgbColor.<br>
+ * ExcelRgbColor is used to set the color by the RGB color model.
+ * <ul>
+ * <li>Red</li>
+ * <li>Green</li>
+ * <li>Blue</li>
+ * </ul>
+ * 
+ * It is used on following annotations:
+ * <ul>
+ * <li>ExcelHeaderCellLayout</li>
+ * <li>ExcelCellLayout</li>
+ * </ul>
  */
 @Retention(RUNTIME)
 @Target({ })

@@ -61,7 +61,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelHeaderGroup;
+import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
@@ -757,7 +757,7 @@ public class SuperGenerateExcelImpl {
 	 * @param layoutHeader the layout header
 	 * @return the cell style
 	 */
-	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderGroup layoutHeader) {
+	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelSuperHeaderCell layoutHeader) {
 		return manageCellStyleHeader(workbook, layoutHeader.excelHeaderCellLayout());
 	}
 
@@ -851,7 +851,7 @@ public class SuperGenerateExcelImpl {
 			for (ExcelSuperHeader superHeader : excelSuperHeaders.superHeaders()) {
 				Row rowSuperHeader = worksheet.createRow(indexStartSuperHeader);
 				rowSuperHeader.setHeight(ExcelUtils.rowHeight(superHeader.rowHeight()));
-				for (ExcelHeaderGroup headerGroup : superHeader.headerGroups()) {
+				for (ExcelSuperHeaderCell headerGroup : superHeader.headerGroups()) {
 					String function = headerGroup.columnRange().replace("${", "").replace("}", "");
 					String[] columns = function.split(":");
 					Cell cellSuperHeader = null;

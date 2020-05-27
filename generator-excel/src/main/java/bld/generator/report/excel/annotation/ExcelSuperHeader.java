@@ -10,7 +10,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 
 /**
- * The Interface ExcelSuperHeader.
+ * The Interface ExcelSuperHeader.<br>
+ * ExcelSuperHeader defines the top level header cell and it sets the row height.<br>  
+ * It is a property of the annotation ExcelSuperHeaders.
  */
 @Retention(RUNTIME)
 public @interface ExcelSuperHeader {
@@ -21,7 +23,7 @@ public @interface ExcelSuperHeader {
 	 *
 	 * @return the excel header group[]
 	 */
-	public ExcelHeaderGroup[] headerGroups() default {};
+	public ExcelSuperHeaderCell[] headerGroups() default {};
 	
 
 	/**

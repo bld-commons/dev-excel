@@ -12,9 +12,19 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelSheetLayout.
+ * The Interface ExcelSheetLayout.<br>
+ * ExcelSheetLayout is used to configure the sheet layout through:
+ * <ul>
+ * <li>Landscape - enable/disable landscape</li>
+ * <li>NotMerge - enable/disable merged cells</li>
+ * <li>SortAndFilter - enable/disable sort and filter</li>
+ * <li>StartColumn - to set the start column</li>
+ * <li>Order - to set index on sheets list</li>
+ * </ul>
+ * 
+ * It is used on SheetData and SheetSummary.
+ * 
  */
 @Retention(RUNTIME)
 @Target({TYPE})

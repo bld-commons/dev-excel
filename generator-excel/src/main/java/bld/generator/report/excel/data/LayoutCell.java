@@ -29,7 +29,7 @@ public class LayoutCell {
 	private VerticalAlignment verticalAlignment;
 
 	/** The font. */
-	private ExceltFont font;
+	private ExcelFont font;
 
 	/** The wrap. */
 	private boolean wrap;

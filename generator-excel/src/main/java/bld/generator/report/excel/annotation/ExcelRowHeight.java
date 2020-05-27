@@ -14,7 +14,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelRowHeight.
+ * The Interface ExcelRowHeight.<br>
+ * ExcelRowHeight is used to set the row height in centimeters.<br>
+ * It is set on RowSheet classes or it added on field within of SheetSummary classes.<br>
+ * 
  */
 @Retention(RUNTIME)
 @Target({TYPE,FIELD})

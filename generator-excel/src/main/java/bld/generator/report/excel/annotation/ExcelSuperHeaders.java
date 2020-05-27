@@ -12,7 +12,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelSuperHeaders.
+ * The Interface ExcelSuperHeaders.<br>
+ * ExcelSuperHeaders manages a list of the top level header cell through superHeaders property.<br>
+ * It is used on SheetData classes and it do not used on SheetDynamicData<br>
  */
 @Retention(RUNTIME)
 @Target(TYPE)

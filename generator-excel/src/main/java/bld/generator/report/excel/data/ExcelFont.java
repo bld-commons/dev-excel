@@ -17,7 +17,7 @@ import lombok.Data;
  * Instantiates a new excelt font.
  */
 @Data
-public class ExceltFont {
+public class ExcelFont {
 
 	/** The font. */
 	private String font;

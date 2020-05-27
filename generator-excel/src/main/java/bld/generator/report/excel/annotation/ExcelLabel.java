@@ -14,7 +14,14 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelLabel.
+ * The Interface ExcelLabel.<br>
+ * ExcelLabel write a label on the sheet and it must be to added on field within the SheetData classes.<br>
+ * It is composed from:
+ * <ul>
+ * <li>ExcelCellsLayout - to define cell layout</li>
+ * <li>ColumnMerge - to set the number of merged cells</li>
+ * </ul>
+ * 
  */
 @Retention(RUNTIME)
 @Target({ FIELD })

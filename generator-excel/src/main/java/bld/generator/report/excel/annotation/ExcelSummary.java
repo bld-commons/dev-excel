@@ -16,7 +16,18 @@ import bld.generator.report.excel.constant.ExcelConstant;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelSummary.
+ * The Interface ExcelSummary.<br>
+ * ExcelSummary is used to define the following properties:
+ * <ul>
+ * <li>Title - to write the title of table</li>
+ * <li>Comment - to write a comment on header</li>
+ * <li>Layout - to set the cell style on cells of the first column</li>
+ * <li>widthColumn1 - to set the width on first column</li>
+ * <li>widthColumn2 - to set the width on second column</li>
+ * </ul> 
+ * 
+ * It must be to used on SheetSummary classes
+ * 
  */
 @Retention(RUNTIME)
 @Target(TYPE)

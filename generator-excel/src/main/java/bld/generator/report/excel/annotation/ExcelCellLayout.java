@@ -21,7 +21,6 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * The Interface ExcelCellLayout.
  * <br>
  * ExcelCellLayout is used to define the cell style.<br>
- * It is set on fields of RowSheet and SheetSummary classes.<br>
  * The cell style is composed: <br>
  * <ul>
  * <li>Border - to set borders types</li>
@@ -34,6 +33,25 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * <li>fillPatternType - to set fill pattern style</li>
  * <li>precision - to set the precision number, if the value is not a number then it is ignored</li>
  * <li>locked - to enable and disable cell editable</li>
+ * </ul>
+ * 
+ * It is set on:
+ * <ul>
+ * 	<li>
+ * 	Classes:
+ * 	<ul>
+ * 	<li>RowSheet</li>
+ * 	<li>SheetSummary</li>
+ * 	</ul>
+ * 	</li>
+ * 	<li>
+ * 	Annotations:
+ * 	<ul>
+ * 	<li>ExcelLabel</li>
+ * <li>ExcelFunctionMergeRow</li>
+ * <li>ExcelFunctionRow</li>
+ * </ul>
+ * 	</li>
  * </ul>
  */
 @Documented
