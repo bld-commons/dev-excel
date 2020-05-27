@@ -1,20 +1,15 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.excel.data.ExceltFont.java
+* @class bld.generator.report.excel.data.ExcelFont.java
 */
 package bld.generator.report.excel.data;
 
 import bld.generator.report.excel.constant.UnderlineType;
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExceltFont.
- */
-
-/**
- * Instantiates a new excelt font.
+ * The Class ExcelFont.
  */
 @Data
 public class ExcelFont {
