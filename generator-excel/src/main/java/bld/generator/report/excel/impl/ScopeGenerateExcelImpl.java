@@ -285,7 +285,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				}
 					
 			} else
-				worksheet = workbook.createSheet("Don't defined" + (indexSheetName++));
+				worksheet = workbook.createSheet("Undefined " + (indexSheetName++));
 
 			Footer footer = worksheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
