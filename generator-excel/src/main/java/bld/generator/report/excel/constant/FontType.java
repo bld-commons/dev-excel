@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.constant;
 
-import lombok.Getter;
-
 /**
  * The Enum FontType.<br>
  * FontType is used to set font property on annotation ExcelFont.
@@ -966,7 +964,6 @@ public enum FontType {
 	
 	
 	/** The value. */
-	@Getter
 	private String value;
 
 
@@ -977,6 +974,16 @@ public enum FontType {
 	 */
 	private FontType(String value) {
 		this.value = value;
+	}
+
+
+	/**
+	 * Gets the value.
+	 *
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
 	}
 	
 	

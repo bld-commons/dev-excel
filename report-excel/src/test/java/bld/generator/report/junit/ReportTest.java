@@ -55,12 +55,12 @@ import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
+import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.junit.entity.ReadAutoreLibriRow;
 import bld.read.report.junit.entity.ReadAutoreLibriSheet;
 import bld.read.report.junit.entity.ReadGenereRow;
 import bld.read.report.junit.entity.ReadGenereSheet;
-import bld.read.report.utils.ExcelType;
 
 /**
  * The Class ReportTest.

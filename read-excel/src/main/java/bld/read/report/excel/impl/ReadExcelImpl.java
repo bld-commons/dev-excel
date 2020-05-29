@@ -38,11 +38,11 @@ import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.annotation.ExcelReadSheet;
 import bld.read.report.excel.constant.ExcelExceptionType;
+import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.excel.domain.RowSheetRead;
 import bld.read.report.excel.domain.SheetRead;
 import bld.read.report.excel.exception.ExcelReaderException;
-import bld.read.report.utils.ExcelType;
 
 /**
  * The Class ReadExcelImpl.

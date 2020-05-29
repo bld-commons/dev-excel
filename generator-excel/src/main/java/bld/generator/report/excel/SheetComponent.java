@@ -20,9 +20,9 @@ package bld.generator.report.excel;
 public interface SheetComponent {
 
 	/**
-	 * Sets the name sheet.
+	 * Sets the sheet name.
 	 *
-	 * @param sheetName the new name sheet
+	 * @param sheetName the new sheet name
 	 */
 	public void setSheetName(String sheetName);
 }

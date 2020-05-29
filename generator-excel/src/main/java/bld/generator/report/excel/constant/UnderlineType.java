@@ -5,9 +5,6 @@
 */
 package bld.generator.report.excel.constant;
 
-import lombok.Getter;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Enum UnderlineType.
  */
@@ -30,7 +27,6 @@ public enum UnderlineType {
 	
 	
 	/** The value. */
-	@Getter
 	private byte value;
 
 	/**
@@ -40,6 +36,15 @@ public enum UnderlineType {
 	 */
 	private UnderlineType(byte value) {
 		this.value = value;
+	}
+
+	/**
+	 * Gets the value.
+	 *
+	 * @return the value
+	 */
+	public byte getValue() {
+		return value;
 	}
 
 	

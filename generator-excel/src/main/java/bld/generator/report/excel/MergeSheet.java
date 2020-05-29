@@ -8,9 +8,6 @@ package bld.generator.report.excel;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 /**
  * The Class MergeSheet.
  * <br>
@@ -21,8 +18,6 @@ import lombok.EqualsAndHashCode;
  * <li>SheetSummary</li>
  * </ol>
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public class MergeSheet extends BaseSheet {
 
 	/** The list sheet. */
@@ -47,6 +42,60 @@ public class MergeSheet extends BaseSheet {
 	public MergeSheet(String sheetName) {
 		super(sheetName);
 		this.listSheet=new ArrayList<>();
+	}
+
+	/**
+	 * Gets the list sheet.
+	 *
+	 * @return the list sheet
+	 */
+	public List<SheetComponent> getListSheet() {
+		return listSheet;
+	}
+
+	/**
+	 * Sets the list sheet.
+	 *
+	 * @param listSheet the new list sheet
+	 */
+	public void setListSheet(List<SheetComponent> listSheet) {
+		this.listSheet = listSheet;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((listSheet == null) ? 0 : listSheet.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MergeSheet other = (MergeSheet) obj;
+		if (listSheet == null) {
+			if (other.listSheet != null)
+				return false;
+		} else if (!listSheet.equals(other.listSheet))
+			return false;
+		return true;
 	}
 
 

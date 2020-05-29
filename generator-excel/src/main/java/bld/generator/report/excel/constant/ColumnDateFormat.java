@@ -5,9 +5,6 @@
 */
 package bld.generator.report.excel.constant;
 
-import lombok.Getter;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Enum ColumnDateFormat.<br>
  * ColumnDateFormat is used to set the format type on the property format on annotation ExcelDate.
@@ -34,7 +31,6 @@ public enum ColumnDateFormat {
 	;
 	
 	/** The value. */
-	@Getter
 	private String value;
 
 	/**
@@ -44,6 +40,15 @@ public enum ColumnDateFormat {
 	 */
 	private ColumnDateFormat(String value) {
 		this.value = value;
+	}
+
+	/**
+	 * Gets the value.
+	 *
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
 	}
 
 	

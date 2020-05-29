@@ -18,6 +18,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
+import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class AutoreLibriSheet.
@@ -36,12 +37,13 @@ import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 })
 public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 
+	
 	/**
 	 * Instantiates a new autore libri sheet.
 	 *
 	 * @param nameSheet the name sheet
 	 */
-	public AutoreLibriSheet(@Size(max = 30) String nameSheet) {
+	public AutoreLibriSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet) {
 		super(nameSheet);
 
 	}
@@ -52,11 +54,10 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 	 * @param nameSheet the name sheet
 	 * @param label     the label
 	 */
-	public AutoreLibriSheet(@Size(max = 30) String nameSheet, String label) {
+	public AutoreLibriSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet, String label) {
 		super(nameSheet);
 		this.label = label;
 	}
-
 	/**
 	 * Gets the row class.
 	 *

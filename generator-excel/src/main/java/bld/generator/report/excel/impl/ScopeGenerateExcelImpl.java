@@ -72,6 +72,7 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
+import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.FunctionCell;
 import bld.generator.report.excel.data.InfoColumn;
@@ -266,7 +267,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private Workbook createSheet(ReportExcel report, Workbook workbook) throws Exception {
 
 		List<BaseSheet> listSheet = report.getListBaseSheet();
-		int indiceNomeSheet = 0;
+		int indexSheetName = 0;
 
 		this.mapCellStyle = new HashMap<>();
 		this.mapCellHeaderStyle = new HashMap<>();
@@ -276,12 +277,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			Sheet worksheet = null;
 			this.mapWidthColumn = new HashMap<>();
 			if (sheet.getSheetName() != null) {
-				if (workbook.getSheet(sheet.getSheetName()) == null && sheet.getSheetName().length() <= 30)
+				if (workbook.getSheet(sheet.getSheetName()) == null && sheet.getSheetName().length() <= ExcelConstant.SHEET_NAME_SIZE)
 					worksheet = workbook.createSheet(sheet.getSheetName().replace("/", ""));
-				else
-					worksheet = workbook.createSheet((indiceNomeSheet++) + sheet.getSheetName().replace("/", ""));
+				else {
+					logger.warn("Sheet name exceeded the maximum limit "+ExcelConstant.SHEET_NAME_SIZE+" characters");
+					worksheet = workbook.createSheet((indexSheetName++)+"-" + sheet.getSheetName().replace("/", ""));
+				}
+					
 			} else
-				worksheet = workbook.createSheet("Don't defined" + (indiceNomeSheet++));
+				worksheet = workbook.createSheet("Don't defined" + (indexSheetName++));
 
 			Footer footer = worksheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());

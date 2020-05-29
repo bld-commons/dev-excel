@@ -13,7 +13,6 @@ package bld.generator.report.excel;
  *
  * @param <T> the generic type
  * 
- * 
  */
 public interface FunctionsTotal<T extends SheetFunctionTotal<? extends RowSheet>> {
 	

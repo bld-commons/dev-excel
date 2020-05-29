@@ -17,12 +17,12 @@ import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFontImpl;
 import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelConstant.
  */
 public class ExcelConstant {
 	
+	public final static int SHEET_NAME_SIZE=31;
 	
 	/** The Constant RGB_FOREGROUND. */
 	public final static ExcelRgbColorImpl RGB_FOREGROUND=new ExcelRgbColorImpl((byte)255, (byte)255, (byte)255); 

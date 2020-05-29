@@ -8,23 +8,21 @@ package bld.generator.report.excel.annotation.impl;
 import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelFunction;
-import lombok.Data;
 
 /**
  * The Class ExcelFunctionImpl.
  */
-@Data
 public class ExcelFunctionImpl implements Cloneable{
 
 	
 	/** The function. */
-	protected String function;
+	private String function;
 	
 	/** The name function. */
-	protected String nameFunction;
+	private String nameFunction;
 	
 	/** The another table. */
-	protected boolean anotherTable;
+	private boolean anotherTable;
 	
 	/**
 	 * Clone.
@@ -97,6 +95,105 @@ public class ExcelFunctionImpl implements Cloneable{
 		super();
 		this.function = function;
 		this.nameFunction = nameFunction;
+		this.anotherTable = anotherTable;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (anotherTable ? 1231 : 1237);
+		result = prime * result + ((function == null) ? 0 : function.hashCode());
+		result = prime * result + ((nameFunction == null) ? 0 : nameFunction.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelFunctionImpl other = (ExcelFunctionImpl) obj;
+		if (anotherTable != other.anotherTable)
+			return false;
+		if (function == null) {
+			if (other.function != null)
+				return false;
+		} else if (!function.equals(other.function))
+			return false;
+		if (nameFunction == null) {
+			if (other.nameFunction != null)
+				return false;
+		} else if (!nameFunction.equals(other.nameFunction))
+			return false;
+		return true;
+	}
+
+	/**
+	 * Gets the function.
+	 *
+	 * @return the function
+	 */
+	public String getFunction() {
+		return function;
+	}
+
+	/**
+	 * Sets the function.
+	 *
+	 * @param function the new function
+	 */
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
+	/**
+	 * Gets the name function.
+	 *
+	 * @return the name function
+	 */
+	public String getNameFunction() {
+		return nameFunction;
+	}
+
+	/**
+	 * Sets the name function.
+	 *
+	 * @param nameFunction the new name function
+	 */
+	public void setNameFunction(String nameFunction) {
+		this.nameFunction = nameFunction;
+	}
+
+	/**
+	 * Checks if is another table.
+	 *
+	 * @return the another table
+	 */
+	public boolean isAnotherTable() {
+		return anotherTable;
+	}
+
+	/**
+	 * Sets the another table.
+	 *
+	 * @param anotherTable the new another table
+	 */
+	public void setAnotherTable(boolean anotherTable) {
 		this.anotherTable = anotherTable;
 	}
 

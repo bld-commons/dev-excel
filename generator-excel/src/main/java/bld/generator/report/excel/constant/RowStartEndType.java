@@ -5,9 +5,6 @@
 */
 package bld.generator.report.excel.constant;
 
-import lombok.Getter;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Enum RowStartEndType.
  */
@@ -27,7 +24,6 @@ public enum RowStartEndType {
 	
 	
 	/** The value. */
-	@Getter
 	private String value;
 
 
@@ -49,5 +45,15 @@ public enum RowStartEndType {
 	public String getParameter(String paramter) {
 		return "${"+paramter+this.value+"}";
 	}
+
+	/**
+	 * Gets the value.
+	 *
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+	
 	
 }

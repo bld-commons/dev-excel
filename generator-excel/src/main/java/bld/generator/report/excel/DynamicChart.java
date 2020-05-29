@@ -12,8 +12,7 @@ import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * 
@@ -26,8 +25,6 @@ import lombok.EqualsAndHashCode;
  * @param <T> the generic type
  *  
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
 public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynamicData<T> {
 
 	/** The list excel chart. */
@@ -39,7 +36,7 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public DynamicChart(@Size(max = 30) String sheetName) {
+	public DynamicChart(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 		this.listExcelChart=new ArrayList<>();
 	}
@@ -57,4 +54,72 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 			this.listExcelChart.add(excelChartImpl.getExcelChart());
 	}
 
+
+
+
+	/**
+	 * Gets the list excel chart.
+	 *
+	 * @return the list excel chart
+	 */
+	public List<ExcelChart> getListExcelChart() {
+		return listExcelChart;
+	}
+
+
+
+
+	/**
+	 * Sets the list excel chart.
+	 *
+	 * @param listExcelChart the new list excel chart
+	 */
+	public void setListExcelChart(List<ExcelChart> listExcelChart) {
+		this.listExcelChart = listExcelChart;
+	}
+
+
+
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((listExcelChart == null) ? 0 : listExcelChart.hashCode());
+		return result;
+	}
+
+
+
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DynamicChart<?> other = (DynamicChart<?>) obj;
+		if (listExcelChart == null) {
+			if (other.listExcelChart != null)
+				return false;
+		} else if (!listExcelChart.equals(other.listExcelChart))
+			return false;
+		return true;
+	}
+
+	
+	
 }

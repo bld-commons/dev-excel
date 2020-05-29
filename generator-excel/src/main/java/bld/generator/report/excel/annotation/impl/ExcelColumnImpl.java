@@ -10,25 +10,23 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
-import lombok.Data;
 
 /**
  * The Class ExcelColumnImpl.
  */
-@Data
 public class ExcelColumnImpl implements Cloneable{
 
 	/** The column name. */
-	protected String columnName;
+	private String columnName;
 
 	/** The comment. */
-	protected String comment;
+	private String comment;
 
 	/** The index column. */
-	protected double indexColumn;
+	private double indexColumn;
 	
 	/** The ignore. */
-	protected boolean ignore;
+	private boolean ignore;
 	
 	
 	/**
@@ -102,6 +100,128 @@ public class ExcelColumnImpl implements Cloneable{
 		this.comment = comment;
 		this.indexColumn = indexColumn;
 		this.ignore = ignore;
+	}
+
+	/**
+	 * Gets the column name.
+	 *
+	 * @return the column name
+	 */
+	public String getColumnName() {
+		return columnName;
+	}
+
+	/**
+	 * Sets the column name.
+	 *
+	 * @param columnName the new column name
+	 */
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
+	/**
+	 * Gets the comment.
+	 *
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * Sets the comment.
+	 *
+	 * @param comment the new comment
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	/**
+	 * Gets the index column.
+	 *
+	 * @return the index column
+	 */
+	public double getIndexColumn() {
+		return indexColumn;
+	}
+
+	/**
+	 * Sets the index column.
+	 *
+	 * @param indexColumn the new index column
+	 */
+	public void setIndexColumn(double indexColumn) {
+		this.indexColumn = indexColumn;
+	}
+
+	/**
+	 * Checks if is ignore.
+	 *
+	 * @return the ignore
+	 */
+	public boolean isIgnore() {
+		return ignore;
+	}
+
+	/**
+	 * Sets the ignore.
+	 *
+	 * @param ignore the new ignore
+	 */
+	public void setIgnore(boolean ignore) {
+		this.ignore = ignore;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + (ignore ? 1231 : 1237);
+		long temp;
+		temp = Double.doubleToLongBits(indexColumn);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelColumnImpl other = (ExcelColumnImpl) obj;
+		if (columnName == null) {
+			if (other.columnName != null)
+				return false;
+		} else if (!columnName.equals(other.columnName))
+			return false;
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
+			return false;
+		if (ignore != other.ignore)
+			return false;
+		if (Double.doubleToLongBits(indexColumn) != Double.doubleToLongBits(other.indexColumn))
+			return false;
+		return true;
 	}
 
 	
