@@ -26,6 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelHyperlink;
@@ -53,6 +54,7 @@ import bld.generator.report.junit.entity.IndexRow;
 import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
+import bld.generator.report.junit.entity.UtenteSheet;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
@@ -69,7 +71,7 @@ import bld.read.report.junit.entity.ReadGenereSheet;
 @SpringBootTest
 @ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
-//@EnableAutoConfiguration(exclude=ExcelConfiguration.class)
+@EnableTransactionManagement
 public class ReportTest {
 
 	/** The Constant PATH_FILE. */
@@ -147,6 +149,12 @@ public class ReportTest {
 		genereSheet.setListRowSheet(listGenere);
 		
 		listBaseSheet.add(genereSheet);
+		
+		
+		
+		UtenteSheet utenteSheet=new UtenteSheet("Utente");
+		utenteSheet.getMapParameters().put("cognome", "Rossi");
+		listBaseSheet.add(utenteSheet);
 		
 	
 		

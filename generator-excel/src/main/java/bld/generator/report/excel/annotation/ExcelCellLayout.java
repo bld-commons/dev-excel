@@ -38,19 +38,19 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * It is set on:
  * <ul>
  * 	<li>
- * 	Classes:
+ * 	Field in the classes:
  * 	<ul>
- * 	<li>RowSheet</li>
- * 	<li>SheetSummary</li>
+ * 	<li>{@link bld.generator.report.excel.RowSheet}</li>
+ * 	<li>{@link bld.generator.report.excel.SheetSummary}</li>
  * 	</ul>
  * 	</li>
  * 	<li>
  * 	Annotations:
  * 	<ul>
- * 	<li>ExcelLabel</li>
- * <li>ExcelFunctionMergeRow</li>
- * <li>ExcelFunctionRow</li>
- * </ul>
+ * 	<li>{@link bld.generator.report.excel.annotation.ExcelLabel}</li>
+ *  <li>{@link bld.generator.report.excel.annotation.ExcelFunctionMergeRow}</li>
+ *  <li>{@link bld.generator.report.excel.annotation.ExcelFunctionRow}</li>
+ *  </ul>
  * 	</li>
  * </ul>
  */

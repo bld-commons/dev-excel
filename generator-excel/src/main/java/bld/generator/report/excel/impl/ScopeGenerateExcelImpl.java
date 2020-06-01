@@ -47,6 +47,7 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -56,6 +57,7 @@ import bld.generator.report.excel.DynamicChart;
 import bld.generator.report.excel.DynamicRowSheet;
 import bld.generator.report.excel.FunctionsTotal;
 import bld.generator.report.excel.MergeSheet;
+import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.ScopeGenerateExcel;
 import bld.generator.report.excel.SheetComponent;
@@ -80,6 +82,7 @@ import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.excel.data.SheetHeader;
+import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
@@ -109,8 +112,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/** The resource path copertina xlsx. */
 	@Value("${bld.commons.resource.path.xlsx:}")
 	private String resourcePathCopertinaXlsx;
-	
-	private final static List<ChartTypes> LIST_CHART_TYPES=listChartTypes();
+
+	private final static List<ChartTypes> LIST_CHART_TYPES = listChartTypes();
+
+	@Autowired(required = false)
+	private ExcelQueryComponent excelQueryComponent;
 
 	/**
 	 * Creates the file xls.
@@ -151,7 +157,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	}
 
 	private static List<ChartTypes> listChartTypes() {
-		List<ChartTypes>list=new ArrayList<>();
+		List<ChartTypes> list = new ArrayList<>();
 		list.add(ChartTypes.PIE);
 		list.add(ChartTypes.PIE3D);
 		list.add(ChartTypes.DOUGHNUT);
@@ -265,7 +271,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private Workbook createSheet(ReportExcel report, Workbook workbook) throws Exception {
-
 		List<BaseSheet> listSheet = report.getListBaseSheet();
 		int indexSheetName = 0;
 
@@ -280,10 +285,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				if (workbook.getSheet(sheet.getSheetName()) == null && sheet.getSheetName().length() <= ExcelConstant.SHEET_NAME_SIZE)
 					worksheet = workbook.createSheet(sheet.getSheetName().replace("/", ""));
 				else {
-					logger.warn("Sheet name exceeded the maximum limit "+ExcelConstant.SHEET_NAME_SIZE+" characters");
-					worksheet = workbook.createSheet((indexSheetName++)+"-" + sheet.getSheetName().replace("/", ""));
+					logger.warn("Sheet name exceeded the maximum limit " + ExcelConstant.SHEET_NAME_SIZE + " characters");
+					worksheet = workbook.createSheet((indexSheetName++) + "-" + sheet.getSheetName().replace("/", ""));
 				}
-					
+
 			} else
 				worksheet = workbook.createSheet("Undefined " + (indexSheetName++));
 
@@ -390,6 +395,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private Integer generateSheetData(Workbook workbook, Sheet worksheet, SheetData<? extends RowSheet> sheetData, Integer indexRow, boolean isMergeSheet) throws Exception {
+		if(this.excelQueryComponent!=null && sheetData instanceof QuerySheetData)
+			this.excelQueryComponent.executeQuery((QuerySheetData<? extends RowSheet>)sheetData);
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
 		indexRow = writeLabel(workbook, worksheet, sheetData, indexRow);
 		indexRow = indexRow + getSizeSuperHeader(sheetData);
@@ -549,13 +556,12 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			for (ExcelChart excelChart : listExcelChart) {
 				String xAxis = makeFunction(worksheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER);
 				indexRow += 2;
-				if(excelChart.group()) {
+				if (excelChart.group()) {
 					indexRow = generateChart((XSSFSheet) worksheet, excelChart, indexRow, xAxis, mapChart);
-				}else {
+				} else {
 					for (String title : mapChart.keySet())
 						indexRow = generateChart((XSSFSheet) worksheet, title, excelChart, indexRow, xAxis, mapChart.get(title));
 				}
-				
 
 			}
 
@@ -580,7 +586,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return listExcelChart;
 	}
 
-	
 	private Integer generateChart(XSSFSheet worksheet, ExcelChart excelChart, Integer indexRow, String xAxis, Map<String, String> mapChart) {
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
 		Integer startChart = indexRow;
@@ -593,9 +598,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		chart.setTitleOverlay(false);
 		XDDFChartLegend legend = chart.getOrAddLegend();
 		legend.setPosition(excelChart.legendPosition());
-		XDDFCategoryAxis bottomAxis =null;
-		XDDFValueAxis leftAxis=null;
-		if(!LIST_CHART_TYPES.contains(excelChart.chartTypes())){
+		XDDFCategoryAxis bottomAxis = null;
+		XDDFValueAxis leftAxis = null;
+		if (!LIST_CHART_TYPES.contains(excelChart.chartTypes())) {
 			bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
 			leftAxis = chart.createValueAxis(excelChart.valueAxis());
 		}
@@ -604,14 +609,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), bottomAxis, leftAxis);
 		XDDFChartData.Series series = null;
 		for (String title : mapChart.keySet()) {
-			String seriesChart= mapChart.get(title);
+			String seriesChart = mapChart.get(title);
 			logger.debug("------------seriesChart: " + seriesChart);
 			series = chartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(worksheet, CellRangeAddress.valueOf(seriesChart)));
 			series.setTitle(title, null);
 			series.setShowLeaderLines(true);
 		}
-		
-		
+
 		chartData.setVaryColors(true);
 
 		chart.plot(chartData);
@@ -619,20 +623,19 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return indexRow;
 
 	}
-	
-	
+
 	/**
 	 * Generate chart.
 	 *
 	 * @param worksheet   the worksheet
 	 * @param seriesChart the series chart
-	 * @param title    the key chart
+	 * @param title       the key chart
 	 * @param excelChart  the excel chart
 	 * @param indexRow    the index row
 	 * @param xAxis       the x axis
 	 * @return the integer
 	 */
-	private Integer generateChart(XSSFSheet worksheet,  String title, ExcelChart excelChart, Integer indexRow, String xAxis,String seriesChart) {
+	private Integer generateChart(XSSFSheet worksheet, String title, ExcelChart excelChart, Integer indexRow, String xAxis, String seriesChart) {
 		// ExcelChart
 		// excelChart=sheetData.getClass().getAnnotation(ExcelChart.class)
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
@@ -646,9 +649,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		chart.setTitleOverlay(false);
 		XDDFChartLegend legend = chart.getOrAddLegend();
 		legend.setPosition(excelChart.legendPosition());
-		XDDFCategoryAxis bottomAxis =null;
-		XDDFValueAxis leftAxis=null;
-		if(!LIST_CHART_TYPES.contains(excelChart.chartTypes())){
+		XDDFCategoryAxis bottomAxis = null;
+		XDDFValueAxis leftAxis = null;
+		if (!LIST_CHART_TYPES.contains(excelChart.chartTypes())) {
 			bottomAxis = chart.createCategoryAxis(excelChart.categoryAxis());
 			leftAxis = chart.createValueAxis(excelChart.valueAxis());
 		}
@@ -660,7 +663,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		series = chartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(worksheet, CellRangeAddress.valueOf(seriesChart)));
 		series.setTitle(title, null);
 		series.setShowLeaderLines(true);
-		
+
 		chartData.setVaryColors(true);
 
 		chart.plot(chartData);
@@ -668,8 +671,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return indexRow;
 
 	}
-	
-	
 
 	/**
 	 * Write label.
