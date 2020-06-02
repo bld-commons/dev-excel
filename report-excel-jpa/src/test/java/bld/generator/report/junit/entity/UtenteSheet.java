@@ -20,6 +20,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 		+ "FROM utente "
 		+ "WHERE cognome=:cognome "
 		+ "order by cognome,nome")
+//@ExcelQuery(select="select new bld.generator.report.junit.entity.UtenteRow(u.idUtente,u.nome,u.cognome,u.dataNascita) from Utente u where u.cognome=:cognome order by u.cognome,u.nome", nativeQuery = false)
 public class UtenteSheet extends SheetData<UtenteRow> implements QuerySheetData<UtenteRow> {
 	
 	private Map<String, Object> mapParameters;

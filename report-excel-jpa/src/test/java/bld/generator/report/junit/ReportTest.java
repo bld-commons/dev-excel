@@ -54,6 +54,7 @@ import bld.generator.report.junit.entity.IndexRow;
 import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
+import bld.generator.report.junit.entity.UtenteSheet;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
@@ -150,7 +151,14 @@ public class ReportTest {
 		listBaseSheet.add(genereSheet);
 		
 		
-		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
+		
+		UtenteSheet utenteSheet=new UtenteSheet("Utente");
+		utenteSheet.getMapParameters().put("cognome", "Rossi");
+		listBaseSheet.add(utenteSheet);
+		
+	
+		
+		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 

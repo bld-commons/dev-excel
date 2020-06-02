@@ -30,6 +30,15 @@ public class UtenteRow implements RowSheet {
 	}
 
 
+	public UtenteRow(Integer idUtente, String nome, String cognome, Date dataNascita) {
+		super();
+		this.idUtente = idUtente;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataNascita = dataNascita;
+	}
+
+
 	public Integer getIdUtente() {
 		return idUtente;
 	}
