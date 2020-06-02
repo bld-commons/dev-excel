@@ -26,7 +26,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
  * <li>widthColumn2 - to set the width on second column</li>
  * </ul> 
  * 
- * It must be to used on SheetSummary classes
+ * It must be to used on {@link bld.generator.report.excel.SheetSummary} classes
  * 
  */
 @Retention(RUNTIME)

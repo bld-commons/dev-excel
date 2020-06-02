@@ -20,7 +20,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * The Interface ExcelHeaderCellLayout.
  * <br>
  * ExcelHeaderCellLayout is used to define the header cell style.<br>
- * It is set on fields of RowSheet classes or it is a property of the annotation ExcelHeaderLayout.<br>
+ * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes or it is a property of the annotation {@link bld.generator.report.excel.annotation.ExcelHeaderLayout}.<br>
  * The header cell style is composed: <br>
  * <ul>
  * <li>Border - to set borders types</li>

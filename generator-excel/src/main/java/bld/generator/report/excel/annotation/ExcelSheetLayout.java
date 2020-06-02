@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
  * <li>Order - to set index on sheets list</li>
  * </ul>
  * 
- * It is used on SheetData and SheetSummary.
+ * It is used on {@link bld.generator.report.excel.SheetData} and {@link bld.generator.report.excel.SheetSummary}.
  * 
  */
 @Retention(RUNTIME)

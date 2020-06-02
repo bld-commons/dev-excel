@@ -16,7 +16,8 @@ import bld.generator.report.excel.query.impl.ExcelQueryComponentImpl;
 import bld.generator.report.utils.ValueProps;
 
 /**
- * The Class ExcelGeneratorConfiguration.
+ * The Class ExcelGeneratorConfiguration.<br>
+ * This class is for configurations.
  */
 @Configuration
 public class ExcelGeneratorConfiguration {

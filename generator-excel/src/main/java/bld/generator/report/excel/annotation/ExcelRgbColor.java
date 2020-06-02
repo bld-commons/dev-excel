@@ -23,8 +23,8 @@ import java.lang.annotation.Target;
  * 
  * It is used on following annotations:
  * <ul>
- * <li>ExcelHeaderCellLayout</li>
- * <li>ExcelCellLayout</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelHeaderCellLayout}</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelCellLayout}</li>
  * </ul>
  */
 @Retention(RUNTIME)

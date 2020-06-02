@@ -12,7 +12,9 @@ import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
 /**
- * The Class SheetColumnComparator.
+ * The Class SheetColumnComparator.<br>
+ * SheetColumnComparator orders the columns on the table.<br>
+ * Sorting is relative to the index and column name.<br>
  */
 public class SheetColumnComparator implements Comparator<SheetHeader> {
 

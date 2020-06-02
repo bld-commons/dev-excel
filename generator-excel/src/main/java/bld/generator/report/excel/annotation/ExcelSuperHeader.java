@@ -12,7 +12,7 @@ import java.lang.annotation.Retention;
 /**
  * The Interface ExcelSuperHeader.<br>
  * ExcelSuperHeader defines the top level header cell and it sets the row height.<br>  
- * It is a property of the annotation ExcelSuperHeaders.
+ * It is a property of the annotation {@link bld.generator.report.excel.annotation.ExcelSuperHeaders}.
  */
 @Retention(RUNTIME)
 public @interface ExcelSuperHeader {

@@ -17,7 +17,7 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 // TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelDate.<br>
- * ExcelDate is used to set format date and is set on field of RowSheet and SheetSummary classes.
+ * ExcelDate is used to set format date and is set on field of {@link bld.generator.report.excel.RowSheet} and {@link bld.generator.report.excel.SheetSummary} classes.
  */
 @Documented
 @Retention(RUNTIME)

@@ -19,7 +19,7 @@ import java.lang.annotation.Retention;
  * <li>ExcelHeaderCellLayout - to set the style of the top level header cell</li>
  * </ul>  
  * 
- * It is a property of the annotation ExcelSuperHeader.
+ * It is a property of the annotation {@link bld.generator.report.excel.annotation.ExcelSuperHeader}.
  * 
  */
 @Retention(RUNTIME)

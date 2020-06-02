@@ -22,8 +22,8 @@ import java.lang.annotation.Target;
  * 
  * it is a property of the following annotations:
  * <ul>
- * <li>ExcelFunctionMergeRow</li>
- * <li>ExcelFunctionRow</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelFunctionMergeRow}</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelFunctionRow}</li>
  * </ul>
  * or it is set on field of SheetField classes
  */

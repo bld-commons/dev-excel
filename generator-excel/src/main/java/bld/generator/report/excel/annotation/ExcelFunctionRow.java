@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.annotation;
 
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
@@ -28,7 +27,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  *  It is parameter of the annotation ExcelFunctionRows.
  */
 @Retention(RUNTIME)
-@Target(TYPE)
+@Target({})
 @Documented
 public @interface ExcelFunctionRow {
 	

@@ -11,11 +11,11 @@ package bld.generator.report.excel;
  * <br>
  * SheetComponet is implemented from:<br>
  * <ol> 
- * <li>SheetData</li>
- * <li>SheetSummary</li>
+ * <li>{@link bld.generator.report.excel.SheetData}</li>
+ * <li>{@link bld.generator.report.excel.SheetSummary}</li>
  * </ol>
  * <br>
- * Its is used to merge different sheet through the class MergeSheet 
+ * Its is used to merge different sheet through the class {@link bld.generator.report.excel.MergeSheet} 
  */
 public interface SheetComponent {
 

@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * The Class MergeSheet.
  * <br>
- * MergeSheet is used to merge different SheetComponent type, through the field listSheet. <br>
+ * MergeSheet is used to merge different {@link bld.generator.report.excel.SheetComponent} type, through the field listSheet. <br>
  * SheetComponent is implemented from:<br> 
  * <ol>
- * <li>SheetData</li> 
- * <li>SheetSummary</li>
+ * <li>{@link bld.generator.report.excel.SheetData}</li> 
+ * <li>{@link bld.generator.report.excel.SheetSummary}</li>
  * </ol>
  */
 public class MergeSheet extends BaseSheet {

@@ -18,7 +18,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
  * 
  * The Class SheetData.
  * <br>
- * SheetData is used for the generation of a table with rows of type RowSheet.
+ * SheetData is used for the generation of a table with rows of type {@link bld.generator.report.excel.RowSheet}.
  *
  * @param <T> the generic type
  * 

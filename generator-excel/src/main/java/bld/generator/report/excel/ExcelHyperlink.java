@@ -10,7 +10,7 @@ import org.apache.poi.common.usermodel.HyperlinkType;
 /**
  * The Class ExcelHyperlink.
  * <br>
- * ExcelHyperlink is used by RowSheet classes, it is used to write a hyperlink field in tables.
+ * ExcelHyperlink is used by {@link bld.generator.report.excel.RowSheet} classes, it is used to write a hyperlink field in tables.
  */
 public class ExcelHyperlink {
 

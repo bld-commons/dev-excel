@@ -7,7 +7,7 @@ package bld.generator.report.excel.constant;
 
 /**
  * The Enum ColumnDateFormat.<br>
- * ColumnDateFormat is used to set the format type on the property format on annotation ExcelDate.
+ * ColumnDateFormat is used to set the format type on the property format on annotation {@link bld.generator.report.excel.annotation.ExcelDate}.
  * 
  */
 public enum ColumnDateFormat {

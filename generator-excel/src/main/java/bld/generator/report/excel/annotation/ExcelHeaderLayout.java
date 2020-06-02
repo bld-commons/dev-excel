@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * <li>RowHeight - to set row height</li>
  * <li>ExcelHeaderCellLayout - to set the header cell style</li>
  * </ul>
- * It must be to used in SheetData classes.
+ * It must be to used in {@link bld.generator.report.excel.SheetData} classes.
  */
 @Retention(RUNTIME)
 @Target({ TYPE })

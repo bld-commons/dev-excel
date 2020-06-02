@@ -16,7 +16,7 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
 /**
  * The Class SheetDynamicData.
  * <br>
- * SheetDynamicData extends SheetData, it manages dynamic columns through the mapExtraColumnAnnotation field.
+ * SheetDynamicData extends {@link bld.generator.report.excel.SheetData}, it manages dynamic columns through the mapExtraColumnAnnotation field.
  * <br>
  * mapExtraColumnAnnotation and mapValue(is a field of DynamicRowSheet) have the same keys.
  * @param <T> the generic type

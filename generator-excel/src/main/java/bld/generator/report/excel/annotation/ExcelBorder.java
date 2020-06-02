@@ -28,8 +28,8 @@ import org.apache.poi.ss.usermodel.BorderStyle;
  * <br>
  * It is a property of the following annotations:
  * <ul>
- * <li>ExcelCellLayout</li>
- * <li>ExcelHeaderCellLayout</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelCellLayout}</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelHeaderCellLayout}</li>
  * </ul>
  */
 @Documented

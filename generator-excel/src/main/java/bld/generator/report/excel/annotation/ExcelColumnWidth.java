@@ -17,7 +17,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
  * The Interface ExcelColumnWidth.
  * <br>
  * ExcelColumnWidth is used to set the column width in centimeters.<br>
- * It is set on fields of RowSheet classes
+ * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes.
  */
 @Retention(RUNTIME)
 @Target({FIELD})

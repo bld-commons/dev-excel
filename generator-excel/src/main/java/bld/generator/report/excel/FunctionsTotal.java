@@ -9,7 +9,7 @@ package bld.generator.report.excel;
 /**
  * The Interface FunctionsTotal.
  * <br>
- * FunctionsTotal can be implemented by classes of type SheetData, it is used to create a table for totals of the functions.
+ * FunctionsTotal can be implemented by classes of type {@link bld.generator.report.excel.SheetData}, it is used to create a table for totals of the functions.
  *
  * @param <T> the generic type
  * 
