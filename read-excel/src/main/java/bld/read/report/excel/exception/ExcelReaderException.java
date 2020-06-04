@@ -8,7 +8,8 @@ import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.constant.ExcelReaderConstant;
 
 /**
- * The Class ExcelReaderException.
+ * The Class ExcelReaderException.<br>
+ * ExcelReaderException is used to manage the exceptions when reading the excel.
  */
 @SuppressWarnings("serial")
 public class ExcelReaderException extends Exception {
@@ -27,7 +28,7 @@ public class ExcelReaderException extends Exception {
 	 * @param parameter          the parameter
 	 */
 	public ExcelReaderException(ExcelExceptionType excelExceptionType,String parameter) {
-		super(excelExceptionType.getMessage().replace(ExcelReaderConstant.PARAMETER, parameter));
+		super(excelExceptionType.getMessage().replace(ExcelReaderConstant.PARAMETER, parameter==null?"":parameter));
 		this.code=excelExceptionType.getCode();
 		this.parameter=parameter;
 	}

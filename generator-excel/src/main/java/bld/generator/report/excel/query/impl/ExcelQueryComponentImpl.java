@@ -14,28 +14,26 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.text.WordUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.annotation.ExcelQuery;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class ExcelQueryComponentImpl.
+ * ExcelQueryComponentImpl is the class that manage the {@link bld.generator.report.excel.QuerySheetData} classes and the annotation {@link bld.generator.report.excel.annotation.ExcelQuery}. <br>
+ * It get the {@link bld.generator.report.excel.RowSheet} list through the query within {@link bld.generator.report.excel.annotation.ExcelQuery}
  */
 @Transactional
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
-
-
 
 	/** The entity manager. */
 	@PersistenceContext
@@ -54,10 +52,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 */
 	@Override
 	public <T extends RowSheet> void executeQuery(QuerySheetData<T> querySheetData) throws Exception {
-
-		if (querySheetData instanceof SheetDynamicData)
-			throw new Exception("The interface QuerySheetData can not be used on SheetDynamicData classes");
-		if(CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
+		if (CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
 			ExcelQuery excelQuery = ExcelUtils.getAnnotation(querySheetData.getClass(), ExcelQuery.class);
 			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? getResultListNativeQuery(querySheetData, excelQuery.select()) : getResultListQuery(querySheetData, excelQuery.select()));
 		}
@@ -85,25 +80,22 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 		return listT;
 	}
 
+	
 	/**
 	 * Reflection.
 	 *
 	 * @param <T>       the generic type
 	 * @param t         the t
 	 * @param mapResult the map result
+	 * @throws Exception the exception
 	 */
-	private <T extends RowSheet> void reflection(T t, Map<String, Object> mapResult) {
-		Map<String,Object>mapResultApp=new HashMap<>();
+	private <T extends RowSheet> void reflection(T t, Map<String, Object> mapResult) throws Exception {
+		Map<String, Object> mapResultApp = new HashMap<>();
 		for (String keyResult : mapResult.keySet()) {
-			String nameField = keyResult.replace("_", " ");
-			nameField=(WordUtils.capitalizeFully(nameField)).replace(" ", "");
-			nameField = ("" + nameField.charAt(0)).toLowerCase() + nameField.substring(1);
+			String nameField = ExcelUtils.getNameParameter(keyResult);
 			mapResultApp.put(nameField, mapResult.get(keyResult));
 		}
-		
-		BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(t);
-		wrapper.setAutoGrowNestedPaths(true);
-		wrapper.setPropertyValues(mapResultApp);
+		BeanUtils.populate(t, mapResultApp);
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class ValuePropsImpl implements ValueProps {
 			keyProperties=props.substring(2);
 			keyProperties=keyProperties.substring(0, keyProperties.length() - 1);
 		}
-		return env.getProperty(keyProperties, props);
+		return this.env.getProperty(keyProperties, props);
 	}
 
 }

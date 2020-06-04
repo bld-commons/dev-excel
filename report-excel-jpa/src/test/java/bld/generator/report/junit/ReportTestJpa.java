@@ -72,7 +72,7 @@ import bld.read.report.junit.entity.ReadGenereSheet;
 @ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
 @EnableTransactionManagement
-public class ReportTest {
+public class ReportTestJpa {
 
 	/** The Constant PATH_FILE. */
 	private static final String PATH_FILE = "/mnt/report/";

@@ -5,50 +5,95 @@
  */
 package bld.generator.report.excel;
 
-import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.Size;
+
+import org.apache.commons.collections4.map.HashedMap;
+
+import bld.generator.report.excel.constant.ExcelConstant;
+
 /**
- * The Interface QuerySheetData.
- *
+ * The Class QuerySheetData.<br>
+ * QuerySheetData is used to obtain a RowSheet list through a query, to set the parameters it is need to insert the parameters on the mapParameter.<br>  
  * @param <T> the generic type
  */
-public interface QuerySheetData<T extends RowSheet> {
+public abstract class QuerySheetData<T extends RowSheet> extends SheetData<T>{
 
-	/**
-	 * Gets the list row sheet.
-	 *
-	 * @return the list row sheet
-	 */
-	public List<T> getListRowSheet();
+	
 
-	/**
-	 * Sets the list row sheet.
-	 *
-	 * @param listRowSheet the new list row sheet
-	 */
-	public void setListRowSheet(List<T> listRowSheet);
+	/** The map parameters. */
+	private Map<String,Object> mapParameters;
+	
 	
 	/**
-	 * Gets the row class.
+	 * Instantiates a new query sheet data.
 	 *
-	 * @return the row class
+	 * @param sheetName the sheet name
 	 */
-	public Class<T> getRowClass();
-	
+	public QuerySheetData(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+		super(sheetName);
+		mapParameters=new HashedMap<>();
+	}
+
+
 	/**
 	 * Gets the map parameters.
 	 *
 	 * @return the map parameters
 	 */
-	public Map<String,Object> getMapParameters();
-	
+	public Map<String, Object> getMapParameters() {
+		return mapParameters;
+	}
+
+
 	/**
 	 * Sets the map parameters.
 	 *
 	 * @param mapParameters the map parameters
 	 */
-	public void setMapParameters(Map<String,Object>mapParameters);
+	public void setMapParameters(Map<String, Object> mapParameters) {
+		this.mapParameters = mapParameters;
+	}
+
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((mapParameters == null) ? 0 : mapParameters.hashCode());
+		return result;
+	}
+
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		QuerySheetData<?> other = (QuerySheetData<?>) obj;
+		if (mapParameters == null) {
+			if (other.mapParameters != null)
+				return false;
+		} else if (!mapParameters.equals(other.mapParameters))
+			return false;
+		return true;
+	}
+	
 	
 	
 }

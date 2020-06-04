@@ -338,16 +338,6 @@ public class SuperGenerateExcelImpl {
 		return listSheetHeader;
 	}
 
-	// protected boolean writeCellEmpty(Workbook workbook, CellStyle cellStyle,
-	// Cell cell, SheetHeader sheetHeader)
-	// throws CloneNotSupportedException, Exception {
-	// boolean repeat;
-	// SheetHeader sheetHeaderTemp = (SheetHeader) sheetHeader.clone();
-	// sheetHeaderTemp.setValue(null);
-	// setCellValueExcel(cell, cellStyle, sheetHeaderTemp);
-	// repeat = false;
-	// return repeat;
-	// }
 
 	/**
 	 * Sets the cell value will merged.
@@ -439,8 +429,9 @@ public class SuperGenerateExcelImpl {
 		cellHeader.setCellComment(comment);
 	}
 
+
 	/**
-	 * Sets the cell sommario.
+	 * Sets the cell summary.
 	 *
 	 * @param workbook     the workbook
 	 * @param worksheet    the worksheet

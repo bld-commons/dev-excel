@@ -7,7 +7,7 @@ package bld.generator.report.excel.data;
 
 /**
  * The Class ExcelColor.<br>
- * This class is used as a property on LayoutCell class.
+ * This class is used as a property on {@link bld.generator.report.excel.data.LayoutCell} class.
  */
 public class ExcelColor {
 

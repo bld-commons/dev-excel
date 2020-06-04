@@ -13,7 +13,8 @@ import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 
 /**
- * The Class GenerateExcelImpl.
+ * The Class GenerateExcelImpl.<br>
+ * In the GenerateExcelImpl class start the process to generate the excel file of xls or xlsx type.   
  */
 @Component
 public class GenerateExcelImpl implements GenerateExcel{

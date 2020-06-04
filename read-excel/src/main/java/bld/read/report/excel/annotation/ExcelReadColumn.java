@@ -11,7 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelReadColumn.
+ * The Interface ExcelReadColumn.<br>
+ * ExcelReadColumn is used to map the header column with the field in the {@link bld.read.report.excel.domain.RowSheetRead} classes.
  */
 @Retention(RUNTIME)
 @Target(FIELD)

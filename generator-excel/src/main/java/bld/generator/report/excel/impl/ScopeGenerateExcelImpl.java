@@ -87,7 +87,8 @@ import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ScopeGenerateExcelImpl.
+ * The Class ScopeGenerateExcelImpl.<br>
+ * In ScopeGenerateExcelImpl there is heart of the generations of the xls or xlsx files.
  */
 @Component
 @SuppressWarnings("unchecked")
@@ -113,8 +114,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	@Value("${bld.commons.resource.path.xlsx:}")
 	private String resourcePathCopertinaXlsx;
 
+	/** The Constant LIST_CHART_TYPES. */
 	private final static List<ChartTypes> LIST_CHART_TYPES = listChartTypes();
 
+	/** The excel query component. */
 	@Autowired(required = false)
 	private ExcelQueryComponent excelQueryComponent;
 
@@ -144,7 +147,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				workbook = new HSSFWorkbook();
 				isCopertina = false;
 			}
-			setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
+			setCoverParameters(report, byteArrayOutputStream, workbook, isCopertina);
 			byteExcel = byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw e;
@@ -156,6 +159,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return byteExcel;
 	}
 
+	/**
+	 * List chart types.
+	 *
+	 * @return the list
+	 */
 	private static List<ChartTypes> listChartTypes() {
 		List<ChartTypes> list = new ArrayList<>();
 		list.add(ChartTypes.PIE);
@@ -192,7 +200,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				isCopertina = false;
 			}
 
-			setParametriCopertina(report, byteArrayOutputStream, workbook, isCopertina);
+			setCoverParameters(report, byteArrayOutputStream, workbook, isCopertina);
 			byteExcel = byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw e;
@@ -203,8 +211,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return byteExcel;
 	}
 
+	
 	/**
-	 * Sets the parametri copertina.
+	 * Sets the cover parameters.
 	 *
 	 * @param report                the report
 	 * @param byteArrayOutputStream the byte array output stream
@@ -212,7 +221,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @param isCopertina           the is copertina
 	 * @throws Exception the exception
 	 */
-	private void setParametriCopertina(ReportExcel report, ByteArrayOutputStream byteArrayOutputStream, Workbook workbook, boolean isCopertina) throws Exception {
+	private void setCoverParameters(ReportExcel report, ByteArrayOutputStream byteArrayOutputStream, Workbook workbook, boolean isCopertina) throws Exception {
 		if (isCopertina) {
 			Set<Field> listField = ExcelUtils.getListField(report.getClass());
 			Sheet worksheet = workbook.getSheetAt(0);
@@ -251,26 +260,23 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		}
 
-		// if (CommonUtil.isNotNullAndIsNotEmpty(report.getListBaseSheet()) &&
-		// report.getListBaseSheet().get(0) instanceof ExcelSommario) {
-		// cell = worksheet.getRow(7).getCell(0);
-		// cell.setCellValue(((ExcelSommario)
-		// report.getListBaseSheet().get(0)).getListCampi().get(0));
-		// }
-		workbook = createSheet(report, workbook);
+		workbook = createSheets(report, workbook);
 		workbook.write(byteArrayOutputStream);
 		workbook.close();
 	}
 
+
 	/**
-	 * Creates the sheet.
+	 * Creates the sheets.<br>
+	 *
+	 *It scores the {@link bld.generator.report.excel.BaseSheet} list, each {@link bld.generator.report.excel.BaseSheet} is equivalent to one sheet.<br>
 	 *
 	 * @param report   the report
 	 * @param workbook the workbook
 	 * @return the workbook
 	 * @throws Exception the exception
 	 */
-	private Workbook createSheet(ReportExcel report, Workbook workbook) throws Exception {
+	private Workbook createSheets(ReportExcel report, Workbook workbook) throws Exception {
 		List<BaseSheet> listSheet = report.getListBaseSheet();
 		int indexSheetName = 0;
 
@@ -320,7 +326,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	}
 
 	/**
-	 * Generate merge sheet.
+	 * Generate merge sheet.<br>
+	 *
+	 *To manage the {@link bld.generator.report.excel.MergeSheet} classes.
 	 *
 	 * @param workbook   the workbook
 	 * @param worksheet  the worksheet
@@ -343,8 +351,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 	}
 
+	
 	/**
-	 * Generate sheet sommario.
+	 * Generate sheet summary.
 	 *
 	 * @param workbook     the workbook
 	 * @param worksheet    the worksheet
@@ -543,8 +552,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (functionsTotal.getSheetFunctionsTotal() != null) {
 				SheetFunctionTotal<? extends RowSheet> functionSheetData = functionsTotal.getSheetFunctionsTotal();
 				// functionSheetData.setMapFieldColumn(this.mapFieldColumn);
-				functionSheetData.setCalRowStart(startRowSheet);
-				functionSheetData.setCalRowEnd(indexRow - 1);
 				indexRow += 2;
 				indexRow = this.generateSheetData(workbook, worksheet, functionSheetData, indexRow, isMergeSheet);
 			}
@@ -586,6 +593,16 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return listExcelChart;
 	}
 
+	/**
+	 * Generate chart.
+	 *
+	 * @param worksheet  the worksheet
+	 * @param excelChart the excel chart
+	 * @param indexRow   the index row
+	 * @param xAxis      the x axis
+	 * @param mapChart   the map chart
+	 * @return the integer
+	 */
 	private Integer generateChart(XSSFSheet worksheet, ExcelChart excelChart, Integer indexRow, String xAxis, Map<String, String> mapChart) {
 		XSSFDrawing drawing = worksheet.createDrawingPatriarch();
 		Integer startChart = indexRow;
@@ -628,11 +645,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * Generate chart.
 	 *
 	 * @param worksheet   the worksheet
-	 * @param seriesChart the series chart
 	 * @param title       the key chart
 	 * @param excelChart  the excel chart
 	 * @param indexRow    the index row
 	 * @param xAxis       the x axis
+	 * @param seriesChart the series chart
 	 * @return the integer
 	 */
 	private Integer generateChart(XSSFSheet worksheet, String title, ExcelChart excelChart, Integer indexRow, String xAxis, String seriesChart) {

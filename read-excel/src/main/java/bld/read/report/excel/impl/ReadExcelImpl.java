@@ -33,6 +33,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
@@ -45,7 +46,9 @@ import bld.read.report.excel.domain.SheetRead;
 import bld.read.report.excel.exception.ExcelReaderException;
 
 /**
- * The Class ReadExcelImpl.
+ * The Class ReadExcelImpl.<br>
+ * ReadExcelImpl is the class that read excel file and converts it to a SheetRead list.<br>
+ * 
  */
 @SuppressWarnings({ "resource", "unchecked" })
 @Component
@@ -58,8 +61,8 @@ public class ReadExcelImpl implements ReadExcel {
 	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
 
 	/**
-	 * Convert excel to entity.
-	 *
+	 * Convert excel to entity.<br>
+	 * This function read excel file by byte array.<br>
 	 * @param excelRead the excel read
 	 * @return the excel read
 	 * @throws Exception the exception
@@ -71,8 +74,8 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Convert excel to entity.
-	 *
+	 * Convert excel to entity.<br>
+	 * This function read excel file by a path file.<br>  
 	 * @param excelRead the excel read
 	 * @param pathFile  the path file
 	 * @return the excel read
@@ -107,6 +110,8 @@ public class ReadExcelImpl implements ReadExcel {
 			excelRead.getMapSheet().put(classSheet, sheetType);
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
 			logger.info("Sheet: " + sheetType.getSheetName());
+			if(sheetType.getSheetName().length()>ExcelConstant.SHEET_NAME_SIZE)
+				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
 			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
 			if(worksheet==null)
 				throw new ExcelReaderException(ExcelExceptionType.SHEET_NOT_FOUND,sheetType.getSheetName());

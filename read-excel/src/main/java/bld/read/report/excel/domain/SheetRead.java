@@ -7,9 +7,18 @@ package bld.read.report.excel.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
+import bld.generator.report.excel.constant.ExcelConstant;
+
 /**
- * The Class SheetRead.
- *
+ * The Class SheetRead.<br>
+ * SheetRead is the object that represents the excel sheet.<br>
+ * It is composed from:
+ * <ul>
+ * <li>ListRowSheet - to get the result of the RowSheetRead list</li>
+ * <lI>SheetName - to get the excel sheet through the name</li>
+ * </ul>
  * @param <T> the generic type
  */
 public abstract class SheetRead<T extends RowSheetRead> {
@@ -26,7 +35,7 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 *
 	 * @param sheetName the sheet name
 	 */
-	public SheetRead(String sheetName) {
+	public SheetRead(@Size(max = ExcelConstant.SHEET_NAME_SIZE)String sheetName) {
 		super();
 		this.listRowSheet=new ArrayList<>();
 		this.sheetName=sheetName;
@@ -40,16 +49,6 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 */
 	public List<T> getListRowSheet() {
 		return listRowSheet;
-	}
-
-
-	/**
-	 * Sets the list row sheet.
-	 *
-	 * @param listRowSheet the new list row sheet
-	 */
-	public void setListRowSheet(List<T> listRowSheet) {
-		this.listRowSheet = listRowSheet;
 	}
 
 

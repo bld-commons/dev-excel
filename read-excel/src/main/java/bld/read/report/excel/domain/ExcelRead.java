@@ -13,7 +13,15 @@ import java.util.Map;
 import bld.read.report.excel.constant.ExcelType;
 
 /**
- * The Class ExcelRead.
+ * The Class ExcelRead.<br>
+ * ExcelRead is the object that represents the excel file.<br>
+ * It is composed from:
+ * <ul>
+ * <li>ReportExcel - to set the excel file in byte array</li>
+ * <li>ListSheetRead - to set a SheetRead list where each object is a new instance</li>
+ * <li>MapSheet - to get result SheetRead list through class type</li>
+ * <li>ExcelType - to set the xls or xlsx type</li>
+ * </ul>
  */
 public class ExcelRead {
 
@@ -110,19 +118,6 @@ public class ExcelRead {
 	public Map<Class<? extends SheetRead<?>>, SheetRead<?>> getMapSheet() {
 		return mapSheet;
 	}
-
-
-
-	/**
-	 * Sets the map sheet.
-	 *
-	 * @param mapSheet the new map sheet
-	 */
-	public void setMapSheet(Map<Class<? extends SheetRead<?>>, SheetRead<?>> mapSheet) {
-		this.mapSheet = mapSheet;
-	}
-
-
 
 	/**
 	 * Gets the excel type.

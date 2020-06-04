@@ -17,12 +17,6 @@ package bld.generator.report.excel;
  */
 public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T> {
 	
-	/** The cal row start. */
-	private Integer calRowStart;
-	
-	/** The cal row end. */
-	private Integer calRowEnd;
-	
 
 	/**
 	 * Instantiates a new sheet function total.
@@ -31,47 +25,6 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 		super("");
 	}
 
-
-	/**
-	 * Gets the cal row start.
-	 *
-	 * @return the cal row start
-	 */
-	public Integer getCalRowStart() {
-		return calRowStart;
-	}
-
-
-	/**
-	 * Sets the cal row start.
-	 *
-	 * @param calRowStart the new cal row start
-	 */
-	public void setCalRowStart(Integer calRowStart) {
-		this.calRowStart = calRowStart;
-	}
-
-
-	/**
-	 * Gets the cal row end.
-	 *
-	 * @return the cal row end
-	 */
-	public Integer getCalRowEnd() {
-		return calRowEnd;
-	}
-
-
-	/**
-	 * Sets the cal row end.
-	 *
-	 * @param calRowEnd the new cal row end
-	 */
-	public void setCalRowEnd(Integer calRowEnd) {
-		this.calRowEnd = calRowEnd;
-	}
-
-
 	/**
 	 * Hash code.
 	 *
@@ -79,13 +32,8 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((calRowEnd == null) ? 0 : calRowEnd.hashCode());
-		result = prime * result + ((calRowStart == null) ? 0 : calRowStart.hashCode());
-		return result;
+		return super.hashCode();
 	}
-
 
 	/**
 	 * Equals.
@@ -101,19 +49,9 @@ public abstract class SheetFunctionTotal<T extends RowSheet> extends SheetData<T
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SheetFunctionTotal<?> other = (SheetFunctionTotal<?>) obj;
-		if (calRowEnd == null) {
-			if (other.calRowEnd != null)
-				return false;
-		} else if (!calRowEnd.equals(other.calRowEnd))
-			return false;
-		if (calRowStart == null) {
-			if (other.calRowStart != null)
-				return false;
-		} else if (!calRowStart.equals(other.calRowStart))
-			return false;
 		return true;
 	}
+
 
 	
 	

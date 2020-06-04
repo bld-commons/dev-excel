@@ -11,10 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * The Class FunctionCell.
- */
-
-/**
- * Instantiates a new function cell.
+ * 
  */
 public class FunctionCell {
 

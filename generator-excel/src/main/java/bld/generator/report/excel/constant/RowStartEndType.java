@@ -6,7 +6,9 @@
 package bld.generator.report.excel.constant;
 
 /**
- * The Enum RowStartEndType.
+ * The Enum RowStartEndType.<br>
+ * RowStartEndType is used to define the name of the variable, to write functions parameterized with the column name.<br>
+ *  
  */
 public enum RowStartEndType {
 

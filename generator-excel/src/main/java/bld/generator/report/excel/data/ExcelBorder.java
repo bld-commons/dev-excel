@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 
 /**
  * The Class ExcelBorder.<br>
- * This class is a property on LayoutCell class.
+ * This class is a property on {@link bld.generator.report.excel.data.LayoutCell} class.
  */
 public class ExcelBorder {
 
