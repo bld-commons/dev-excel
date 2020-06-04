@@ -1,5 +1,5 @@
 # dev-excel
-In questo progetto ci sono 2 progetti usati per semplificare la generazione e lettura dei file excel.
+In this project there are 2 projects used to simplify the generation and reading of excel files.
 
 
 
