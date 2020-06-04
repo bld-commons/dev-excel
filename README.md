@@ -1,5 +1,5 @@
 # dev-excel
-In this project there are 2 projects used to simplify the generation and reading of excel files and are:
+In this project there are 2 projects used to simplify the generation and reading of excel files through the packages apache-poi and are:
 
   1)generator-excel
   2)read-excel
@@ -18,6 +18,12 @@ The main classes to start developing the generator-excel project are:
         - ExcelSheetLayout
         - ExcelColumn
         - ExcelCellLayout
+        
+It generates sheet whit:
+    - Functions(sum by column and row)
+    - Charts
+    - It merge cells between rows when they are equals
+    - To get rows list through the annotation ExcelQuery and the QuerySheetData type entity
         
 For all the documnetation of the generator-excel project, to click on the following link:
 
