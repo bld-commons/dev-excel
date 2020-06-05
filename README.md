@@ -1,8 +1,8 @@
 # dev-excel
 In this project there are 2 libraries used to speed up and easy the generation and reading of excel files through the library apache-poi and are:
 
-  1)generator-excel
-  2)read-excel
+  1)  generator-excel
+  2)  read-excel
  
  
 The main classes to start developing the generator-excel library are:
