@@ -19,7 +19,8 @@ import java.lang.annotation.Target;
  * <li>Landscape - enable/disable landscape</li>
  * <li>NotMerge - enable/disable merged cells</li>
  * <li>SortAndFilter - enable/disable sort and filter</li>
- * <li>StartColumn - to set the start column</li>
+ * <li>StartColumn - to set the column start</li>
+ * <li>StartRow - to set the row start</li>
  * <li>Order - to set index on sheets list</li>
  * </ul>
  * 
@@ -58,6 +59,13 @@ public @interface ExcelSheetLayout {
 	 * @return the int
 	 */
 	public int startColumn()default 0;
+	
+	/**
+	 * Start row.
+	 *
+	 * @return the int
+	 */
+	public int startRow()default 0;
 	
 	/**
 	 * Order.

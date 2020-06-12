@@ -366,6 +366,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		Class<? extends SheetSummary> classSheet = sheetSummary.getClass();
 		ExcelSummary excelSummary = classSheet.getAnnotation(ExcelSummary.class);
 		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSheetLayout.class);
+		indexRow+=excelSheetLayout.startRow();
+		if(indexRow<0)
+			throw new Exception("The row number cannot be negative");
 		if (excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
 			Row rowHeader = worksheet.createRow(indexRow);
 			CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetSummary, rowHeader);
@@ -407,13 +410,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if(this.excelQueryComponent!=null && sheetData instanceof QuerySheetData)
 			this.excelQueryComponent.executeQuery((QuerySheetData<? extends RowSheet>)sheetData);
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
+		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
+		indexRow+=excelSheetLayout.startRow();
+		if(indexRow<0)
+			throw new Exception("The row number cannot be negative");
 		indexRow = writeLabel(workbook, worksheet, sheetData, indexRow);
 		indexRow = indexRow + getSizeSuperHeader(sheetData);
 		int startRowSheet = indexRow + 1;
 		List<SheetHeader> listSheetHeader = generateHeaderSheetData(workbook, worksheet, sheetData, indexRow);
 
 		indexRow++;
-		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
+		
 		boolean start = true;
 		// CellStyle cellStyle = null;
 		Map<Integer, MergeCell> mapMergeRow = new HashMap<>();
