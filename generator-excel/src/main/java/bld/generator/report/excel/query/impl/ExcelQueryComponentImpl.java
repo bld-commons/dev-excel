@@ -16,7 +16,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +27,9 @@ import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
- * The Class ExcelQueryComponentImpl.
+ * The Class ExcelQueryComponentImpl.<br>
  * ExcelQueryComponentImpl is the class that manage the {@link bld.generator.report.excel.QuerySheetData} classes and the annotation {@link bld.generator.report.excel.annotation.ExcelQuery}. <br>
- * It get the {@link bld.generator.report.excel.RowSheet} list through the query within {@link bld.generator.report.excel.annotation.ExcelQuery}
+ * It get the {@link bld.generator.report.excel.RowSheet} list through the query within {@link bld.generator.report.excel.annotation.ExcelQuery}.<br>
  */
 @Transactional
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
