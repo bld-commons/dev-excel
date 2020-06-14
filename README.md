@@ -20,10 +20,10 @@ The main classes to start developing the generator-excel library are:
         - ExcelCellLayout
         
 It generates sheet whit:
-    - Functions(sum by column and row)
-    - Charts
-    - It merge cells between rows when they are equals
-    - To get rows list through the annotation ExcelQuery and the QuerySheetData type entity
+        - Functions(sum by column and row)
+        - Charts
+        - It merge cells between rows when they are equals
+        - To get rows list through the annotation ExcelQuery and the QuerySheetData type entity
         
 For all the documnetation of the generator-excel library, to click on the following link:
 
