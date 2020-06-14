@@ -8,7 +8,7 @@ In this project there are 2 libraries used to speed up and easy the generation a
 The main classes to start developing the generator-excel library are:
 
   1)  ReportExcel is the entity from which the excel file will be generated.
-  2)  BaseSheet is the class that represents the Excel sheet, it is extended:
+  2)  BaseSheet is the class that represents the Excel sheet, it is extended from:
         - SheetData
         - SheetSummary
         - MergeSheet
