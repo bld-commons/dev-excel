@@ -19,9 +19,9 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * 
  * ExcelChart is used to create different chart types.
  * <br>
- * This annotation is composed from:<br>
+ * This annotation is composed of:<br>
  * <ul>
- * <li>Title - chart identifier</li>
+ * <li>FieldName - chart identifier</li>
  * <li>Function - is the chart function</li>
  * <li>ChartTypes - to set the chart type</li>
  * <li>SizeRow - to set height in terms number of rows</li>
@@ -33,7 +33,7 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * <li>Group - to group series</li>
  * </ul>
  * 
- * It is a property of the annotation ExcelCharts 
+ * It is a property of the annotation {@link bld.generator.report.excel.annotation.ExcelCharts} 
  */
 @Retention(RUNTIME)
 @Target({})

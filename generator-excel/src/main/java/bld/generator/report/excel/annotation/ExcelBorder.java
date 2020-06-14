@@ -16,9 +16,9 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 /**
  * The Interface ExcelBorder.
  * <br>
- * ExcelBorder is used to define borders types through enumeration BorderStyle.
+ * ExcelBorder is used to define the border types through enumeration BorderStyle.
  * <br>
- * ExcelBorder is composed of 4 properties and they are:
+ * ExcelBorder is composed of 4 properties:
  * <ul>
  * <li>bottom</li>
  * <li>left</li>

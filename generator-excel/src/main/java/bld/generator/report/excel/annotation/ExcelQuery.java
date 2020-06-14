@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelQuery. <br>
- * ExcelQuery is used to get the rows list direct of database, this work if the project is configured with spring-data-jpa and it is set the property "spring.datasource.url"<br>
+ * ExcelQuery is used to get the list of rows directly from the database; this functionality works if the project is configured with spring-data-jpa and if the property is set to "spring.datasource.url"<br>
  * It is used on {@link bld.generator.report.excel.QuerySheetData} classes.
  */
 @Documented

@@ -21,18 +21,18 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * The Interface ExcelCellLayout.
  * <br>
  * ExcelCellLayout is used to define the cell style.<br>
- * The cell style is composed: <br>
+ * The cell style is composed of:<br>
  * <ul>
  * <li>Border - to set borders types</li>
  * <li>HorizontalAlignment - to set horizontal align</li>
  * <li>VerticalAlignment - to set vertical align</li>
  * <li>Font - to set font type</li>
- * <li>wrap - to enable and disable wrap text into cell</li>
+ * <li>wrap - to enable/disable wrap text into cell</li>
  * <li>rgbFont - to set the font color</li>
  * <li>rgbForeground - to set the background color</li>
  * <li>fillPatternType - to set fill pattern style</li>
  * <li>precision - to set the precision number, if the value is not a number then it is ignored</li>
- * <li>locked - to enable and disable cell editable</li>
+ * <li>locked - to enable/disable edit cell</li>
  * </ul>
  * 
  * It is set on:

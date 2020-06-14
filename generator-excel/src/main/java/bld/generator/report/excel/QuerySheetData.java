@@ -15,7 +15,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class QuerySheetData.<br>
- * QuerySheetData is used to obtain a RowSheet list through a query, to set the parameters it is need to insert the parameters on the mapParameter.<br>  
+ * QuerySheetData is used to obtain a RowSheet list through a query, to set the parameters in the query you need to insert them in the "mapParameter" field.<br>  
  * @param <T> the generic type
  */
 public abstract class QuerySheetData<T extends RowSheet> extends SheetData<T>{
