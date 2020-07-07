@@ -14,9 +14,11 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelMergeRow.<br>
- * ExcelMergeRow works like this:<br>
- * If referenceField is not empty then ExcelMergeRow checks the change another field, if the field changes then it must to change cell.<br>
- * ReferenceField is empty only to the field identifier of the table and it must be in the first column
+ * ExcelMergeRow works as follows:<br>
+ * It is used to merge cells after checking the equality the reference field values.<br>
+ * ReferenceField is empty only to the field identifier of the table and it must be in the first column.</br>
+ * 
+ * ExcelMergeRow is an annotation of the fields within {@link bld.generator.report.excel.RowSheet} classes. 
  * 
  */
 @Retention(RUNTIME)

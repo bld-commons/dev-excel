@@ -20,11 +20,11 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * It is composed from:
  * <ul>
  * <li>ExcelCellsLayout - to define cell layout</li>
- * <li>ExcelColumn - to define the header of column</li>
+ * <li>ExcelColumn - to define the header description and the position of column</li>
  * <li>ExcelFunction - to define the function</li>
  * </ul>
  *  
- *  It is parameter of the annotation ExcelFunctionRows.
+ *  It is parameter of the annotation {@link bld.generator.report.excel.ExcelFunctionRows}.
  */
 @Retention(RUNTIME)
 @Target({})

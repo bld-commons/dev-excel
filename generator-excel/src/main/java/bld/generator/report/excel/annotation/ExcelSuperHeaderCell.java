@@ -12,9 +12,9 @@ import java.lang.annotation.Retention;
 /**
  * The Interface ExcelSuperHeaderCell.<br>
  * ExcelSuperHeaderCell is used to write the top level header cell.<br>
- * It is composed from:
+ * It is composed by:
  * <ul>
- * <li>ColumnName - to define the super header name</li>
+ * <li>ColumnName - to define the top level header name</li>
  * <li>ColumnRange - to set the cell range address</li>
  * <li>ExcelHeaderCellLayout - to set the style of the top level header cell</li>
  * </ul>  

@@ -14,7 +14,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
 /**
  * The Class SheetRead.<br>
  * SheetRead is the object that represents the excel sheet.<br>
- * It is composed from:
+ * It is composed by:
  * <ul>
  * <li>ListRowSheet - to get the result of the RowSheetRead list</li>
  * <lI>SheetName - to get the excel sheet through the name</li>

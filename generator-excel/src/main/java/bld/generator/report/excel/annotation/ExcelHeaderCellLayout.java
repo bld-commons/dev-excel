@@ -21,17 +21,17 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
  * <br>
  * ExcelHeaderCellLayout is used to define the header cell style.<br>
  * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes or it is a property of the annotation {@link bld.generator.report.excel.annotation.ExcelHeaderLayout}.<br>
- * The header cell style is composed: <br>
+ * The header cell style is composed by: <br>
  * <ul>
  * <li>Border - to set borders types</li>
- * <li>HorizontalAlignment - to set horizontal align</li>
- * <li>VerticalAlignment - to set vertical align</li>
+ * <li>HorizontalAlignment - to set horizontal alignment</li>
+ * <li>VerticalAlignment - to set vertical alignment</li>
  * <li>Font - to set font type</li>
  * <li>wrap - to enable and disable wrap text into cell</li>
  * <li>rgbFont - to set the font color</li>
  * <li>rgbForeground - to set the background color</li>
  * <li>fillPatternType - to set fill pattern style</li>
- * <li>precision - to set the precision number, if the value is not a number then it is ignored</li>
+ * <li>precision - to set the precision number, if the value is not a number then it can be ignored</li>
  * <li>locked - to enable and disable cell editable</li>
  * <li>rotation - to set the cell rotation</li>
  * </ul>

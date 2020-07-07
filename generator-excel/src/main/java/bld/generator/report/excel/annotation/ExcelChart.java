@@ -19,7 +19,7 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * 
  * ExcelChart is used to create different chart types.
  * <br>
- * This annotation is composed of:<br>
+ * This annotation is composed by:<br>
  * <ul>
  * <li>FieldName - chart identifier</li>
  * <li>Function - is the chart function</li>

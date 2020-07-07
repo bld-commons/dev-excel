@@ -16,12 +16,12 @@ import java.lang.annotation.Target;
 /**
  * The Interface ExcelHeaderLayout.<br>
  * ExcelHeaderLayout is used to configure the header of the table.<br>
- * It is composed from:
+ * It is composed by:
  * <ul>
  * <li>RowHeight - to set row height</li>
  * <li>ExcelHeaderCellLayout - to set the header cell style</li>
  * </ul>
- * It must be to used in {@link bld.generator.report.excel.SheetData} classes.
+ * It must be to managed in {@link bld.generator.report.excel.SheetData} classes.
  */
 @Retention(RUNTIME)
 @Target({ TYPE })

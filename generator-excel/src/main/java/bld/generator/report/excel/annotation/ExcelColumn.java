@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * The Interface ExcelColumn.
  * <br>
  * ExcelColumn is used to define the header column
- * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes and is composed from:
+ * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes and is composed by:
  * <ul>
  * <li>ColumnName - to set column name on header</li>
  * <li>Comment - to add a comment on header</li>

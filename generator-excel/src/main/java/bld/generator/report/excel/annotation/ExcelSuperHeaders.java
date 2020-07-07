@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 /**
  * The Interface ExcelSuperHeaders.<br>
  * ExcelSuperHeaders manages a list of the top level header cell through superHeaders property.<br>
- * It is used on {@link bld.generator.report.excel.SheetData} classes and it do not used on {@link bld.generator.report.excel.SheetDynamicData}<br>
+ * It is used on {@link bld.generator.report.excel.SheetData} classes and it is not used on {@link bld.generator.report.excel.SheetDynamicData} classes<br>
  */
 @Retention(RUNTIME)
 @Target(TYPE)

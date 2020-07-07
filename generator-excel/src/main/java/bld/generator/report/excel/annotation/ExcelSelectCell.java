@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelSelectCell.<br>
- * ExcelSelectCell is use to select a cell within of a cover file.<br> 
+ * ExcelSelectCell is use to select a cell within a cover file.<br> 
  * It is used on {@link bld.generator.report.excel.data.ReportExcel} classes.
  */
 @Retention(RUNTIME)

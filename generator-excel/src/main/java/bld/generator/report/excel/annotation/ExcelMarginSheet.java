@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelMarginSheet.<br>
- * ExcelMarginSheet is used to set the margin on all the cells of the sheet.<br>
+ * ExcelMarginSheet is used to set the margin for all the cells of the sheet.<br>
  * <ol>
  * <li>Top</li>
  * <li>Bottom</li>

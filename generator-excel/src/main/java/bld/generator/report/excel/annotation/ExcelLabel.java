@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
 // TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelLabel.<br>
- * ExcelLabel write a label on the sheet and it must be to added on field within the {@link bld.generator.report.excel.SheetData} classes.<br>
- * It is composed from:
+ * ExcelLabel writes a label on the sheet and it must be added in the field within the {@link bld.generator.report.excel.SheetData} classes.<br>
+ * It is composed by:
  * <ul>
  * <li>ExcelCellsLayout - to define cell layout</li>
  * <li>ColumnMerge - to set the number of merged cells</li>

@@ -15,7 +15,7 @@ import bld.read.report.excel.constant.ExcelType;
 /**
  * The Class ExcelRead.<br>
  * ExcelRead is the object that represents the excel file.<br>
- * It is composed from:
+ * It is composed by:
  * <ul>
  * <li>ReportExcel - to set the excel file in byte array</li>
  * <li>ListSheetRead - to set a SheetRead list where each object is a new instance</li>

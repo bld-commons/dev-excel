@@ -88,7 +88,7 @@ import bld.generator.report.utils.ExcelUtils;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ScopeGenerateExcelImpl.<br>
- * In ScopeGenerateExcelImpl there is heart of the generations of the xls or xlsx files.
+ * ScopeGenerateExcelImpl is the heart of the generation of the xls or xlsx files.
  */
 @Component
 @SuppressWarnings("unchecked")

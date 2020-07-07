@@ -28,8 +28,8 @@ import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class ExcelQueryComponentImpl.<br>
- * ExcelQueryComponentImpl is the class that manage the {@link bld.generator.report.excel.QuerySheetData} classes and the annotation {@link bld.generator.report.excel.annotation.ExcelQuery}. <br>
- * It get the {@link bld.generator.report.excel.RowSheet} list through the query within {@link bld.generator.report.excel.annotation.ExcelQuery}.<br>
+ * ExcelQueryComponentImpl is the class that manages the {@link bld.generator.report.excel.QuerySheetData} classes and the annotation {@link bld.generator.report.excel.annotation.ExcelQuery}. <br>
+ * It gets the {@link bld.generator.report.excel.RowSheet} list through the query within the annotation {@link bld.generator.report.excel.annotation.ExcelQuery}.<br>
  */
 @Transactional
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {

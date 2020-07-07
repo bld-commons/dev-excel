@@ -16,15 +16,15 @@ import java.lang.annotation.Target;
  * The Interface ExcelSheetLayout.<br>
  * ExcelSheetLayout is used to configure the sheet layout through:
  * <ul>
- * <li>Landscape - enable/disable landscape</li>
- * <li>NotMerge - enable/disable merged cells</li>
- * <li>SortAndFilter - enable/disable sort and filter</li>
+ * <li>Landscape - to enable/disable landscape</li>
+ * <li>NotMerge - to enable/disable merged cells</li>
+ * <li>SortAndFilter - to enable/disable sort and filter</li>
  * <li>StartColumn - to set the column start</li>
  * <li>StartRow - to set the row start</li>
  * <li>Order - to set index on sheets list</li>
  * </ul>
  * 
- * It is used on {@link bld.generator.report.excel.SheetData} and {@link bld.generator.report.excel.SheetSummary}.
+ * It is used on {@link bld.generator.report.excel.SheetData} and {@link bld.generator.report.excel.SheetSummary} classes.
  * 
  */
 @Retention(RUNTIME)

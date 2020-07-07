@@ -7,7 +7,7 @@ package bld.generator.report.excel.constant;
 
 /**
  * The Enum FontType.<br>
- * FontType is used to set font property on annotation {@link bld.generator.report.excel.annotation.ExcelFont}.
+ * FontType is used to set font property on the  following annotation {@link bld.generator.report.excel.annotation.ExcelFont}.
  */
 public enum FontType {
 

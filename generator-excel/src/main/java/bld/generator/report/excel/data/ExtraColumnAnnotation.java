@@ -24,7 +24,7 @@ import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 
 /**
  * The Class ExtraColumnAnnotation.<br>
- *  ExtraColumnAnnotation is used to configure the dynamic cells type and style.<br>
+ *  ExtraColumnAnnotation is used to configure the dynamic cells type and the style.<br>
  *  It must be set on mapExtraColumnAnnotation within the {@link bld.generator.report.excel.SheetDynamicData} classes. 
  */
 public class ExtraColumnAnnotation {

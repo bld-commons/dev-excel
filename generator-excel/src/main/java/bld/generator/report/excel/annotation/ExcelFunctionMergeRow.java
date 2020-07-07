@@ -17,12 +17,12 @@ import java.lang.annotation.Target;
  * It is composed from:
  * <ul>
  * <li>ExcelCellsLayout - to define cell layout</li>
- * <li>ExcelColumn - to define the header of column</li>
- * <li>ExcelMergeRow - to check another field if the field changes then it must to change cell</li>
+ * <li>ExcelColumn - to define the header description and the position of column</li>
+ * <li>ExcelMergeRow - it is used to merge cells after checking the equality the reference field values</li>
  * <li>ExcelFunction - to define the function</li>
  * </ul>
  *  
- *  It is parameter of the annotation ExcelFunctionRows.
+ *  ExcelFunctionMergeRow is parameter of the annotation {@link bld.generator.report.excel.ExcelFunctionRows}.
  *  
  */
 @Retention(RUNTIME)
