@@ -152,9 +152,9 @@ public class ReportTest {
 		
 		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 
-		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
+		byte[] byteReport = this.generateExcel.createFileXls(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xls", byteReport);
 
 	}
 

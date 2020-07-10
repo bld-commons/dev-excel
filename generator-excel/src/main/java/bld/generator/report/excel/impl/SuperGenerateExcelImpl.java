@@ -796,9 +796,7 @@ public class SuperGenerateExcelImpl {
 		Integer indexStartSuperHeader = indexRow - getSizeSuperHeader(sheetData);
 
 		Row rowHeader = worksheet.createRow(indexRow);
-		int idRowHeader = indexRow + 1;
-		worksheet.setRepeatingRows(CellRangeAddress.valueOf(idRowHeader + ":" + idRowHeader));
-
+		
 		CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetData, rowHeader);
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
 
