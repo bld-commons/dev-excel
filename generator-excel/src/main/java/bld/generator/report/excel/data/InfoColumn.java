@@ -1,8 +1,8 @@
 /**
-* @author Francesco Baldi
-* @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.excel.data.InfoColumn.java
-*/
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ * @class bld.generator.report.excel.data.InfoColumn.java
+ */
 package bld.generator.report.excel.data;
 
 import java.util.Map;
@@ -15,6 +15,7 @@ import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class InfoColumn.
+ * 
  */
 public class InfoColumn extends InfoField {
 

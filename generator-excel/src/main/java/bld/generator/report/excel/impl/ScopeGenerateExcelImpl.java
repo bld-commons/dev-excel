@@ -262,7 +262,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		workbook = createSheets(report, workbook);
 		workbook.write(byteArrayOutputStream);
-		workbook.close();
+		
 	}
 
 
