@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFComment;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -61,7 +62,6 @@ import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
@@ -69,6 +69,7 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
+import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.comparator.SheetColumnComparator;
 import bld.generator.report.excel.constant.ColumnDateFormat;
@@ -149,15 +150,12 @@ public class SuperGenerateExcelImpl {
 		Font font = getFont(workbook, layout.font());
 		if (workbook instanceof HSSFWorkbook) {
 			HSSFPalette paletteFont = ((HSSFWorkbook) workbook).getCustomPalette();
-			short colorFont = 20;
-
-			paletteFont.setColorAtIndex(colorFont, rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((HSSFFont) font).setColor(colorFont);
-			short colorForeground = 45;
+			HSSFColor colorFont=paletteFont.findSimilarColor(rgbFont.red(), rgbFont.green(), rgbFont.blue());
+			((HSSFFont) font).setColor(colorFont.getIndex());
 
 			HSSFPalette palette = ((HSSFWorkbook) workbook).getCustomPalette();
-			palette.setColorAtIndex(colorForeground, rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			cellStyleHeader.setFillForegroundColor(colorForeground);
+			HSSFColor colorForeground=palette.findSimilarColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
+			cellStyleHeader.setFillForegroundColor(colorForeground.getIndex());
 
 		} else {
 			XSSFColor colorForeground = getColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
@@ -203,15 +201,12 @@ public class SuperGenerateExcelImpl {
 		Font font = getFont(workbook, layout.font());
 		if (workbook instanceof HSSFWorkbook) {
 			HSSFPalette paletteFont = ((HSSFWorkbook) workbook).getCustomPalette();
-			short colorFont = 20;
-
-			paletteFont.setColorAtIndex(colorFont, rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((HSSFFont) font).setColor(colorFont);
-			short colorForeground = 45;
+			HSSFColor colorFont=paletteFont.findSimilarColor(rgbFont.red(), rgbFont.green(), rgbFont.blue());
+			((HSSFFont) font).setColor(colorFont.getIndex());
 
 			HSSFPalette palette = ((HSSFWorkbook) workbook).getCustomPalette();
-			palette.setColorAtIndex(colorForeground, rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			cellStyle.setFillForegroundColor(colorForeground);
+			HSSFColor colorForeground=palette.findSimilarColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
+			cellStyle.setFillForegroundColor(colorForeground.getIndex());
 
 		} else {
 			XSSFColor colorForeground = getColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
@@ -845,9 +840,13 @@ public class SuperGenerateExcelImpl {
 					String[] columns = function.split(":");
 					Cell cellSuperHeader = null;
 					boolean setCellValue = true;
-					for (String column : columns) {
-						String key = ExcelUtils.getKeyColumn(worksheet, column);
-						int columnNum = this.mapFieldColumn.get(key).getColumnNum();
+					int startColumn=this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, columns[0])).getColumnNum();
+					int endColumn=this.mapFieldColumn.get(ExcelUtils.getKeyColumn(worksheet, columns[1])).getColumnNum();
+					
+					//for (String column : columns) {
+					for(int columnNum=startColumn;columnNum<=endColumn;columnNum++) {
+//						String key = ExcelUtils.getKeyColumn(worksheet, column);
+//						int columnNum = this.mapFieldColumn.get(key).getColumnNum();
 						cellSuperHeader = rowSuperHeader.createCell(columnNum);
 						CellStyle cellSuperHeaderStyle = manageCellStyleHeader(workbook, headerGroup);
 						cellSuperHeader.setCellStyle(cellSuperHeaderStyle);

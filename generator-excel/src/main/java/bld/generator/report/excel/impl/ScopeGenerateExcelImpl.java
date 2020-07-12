@@ -135,7 +135,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		Workbook workbook = null;
 		try {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			boolean isCopertina = true;
+			boolean isCover = true;
 			workbook = null;
 			if (StringUtils.isNotBlank(this.pathCopertinaXls)) {
 				InputStream inputstream = new FileInputStream(this.pathCopertinaXls);
@@ -145,9 +145,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				workbook = new HSSFWorkbook(inputstream);
 			} else {
 				workbook = new HSSFWorkbook();
-				isCopertina = false;
+				isCover = false;
 			}
-			setCoverParameters(report, byteArrayOutputStream, workbook, isCopertina);
+			this.setCoverParameters(report, byteArrayOutputStream, workbook, isCover);
 			byteExcel = byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw e;
@@ -186,7 +186,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		Workbook workbook = null;
 		try {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			boolean isCopertina = true;
+			boolean isCover = true;
 			workbook = null;
 			if (StringUtils.isNotBlank(this.pathCopertinaXlsx)) {
 				InputStream inputstream = new FileInputStream(this.pathCopertinaXlsx);
@@ -197,10 +197,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				workbook = new XSSFWorkbook(inputstream);
 			} else {
 				workbook = new XSSFWorkbook();
-				isCopertina = false;
+				isCover = false;
 			}
 
-			setCoverParameters(report, byteArrayOutputStream, workbook, isCopertina);
+			this.setCoverParameters(report, byteArrayOutputStream, workbook, isCover);
 			byteExcel = byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw e;
@@ -547,7 +547,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (Integer numColumn : mapMergeRow.keySet())
 			super.mergeRow(workbook, worksheet, indexRow, mapMergeRow, numColumn);
 
-		if (excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
+		if (!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) {
 			String startCell = ExcelUtils.calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn());
 			String endCell = ExcelUtils.calcoloCoordinateFunction(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn() - 1);
 			logger.debug(sheetData.getClass().getSimpleName() + "- " + startCell + ":" + endCell);
