@@ -11,18 +11,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelReadSheet.
+ * The Interface ExcelReadSheet.<br>
+ * ExcelReadSheet is used to define the row and column start and is used in the {@link bld.read.report.excel.domain.SheetRead} classes.
  */
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface ExcelReadSheet {
-
-	/**
-	 * Name sheet.
-	 *
-	 * @return the string
-	 */
-	public String nameSheet();
 	
 	/**
 	 * Start row.

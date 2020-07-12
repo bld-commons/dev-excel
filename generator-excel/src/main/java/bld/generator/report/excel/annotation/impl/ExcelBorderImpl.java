@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelBorderImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -10,24 +11,23 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 
 import bld.generator.report.excel.annotation.ExcelBorder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelBorderImpl.
  */
-public class ExcelBorderImpl {
+public class ExcelBorderImpl implements Cloneable{
 
 	
 	/** The left. */
-	protected BorderStyle left;
+	private BorderStyle left;
 	
 	/** The top. */
-	protected BorderStyle top;
+	private BorderStyle top;
 	
 	/** The right. */
-	protected BorderStyle right;
+	private BorderStyle right;
 	
 	/** The bottom. */
-	protected BorderStyle bottom;
+	private BorderStyle bottom;
 
 	/**
 	 * Gets the excel border.
@@ -80,47 +80,28 @@ public class ExcelBorderImpl {
 		this.right = right;
 		this.bottom = bottom;
 	}
-
+	
 	/**
-	 * Hash code.
-	 *
-	 * @return the int
+	 * Instantiates a new excel border impl.
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((bottom == null) ? 0 : bottom.hashCode());
-		result = prime * result + ((left == null) ? 0 : left.hashCode());
-		result = prime * result + ((right == null) ? 0 : right.hashCode());
-		result = prime * result + ((top == null) ? 0 : top.hashCode());
-		return result;
+	public ExcelBorderImpl(){
+		super();
+		this.left = BorderStyle.THIN;
+		this.top = BorderStyle.THIN;
+		this.right = BorderStyle.THIN;
+		this.bottom = BorderStyle.THIN;
 	}
 
+
 	/**
-	 * Equals.
+	 * Clone.
 	 *
-	 * @param obj the obj
-	 * @return true, if successful
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExcelBorderImpl other = (ExcelBorderImpl) obj;
-		if (bottom != other.bottom)
-			return false;
-		if (left != other.left)
-			return false;
-		if (right != other.right)
-			return false;
-		if (top != other.top)
-			return false;
-		return true;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -193,6 +174,48 @@ public class ExcelBorderImpl {
 	 */
 	public void setBottom(BorderStyle bottom) {
 		this.bottom = bottom;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bottom == null) ? 0 : bottom.hashCode());
+		result = prime * result + ((left == null) ? 0 : left.hashCode());
+		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		result = prime * result + ((top == null) ? 0 : top.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelBorderImpl other = (ExcelBorderImpl) obj;
+		if (bottom != other.bottom)
+			return false;
+		if (left != other.left)
+			return false;
+		if (right != other.right)
+			return false;
+		if (top != other.top)
+			return false;
+		return true;
 	}
 
 

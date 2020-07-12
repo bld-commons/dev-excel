@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelCellLayout.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -16,9 +17,42 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelCellLayout.
+ * <br>
+ * ExcelCellLayout is used to define the cell style.<br>
+ * The cell style is composed by:<br>
+ * <ul>
+ * <li>Border - to set borders types</li>
+ * <li>HorizontalAlignment - to set horizontal align</li>
+ * <li>VerticalAlignment - to set vertical align</li>
+ * <li>Font - to set font type</li>
+ * <li>wrap - to enable/disable wrap text into cell</li>
+ * <li>rgbFont - to set the font color</li>
+ * <li>rgbForeground - to set the background color</li>
+ * <li>fillPatternType - to set fill pattern style</li>
+ * <li>precision - to set the precision number, if the value is not a number then it is ignored</li>
+ * <li>locked - to enable/disable edit cell</li>
+ * </ul>
+ * 
+ * It is set on:
+ * <ul>
+ * 	<li>
+ * 	Field in the classes:
+ * 	<ul>
+ * 	<li>{@link bld.generator.report.excel.RowSheet}</li>
+ * 	<li>{@link bld.generator.report.excel.SheetSummary}</li>
+ * 	</ul>
+ * 	</li>
+ * 	<li>
+ * 	Annotations:
+ * 	<ul>
+ * 	<li>{@link bld.generator.report.excel.annotation.ExcelLabel}</li>
+ *  <li>{@link bld.generator.report.excel.annotation.ExcelFunctionMergeRow}</li>
+ *  <li>{@link bld.generator.report.excel.annotation.ExcelFunctionRow}</li>
+ *  </ul>
+ * 	</li>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)
@@ -87,5 +121,13 @@ public @interface ExcelCellLayout {
 	 * @return the int
 	 */
 	public int precision() default -1;
+	
+	
+	/**
+	 * Locked.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean locked() default false;
 
 }

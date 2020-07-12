@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.LayoutCell.java
+*/
 package bld.generator.report.excel.data;
 
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -10,7 +11,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class LayoutCell.
  */
@@ -26,7 +27,7 @@ public class LayoutCell {
 	private VerticalAlignment verticalAlignment;
 
 	/** The font. */
-	private ExceltFont font;
+	private ExcelFont font;
 
 	/** The wrap. */
 	private boolean wrap;
@@ -43,10 +44,15 @@ public class LayoutCell {
 	/** The precision. */
 	private Integer precision;
 
+	/** The rotation. */
+	private Integer rotation;
+	
 	
 	/** The format. */
 	private ColumnDateFormat format;
 
+	/** The locked. */
+	private boolean locked;
 
 	/**
 	 * Gets the border.
@@ -57,7 +63,6 @@ public class LayoutCell {
 		return border;
 	}
 
-
 	/**
 	 * Sets the border.
 	 *
@@ -66,7 +71,6 @@ public class LayoutCell {
 	public void setBorder(ExcelBorder border) {
 		this.border = border;
 	}
-
 
 	/**
 	 * Gets the horizontal alignment.
@@ -77,7 +81,6 @@ public class LayoutCell {
 		return horizontalAlignment;
 	}
 
-
 	/**
 	 * Sets the horizontal alignment.
 	 *
@@ -86,7 +89,6 @@ public class LayoutCell {
 	public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
 		this.horizontalAlignment = horizontalAlignment;
 	}
-
 
 	/**
 	 * Gets the vertical alignment.
@@ -97,7 +99,6 @@ public class LayoutCell {
 		return verticalAlignment;
 	}
 
-
 	/**
 	 * Sets the vertical alignment.
 	 *
@@ -107,26 +108,23 @@ public class LayoutCell {
 		this.verticalAlignment = verticalAlignment;
 	}
 
-
 	/**
 	 * Gets the font.
 	 *
 	 * @return the font
 	 */
-	public ExceltFont getFont() {
+	public ExcelFont getFont() {
 		return font;
 	}
-
 
 	/**
 	 * Sets the font.
 	 *
 	 * @param font the new font
 	 */
-	public void setFont(ExceltFont font) {
+	public void setFont(ExcelFont font) {
 		this.font = font;
 	}
-
 
 	/**
 	 * Checks if is wrap.
@@ -137,7 +135,6 @@ public class LayoutCell {
 		return wrap;
 	}
 
-
 	/**
 	 * Sets the wrap.
 	 *
@@ -146,7 +143,6 @@ public class LayoutCell {
 	public void setWrap(boolean wrap) {
 		this.wrap = wrap;
 	}
-
 
 	/**
 	 * Gets the rgb font.
@@ -157,7 +153,6 @@ public class LayoutCell {
 		return rgbFont;
 	}
 
-
 	/**
 	 * Sets the rgb font.
 	 *
@@ -166,7 +161,6 @@ public class LayoutCell {
 	public void setRgbFont(ExcelColor rgbFont) {
 		this.rgbFont = rgbFont;
 	}
-
 
 	/**
 	 * Gets the rgb foreground.
@@ -177,7 +171,6 @@ public class LayoutCell {
 		return rgbForeground;
 	}
 
-
 	/**
 	 * Sets the rgb foreground.
 	 *
@@ -186,7 +179,6 @@ public class LayoutCell {
 	public void setRgbForeground(ExcelColor rgbForeground) {
 		this.rgbForeground = rgbForeground;
 	}
-
 
 	/**
 	 * Gets the fill patter type.
@@ -197,7 +189,6 @@ public class LayoutCell {
 		return fillPatterType;
 	}
 
-
 	/**
 	 * Sets the fill patter type.
 	 *
@@ -206,29 +197,6 @@ public class LayoutCell {
 	public void setFillPatterType(FillPatternType fillPatterType) {
 		this.fillPatterType = fillPatterType;
 	}
-
-
-	/**
-	 * Gets the format.
-	 *
-	 * @return the format
-	 */
-	public ColumnDateFormat getFormat() {
-		return format;
-	}
-
-
-	/**
-	 * Sets the format.
-	 *
-	 * @param format the new format
-	 */
-	public void setFormat(ColumnDateFormat format) {
-		this.format = format;
-	}
-
-
-	
 
 	/**
 	 * Gets the precision.
@@ -239,7 +207,6 @@ public class LayoutCell {
 		return precision;
 	}
 
-
 	/**
 	 * Sets the precision.
 	 *
@@ -249,6 +216,59 @@ public class LayoutCell {
 		this.precision = precision;
 	}
 
+	/**
+	 * Gets the rotation.
+	 *
+	 * @return the rotation
+	 */
+	public Integer getRotation() {
+		return rotation;
+	}
+
+	/**
+	 * Sets the rotation.
+	 *
+	 * @param rotation the new rotation
+	 */
+	public void setRotation(Integer rotation) {
+		this.rotation = rotation;
+	}
+
+	/**
+	 * Gets the format.
+	 *
+	 * @return the format
+	 */
+	public ColumnDateFormat getFormat() {
+		return format;
+	}
+
+	/**
+	 * Sets the format.
+	 *
+	 * @param format the new format
+	 */
+	public void setFormat(ColumnDateFormat format) {
+		this.format = format;
+	}
+
+	/**
+	 * Checks if is locked.
+	 *
+	 * @return the locked
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * Sets the locked.
+	 *
+	 * @param locked the new locked
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
 
 	/**
 	 * Hash code.
@@ -264,14 +284,15 @@ public class LayoutCell {
 		result = prime * result + ((font == null) ? 0 : font.hashCode());
 		result = prime * result + ((format == null) ? 0 : format.hashCode());
 		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
+		result = prime * result + (locked ? 1231 : 1237);
 		result = prime * result + ((precision == null) ? 0 : precision.hashCode());
 		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
 		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
+		result = prime * result + ((rotation == null) ? 0 : rotation.hashCode());
 		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
 		result = prime * result + (wrap ? 1231 : 1237);
 		return result;
 	}
-
 
 	/**
 	 * Equals.
@@ -304,6 +325,8 @@ public class LayoutCell {
 			return false;
 		if (horizontalAlignment != other.horizontalAlignment)
 			return false;
+		if (locked != other.locked)
+			return false;
 		if (precision == null) {
 			if (other.precision != null)
 				return false;
@@ -319,17 +342,17 @@ public class LayoutCell {
 				return false;
 		} else if (!rgbForeground.equals(other.rgbForeground))
 			return false;
+		if (rotation == null) {
+			if (other.rotation != null)
+				return false;
+		} else if (!rotation.equals(other.rotation))
+			return false;
 		if (verticalAlignment != other.verticalAlignment)
 			return false;
 		if (wrap != other.wrap)
 			return false;
 		return true;
 	}
-
-
-	
-	
-		
 	
 	
 	

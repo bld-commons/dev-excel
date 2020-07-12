@@ -1,27 +1,39 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelFunctionRowsImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionRowsImpl.
  */
-public class ExcelFunctionRowsImpl {
+public class ExcelFunctionRowsImpl implements Cloneable{
 
 	
 	/** The excel functions. */
-	protected ExcelFunctionRow[] excelFunctions;
+	private ExcelFunctionRow[] excelFunctions;
 	
 	/** The excel function merges. */
-	protected ExcelFunctionMergeRow[] excelFunctionMerges;
+	private ExcelFunctionMergeRow[] excelFunctionMerges;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function row.
@@ -57,6 +69,42 @@ public class ExcelFunctionRowsImpl {
 		super();
 		this.excelFunctions = excelFunctions;
 		this.excelFunctionMerges = excelFunctionMerges;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(excelFunctionMerges);
+		result = prime * result + Arrays.hashCode(excelFunctions);
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelFunctionRowsImpl other = (ExcelFunctionRowsImpl) obj;
+		if (!Arrays.equals(excelFunctionMerges, other.excelFunctionMerges))
+			return false;
+		if (!Arrays.equals(excelFunctions, other.excelFunctions))
+			return false;
+		return true;
 	}
 
 	/**
@@ -96,4 +144,5 @@ public class ExcelFunctionRowsImpl {
 	}
 	
 	
+
 }

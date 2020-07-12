@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -11,11 +12,22 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 /**
  * The Class ExcelMergeRowImpl.
  */
-public class ExcelMergeRowImpl {
+public class ExcelMergeRowImpl implements Cloneable{
 
 	
 	/** The reference field. */
-	protected String referenceField;
+	private String referenceField;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel merge row.
@@ -43,6 +55,24 @@ public class ExcelMergeRowImpl {
 	 */
 	public ExcelMergeRowImpl(String referenceField) {
 		super();
+		this.referenceField = referenceField;
+	}
+
+	/**
+	 * Gets the reference field.
+	 *
+	 * @return the reference field
+	 */
+	public String getReferenceField() {
+		return referenceField;
+	}
+
+	/**
+	 * Sets the reference field.
+	 *
+	 * @param referenceField the new reference field
+	 */
+	public void setReferenceField(String referenceField) {
 		this.referenceField = referenceField;
 	}
 
@@ -81,27 +111,8 @@ public class ExcelMergeRowImpl {
 			return false;
 		return true;
 	}
-
-	/**
-	 * Gets the reference field.
-	 *
-	 * @return the reference field
-	 */
-	public String getReferenceField() {
-		return referenceField;
-	}
-
-	/**
-	 * Sets the reference field.
-	 *
-	 * @param referenceField the new reference field
-	 */
-	public void setReferenceField(String referenceField) {
-		this.referenceField = referenceField;
-	}
-
 	
 	
-	
+
 	
 }

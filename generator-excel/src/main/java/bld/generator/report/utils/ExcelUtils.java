@@ -1,20 +1,24 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.utils.ExcelUtils.java
+*/
 package bld.generator.report.utils;
 
 import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.WordUtils;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The Class ExcelUtils.
+ *  
  */
 @SuppressWarnings("unchecked")
 @Component
@@ -30,8 +35,8 @@ public class ExcelUtils implements ApplicationContextAware {
 	/** The Constant BLD_GENERATOR. */
 	private static final String BLD_GENERATOR = "bld.generator";
 
-	/** The Constant logger. */
-	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
+	/** The Constant ANNOTATIONS. */
+//	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
 	/** The Constant ANNOTATIONS. */
 	public static final String ANNOTATIONS = "annotations";
@@ -39,8 +44,13 @@ public class ExcelUtils implements ApplicationContextAware {
 	/** The Constant ANNOTATION_DATA. */
 	public static final String ANNOTATION_DATA = "annotationData";
 	
+	
+	
 	/** The application context. */
 	private static ApplicationContext applicationContext;
+	
+	/** The Constant AUTO_SIZE_HEIGHT. */
+	public final static short AUTO_SIZE_HEIGHT = -1;
 
 	/**
 	 * Gets the annotation.
@@ -75,48 +85,6 @@ public class ExcelUtils implements ApplicationContextAware {
 	}
 
 	/**
-	 * Reflection annotation 2.
-	 *
-	 * @param <T>        the generic type
-	 * @param <K>        the key type
-	 * @param entity     the entity
-	 * @param annotation the annotation
-	 * @return the t
-	 */
-	public static <T, K extends Annotation> T reflectionAnnotation2(T entity, K annotation) {
-		List<Field> listField = Arrays.asList(entity.getClass().getDeclaredFields());
-		listField.addAll(Arrays.asList(entity.getClass().getSuperclass().getDeclaredFields()));
-		Class<K> classAnnotation = (Class<K>) annotation.getClass();
-		Class<T> classEntity = (Class<T>) entity.getClass();
-		for (Field field : listField) {
-			Object value = null;
-			String nameField = field.getName();
-			String setMethod = "set" + ("" + nameField.charAt(0)).toUpperCase() + nameField.substring(1);
-			Class<?> classField = field.getType();
-			try {
-				if (classAnnotation.getMethod(nameField) != null) {
-					value = classAnnotation.getMethod(nameField).invoke(annotation);
-					try {
-						classEntity.getMethod(setMethod, classField).invoke(entity, value);
-					} catch (Exception e) {
-						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith(BLD_GENERATOR)) {
-							Annotation fieldAnnotation = (Annotation) value;
-							value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
-							classEntity.getMethod(setMethod, classField).invoke(entity, value);
-
-						}
-					}
-
-				}
-			} catch (Exception e) {
-				logger.error("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
-			}
-		}
-
-		return entity;
-	}
-
-	/**
 	 * Reflection annotation.
 	 *
 	 * @param <T>        the generic type
@@ -126,8 +94,14 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the t
 	 */
 	public static <T, K extends Annotation> T reflectionAnnotation(T entity, K annotation) {
-		List<Field> listField = Arrays.asList(entity.getClass().getDeclaredFields());
-		listField.addAll(Arrays.asList(entity.getClass().getSuperclass().getDeclaredFields()));
+		
+		
+		List<Field> listField = new ArrayList<>();
+		Class<?>classT=entity.getClass();
+		do {
+			listField.addAll(Arrays.asList(classT.getDeclaredFields()));
+			classT=classT.getSuperclass();
+		}while(classT.getSuperclass()!=null && !classT.getName().equals(Object.class.getName()));
 		Map<String, Field> mapField = new HashMap<>();
 		for (Field field : listField)
 			mapField.put(field.getName(), field);
@@ -155,7 +129,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					}
 
 				} catch (Exception e) {
-					logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
+				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
 		}
@@ -200,6 +174,18 @@ public class ExcelUtils implements ApplicationContextAware {
 		return applicationContext;
 	}
 	
+	
+	/**
+	 * Gets the name parameter.
+	 *
+	 * @param parameter the parameter
+	 * @return the name parameter
+	 */
+	public static String getNameParameter(String parameter) {
+		parameter=WordUtils.capitalize(parameter.replace("_", " ")).replace(" ", "");
+		return (parameter.charAt(0)+"").toLowerCase()+parameter.substring(1);
+	}
+	
 	/**
 	 * Write to file.
 	 *
@@ -220,5 +206,80 @@ public class ExcelUtils implements ApplicationContextAware {
 
 	}
 	
+	/**
+	 * Calcolo coordinate function.
+	 *
+	 * @param row    the row
+	 * @param column the column
+	 * @return the string
+	 */
+	public static String calcoloCoordinateFunction(int row, int column) {
+		int mod = 0;
+		int div = column;
+		String coordinata = "";
+		do {
+			mod = div % 26;
+			mod += 65;
+			div = (div / 26) - 1;
+			coordinata = Character.toString((char) mod) + coordinata;
+		} while (div >= 0);
+		coordinata = coordinata + row;
 
+		return coordinata;
+	}
+
+
+	/**
+	 * Gets the key column.
+	 *
+	 * @param sheet the sheet
+	 * @param key   the key
+	 * @return the key column
+	 */
+	public static String getKeyColumn(Sheet sheet, String key) {
+		if (!key.contains("."))
+			key = sheet.getSheetName() + "." + key;
+		return key;
+	}
+	
+	
+	
+	/**
+	 * Gets the list field.
+	 *
+	 * @param classComponentExcel the class component excel
+	 * @return the list field
+	 */
+	public static Set<Field>getListField(Class<?> classComponentExcel){
+		Set<Field> listField = new HashSet<>();
+		Class<?> classApp = classComponentExcel;
+		do {
+			listField.addAll(Arrays.asList(classApp.getDeclaredFields()));
+			classApp = classApp.getSuperclass();
+		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
+		return listField;
+	}
+	
+	
+	/**
+	 * Width column.
+	 *
+	 * @param widthColumn the width column
+	 * @return the short
+	 */
+	public static short widthColumn(int widthColumn) {
+		return (short)(widthColumn*1036);
+	}
+	
+	/**
+	 * Hight row.
+	 *
+	 * @param rowHeight the hight row
+	 * @return the short
+	 */
+	public static short rowHeight(int rowHeight) {
+		if(rowHeight!=AUTO_SIZE_HEIGHT)
+			rowHeight=rowHeight*568;
+		return (short)rowHeight;
+	}
 }

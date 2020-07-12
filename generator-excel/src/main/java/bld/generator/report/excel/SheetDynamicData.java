@@ -1,6 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.SheetDynamicData.java
 */
 package bld.generator.report.excel;
 
@@ -9,13 +10,17 @@ import java.util.Map;
 
 import javax.validation.constraints.Size;
 
+import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SheetDynamicData.
- *
+ * <br>
+ * SheetDynamicData extends {@link bld.generator.report.excel.SheetData}, it manages dynamic columns through the mapExtraColumnAnnotation field.
+ * <br>
+ * mapExtraColumnAnnotation and mapValue(is a field of DynamicRowSheet) have the same keys.
  * @param <T> the generic type
+ * 
  */
 public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn{
 		
@@ -26,10 +31,10 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	/**
 	 * Instantiates a new sheet dynamic data.
 	 *
-	 * @param nameSheet the name sheet
+	 * @param sheetName the name sheet
 	 */
-	public SheetDynamicData(@Size(max = 30) String nameSheet) {
-		super(nameSheet);
+	public SheetDynamicData(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+		super(sheetName);
 		this.mapExtraColumnAnnotation=new HashMap<>();
 	}
 
@@ -51,6 +56,44 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	 */
 	public void setMapExtraColumnAnnotation(Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation) {
 		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;
+	}
+
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((mapExtraColumnAnnotation == null) ? 0 : mapExtraColumnAnnotation.hashCode());
+		return result;
+	}
+
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SheetDynamicData<?> other = (SheetDynamicData<?>) obj;
+		if (mapExtraColumnAnnotation == null) {
+			if (other.mapExtraColumnAnnotation != null)
+				return false;
+		} else if (!mapExtraColumnAnnotation.equals(other.mapExtraColumnAnnotation))
+			return false;
+		return true;
 	}
 
 

@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelRgbColor.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,7 +13,19 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelRgbColor.
+ * The Interface ExcelRgbColor.<br>
+ * ExcelRgbColor is used to set the color by the RGB color model.
+ * <ul>
+ * <li>Red</li>
+ * <li>Green</li>
+ * <li>Blue</li>
+ * </ul>
+ * 
+ * It is used on following annotations:
+ * <ul>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelHeaderCellLayout}</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelCellLayout}</li>
+ * </ul>
  */
 @Retention(RUNTIME)
 @Target({ })

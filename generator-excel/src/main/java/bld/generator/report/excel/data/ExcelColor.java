@@ -1,12 +1,13 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.ExcelColor.java
+*/
 package bld.generator.report.excel.data;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExcelColor.
+ * The Class ExcelColor.<br>
+ * This class is used as a property on {@link bld.generator.report.excel.data.LayoutCell} class.
  */
 public class ExcelColor {
 
@@ -111,6 +112,7 @@ public class ExcelColor {
 			return false;
 		return true;
 	}
+
 	
 	
 	

@@ -1,6 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.DynamicColumn.java
 */
 package bld.generator.report.excel;
 
@@ -10,6 +11,14 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
  * The Interface DynamicColumn.
+ * <br>
+ * This insterface is implemented by classes that manage the dynamic columns:
+ * <br>
+ * <ol>
+ * 	<li>{@link bld.generator.report.excel.SheetDynamicData}</li>
+ * 	<li>{@link bld.generator.report.excel.SheetDynamicFunctionTotal}</li>
+ * </ol>
+ * 
  */
 public interface DynamicColumn {
 

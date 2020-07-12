@@ -1,12 +1,14 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.constant.ColumnDateFormat.java
+*/
 package bld.generator.report.excel.constant;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum ColumnDateFormat.
+ * The Enum ColumnDateFormat.<br>
+ * ColumnDateFormat is used to set the date format. It is used on the following annotation {@link bld.generator.report.excel.annotation.ExcelDate}.
+ * 
  */
 public enum ColumnDateFormat {
 
@@ -20,7 +22,12 @@ public enum ColumnDateFormat {
 	YYYY_MM_DD("yyyy/mm/dd"),
 	
 	/** The yyyy mm dd hh mm ss. */
-	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss")
+	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
+	
+	/** The parameter. <br>
+	 * This option is set on properties file
+	 * */
+	PARAMETER("${bld.commons.date.format}")
 	;
 	
 	/** The value. */
@@ -43,6 +50,8 @@ public enum ColumnDateFormat {
 	public String getValue() {
 		return value;
 	}
+
+	
 	
 	
 	

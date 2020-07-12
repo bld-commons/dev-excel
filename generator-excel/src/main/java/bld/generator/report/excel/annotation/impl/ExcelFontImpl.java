@@ -1,37 +1,47 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelFontImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
 
-import org.apache.commons.lang3.StringUtils;
-
 import bld.generator.report.excel.annotation.ExcelFont;
+import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.UnderlineType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFontImpl.
  */
-public class ExcelFontImpl{
+public class ExcelFontImpl implements Cloneable{
 
 	
 	/** The underline. */
-	protected UnderlineType underline;
+	private UnderlineType underline;
 	
 	/** The size. */
-	protected short size;
+	private short size;
 	
 	/** The italic. */
-	protected boolean italic;
+	private boolean italic;
 	
 	/** The font. */
-	protected String font;
+	private FontType font;
 	
 	/** The bold. */
-	protected boolean bold;
+	private boolean bold;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel font.
@@ -40,7 +50,7 @@ public class ExcelFontImpl{
 	 */
 	public ExcelFont getExcelFont() {
 		ExcelFont excelFont=null;
-		if(underline!=null && StringUtils.isNotBlank(font))
+		if(underline!=null && font!=null)
 		excelFont=new ExcelFont() {
 			
 			@Override
@@ -64,7 +74,7 @@ public class ExcelFontImpl{
 			}
 			
 			@Override
-			public String font() {
+			public FontType font() {
 				return font;
 			}
 			
@@ -85,7 +95,7 @@ public class ExcelFontImpl{
 	 * @param font      the font
 	 * @param bold      the bold
 	 */
-	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, String font, boolean bold) {
+	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, FontType font, boolean bold) {
 		super();
 		this.underline = underline;
 		this.size = size;
@@ -93,53 +103,17 @@ public class ExcelFontImpl{
 		this.font = font;
 		this.bold = bold;
 	}
-
+	
 	/**
-	 * Hash code.
-	 *
-	 * @return the int
+	 * Instantiates a new excel font impl.
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (bold ? 1231 : 1237);
-		result = prime * result + ((font == null) ? 0 : font.hashCode());
-		result = prime * result + (italic ? 1231 : 1237);
-		result = prime * result + size;
-		result = prime * result + ((underline == null) ? 0 : underline.hashCode());
-		return result;
-	}
-
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExcelFontImpl other = (ExcelFontImpl) obj;
-		if (bold != other.bold)
-			return false;
-		if (font == null) {
-			if (other.font != null)
-				return false;
-		} else if (!font.equals(other.font))
-			return false;
-		if (italic != other.italic)
-			return false;
-		if (size != other.size)
-			return false;
-		if (underline != other.underline)
-			return false;
-		return true;
+	public ExcelFontImpl() {
+		super();
+		this.underline = UnderlineType.NONE;
+		this.size = 11;
+		this.italic = false;
+		this.font = FontType.CALIBRI;
+		this.bold = false;
 	}
 
 	/**
@@ -201,7 +175,7 @@ public class ExcelFontImpl{
 	 *
 	 * @return the font
 	 */
-	public String getFont() {
+	public FontType getFont() {
 		return font;
 	}
 
@@ -210,7 +184,7 @@ public class ExcelFontImpl{
 	 *
 	 * @param font the new font
 	 */
-	public void setFont(String font) {
+	public void setFont(FontType font) {
 		this.font = font;
 	}
 
@@ -231,7 +205,52 @@ public class ExcelFontImpl{
 	public void setBold(boolean bold) {
 		this.bold = bold;
 	}
-	
-	
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (bold ? 1231 : 1237);
+		result = prime * result + ((font == null) ? 0 : font.hashCode());
+		result = prime * result + (italic ? 1231 : 1237);
+		result = prime * result + size;
+		result = prime * result + ((underline == null) ? 0 : underline.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelFontImpl other = (ExcelFontImpl) obj;
+		if (bold != other.bold)
+			return false;
+		if (font != other.font)
+			return false;
+		if (italic != other.italic)
+			return false;
+		if (size != other.size)
+			return false;
+		if (underline != other.underline)
+			return false;
+		return true;
+	}
+
+
 	
 }

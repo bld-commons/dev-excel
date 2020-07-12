@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -14,39 +15,42 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.constant.ExcelConstant;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelCellLayoutImpl.
  */
-public class ExcelCellLayoutImpl {
+public class ExcelCellLayoutImpl implements Cloneable{
 
 	/** The wrap. */
-	protected boolean wrap;
+	private boolean wrap;
 	
 	/** The vertical alignment. */
-	protected VerticalAlignment verticalAlignment;
+	private VerticalAlignment verticalAlignment;
 	
 	/** The rgb foreground. */
-	protected ExcelRgbColor rgbForeground;
+	private ExcelRgbColor rgbForeground;
 	
 	/** The rgb font. */
-	protected ExcelRgbColor rgbFont;
+	private ExcelRgbColor rgbFont;
 	
 	/** The precision. */
-	protected int precision;
+	private int precision;
 	
 	/** The horizontal alignment. */
-	protected HorizontalAlignment horizontalAlignment;
+	private HorizontalAlignment horizontalAlignment;
 	
 	/** The font. */
-	protected ExcelFont font;
+	private ExcelFont font;
 	
 	/** The fill pattern type. */
-	protected FillPatternType fillPatternType;
+	private FillPatternType fillPatternType;
 	
 	/** The border. */
-	protected ExcelBorder border;
+	private ExcelBorder border;
+	
+	/** The locked. */
+	private boolean locked;
 
 	/**
 	 * Gets the excel cell layout.
@@ -105,6 +109,11 @@ public class ExcelCellLayoutImpl {
 			public ExcelBorder border() {
 				return border;
 			}
+
+			@Override
+			public boolean locked() {
+				return locked;
+			}
 		};
 		return excelCellLayout;
 	}
@@ -134,86 +143,65 @@ public class ExcelCellLayoutImpl {
 		this.font = font;
 		this.fillPatternType = fillPatternType;
 		this.border = border;
+		this.locked=false;
+	}
+	
+	/**
+	 * Instantiates a new excel cell layout impl.
+	 *
+	 * @param wrap                the wrap
+	 * @param verticalAlignment   the vertical alignment
+	 * @param rgbForeground       the rgb foreground
+	 * @param rgbFont             the rgb font
+	 * @param precision           the precision
+	 * @param horizontalAlignment the horizontal alignment
+	 * @param font                the font
+	 * @param fillPatternType     the fill pattern type
+	 * @param border              the border
+	 * @param locked              the locked
+	 */
+	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
+			ExcelBorder border, boolean locked) {
+		super();
+		this.wrap = wrap;
+		this.verticalAlignment = verticalAlignment;
+		this.rgbForeground = rgbForeground;
+		this.rgbFont = rgbFont;
+		this.precision = precision;
+		this.horizontalAlignment = horizontalAlignment;
+		this.font = font;
+		this.fillPatternType = fillPatternType;
+		this.border = border;
+		this.locked = locked;
 	}
 
 	/**
-	 * To string.
-	 *
-	 * @return the string
+	 * Instantiates a new excel cell layout impl.
 	 */
-	@Override
-	public String toString() {
-		return "ExcelCellLayoutImpl [wrap=" + wrap + ", verticalAlignment=" + verticalAlignment + ", rgbForeground=" + rgbForeground + ", rgbFont=" + rgbFont + ", precision=" + precision + ", horizontalAlignment=" + horizontalAlignment + ", font="
-				+ font + ", fillPatternType=" + fillPatternType + ", border=" + border + "]";
+	public ExcelCellLayoutImpl()  {
+		super();
+		this.wrap = true;
+		this.verticalAlignment = VerticalAlignment.CENTER;
+		this.rgbForeground = ExcelConstant.RGB_FOREGROUND.getExcelRgbColor();
+		this.rgbFont = ExcelConstant.RGB_FONT.getExcelRgbColor();
+		this.precision = -1;
+		this.horizontalAlignment = HorizontalAlignment.RIGHT;
+		this.font = ExcelConstant.FONT.getExcelFont();
+		this.fillPatternType = FillPatternType.SOLID_FOREGROUND;
+		this.border = ExcelConstant.BORDER.getExcelBorder();
 	}
 
+	
+	
 	/**
-	 * Hash code.
+	 * Clone.
 	 *
-	 * @return the int
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
 	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((border == null) ? 0 : border.hashCode());
-		result = prime * result + ((fillPatternType == null) ? 0 : fillPatternType.hashCode());
-		result = prime * result + ((font == null) ? 0 : font.hashCode());
-		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
-		result = prime * result + precision;
-		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
-		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
-		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
-		result = prime * result + (wrap ? 1231 : 1237);
-		return result;
-	}
-
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExcelCellLayoutImpl other = (ExcelCellLayoutImpl) obj;
-		if (border == null) {
-			if (other.border != null)
-				return false;
-		} else if (!border.equals(other.border))
-			return false;
-		if (fillPatternType != other.fillPatternType)
-			return false;
-		if (font == null) {
-			if (other.font != null)
-				return false;
-		} else if (!font.equals(other.font))
-			return false;
-		if (horizontalAlignment != other.horizontalAlignment)
-			return false;
-		if (precision != other.precision)
-			return false;
-		if (rgbFont == null) {
-			if (other.rgbFont != null)
-				return false;
-		} else if (!rgbFont.equals(other.rgbFont))
-			return false;
-		if (rgbForeground == null) {
-			if (other.rgbForeground != null)
-				return false;
-		} else if (!rgbForeground.equals(other.rgbForeground))
-			return false;
-		if (verticalAlignment != other.verticalAlignment)
-			return false;
-		if (wrap != other.wrap)
-			return false;
-		return true;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	/**
@@ -378,7 +366,95 @@ public class ExcelCellLayoutImpl {
 		this.border = border;
 	}
 
-	
+	/**
+	 * Checks if is locked.
+	 *
+	 * @return the locked
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * Sets the locked.
+	 *
+	 * @param locked the new locked
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((border == null) ? 0 : border.hashCode());
+		result = prime * result + ((fillPatternType == null) ? 0 : fillPatternType.hashCode());
+		result = prime * result + ((font == null) ? 0 : font.hashCode());
+		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
+		result = prime * result + (locked ? 1231 : 1237);
+		result = prime * result + precision;
+		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
+		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
+		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
+		result = prime * result + (wrap ? 1231 : 1237);
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelCellLayoutImpl other = (ExcelCellLayoutImpl) obj;
+		if (border == null) {
+			if (other.border != null)
+				return false;
+		} else if (!border.equals(other.border))
+			return false;
+		if (fillPatternType != other.fillPatternType)
+			return false;
+		if (font == null) {
+			if (other.font != null)
+				return false;
+		} else if (!font.equals(other.font))
+			return false;
+		if (horizontalAlignment != other.horizontalAlignment)
+			return false;
+		if (locked != other.locked)
+			return false;
+		if (precision != other.precision)
+			return false;
+		if (rgbFont == null) {
+			if (other.rgbFont != null)
+				return false;
+		} else if (!rgbFont.equals(other.rgbFont))
+			return false;
+		if (rgbForeground == null) {
+			if (other.rgbForeground != null)
+				return false;
+		} else if (!rgbForeground.equals(other.rgbForeground))
+			return false;
+		if (verticalAlignment != other.verticalAlignment)
+			return false;
+		if (wrap != other.wrap)
+			return false;
+		return true;
+	}
 	
 	
 	

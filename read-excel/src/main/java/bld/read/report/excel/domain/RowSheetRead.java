@@ -5,7 +5,8 @@
 package bld.read.report.excel.domain;
 
 /**
- * The Interface RowSheetRead.
+ * The Interface RowSheetRead.<br>
+ * RowSheetRead is used to create an object that represents the row of the sheet.
  */
 public interface RowSheetRead {
 

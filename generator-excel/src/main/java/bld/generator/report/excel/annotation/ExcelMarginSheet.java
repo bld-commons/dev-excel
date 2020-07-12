@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelMarginSheet.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -11,9 +12,15 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelMarginSheet.
+ * The Interface ExcelMarginSheet.<br>
+ * ExcelMarginSheet is used to set the margin for all the cells of the sheet.<br>
+ * <ol>
+ * <li>Top</li>
+ * <li>Bottom</li>
+ * <li>Left</li>
+ * <li>Right</li>
+ * </ol>
  */
 @Retention(RUNTIME)
 @Target(TYPE)

@@ -1,5 +1,3 @@
-/generator-excel/target/
-/read-excel/target/
-/.settings/
-/target/
+**/.settings/
+**/target/
 

@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelBorder.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,9 +13,25 @@ import java.lang.annotation.Target;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelBorder.
+ * <br>
+ * ExcelBorder is used to define the border types through enumeration BorderStyle.
+ * <br>
+ * ExcelBorder is composed of 4 properties:
+ * <ul>
+ * <li>bottom</li>
+ * <li>left</li>
+ * <li>right</li>
+ * <li>top</li>
+ * </ul>
+ * <br>
+ * It is a property of the following annotations:
+ * <ul>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelCellLayout}</li>
+ * <li>{@link bld.generator.report.excel.annotation.ExcelHeaderCellLayout}</li>
+ * </ul>
+ * 
  */
 @Documented
 @Retention(RUNTIME)

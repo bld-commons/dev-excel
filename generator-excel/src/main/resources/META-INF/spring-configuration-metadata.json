@@ -1,0 +1,40 @@
+{"groups": [
+    {
+        "name": "bld.commons.resource.path",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },
+    {
+        "name": "bld.commons.date.format",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.report.excel",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    }
+    
+],"properties": [
+    {
+        "name": "bld.commons.resource.path.xls",
+        "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.resource.path.xlsx",
+        "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.date.format",
+        "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.report.excel.titolo",
+        "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.report.excel.date",
+        "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    }
+]
+}

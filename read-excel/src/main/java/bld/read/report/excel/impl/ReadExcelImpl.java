@@ -29,20 +29,26 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.annotation.ExcelReadSheet;
+import bld.read.report.excel.constant.ExcelExceptionType;
+import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.excel.domain.RowSheetRead;
 import bld.read.report.excel.domain.SheetRead;
-import bld.read.report.utils.ExcelType;
+import bld.read.report.excel.exception.ExcelReaderException;
 
 /**
- * The Class ReadExcelImpl.
+ * The Class ReadExcelImpl.<br>
+ * ReadExcelImpl is the class that read excel file and converts it to a SheetRead list.<br>
+ * 
  */
 @SuppressWarnings({ "resource", "unchecked" })
 @Component
@@ -55,8 +61,8 @@ public class ReadExcelImpl implements ReadExcel {
 	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
 
 	/**
-	 * Convert excel to entity.
-	 *
+	 * Convert excel to entity.<br>
+	 * This function read excel file by byte array.<br>
 	 * @param excelRead the excel read
 	 * @return the excel read
 	 * @throws Exception the exception
@@ -68,8 +74,8 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Convert excel to entity.
-	 *
+	 * Convert excel to entity.<br>
+	 * This function read excel file by a path file.<br>  
 	 * @param excelRead the excel read
 	 * @param pathFile  the path file
 	 * @return the excel read
@@ -98,12 +104,17 @@ public class ReadExcelImpl implements ReadExcel {
 		} else {
 			workbook = new XSSFWorkbook(inputStream);
 		}
-		for (Class<? extends SheetRead<? extends RowSheetRead>> classSheet : excelRead.getListClassSheet()) {
-			SheetRead<T>sheetType=(SheetRead<T>) classSheet.newInstance();
+		for (SheetRead<? extends RowSheetRead> sheet: excelRead.getListSheetRead()) {
+			SheetRead<T>sheetType=(SheetRead<T>) sheet;
+			Class<? extends SheetRead<? extends RowSheetRead>> classSheet=(Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
 			excelRead.getMapSheet().put(classSheet, sheetType);
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
-			logger.info("Sheet: " + excelReadSheet.nameSheet());
-			Sheet worksheet = workbook.getSheet(excelReadSheet.nameSheet());
+			logger.info("Sheet: " + sheetType.getSheetName());
+			if(sheetType.getSheetName().length()>ExcelConstant.SHEET_NAME_SIZE)
+				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
+			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
+			if(worksheet==null)
+				throw new ExcelReaderException(ExcelExceptionType.SHEET_NOT_FOUND,sheetType.getSheetName());
 			Row header = worksheet.getRow(excelReadSheet.startRow());
 			Map<String, Integer> mapColumns = this.getMapColumns(header, excelReadSheet);
 			int startRow = excelReadSheet.startRow() + 1;
@@ -124,9 +135,17 @@ public class ReadExcelImpl implements ReadExcel {
 						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 							ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
 							if (!mapColumns.containsKey(excelReadColumn.name()))
-								throw new Exception("Not exist the column: " + excelReadColumn.name());
+								throw new ExcelReaderException(ExcelExceptionType.COLUMN_NOT_FOUND,excelReadColumn.name());
 							int indexColumn = mapColumns.get(excelReadColumn.name());
 							Cell cell = row.getCell(indexColumn);
+							for(int indexRegion=0;indexRegion<worksheet.getNumMergedRegions();indexRegion++) {
+								CellRangeAddress mergedCell=worksheet.getMergedRegion(indexRegion);
+								if(mergedCell.isInRange(indexRow, indexColumn)) {
+									cell=worksheet.getRow(mergedCell.getFirstRow()).getCell(indexColumn);
+									break;
+								}
+								
+							}
 							if (cell != null && cell.getCellType() != CellType.BLANK) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase()
 										+ field.getName().substring(1);

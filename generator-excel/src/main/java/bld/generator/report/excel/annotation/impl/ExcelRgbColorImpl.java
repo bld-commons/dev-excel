@@ -1,27 +1,38 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelRgbColorImpl.
  */
-public class ExcelRgbColorImpl {
+public class ExcelRgbColorImpl implements Cloneable{
 
 	/** The blue. */
-	protected byte blue;
+	private byte blue;
 	
 	/** The red. */
-	protected byte red;
+	private byte red;
 	
 	/** The green. */
-	protected byte green;
+	private byte green;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel rgb color.
@@ -58,11 +69,11 @@ public class ExcelRgbColorImpl {
 	/**
 	 * Instantiates a new excel rgb color impl.
 	 *
-	 * @param blue  the blue
 	 * @param red   the red
 	 * @param green the green
+	 * @param blue  the blue
 	 */
-	public ExcelRgbColorImpl(byte blue, byte red, byte green) {
+	public ExcelRgbColorImpl(byte red, byte green,byte blue) {
 		super();
 		this.blue = blue;
 		this.red = red;
@@ -161,5 +172,7 @@ public class ExcelRgbColorImpl {
 	public void setGreen(byte green) {
 		this.green = green;
 	}
+
+	
 
 }

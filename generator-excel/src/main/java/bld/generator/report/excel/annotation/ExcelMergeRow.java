@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelMergeRow.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -12,7 +13,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * The Interface ExcelMergeRow.
+ * The Interface ExcelMergeRow.<br>
+ * ExcelMergeRow works as follows:<br>
+ * It is used to merge cells after checking the equality the reference field values.<br>
+ * ReferenceField is empty only to the field identifier of the table and it must be in the first column.<br>
+ * 
+ * ExcelMergeRow is an annotation of the fields within {@link bld.generator.report.excel.RowSheet} classes. 
+ * 
  */
 @Retention(RUNTIME)
 @Target(FIELD)

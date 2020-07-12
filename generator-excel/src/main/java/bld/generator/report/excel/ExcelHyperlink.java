@@ -1,14 +1,16 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.ExcelHyperlink.java
+*/
 package bld.generator.report.excel;
 
 import org.apache.poi.common.usermodel.HyperlinkType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelHyperlink.
+ * <br>
+ * ExcelHyperlink is used by {@link bld.generator.report.excel.RowSheet} classes, it is used to write a hyperlink field in tables.
  */
 public class ExcelHyperlink {
 
@@ -46,12 +48,30 @@ public class ExcelHyperlink {
 	}
 
 	/**
+	 * Gets the address document.
+	 *
+	 * @return the address document
+	 */
+	public String getAddressDocument() {
+		return "'"+this.address.replace("'", "''")+"'!"+this.column+this.row;
+	}
+
+	/**
 	 * Gets the value.
 	 *
 	 * @return the value
 	 */
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * Sets the value.
+	 *
+	 * @param value the new value
+	 */
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	/**
@@ -64,12 +84,30 @@ public class ExcelHyperlink {
 	}
 
 	/**
+	 * Sets the address.
+	 *
+	 * @param address the new address
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	/**
 	 * Gets the hyperlink type.
 	 *
 	 * @return the hyperlink type
 	 */
 	public HyperlinkType getHyperlinkType() {
 		return hyperlinkType;
+	}
+
+	/**
+	 * Sets the hyperlink type.
+	 *
+	 * @param hyperlinkType the new hyperlink type
+	 */
+	public void setHyperlinkType(HyperlinkType hyperlinkType) {
+		this.hyperlinkType = hyperlinkType;
 	}
 
 	/**
@@ -82,6 +120,15 @@ public class ExcelHyperlink {
 	}
 
 	/**
+	 * Sets the row.
+	 *
+	 * @param row the new row
+	 */
+	public void setRow(Integer row) {
+		this.row = row;
+	}
+
+	/**
 	 * Gets the column.
 	 *
 	 * @return the column
@@ -89,71 +136,14 @@ public class ExcelHyperlink {
 	public String getColumn() {
 		return column;
 	}
-	
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		result = prime * result + ((hyperlinkType == null) ? 0 : hyperlinkType.hashCode());
-		result = prime * result + ((row == null) ? 0 : row.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		return result;
-	}
 
 	/**
-	 * Equals.
+	 * Sets the column.
 	 *
-	 * @param obj the obj
-	 * @return true, if successful
+	 * @param column the new column
 	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ExcelHyperlink other = (ExcelHyperlink) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		} else if (!column.equals(other.column))
-			return false;
-		if (hyperlinkType != other.hyperlinkType)
-			return false;
-		if (row == null) {
-			if (other.row != null)
-				return false;
-		} else if (!row.equals(other.row))
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		return true;
-	}
-
-	/**
-	 * Gets the address document.
-	 *
-	 * @return the address document
-	 */
-	public String getAddressDocument() {
-		return "'"+this.address.replace("'", "''")+"'!"+this.column+this.row;
+	public void setColumn(String column) {
+		this.column = column;
 	}
 	
 	

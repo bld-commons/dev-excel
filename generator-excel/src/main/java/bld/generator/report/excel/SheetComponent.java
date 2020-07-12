@@ -1,19 +1,28 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.SheetComponent.java
+*/
 package bld.generator.report.excel;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface SheetComponent.
+ * <br>
+ * SheetComponet is implemented from:<br>
+ * <ol> 
+ * <li>{@link bld.generator.report.excel.SheetData}</li>
+ * <li>{@link bld.generator.report.excel.SheetSummary}</li>
+ * </ol>
+ * <br>
+ * Its is used to merge different sheet through the class {@link bld.generator.report.excel.MergeSheet} 
  */
 public interface SheetComponent {
 
 	/**
-	 * Sets the name sheet.
+	 * Sets the sheet name.
 	 *
-	 * @param nameSheet the new name sheet
+	 * @param sheetName the new sheet name
 	 */
-	public void setNameSheet(String nameSheet);
+	public void setSheetName(String sheetName);
 }

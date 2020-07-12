@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelFunctionRows.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -13,7 +14,14 @@ import java.lang.annotation.Target;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ExcelFunctionRows.
+ * The Interface ExcelFunctionRows.<br>
+ * ExcelFunctionRows is used to manage 2 lists:
+ * <ol>
+ * <li>excelFunctions</li>
+ * <li>excelFunctionMerges</li>
+ * </ol> 
+ * 
+ * It must be managed on {@link bld.generator.report.excel.RowSheet} classes.
  */
 @Retention(RUNTIME)
 @Target(TYPE)

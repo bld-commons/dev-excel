@@ -1,0 +1,59 @@
+bld:
+  commons:
+    resource:
+      path:
+        xls: /excel/Copertina.xls
+        xlsx: /excel/Copertina.xlsx
+    date:
+      format: dd/MM/yyyy
+    report:
+      excel:
+        titolo: A12
+        date: A18
+
+
+
+autore-libri-row:
+  nome:
+    name-column: Nome
+  matricola:
+    name-column: Matricola
+  cognome:
+    name-column: Cognome
+
+
+
+
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: DEBUG
+      hibernate: ERROR
+
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/excel_db
+    username: ${EXCEL_USER_DB}
+    password: ${EXCEL_PASSWORD_DB}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: public
+        jdbc:
+          lob:
+            non_contextual_creation: true 
+        format_sql: true    
+        ddl-auto: auto
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    
+    
+    
+    
+           

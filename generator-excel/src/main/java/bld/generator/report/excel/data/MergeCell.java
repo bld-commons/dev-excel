@@ -1,23 +1,27 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.MergeCell.java
+*/
 package bld.generator.report.excel.data;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MergeCell.
  */
+
+/**
+ * Instantiates a new merge cell.
+ */
 public class MergeCell {
 
-	/** The row from. */
-	private int rowFrom;
+	/** The row start. */
+	private int rowStart;
 
-	/** The row to. */
-	private int rowTo;
+	/** The row end. */
+	private int rowEnd;
 
 	/** The column from. */
 	private int columnFrom;
@@ -33,84 +37,41 @@ public class MergeCell {
 	
 	/** The cell style from. */
 	private CellStyle cellStyleFrom;
-	
-	/** The cal row start. */
-	private Integer calRowStart;
-	
-	/** The cal row end. */
-	private Integer calRowEnd;
-	
 
 	/**
-	 * Gets the cal row start.
+	 * Gets the row start.
 	 *
-	 * @return the cal row start
+	 * @return the row start
 	 */
-	public Integer getCalRowStart() {
-		return calRowStart;
+	public int getRowStart() {
+		return rowStart;
 	}
 
 	/**
-	 * Sets the cal row start.
+	 * Sets the row start.
 	 *
-	 * @param calRowStart the new cal row start
+	 * @param rowStart the new row start
 	 */
-	public void setCalRowStart(Integer calRowStart) {
-		this.calRowStart = calRowStart;
+	public void setRowStart(int rowStart) {
+		this.rowStart = rowStart;
 	}
 
 	/**
-	 * Gets the cal row end.
+	 * Gets the row end.
 	 *
-	 * @return the cal row end
+	 * @return the row end
 	 */
-	public Integer getCalRowEnd() {
-		return calRowEnd;
+	public int getRowEnd() {
+		return rowEnd;
 	}
 
 	/**
-	 * Sets the cal row end.
+	 * Sets the row end.
 	 *
-	 * @param calRowEnd the new cal row end
+	 * @param rowEnd the new row end
 	 */
-	public void setCalRowEnd(Integer calRowEnd) {
-		this.calRowEnd = calRowEnd;
-	}
-
-	/**
-	 * Gets the row from.
-	 *
-	 * @return the row from
-	 */
-	public int getRowFrom() {
-		return rowFrom;
-	}
-
-	/**
-	 * Sets the row from.
-	 *
-	 * @param rowFrom the new row from
-	 */
-	public void setRowFrom(int rowFrom) {
-		this.rowFrom = rowFrom;
-	}
-
-	/**
-	 * Gets the row to.
-	 *
-	 * @return the row to
-	 */
-	public int getRowTo() {
-		return rowTo;
-	}
-
-	/**
-	 * Sets the row to.
-	 *
-	 * @param rowTo the new row to
-	 */
-	public void setRowTo(int rowTo) {
-		this.rowTo = rowTo;
+	public void setRowEnd(int rowEnd) {
+		this.rowEnd = rowEnd;
 	}
 
 	/**
@@ -204,13 +165,65 @@ public class MergeCell {
 	}
 
 	/**
-	 * To string.
+	 * Hash code.
 	 *
-	 * @return the string
+	 * @return the int
 	 */
 	@Override
-	public String toString() {
-		return "MergeColumn [rowFrom=" + rowFrom + ", rowTo=" + rowTo + ", columnFrom=" + columnFrom + ", columnTo=" + columnTo + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cellFrom == null) ? 0 : cellFrom.hashCode());
+		result = prime * result + ((cellStyleFrom == null) ? 0 : cellStyleFrom.hashCode());
+		result = prime * result + columnFrom;
+		result = prime * result + columnTo;
+		result = prime * result + rowEnd;
+		result = prime * result + rowStart;
+		result = prime * result + ((sheetHeader == null) ? 0 : sheetHeader.hashCode());
+		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MergeCell other = (MergeCell) obj;
+		if (cellFrom == null) {
+			if (other.cellFrom != null)
+				return false;
+		} else if (!cellFrom.equals(other.cellFrom))
+			return false;
+		if (cellStyleFrom == null) {
+			if (other.cellStyleFrom != null)
+				return false;
+		} else if (!cellStyleFrom.equals(other.cellStyleFrom))
+			return false;
+		if (columnFrom != other.columnFrom)
+			return false;
+		if (columnTo != other.columnTo)
+			return false;
+		if (rowEnd != other.rowEnd)
+			return false;
+		if (rowStart != other.rowStart)
+			return false;
+		if (sheetHeader == null) {
+			if (other.sheetHeader != null)
+				return false;
+		} else if (!sheetHeader.equals(other.sheetHeader))
+			return false;
+		return true;
+	}
+	
+	
+	
 }

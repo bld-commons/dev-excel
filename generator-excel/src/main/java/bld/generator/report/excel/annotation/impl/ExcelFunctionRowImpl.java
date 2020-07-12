@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelFunctionRowImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -11,20 +12,30 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelFunctionRowImpl.
  */
-public class ExcelFunctionRowImpl {
+public class ExcelFunctionRowImpl implements Cloneable{
 
 	/** The excel cells layout. */
-	protected ExcelCellLayout excelCellsLayout;
+	private ExcelCellLayout excelCellsLayout;
 	
 	/** The excel column. */
-	protected ExcelColumn excelColumn;
+	private ExcelColumn excelColumn;
 	
 	/** The excel function. */
-	protected ExcelFunction excelFunction;
+	private ExcelFunction excelFunction;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel function.
@@ -117,6 +128,54 @@ public class ExcelFunctionRowImpl {
 		this.excelFunction = excelFunction;
 	}
 
-	
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((excelCellsLayout == null) ? 0 : excelCellsLayout.hashCode());
+		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
+		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelFunctionRowImpl other = (ExcelFunctionRowImpl) obj;
+		if (excelCellsLayout == null) {
+			if (other.excelCellsLayout != null)
+				return false;
+		} else if (!excelCellsLayout.equals(other.excelCellsLayout))
+			return false;
+		if (excelColumn == null) {
+			if (other.excelColumn != null)
+				return false;
+		} else if (!excelColumn.equals(other.excelColumn))
+			return false;
+		if (excelFunction == null) {
+			if (other.excelFunction != null)
+				return false;
+		} else if (!excelFunction.equals(other.excelFunction))
+			return false;
+		return true;
+	}
+
+
 	
 }

@@ -1,0 +1,39 @@
+bld:
+  commons:
+    resource:
+      path:
+        xls: /excel/Copertina.xls
+        xlsx: /excel/Copertina.xlsx
+    date:
+      format: dd/MM/yyyy
+    report:
+      excel:
+        titolo: A12
+        date: A18
+
+
+
+autore-libri-row:
+  nome:
+    name-column: Nome
+  matricola:
+    name-column: Matricola
+  cognome:
+    name-column: Cognome
+
+
+
+
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: DEBUG
+      hibernate: ERROR
+
+
+
+
+           

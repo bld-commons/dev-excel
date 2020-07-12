@@ -1,18 +1,23 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.config.ExcelGeneratorConfiguration.java
+*/
 package bld.generator.report.excel.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import bld.generator.report.excel.GenerateExcel;
+import bld.generator.report.excel.query.ExcelQueryComponent;
+import bld.generator.report.excel.query.impl.ExcelQueryComponentImpl;
 import bld.generator.report.utils.ValueProps;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExcelGeneratorConfiguration.
+ * The Class ExcelGeneratorConfiguration.<br>
+ * This class is for configurations.
  */
 @Configuration
 public class ExcelGeneratorConfiguration {
@@ -44,6 +49,10 @@ public class ExcelGeneratorConfiguration {
 	}
 
 	
-	
+	@Bean
+	@ConditionalOnProperty(value="spring.datasource.url")
+	public ExcelQueryComponent excelQueryComponent() {
+		return new ExcelQueryComponentImpl();
+	}
 	
 }

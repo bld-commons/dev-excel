@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelDateImpl.java
+*/
 
 package bld.generator.report.excel.annotation.impl;
 
@@ -10,15 +11,25 @@ import java.lang.annotation.Annotation;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelDateImpl.
  */
-public class ExcelDateImpl{
+public class ExcelDateImpl implements Cloneable{
 
 	
 	/** The format. */
-	protected ColumnDateFormat format;
+	private ColumnDateFormat format;
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel date.
@@ -48,6 +59,24 @@ public class ExcelDateImpl{
 	 */
 	public ExcelDateImpl(ColumnDateFormat format){
 		super();
+		this.format = format;
+	}
+
+	/**
+	 * Gets the format.
+	 *
+	 * @return the format
+	 */
+	public ColumnDateFormat getFormat() {
+		return format;
+	}
+
+	/**
+	 * Sets the format.
+	 *
+	 * @param format the new format
+	 */
+	public void setFormat(ColumnDateFormat format) {
 		this.format = format;
 	}
 
@@ -84,24 +113,5 @@ public class ExcelDateImpl{
 		return true;
 	}
 
-	/**
-	 * Gets the format.
-	 *
-	 * @return the format
-	 */
-	public ColumnDateFormat getFormat() {
-		return format;
-	}
-
-	/**
-	 * Sets the format.
-	 *
-	 * @param format the new format
-	 */
-	public void setFormat(ColumnDateFormat format) {
-		this.format = format;
-	}
-
-	
 	
 }

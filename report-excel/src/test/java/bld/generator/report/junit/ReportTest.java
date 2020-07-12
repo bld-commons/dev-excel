@@ -1,3 +1,8 @@
+/**
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.junit.ReportTest.java
+*/
 package bld.generator.report.junit;
 
 import java.io.FileInputStream;
@@ -7,9 +12,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
+import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelHyperlink;
@@ -25,12 +34,13 @@ import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
+import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
-import bld.generator.report.excel.impl.ReportExcel;
+import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriRow;
 import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
@@ -46,33 +56,49 @@ import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
+import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.junit.entity.ReadAutoreLibriRow;
 import bld.read.report.junit.entity.ReadAutoreLibriSheet;
 import bld.read.report.junit.entity.ReadGenereRow;
 import bld.read.report.junit.entity.ReadGenereSheet;
-import bld.read.report.utils.ExcelType;
 
+/**
+ * The Class ReportTest.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
-//@EnableAutoConfiguration(exclude=ExcelConfiguration.class)
+@EnableTransactionManagement
 public class ReportTest {
 
+	/** The Constant PATH_FILE. */
 	private static final String PATH_FILE = "/mnt/report/";
 
+	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
 	
+	/** The read excel. */
 	@Autowired
 	private ReadExcel readExcel;
 	
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Test.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
@@ -86,8 +112,16 @@ public class ReportTest {
 		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
 		listBaseSheet.add(casaEditrice);
 
+		DateSheet dateSheet=new DateSheet("Test Date");
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		
+		listBaseSheet.add(dateSheet);
+		
+		
 		List<AutoreLibriRow> list = new ArrayList<>();
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Profondo Rosso", "Thriller", 1, 25.5, 3.0));
+		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Profondo Rosso questo è un test per verificare che la cella va a capo automaticamente", "Thriller", 1, 25.5, 3.0));
 		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto", "Thriller", 1, 30.0, 2.2));
 		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Sto Cazzo", "Comico", 1, 12.24, 1.2));
 		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Amore", "Sentimentale", 1, 35.455, 4.7));
@@ -100,10 +134,10 @@ public class ReportTest {
 		listBaseSheet.add(autoreLibriSheet);
 
 		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
-		mergeSheet.getListSheet().add(casaEditrice);
+		
 		mergeSheet.getListSheet().add(autoreLibriSheet);
 		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(casaEditrice);
+		mergeSheet.getListSheet().add(dateSheet);
 
 		listBaseSheet.add(mergeSheet);
 		
@@ -115,21 +149,20 @@ public class ReportTest {
 		
 		listBaseSheet.add(genereSheet);
 		
-		DateSheet dateSheet=new DateSheet("Test Date");
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		
-		listBaseSheet.add(dateSheet);
 		
 		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
 
 	}
 
+	/**
+	 * Test dynamic.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testDynamic() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
@@ -183,14 +216,15 @@ public class ReportTest {
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("anno3")+")", "totalePrezzoAnni"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("anno3")+")", "totalePrezzoAnni",false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn( new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22,false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_START.getParameter("totalePrezzoAnni")+":"+RowStartEndType.ROW_END.getParameter("totalePrezzoAnni")+")", "totalePrezzoAnniAutore"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_START.getParameter("totalePrezzoAnni")+":"+RowStartEndType.ROW_END.getParameter("totalePrezzoAnni")+")", "totalePrezzoAnniAutore",false));
 		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
+		extraColumnAnnotation.setExcelColumnWidth(new ExcelColumnWidthImpl(10));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
@@ -213,13 +247,40 @@ public class ReportTest {
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2,false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno3", extraColumnAnnotation);
+		
+		
+		
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2015", null, 30,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno1")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno1"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno1", extraColumnAnnotation);
+		
+		
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2016", null, 30.1,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno2")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno2"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno2", extraColumnAnnotation);
+
+		extraColumnAnnotation = new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2017", null, 30.2,false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3")+"/"+RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
+		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno3", extraColumnAnnotation);
 
 		autoreLibriSheet.setListRowSheet(list);
 
-		ExcelChartImpl excelChartImpl=new ExcelChartImpl("titolo", "anno1", "anno3", ChartTypes.LINE,10,10);
-		autoreLibriSheet.setExcelChart(excelChartImpl);
+		ExcelChartImpl excelChartImpl=null;
+		excelChartImpl=new ExcelChartImpl("titolo", ChartTypes.PIE,10,3,LegendPosition.BOTTOM,AxisPosition.BOTTOM,AxisPosition.LEFT, RowStartEndType.ROW_EMPTY.getParameter("percAnno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"),false,null);
+		autoreLibriSheet.addExcelChart(excelChartImpl);
 		
-		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet(null);
+		excelChartImpl=new ExcelChartImpl("titolo",  ChartTypes.LINE,20,5,LegendPosition.BOTTOM,AxisPosition.BOTTOM,AxisPosition.LEFT,RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+ RowStartEndType.ROW_EMPTY.getParameter("anno3"),RowStartEndType.ROW_HEADER.getParameter("anno1")+":"+ RowStartEndType.ROW_HEADER.getParameter("anno3"),true,"Titoli");
+		autoreLibriSheet.addExcelChart(excelChartImpl);
+		
+		
+		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
 		
 		TotaleAutoreLibriRow totaleAutoreLibriRow=new TotaleAutoreLibriRow(1);
 		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);
@@ -236,29 +297,40 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitolo(), ".xlsx", byteReport);
+		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
 
 	}
 
 
 	
+	/**
+	 * Test read.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testRead() throws Exception{
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori.xlsx");
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
 		byte[] report=IOUtils.toByteArray(inputStream);
 		ExcelRead excelRead=new ExcelRead();
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListClassSheet().add(ReadAutoreLibriSheet.class);
-		excelRead.getListClassSheet().add(ReadGenereSheet.class);
+		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
+//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
-		for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
-			System.out.println(row.toString());
+		ReadAutoreLibriSheet sheet;
+		try {
+			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+				System.out.println(row.toString());
+			
+			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
+				System.out.println(row.toString());
+		} catch (Exception e) {
+			ExceptionUtils.getStackTrace(e);
+		}
 		
-		ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
-		for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
-			System.out.println(row.toString());
 		
 		
 	}

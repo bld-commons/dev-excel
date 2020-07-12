@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.ExcelColumn.java
+*/
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -11,9 +12,17 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelColumn.
+ * <br>
+ * ExcelColumn is used to define the header column
+ * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes and is composed by:
+ * <ul>
+ * <li>ColumnName - to set column name on header</li>
+ * <li>Comment - to add a comment on header</li>
+ * <li>IndexColumn - to set the insertion order of the columns</li>
+ * <li>Ignore - to show or hide the column</li>
+ * </ul> 
  */
 @Documented
 @Retention(RUNTIME)
@@ -21,11 +30,11 @@ import java.lang.annotation.Target;
 public @interface ExcelColumn {
 
 	/**
-	 * Name column.
+	 * Column name.
 	 *
 	 * @return the string
 	 */
-	public String nameColumn();
+	public String columnName();
 	
 	/**
 	 * Comment.
@@ -47,5 +56,7 @@ public @interface ExcelColumn {
 	 * @return true, if successful
 	 */
 	public boolean ignore() default false;
+	
+	
 	
 }

@@ -1,14 +1,15 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.data.ExcelBorder.java
+*/
 package bld.generator.report.excel.data;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExcelBorder.
+ * The Class ExcelBorder.<br>
+ * This class is a property on {@link bld.generator.report.excel.data.LayoutCell} class.
  */
 public class ExcelBorder {
 
@@ -23,14 +24,6 @@ public class ExcelBorder {
 
 	/** The right. */
 	private BorderStyle right;
-	
-
-	/**
-	 * Instantiates a new excel border.
-	 */
-	public ExcelBorder() {
-		super();
-	}
 
 	/**
 	 * Gets the top.
@@ -146,7 +139,7 @@ public class ExcelBorder {
 		return true;
 	}
 	
-	
+
 	
 
 }

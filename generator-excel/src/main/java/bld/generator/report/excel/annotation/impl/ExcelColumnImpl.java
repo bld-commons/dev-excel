@@ -1,7 +1,8 @@
 /**
- * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
- */
+* @author Francesco Baldi
+* @mail francesco.baldi1987@gmail.com
+* @class bld.generator.report.excel.annotation.impl.ExcelColumnImpl.java
+*/
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
@@ -10,23 +11,34 @@ import org.apache.commons.lang3.StringUtils;
 
 import bld.generator.report.excel.annotation.ExcelColumn;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelColumnImpl.
  */
-public class ExcelColumnImpl{
+public class ExcelColumnImpl implements Cloneable{
 
-	/** The name column. */
-	protected String nameColumn;
+	/** The column name. */
+	private String columnName;
 
 	/** The comment. */
-	protected String comment;
+	private String comment;
 
 	/** The index column. */
-	protected double indexColumn;
+	private double indexColumn;
 	
 	/** The ignore. */
-	protected boolean ignore;
+	private boolean ignore;
+	
+	
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	/**
 	 * Gets the excel column.
@@ -35,16 +47,17 @@ public class ExcelColumnImpl{
 	 */
 	public ExcelColumn getExcelColumn() {
 		ExcelColumn excelColumn = null;
-		if (StringUtils.isNotBlank(nameColumn) )
+		if (StringUtils.isNotBlank(columnName) )
 			excelColumn = new ExcelColumn() {
+
 				@Override
 				public Class<? extends Annotation> annotationType() {
 					return ExcelColumn.class;
 				}
 
 				@Override
-				public String nameColumn() {
-					return nameColumn;
+				public String columnName() {
+					return columnName;
 				}
 
 				@Override
@@ -63,45 +76,48 @@ public class ExcelColumnImpl{
 					return ignore;
 				}
 
+			
+
 			};
 
 		return excelColumn;
 	}
 
+	
+	
 
 	/**
 	 * Instantiates a new excel column impl.
 	 *
-	 * @param nameColumn  the name column
+	 * @param columnName  the name column
 	 * @param comment     the comment
 	 * @param indexColumn the index column
 	 * @param ignore      the ignore
-	 * @throws Exception the exception
 	 */
-	public ExcelColumnImpl(String nameColumn, String comment, double indexColumn,boolean ignore) throws Exception {
+	public ExcelColumnImpl(String columnName, String comment, double indexColumn, boolean ignore) {
 		super();
-		this.nameColumn = nameColumn;
+		this.columnName = columnName;
 		this.comment = comment;
 		this.indexColumn = indexColumn;
-		this.ignore=ignore;
+		this.ignore = ignore;
 	}
 
 	/**
-	 * Gets the name column.
+	 * Gets the column name.
 	 *
-	 * @return the name column
+	 * @return the column name
 	 */
-	public String getNameColumn() {
-		return nameColumn;
+	public String getColumnName() {
+		return columnName;
 	}
 
 	/**
-	 * Sets the name column.
+	 * Sets the column name.
 	 *
-	 * @param nameColumn the new name column
+	 * @param columnName the new column name
 	 */
-	public void setNameColumn(String nameColumn) {
-		this.nameColumn = nameColumn;
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
 	}
 
 	/**
@@ -157,6 +173,58 @@ public class ExcelColumnImpl{
 	public void setIgnore(boolean ignore) {
 		this.ignore = ignore;
 	}
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + (ignore ? 1231 : 1237);
+		long temp;
+		temp = Double.doubleToLongBits(indexColumn);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ExcelColumnImpl other = (ExcelColumnImpl) obj;
+		if (columnName == null) {
+			if (other.columnName != null)
+				return false;
+		} else if (!columnName.equals(other.columnName))
+			return false;
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
+			return false;
+		if (ignore != other.ignore)
+			return false;
+		if (Double.doubleToLongBits(indexColumn) != Double.doubleToLongBits(other.indexColumn))
+			return false;
+		return true;
+	}
+
+	
 
 	
 
