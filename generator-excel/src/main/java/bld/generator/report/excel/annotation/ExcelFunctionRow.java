@@ -24,7 +24,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * <li>ExcelFunction - to define the function</li>
  * </ul>
  *  
- *  It is parameter of the annotation {@link bld.generator.report.excel.ExcelFunctionRows}.
+ *  It is parameter of the annotation {@link bld.generator.report.excel.annotation.ExcelFunctionRows}.
  */
 @Retention(RUNTIME)
 @Target({})

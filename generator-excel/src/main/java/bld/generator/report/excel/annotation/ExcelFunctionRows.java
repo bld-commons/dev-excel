@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * <li>excelFunctionMerges</li>
  * </ol> 
  * 
- * it must be managed on {@link bld.generator.report.excel.RowSheet} classes.
+ * It must be managed on {@link bld.generator.report.excel.RowSheet} classes.
  */
 @Retention(RUNTIME)
 @Target(TYPE)

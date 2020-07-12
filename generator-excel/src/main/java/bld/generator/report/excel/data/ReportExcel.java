@@ -15,9 +15,9 @@ import bld.generator.report.excel.annotation.ExcelSelectCell;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
- * The Class ReportExcel.</br>
- * ReportExcel is the class that represents the excel object.</br>
- * Fields "title" and "date" can be shown on a cover sheet. The list base sheet represents a list of sheets</br>
+ * The Class ReportExcel. <br>
+ * ReportExcel is the class that represents the excel object. <br>
+ * Fields "title" and "date" can be shown on a cover sheet. The list base sheet represents a list of sheets. <br>
  * 
  */
 public class ReportExcel {

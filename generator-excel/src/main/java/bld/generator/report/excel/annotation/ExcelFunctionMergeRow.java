@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * <li>ExcelFunction - to define the function</li>
  * </ul>
  *  
- *  ExcelFunctionMergeRow is parameter of the annotation {@link bld.generator.report.excel.ExcelFunctionRows}.
+ *  ExcelFunctionMergeRow is parameter of the annotation {@link bld.generator.report.excel.annotation.ExcelFunctionRows}.
  *  
  */
 @Retention(RUNTIME)
