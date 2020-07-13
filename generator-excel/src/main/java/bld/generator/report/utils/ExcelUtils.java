@@ -282,4 +282,6 @@ public class ExcelUtils implements ApplicationContextAware {
 			rowHeight=rowHeight*568;
 		return (short)rowHeight;
 	}
+	
+	
 }

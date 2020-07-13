@@ -7,35 +7,33 @@ package bld.generator.report.junit.entity;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.SheetData;
-import bld.generator.report.excel.annotation.ExcelFreezePane;
-import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
+import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.annotation.ExcelPivot;
+import bld.generator.report.excel.annotation.ExcelQuery;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeader;
-import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout
+@ExcelSheetLayout(notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
-@ExcelFreezePane(rowFreez = 5, columnFreez = 1)
-@ExcelSuperHeaders(superHeaders = { @ExcelSuperHeader(headerGroups = {
-				@ExcelSuperHeaderCell(columnName = "Anagrafica", columnRange = "${matricola}:${dataDiNascita}"),
-				@ExcelSuperHeaderCell(columnName = "Libri", columnRange = "${genere}:${supplemento}")
-		}),
-		@ExcelSuperHeader(rowHeight = -1,headerGroups = {
-				@ExcelSuperHeaderCell(columnName = "Test", columnRange = "${matricola}:${cognome}"),
-				@ExcelSuperHeaderCell(columnName = "test1", columnRange = "${dataDiNascita}:${test}",excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(red=(byte)0)))})
-})
-public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
+@ExcelQuery(select = "select\n" + 
+		"	sp.anno,sp.prezzo,l.id_libro,l.titolo,a.id_autore,a.nome,a.cognome,a.data_nascita,a.sesso,g.des_genere\n" + 
+		"from\n" + 
+		"	storico_prezzo sp\n" + 
+		"inner join libro l on\n" + 
+		"	sp.id_libro = l.id_libro\n" + 
+		"inner join autore a on\n" + 
+		"	a.id_autore = l.id_autore\n" + 
+		"inner join genere g on\n" + 
+		"	g.id_genere = l.id_genere;")
+@ExcelPivot
+public class AutoreLibriSheet extends QuerySheetData<AutoreLibriRow> {
 
 	
 	/**

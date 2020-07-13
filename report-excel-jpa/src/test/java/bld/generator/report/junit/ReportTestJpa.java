@@ -8,12 +8,10 @@ package bld.generator.report.junit;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
@@ -29,9 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.BaseSheet;
-import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.GenerateExcel;
-import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
@@ -41,17 +37,10 @@ import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.data.ReportExcel;
-import bld.generator.report.junit.entity.AutoreLibriRow;
 import bld.generator.report.junit.entity.AutoreLibriRowDynamic;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.AutoreLibriSheetDynamic;
 import bld.generator.report.junit.entity.CasaEditrice;
-import bld.generator.report.junit.entity.DateRow;
-import bld.generator.report.junit.entity.DateSheet;
-import bld.generator.report.junit.entity.GenereRow;
-import bld.generator.report.junit.entity.GenereSheet;
-import bld.generator.report.junit.entity.IndexRow;
-import bld.generator.report.junit.entity.IndexSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
@@ -103,53 +92,11 @@ public class ReportTestJpa {
 	@Test
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
-		IndexSheet indexSheet=new IndexSheet("Indice");
-		List<IndexRow> listIndice=new ArrayList<>();
-		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"), "Casa Editrice"));
-		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
-		indexSheet.setListRowSheet(listIndice);
-		listBaseSheet.add(indexSheet);
 		
-		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
-		listBaseSheet.add(casaEditrice);
-
-		DateSheet dateSheet=new DateSheet("Test Date");
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		
-		listBaseSheet.add(dateSheet);
-		
-		
-		List<AutoreLibriRow> list = new ArrayList<>();
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Profondo Rosso questo è un test per verificare che la cella va a capo automaticamente", "Thriller", 1, 25.5, 3.0));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto", "Thriller", 1, 30.0, 2.2));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Sto Cazzo", "Comico", 1, 12.24, 1.2));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Amore", "Sentimentale", 1, 35.455, 4.7));
-		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Rosso", "Sentimentale", 2, 42.0, 6.94));
-		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Arancio", "Sentimentale", 2, 23.24, 3.0));
-
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
-		autoreLibriSheet.setListRowSheet(list);
 
 		listBaseSheet.add(autoreLibriSheet);
 
-		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
-		
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(dateSheet);
-
-		listBaseSheet.add(mergeSheet);
-		
-		GenereSheet genereSheet=new GenereSheet("Genere");
-		List<GenereRow>listGenere=new ArrayList<>();
-		listGenere.add(new GenereRow("Giallo","Test remove cell 1:1",23,"Test Remove cell 1:2"));
-		listGenere.add(new GenereRow("Romanzi","Test remove cell 2:1",17,"Test Remove cell 2:2"));
-		genereSheet.setListRowSheet(listGenere);
-		
-		listBaseSheet.add(genereSheet);
-		
 		
 		
 		UtenteSheet utenteSheet=new UtenteSheet("Utente");
