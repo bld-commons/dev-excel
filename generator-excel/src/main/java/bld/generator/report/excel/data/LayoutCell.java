@@ -283,6 +283,11 @@ public class LayoutCell {
 	}
 
 
+	/**
+	 * Sets the color.
+	 *
+	 * @param indexRow the new color
+	 */
 	public void setColor(int indexRow) {
 		if (this.rgbFont != null) {
 			int indexFont = indexRow % this.rgbFont.length;

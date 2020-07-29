@@ -96,15 +96,19 @@ public @interface ExcelCellLayout {
 
 	/**
 	 * Rgb font.
-	 *
-	 * @return the excel rgb color
+	 *   
+	 * @return the excel rgb color<br>
+	 * RgbFont is an array for alternating font colors between rows through the following expression:<br> 
+	 * numberRow mod sizeArray
 	 */
 	public ExcelRgbColor[] rgbFont() default @ExcelRgbColor(red = (byte) 0, green = (byte) 0, blue = (byte) 0);
 
 	/**
 	 * Rgb foreground.
 	 *
-	 * @return the excel rgb color
+	 * @return the excel rgb color<br>
+	 * RgbForeground is an array for alternating foreground colors between rows through the following expression:<br> 
+	 * numberRow mod sizeArray
 	 */
 	public ExcelRgbColor[] rgbForeground() default @ExcelRgbColor(red = (byte)255, green = (byte)255, blue = (byte)255);
 	
