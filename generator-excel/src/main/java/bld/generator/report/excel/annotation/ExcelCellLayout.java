@@ -99,14 +99,14 @@ public @interface ExcelCellLayout {
 	 *
 	 * @return the excel rgb color
 	 */
-	public ExcelRgbColor rgbFont() default @ExcelRgbColor(red = (byte) 0, green = (byte) 0, blue = (byte) 0);
+	public ExcelRgbColor[] rgbFont() default @ExcelRgbColor(red = (byte) 0, green = (byte) 0, blue = (byte) 0);
 
 	/**
 	 * Rgb foreground.
 	 *
 	 * @return the excel rgb color
 	 */
-	public ExcelRgbColor rgbForeground() default @ExcelRgbColor(red = (byte)255, green = (byte)255, blue = (byte)255);
+	public ExcelRgbColor[] rgbForeground() default @ExcelRgbColor(red = (byte)255, green = (byte)255, blue = (byte)255);
 	
 	/**
 	 * Fill pattern type.

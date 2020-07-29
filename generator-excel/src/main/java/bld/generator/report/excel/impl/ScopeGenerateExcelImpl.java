@@ -314,7 +314,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (FunctionCell functionCell : listFunctionCell) {
 			Sheet worksheet = functionCell.getWorksheet();
 			if (functionCell.getMergeRow() != null) {
-				this.setCellFormulaExcel(worksheet, functionCell.getMergeRow());
+				this.setCellFormulaExcel(worksheet, functionCell.getMergeRow(),0);
 			} else {
 				this.setCellFormulaExcel(functionCell.getCell(), functionCell.getCellStyle(), functionCell.getSheetHeader(), functionCell.getIndexRow(), worksheet);
 			}
@@ -388,7 +388,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		Row row = null;
 		for (SheetHeader sheetHeader : listSheetHeader) {
 			row = worksheet.createRow(indexRow);
-			setCellSummary(workbook, worksheet, sheetSummary, sheetHeader, row);
+			setCellSummary(workbook, worksheet, sheetSummary, sheetHeader, row,indexRow);
 			indexRow++;
 		}
 		return indexRow;
@@ -475,8 +475,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						excelDate = sheetHeader.getExcelDate();
 						layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
 					}
+					layoutCell.setColor(indexRow);
 					if (!this.mapCellStyle.containsKey(layoutCell))
-						this.mapCellStyle.put(layoutCell, createCellStyle(workbook, excelCellLayout, excelDate));
+						this.mapCellStyle.put(layoutCell, createCellStyle(workbook, excelCellLayout, excelDate,indexRow));
 					cellStyle = this.mapCellStyle.get(layoutCell);
 					infoColumn.setFirstRow(indexRow);
 					infoColumn.setLastRow(indexRow + sheetData.getListRowSheet().size() - 1);
@@ -513,7 +514,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader,indexRow);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeRow().referenceField();
@@ -522,7 +523,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else {
-								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader);
+								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader,indexRow);
 							}
 						}
 
@@ -719,7 +720,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (!(value instanceof String))
 						throw new Exception(field.getName() + " field type is not supported: required String");
 					if (StringUtils.isNotBlank(value.toString())) {
-						CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(), null);
+						CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(),0);
 						SheetHeader sheetHeader = new SheetHeader();
 						sheetHeader.setValue(value);
 						sheetHeader.setExcelCellLayout(excelLabel.labelLayout());

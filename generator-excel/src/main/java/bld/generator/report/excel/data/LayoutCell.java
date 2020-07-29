@@ -5,18 +5,19 @@
 */
 package bld.generator.report.excel.data;
 
+import java.util.Arrays;
+
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
-
 /**
  * The Class LayoutCell.
  */
 public class LayoutCell {
-	
+
 	/** The border. */
 	private ExcelBorder border;
 
@@ -33,26 +34,37 @@ public class LayoutCell {
 	private boolean wrap;
 
 	/** The rgb font. */
-	private ExcelColor rgbFont;
+	private ExcelColor[] rgbFont;
 
 	/** The rgb foreground. */
-	private ExcelColor rgbForeground;
-	
+	private ExcelColor[] rgbForeground;
+
 	/** The fill patter type. */
 	private FillPatternType fillPatterType;
-	
+
 	/** The precision. */
 	private Integer precision;
 
 	/** The rotation. */
 	private Integer rotation;
-	
-	
+
 	/** The format. */
 	private ColumnDateFormat format;
 
 	/** The locked. */
 	private boolean locked;
+
+	private ExcelColor fontColor;
+
+	private ExcelColor foregroundColor;
+
+	public ExcelColor getFontColor() {
+		return fontColor;
+	}
+
+	public ExcelColor getForegroundColor() {
+		return foregroundColor;
+	}
 
 	/**
 	 * Gets the border.
@@ -149,7 +161,7 @@ public class LayoutCell {
 	 *
 	 * @return the rgb font
 	 */
-	public ExcelColor getRgbFont() {
+	public ExcelColor[] getRgbFont() {
 		return rgbFont;
 	}
 
@@ -158,7 +170,7 @@ public class LayoutCell {
 	 *
 	 * @param rgbFont the new rgb font
 	 */
-	public void setRgbFont(ExcelColor rgbFont) {
+	public void setRgbFont(ExcelColor... rgbFont) {
 		this.rgbFont = rgbFont;
 	}
 
@@ -167,7 +179,7 @@ public class LayoutCell {
 	 *
 	 * @return the rgb foreground
 	 */
-	public ExcelColor getRgbForeground() {
+	public ExcelColor[] getRgbForeground() {
 		return rgbForeground;
 	}
 
@@ -176,7 +188,7 @@ public class LayoutCell {
 	 *
 	 * @param rgbForeground the new rgb foreground
 	 */
-	public void setRgbForeground(ExcelColor rgbForeground) {
+	public void setRgbForeground(ExcelColor... rgbForeground) {
 		this.rgbForeground = rgbForeground;
 	}
 
@@ -270,11 +282,18 @@ public class LayoutCell {
 		this.locked = locked;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
+
+	public void setColor(int indexRow) {
+		if (this.rgbFont != null) {
+			int indexFont = indexRow % this.rgbFont.length;
+			this.fontColor = this.rgbFont[indexFont];
+		}
+		if (this.rgbForeground != null) {
+			int indexForeground = indexRow % this.rgbForeground.length;
+			this.foregroundColor = this.rgbForeground[indexForeground];
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -282,24 +301,20 @@ public class LayoutCell {
 		result = prime * result + ((border == null) ? 0 : border.hashCode());
 		result = prime * result + ((fillPatterType == null) ? 0 : fillPatterType.hashCode());
 		result = prime * result + ((font == null) ? 0 : font.hashCode());
+		result = prime * result + ((fontColor == null) ? 0 : fontColor.hashCode());
+		result = prime * result + ((foregroundColor == null) ? 0 : foregroundColor.hashCode());
 		result = prime * result + ((format == null) ? 0 : format.hashCode());
 		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
 		result = prime * result + (locked ? 1231 : 1237);
 		result = prime * result + ((precision == null) ? 0 : precision.hashCode());
-		result = prime * result + ((rgbFont == null) ? 0 : rgbFont.hashCode());
-		result = prime * result + ((rgbForeground == null) ? 0 : rgbForeground.hashCode());
+		result = prime * result + Arrays.hashCode(rgbFont);
+		result = prime * result + Arrays.hashCode(rgbForeground);
 		result = prime * result + ((rotation == null) ? 0 : rotation.hashCode());
 		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
 		result = prime * result + (wrap ? 1231 : 1237);
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -321,6 +336,16 @@ public class LayoutCell {
 				return false;
 		} else if (!font.equals(other.font))
 			return false;
+		if (fontColor == null) {
+			if (other.fontColor != null)
+				return false;
+		} else if (!fontColor.equals(other.fontColor))
+			return false;
+		if (foregroundColor == null) {
+			if (other.foregroundColor != null)
+				return false;
+		} else if (!foregroundColor.equals(other.foregroundColor))
+			return false;
 		if (format != other.format)
 			return false;
 		if (horizontalAlignment != other.horizontalAlignment)
@@ -332,15 +357,9 @@ public class LayoutCell {
 				return false;
 		} else if (!precision.equals(other.precision))
 			return false;
-		if (rgbFont == null) {
-			if (other.rgbFont != null)
-				return false;
-		} else if (!rgbFont.equals(other.rgbFont))
+		if (!Arrays.equals(rgbFont, other.rgbFont))
 			return false;
-		if (rgbForeground == null) {
-			if (other.rgbForeground != null)
-				return false;
-		} else if (!rgbForeground.equals(other.rgbForeground))
+		if (!Arrays.equals(rgbForeground, other.rgbForeground))
 			return false;
 		if (rotation == null) {
 			if (other.rotation != null)
@@ -355,5 +374,5 @@ public class LayoutCell {
 	}
 	
 	
-	
+
 }

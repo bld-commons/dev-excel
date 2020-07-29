@@ -19,7 +19,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout(notMerge = false)
+@ExcelSheetLayout
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 @ExcelQuery(select = "select\n" + 

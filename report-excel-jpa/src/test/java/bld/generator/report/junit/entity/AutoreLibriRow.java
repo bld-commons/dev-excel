@@ -19,6 +19,7 @@ import bld.generator.report.excel.annotation.ExcelPivotColumn;
 import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
 import bld.generator.report.excel.annotation.ExcelPivotFilter;
 import bld.generator.report.excel.annotation.ExcelPivotRow;
+import bld.generator.report.excel.annotation.ExcelRgbColor;
 
 /**
  * The Class AutoreLibriRow.
@@ -26,43 +27,43 @@ import bld.generator.report.excel.annotation.ExcelPivotRow;
 public class AutoreLibriRow implements RowSheet {
 
 	@ExcelColumn(columnName = "Matricola", indexColumn = 0)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)}) 
 	@ExcelPivotFilter
 	@ExcelMergeRow(referenceField = "")
 	private Integer idAutore;
 	@ExcelColumn(columnName = "Anno", indexColumn = 7)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotColumn(order = 0)
 	private Integer anno;	
 	@ExcelColumn(columnName = "Prezzo", indexColumn = 8)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotColumnFunction(dataConsolidateFunction = {DataConsolidateFunction.SUM,DataConsolidateFunction.AVERAGE},order = 0)
 	private Double prezzo;
 	@ExcelColumn(columnName = "Titolo", indexColumn = 6)
-	@ExcelCellLayout
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotRow(order = 3)
 	private String titolo;
 	@ExcelColumn(columnName = "Nome", indexColumn = 1)
-	@ExcelCellLayout
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotRow(order = 2)
 	@ExcelMergeRow(referenceField = "idAutore")
 	private String nome;
 	@ExcelColumn(columnName = "Cognome", indexColumn = 2)
-	@ExcelCellLayout
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotRow(order = 0)
 	@ExcelMergeRow(referenceField = "idAutore")
 	private String cognome;
 	@ExcelColumn(columnName = "Data di Nascita", indexColumn = 3)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelDate
 	@ExcelMergeRow(referenceField = "idAutore")
 	private Date dataNascita;
 	@ExcelColumn(columnName = "Sesso", indexColumn = 4)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelMergeRow(referenceField = "idAutore")
 	private Character sesso;
 	@ExcelColumn(columnName = "Genere", indexColumn = 5)
-	@ExcelCellLayout
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelMergeRow(referenceField = "idAutore")
 	private String desGenere;
 	
