@@ -23,27 +23,17 @@ import bld.generator.report.excel.constant.ExcelConstant;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout(areaBorder = {@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${prezzoRowHeader}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED)),
-		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED)),
-		@ExcelAreaBorder(areaRange = "${nomeRowHeader}:${cognomeRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED))
-}
-)
+@ExcelSheetLayout(areaBorder = {
+		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${dataCreazioneRowHeader}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)),
+		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${dataCreazioneRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)),
+		@ExcelAreaBorder(areaRange = "${nomeRowHeader}:${cognomeRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)) })
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
-@ExcelQuery(select = "select\n" + 
-		"	sp.anno,sp.prezzo,l.id_libro,l.titolo,a.id_autore,a.nome,a.cognome,a.data_nascita,a.sesso,g.des_genere\n" + 
-		"from\n" + 
-		"	storico_prezzo sp\n" + 
-		"inner join libro l on\n" + 
-		"	sp.id_libro = l.id_libro\n" + 
-		"inner join autore a on\n" + 
-		"	a.id_autore = l.id_autore\n" + 
-		"inner join genere g on\n" + 
-		"	g.id_genere = l.id_genere;")
+@ExcelQuery(select = "select\n" + "	sp.anno,sp.prezzo,l.id_libro,l.titolo,a.id_autore,a.nome,a.cognome,a.data_nascita,a.sesso,g.des_genere\n" + "from\n" + "	storico_prezzo sp\n" + "inner join libro l on\n" + "	sp.id_libro = l.id_libro\n"
+		+ "inner join autore a on\n" + "	a.id_autore = l.id_autore\n" + "inner join genere g on\n" + "	g.id_genere = l.id_genere;")
 @ExcelPivot
 public class AutoreLibriSheet extends QuerySheetData<AutoreLibriRow> {
 
-	
 	/**
 	 * Instantiates a new autore libri sheet.
 	 *
@@ -64,6 +54,7 @@ public class AutoreLibriSheet extends QuerySheetData<AutoreLibriRow> {
 		super(nameSheet);
 		this.label = label;
 	}
+
 	/**
 	 * Gets the row class.
 	 *
@@ -95,9 +86,5 @@ public class AutoreLibriSheet extends QuerySheetData<AutoreLibriRow> {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-	
-
-
 
 }

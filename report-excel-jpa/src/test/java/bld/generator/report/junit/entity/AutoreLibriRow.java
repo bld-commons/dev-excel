@@ -5,6 +5,7 @@
 */
 package bld.generator.report.junit.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -20,6 +21,7 @@ import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
 import bld.generator.report.excel.annotation.ExcelPivotFilter;
 import bld.generator.report.excel.annotation.ExcelPivotRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
  * The Class AutoreLibriRow.
@@ -66,7 +68,16 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelMergeRow(referenceField = "idAutore")
 	private String desGenere;
+	@ExcelColumn(columnName = "Data Creazione", indexColumn = 9)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelDate(format = ColumnDateFormat.DD_MM_YYYY_HH_MM_SS)
+	private Timestamp dataCreazione;
 	
+	
+	public AutoreLibriRow() {
+		super();
+		this.dataCreazione= new Timestamp(System.currentTimeMillis());
+	}
 	public Integer getIdAutore() {
 		return idAutore;
 	}
@@ -120,6 +131,12 @@ public class AutoreLibriRow implements RowSheet {
 	}
 	public void setDesGenere(String desGenere) {
 		this.desGenere = desGenere;
+	}
+	public Timestamp getDataCreazione() {
+		return dataCreazione;
+	}
+	public void setDataCreazione(Timestamp dataCreazione) {
+		this.dataCreazione = dataCreazione;
 	}
 
 	

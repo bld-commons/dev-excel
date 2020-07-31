@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -474,7 +475,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 					ExcelDate excelDate = null;
 					LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
-					if (field != null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()))) {
+					if (field != null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType()))) {
 						excelDate = sheetHeader.getExcelDate();
 						layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
 					}
@@ -598,7 +599,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			int lastColumn=region.getLastColumn();
 			
 			for(int count=firstRow;count<=lastRow;count++) {
-				System.out.println(count);
 				Cell cellLeft=sheet.getRow(count).getCell(firstColumn);
 				Cell cellRight=sheet.getRow(count).getCell(lastColumn);
 				setBorderArea(workbook, sheet, cellLeft,areaBorder.border().left(),BorderType.LEFT);

@@ -7,6 +7,7 @@ package bld.generator.report.excel.impl;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -467,7 +468,7 @@ public class SuperGenerateExcelImpl {
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 		ExcelDate excelDate = null;
-		if (sheetHeader.getValue() instanceof Date || sheetHeader.getValue() instanceof Calendar)
+		if (sheetHeader.getValue() instanceof Date || sheetHeader.getValue() instanceof Calendar || sheetHeader.getValue() instanceof Timestamp)
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate,indexRow);
 		Cell cellColumn1 = row.createCell(1);
@@ -643,6 +644,8 @@ public class SuperGenerateExcelImpl {
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
 			cell.setCellValue((Calendar) sheetHeader.getValue());
+		else if(sheetHeader.getValue() instanceof Timestamp)
+			cell.setCellValue(new Date(((Timestamp)sheetHeader.getValue()).getTime()));
 		else if (sheetHeader.getValue() instanceof String || sheetHeader.getValue() instanceof Character) {
 			String value = null;
 			if (sheetHeader.getValue() != null)
