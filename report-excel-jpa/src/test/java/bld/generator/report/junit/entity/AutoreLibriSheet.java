@@ -7,7 +7,11 @@ package bld.generator.report.junit.entity;
 
 import javax.validation.constraints.Size;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+
 import bld.generator.report.excel.QuerySheetData;
+import bld.generator.report.excel.annotation.ExcelAreaBorder;
+import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
@@ -19,7 +23,11 @@ import bld.generator.report.excel.constant.ExcelConstant;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout
+@ExcelSheetLayout(areaBorder = {@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${prezzoRowHeader}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED)),
+		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED)),
+		@ExcelAreaBorder(areaRange = "${nomeRowHeader}:${cognomeRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED,top= BorderStyle.MEDIUM_DASHED,right= BorderStyle.MEDIUM_DASHED,left= BorderStyle.MEDIUM_DASHED))
+}
+)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 @ExcelQuery(select = "select\n" + 

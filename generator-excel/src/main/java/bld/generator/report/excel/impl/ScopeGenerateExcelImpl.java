@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HeaderFooter;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Footer;
@@ -64,6 +65,7 @@ import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.SheetFunctionTotal;
 import bld.generator.report.excel.SheetSummary;
+import bld.generator.report.excel.annotation.ExcelAreaBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.ExcelCharts;
@@ -75,6 +77,7 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSummary;
+import bld.generator.report.excel.constant.BorderType;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.FunctionCell;
@@ -547,6 +550,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 		for (Integer numColumn : mapMergeRow.keySet())
 			super.mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn);
+		
 
 		if (!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter()) 
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet-1, indexRow-1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
@@ -579,11 +583,63 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				}
 
 			}
-
+		}
+		
+		for (ExcelAreaBorder areaBorder:excelSheetLayout.areaBorder()) {
+			String areaRange=areaBorder.areaRange();
+			areaRange=this.makeFunction(sheet, null, areaRange, RowStartEndType.ROW_EMPTY);
+			areaRange=this.makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+			areaRange=this.makeFunction(sheet, null, areaRange, RowStartEndType.ROW_HEADER);
+			areaRange=this.makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
+			CellRangeAddress region=CellRangeAddress.valueOf(areaRange);
+			int firstRow=region.getFirstRow();
+			int firstColumn=region.getFirstColumn();
+			int lastRow=region.getLastRow();
+			int lastColumn=region.getLastColumn();
+			
+			for(int count=firstRow;count<=lastRow;count++) {
+				System.out.println(count);
+				Cell cellLeft=sheet.getRow(count).getCell(firstColumn);
+				Cell cellRight=sheet.getRow(count).getCell(lastColumn);
+				setBorderArea(workbook, sheet, cellLeft,areaBorder.border().left(),BorderType.LEFT);
+				setBorderArea(workbook, sheet, cellRight,areaBorder.border().right(),BorderType.RIGHT);
+			}
+			
+			for(int count=firstColumn;count<=lastColumn;count++) {
+				Cell cellTop=sheet.getRow(firstRow).getCell(count);
+				Cell cellBottom=sheet.getRow(lastRow).getCell(count);
+				setBorderArea(workbook, sheet, cellTop,areaBorder.border().top(),BorderType.TOP);
+				setBorderArea(workbook, sheet, cellBottom,areaBorder.border().bottom(),BorderType.BOTTOM);
+			}
+			
 		}
 
 		return indexRow;
 
+	}
+
+	private void setBorderArea(Workbook workbook, Sheet sheet,Cell cell, BorderStyle borderStyle,BorderType borderType) {
+		CellStyle cellStyle=workbook.createCellStyle();
+		cellStyle.cloneStyleFrom(cell.getCellStyle());
+		switch(borderType) {
+		case BOTTOM:
+			cellStyle.setBorderBottom(borderStyle);
+			break;
+		case LEFT:
+			cellStyle.setBorderLeft(borderStyle);
+			break;
+		case RIGHT:
+			cellStyle.setBorderRight(borderStyle);
+			break;
+		case TOP:
+			cellStyle.setBorderTop(borderStyle);
+			break;
+		default:
+			break;
+		
+		}
+		cell.setCellStyle(cellStyle);
+		
 	}
 
 	/**

@@ -74,4 +74,7 @@ public @interface ExcelSheetLayout {
 	 */
 	public int order()default -1;
 	
+	
+	public ExcelAreaBorder[] areaBorder() default {};
+	
 }
