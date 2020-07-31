@@ -14,10 +14,11 @@ import java.lang.annotation.Retention;
  * The Interface ExcelAreaBorder.<br>
  * ExcelAreaBorder is used to set a border on an area of cells.<br>
  * ExcelAreaBorder is composed by:
- * <li>
- * <ul>AreaRange - to define an area of cells</ul>
- * <ul>Border - to set the border type</ul>
- * </li>
+ * <ul>
+ * <li>AreaRange - to define an area of cells</li>
+ * <li>Border - to set the border type</li>
+ * <li>IncludeSuperHeader - to enable/disable the area extension on the super header</li>
+ * </ul>
  */
 @Documented
 @Retention(RUNTIME)
@@ -38,6 +39,11 @@ public @interface ExcelAreaBorder {
 	public ExcelBorder border();
 	
 	
+	/**
+	 * Include super header.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean includeSuperHeader() default false;
 	
 }
