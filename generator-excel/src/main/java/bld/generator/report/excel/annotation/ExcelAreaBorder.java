@@ -37,4 +37,7 @@ public @interface ExcelAreaBorder {
 	 */
 	public ExcelBorder border();
 	
+	
+	public boolean includeSuperHeader() default false;
+	
 }

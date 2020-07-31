@@ -196,8 +196,8 @@ public class SuperGenerateExcelImpl {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout,Integer indexRow) throws Exception {
-		return createCellStyle(workbook, layout, null,indexRow);
+	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, Integer indexRow) throws Exception {
+		return createCellStyle(workbook, layout, null, indexRow);
 	}
 
 	/**
@@ -209,10 +209,10 @@ public class SuperGenerateExcelImpl {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, ExcelDate excelDate,Integer indexRow) throws Exception {
+	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, ExcelDate excelDate, Integer indexRow) throws Exception {
 		CellStyle cellStyle = workbook.createCellStyle();
-		int indexFont=indexRow%layout.rgbFont().length;
-		int indexForeground=indexRow%layout.rgbForeground().length;
+		int indexFont = indexRow % layout.rgbFont().length;
+		int indexForeground = indexRow % layout.rgbForeground().length;
 		ExcelRgbColor rgbFont = layout.rgbFont()[indexFont];
 		ExcelRgbColor rgbForeground = layout.rgbForeground()[indexForeground];
 		Font font = getFont(workbook, layout.font());
@@ -356,15 +356,15 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param cell        the cell
 	 * @param sheetHeader the sheet header
-	 * @param indexRow 
+	 * @param indexRow
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow) throws Exception {
-		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader,indexRow); // writeCellEmpty(workbook,
-																		// cellStyle,
-																		// cell,
-																		// sheetHeader);
+		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow); // writeCellEmpty(workbook,
+		// cellStyle,
+		// cell,
+		// sheetHeader);
 		return false;
 	}
 
@@ -448,7 +448,7 @@ public class SuperGenerateExcelImpl {
 	 * @param sheetSummary the sheet summary
 	 * @param sheetHeader  the sheet header
 	 * @param row          the row
-	 * @param indexRow 
+	 * @param indexRow
 	 * @throws Exception the exception
 	 */
 	protected void setCellSummary(Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow) throws Exception {
@@ -460,9 +460,9 @@ public class SuperGenerateExcelImpl {
 			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
 		row.setHeight(heightRow);
-		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout(),indexRow);
+		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout(), indexRow);
 		Cell cellColumn0 = row.createCell(0);
-		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary,indexRow);
+		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary, indexRow);
 		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().columnName()));
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
@@ -470,7 +470,7 @@ public class SuperGenerateExcelImpl {
 		ExcelDate excelDate = null;
 		if (sheetHeader.getValue() instanceof Date || sheetHeader.getValue() instanceof Calendar || sheetHeader.getValue() instanceof Timestamp)
 			excelDate = sheetHeader.getExcelDate();
-		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate,indexRow);
+		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
 		Cell cellColumn1 = row.createCell(1);
 
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex());
@@ -502,7 +502,7 @@ public class SuperGenerateExcelImpl {
 				listFunctionCell.add(functionCell);
 			}
 		} else
-			setCellValueExcel(workbook, cell, cellStyle, sheetHeader,indexRow);
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow);
 
 	}
 
@@ -518,7 +518,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void setCellFormulaExcel(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
-		setCellStyleExcel(cellStyle, cell, layoutCell,indexRow);
+		setCellStyleExcel(cellStyle, cell, layoutCell, indexRow);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY);
@@ -543,8 +543,9 @@ public class SuperGenerateExcelImpl {
 	 * @param function        the function
 	 * @param rowStartEndType the row start end type
 	 * @return the string
+	 * @throws Exception
 	 */
-	protected String makeFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) {
+	protected String makeFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
@@ -554,9 +555,11 @@ public class SuperGenerateExcelImpl {
 				InfoColumn infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
 				Integer row = indexRow;
 
-				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType))
+				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
 					row = infoColumn.getRowHeader();
-				else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty())
+					if (row == null)
+						throw new Exception("The header not exist");
+				} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty())
 					row = infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
 				else if (row == null && RowStartEndType.ROW_START.equals(rowStartEndType))
 					row = infoColumn.getFirstRow();
@@ -584,7 +587,7 @@ public class SuperGenerateExcelImpl {
 	private void setCellValueExcel(Workbook workbook, Sheet sheet, MergeCell mergeRow) throws Exception {
 		if (mergeRow.getSheetHeader().getExcelFunction() != null)
 			try {
-				setCellFormulaExcel(sheet, mergeRow,0);
+				setCellFormulaExcel(sheet, mergeRow, 0);
 			} catch (Exception e) {
 				FunctionCell functionCell = new FunctionCell();
 				functionCell.setWorksheet(sheet);
@@ -592,7 +595,7 @@ public class SuperGenerateExcelImpl {
 				listFunctionCell.add(functionCell);
 			}
 		else
-			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(),0);
+			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(), 0);
 
 	}
 
@@ -601,7 +604,7 @@ public class SuperGenerateExcelImpl {
 	 *
 	 * @param sheet    the sheet
 	 * @param mergeRow the merge row
-	 * @param indexRow 
+	 * @param indexRow
 	 * @throws Exception the exception
 	 */
 	protected void setCellFormulaExcel(Sheet sheet, MergeCell mergeRow, Integer indexRow) throws Exception {
@@ -609,7 +612,7 @@ public class SuperGenerateExcelImpl {
 		CellStyle cellStyle = mergeRow.getCellStyleFrom();
 		Cell cell = mergeRow.getCellFrom();
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
-		setCellStyleExcel(cellStyle, cell, layoutCell,indexRow);
+		setCellStyleExcel(cellStyle, cell, layoutCell, indexRow);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = makeFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
@@ -634,18 +637,18 @@ public class SuperGenerateExcelImpl {
 	 * @param cell        the cell
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
-	 * @param indexRow 
+	 * @param indexRow
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
-		setCellStyleExcel(cellStyle!=null?cellStyle:createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(),indexRow), cell, layoutCell,indexRow);
+		setCellStyleExcel(cellStyle != null ? cellStyle : createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(), indexRow), cell, layoutCell, indexRow);
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
 			cell.setCellValue((Calendar) sheetHeader.getValue());
-		else if(sheetHeader.getValue() instanceof Timestamp)
-			cell.setCellValue(new Date(((Timestamp)sheetHeader.getValue()).getTime()));
+		else if (sheetHeader.getValue() instanceof Timestamp)
+			cell.setCellValue(new Date(((Timestamp) sheetHeader.getValue()).getTime()));
 		else if (sheetHeader.getValue() instanceof String || sheetHeader.getValue() instanceof Character) {
 			String value = null;
 			if (sheetHeader.getValue() != null)
@@ -695,7 +698,7 @@ public class SuperGenerateExcelImpl {
 	 * @param cell       the cell
 	 * @param layoutCell the layout cell
 	 */
-	protected void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell,Integer indexRow) {
+	protected void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell, Integer indexRow) {
 		layoutCell.setColor(indexRow);
 		if (!mapCellStyle.containsKey(layoutCell))
 			mapCellStyle.put(layoutCell, cellStyle);
@@ -810,36 +813,43 @@ public class SuperGenerateExcelImpl {
 			Collections.sort(listSheetHeader, new SheetColumnComparator());
 		}
 		Integer indexStartSuperHeader = indexRow - getSizeSuperHeader(sheetData);
+		Row rowHeader = null;
+		CellStyle cellStyleHeader = null;
+		if (excelSheetLayout.showHeader()) {
+			rowHeader = sheet.createRow(indexRow);
+			cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetData, rowHeader);
 
-		Row rowHeader = sheet.createRow(indexRow);
-
-		CellStyle cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetData, rowHeader);
+		}
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
 
 		for (int columnNum = excelSheetLayout.startColumn(); columnNum < maxColumn; columnNum++) {
 			int indexHeader = columnNum - excelSheetLayout.startColumn();
-			Cell cellHeader = rowHeader.createCell(columnNum);
 			SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
-			if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderCellLayout.class) || sheetHeader.getExcelHeaderCellLayout() != null) {
-				ExcelHeaderCellLayout layoutHeader = null;
-				if (sheetHeader.getExcelHeaderCellLayout() != null)
-					layoutHeader = sheetHeader.getExcelHeaderCellLayout();
-				else
-					layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
-				if (layoutHeader.locked())
-					sheet.protectSheet("");
-				CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
-				cellHeader.setCellStyle(differentCellStyleHeader);
-			} else
-				cellHeader.setCellStyle(cellStyleHeader);
+			Integer indexRowHeader = null;
+			if (excelSheetLayout.showHeader()) {
+				indexRowHeader = indexRow;
+				Cell cellHeader = rowHeader.createCell(columnNum);
+				if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelHeaderCellLayout.class) || sheetHeader.getExcelHeaderCellLayout() != null) {
+					ExcelHeaderCellLayout layoutHeader = null;
+					if (sheetHeader.getExcelHeaderCellLayout() != null)
+						layoutHeader = sheetHeader.getExcelHeaderCellLayout();
+					else
+						layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
+					if (layoutHeader.locked())
+						sheet.protectSheet("");
+					CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
+					cellHeader.setCellStyle(differentCellStyleHeader);
+				} else
+					cellHeader.setCellStyle(cellStyleHeader);
 
-			ExcelColumn excelColumn = listSheetHeader.get(indexHeader).getExcelColumn();
-			setColumnWidth(sheet, columnNum, sheetHeader.getExcelColumnWidth().width());
-			listSheetHeader.get(indexHeader).setNumColumn(columnNum);
-			cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.columnName()));
-			if (StringUtils.isNoneBlank(excelColumn.comment()))
-				addComment(workbook, sheet, rowHeader, cellHeader, excelColumn.comment());
-			InfoColumn infoColumn = new InfoColumn(sheet, sheetHeader, columnNum, indexRow);
+				ExcelColumn excelColumn = listSheetHeader.get(indexHeader).getExcelColumn();
+				setColumnWidth(sheet, columnNum, sheetHeader.getExcelColumnWidth().width());
+				listSheetHeader.get(indexHeader).setNumColumn(columnNum);
+				cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.columnName()));
+				if (StringUtils.isNoneBlank(excelColumn.comment()))
+					addComment(workbook, sheet, rowHeader, cellHeader, excelColumn.comment());
+			}
+			InfoColumn infoColumn = new InfoColumn(sheet, sheetHeader, columnNum, indexRowHeader);
 			String key = null;
 			if (sheetHeader.getField() != null)
 				key = ExcelUtils.getKeyColumn(sheet, sheetHeader.getField().getName());
@@ -936,14 +946,14 @@ public class SuperGenerateExcelImpl {
 		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
-		indexRow+=3;
+		indexRow += 3;
 		XSSFPivotTable pivotTable = sheet.createPivotTable(areaReference, new CellReference(indexRow, excelPivot.startColumn()));
 		List<Field> listRow = new ArrayList<>();
 		List<Field> listColumn = new ArrayList<>();
 		List<Field> listColumnFunction = new ArrayList<>();
 		for (Field field : listField) {
 			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			if(field.isAnnotationPresent(ExcelPivotFilter.class))
+			if (field.isAnnotationPresent(ExcelPivotFilter.class))
 				pivotTable.addReportFilter(columnIndex);
 			if (field.isAnnotationPresent(ExcelPivotRow.class))
 				listRow.add(field);
@@ -954,22 +964,22 @@ public class SuperGenerateExcelImpl {
 		}
 		Collections.sort(listRow, new PivotRowComparator());
 		Collections.sort(listColumn, new PivotColumnComparator());
-		Collections.sort(listColumnFunction,new PivotColumnFunctionComparator());
-		
-		for(Field field:listRow) {
+		Collections.sort(listColumnFunction, new PivotColumnFunctionComparator());
+
+		for (Field field : listRow) {
 			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
 			pivotTable.addRowLabel(columnIndex);
 		}
-		for(Field field:listColumn) {
+		for (Field field : listColumn) {
 			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
 			pivotTable.addColLabel(columnIndex);
 		}
-		for(Field field:listColumnFunction) {
+		for (Field field : listColumnFunction) {
 			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			ExcelPivotColumnFunction excelPivotColumnFunction=field.getAnnotation(ExcelPivotColumnFunction.class);
-			for(DataConsolidateFunction dataConsolidateFunction:excelPivotColumnFunction.dataConsolidateFunction()) 
+			ExcelPivotColumnFunction excelPivotColumnFunction = field.getAnnotation(ExcelPivotColumnFunction.class);
+			for (DataConsolidateFunction dataConsolidateFunction : excelPivotColumnFunction.dataConsolidateFunction())
 				pivotTable.addColumnLabel(dataConsolidateFunction, columnIndex);
-			
+
 		}
 		return indexRow;
 

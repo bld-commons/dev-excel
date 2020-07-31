@@ -23,7 +23,7 @@ public class InfoColumn extends InfoField {
 	private int columnNum;
 
 	/** The row header. */
-	private int rowHeader;
+	private Integer rowHeader;
 	
 	/** The first row. */
 	private Integer firstRow;
@@ -46,7 +46,7 @@ public class InfoColumn extends InfoField {
 	 * @param columnNum   the column num
 	 * @param rowHeader   the row header
 	 */
-	public InfoColumn(Sheet worksheet, SheetHeader sheetHeader, int columnNum, int rowHeader) {
+	public InfoColumn(Sheet worksheet, SheetHeader sheetHeader, int columnNum, Integer rowHeader) {
 		super();
 		if (sheetHeader.getField() != null)
 			this.key = ExcelUtils.getKeyColumn(worksheet, sheetHeader.getField().getName());
@@ -106,7 +106,7 @@ public class InfoColumn extends InfoField {
 	 *
 	 * @return the row header
 	 */
-	public int getRowHeader() {
+	public Integer getRowHeader() {
 		return rowHeader;
 	}
 
@@ -118,7 +118,7 @@ public class InfoColumn extends InfoField {
 	 *
 	 * @param rowHeader the new row header
 	 */
-	public void setRowHeader(int rowHeader) {
+	public void setRowHeader(Integer rowHeader) {
 		this.rowHeader = rowHeader;
 	}
 
@@ -235,7 +235,7 @@ public class InfoColumn extends InfoField {
 		result = prime * result + ((lastRow == null) ? 0 : lastRow.hashCode());
 		result = prime * result + ((lastRowReference == null) ? 0 : lastRowReference.hashCode());
 		result = prime * result + ((mapRowMergeRow == null) ? 0 : mapRowMergeRow.hashCode());
-		result = prime * result + rowHeader;
+		result = prime * result + ((rowHeader == null) ? 0 : rowHeader.hashCode());
 		return result;
 	}
 
@@ -279,10 +279,17 @@ public class InfoColumn extends InfoField {
 				return false;
 		} else if (!mapRowMergeRow.equals(other.mapRowMergeRow))
 			return false;
-		if (rowHeader != other.rowHeader)
+		if (rowHeader == null) {
+			if (other.rowHeader != null)
+				return false;
+		} else if (!rowHeader.equals(other.rowHeader))
 			return false;
 		return true;
 	}
+
+
+
+
 	
 	
 

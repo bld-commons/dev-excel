@@ -77,4 +77,6 @@ public @interface ExcelSheetLayout {
 	
 	public ExcelAreaBorder[] areaBorder() default {};
 	
+	public boolean showHeader() default true;
+	
 }
