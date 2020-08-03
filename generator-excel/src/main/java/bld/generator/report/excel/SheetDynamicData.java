@@ -15,11 +15,12 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
  * The Class SheetDynamicData.
+ * @param <T> the generic type
  * <br>
  * SheetDynamicData extends {@link bld.generator.report.excel.SheetData}, it manages dynamic columns through the mapExtraColumnAnnotation field.
  * <br>
  * mapExtraColumnAnnotation and mapValue(is a field of DynamicRowSheet) have the same keys.
- * @param <T> the generic type
+ * 
  * 
  */
 public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn{

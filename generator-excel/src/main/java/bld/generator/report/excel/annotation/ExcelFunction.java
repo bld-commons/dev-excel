@@ -34,6 +34,50 @@ import java.lang.annotation.Target;
  * </ul>
  * 
  * 
+ * Below an example to calculate functions on rows and columns.
+ * <table style="width:100%;">
+ *  <tr>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">column name 1</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">column name 2</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">column name 3</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">Total</th>
+ *  </tr>
+ *  <tr>
+ *    <td style="width: 25%; border: 1px solid #666;">value field1</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field2</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field3</td>
+ *   	<td style="width: 25%; border: 1px solid #666">sum(${fieldName1}:$fieldName3)</td>
+ *  </tr>
+ *  <tr>
+ *    <td style="width: 25%; border: 1px solid #666;">value field1</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field2</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field3</td>
+ *   	<td style="width: 25%; border: 1px solid #666">sum(${fieldName1}:$fieldName3)</td>
+ *  </tr>
+ *  <tr>
+ *    <td style="width: 25%; border: 1px solid #666;">value field1</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field2</td>
+ *    <td style="width: 25%; border: 1px solid #666">value field3</td>
+ *   	<td style="width: 25%; border: 1px solid #666">sum(${fieldName1}:${fieldName3})</td>
+ *  </tr>
+ *</table>
+ *
+ * <table style="width:100%;">
+ *  <tr>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">Total column 1</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">Total column 2</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">Total column 3</th>
+ *    <th style="width: 25%; border: 1px solid #666; text-align: center;">Sum Total</th>
+ *  </tr>
+ *  <tr>
+ *    <td style="width: 25%; border: 1px solid #666">sum(${fieldName1RowStart}:${fieldName1RowEnd})</td>
+ *    <td style="width: 25%; border: 1px solid #666">sum(${fieldName2RowStart}:${fieldName2RowEnd})</td>
+ *    <td style="width: 25%; border: 1px solid #666">sum(${fieldName3RowStart}:${fieldName3RowEnd})</td>
+ *   	<td style="width: 25%; border: 1px solid #666">sum(${fieldNameTotalRowStart}:fieldNameTotalRowEnd)</td>
+ *  </tr>
+ * </table>
+ * 
+ * 
  * 
  */
 @Documented

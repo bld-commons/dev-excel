@@ -14,9 +14,11 @@ import org.apache.commons.collections4.map.HashedMap;
 import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
- * The Class QuerySheetData.<br>
- * QuerySheetData is used to obtain a RowSheet list through a query, to set the parameters in the query you need to insert them in the "mapParameter" field.<br>  
+ * The Class QuerySheetData.
  * @param <T> the generic type
+ * <br>
+ * QuerySheetData is used to obtain a RowSheet list through a query, to set the parameters in the query you need to insert them in the "mapParameter" field.<br>  
+ * 
  */
 public abstract class QuerySheetData<T extends RowSheet> extends SheetData<T>{
 

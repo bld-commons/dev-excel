@@ -377,7 +377,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		indexRow += excelSheetLayout.startRow();
 		if (indexRow < 0)
 			throw new Exception("The row number cannot be negative");
-		if (excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
+		if (excelSheetLayout.showHeader() && excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
 			Row rowHeader = worksheet.createRow(indexRow);
 			CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetSummary, rowHeader);
 			Cell cellHeader = rowHeader.createCell(excelSheetLayout.startColumn());

@@ -188,11 +188,13 @@ public class SuperGenerateExcelImpl {
 		return cellStyleHeader;
 	}
 
+
 	/**
 	 * Creates the cell style.
 	 *
 	 * @param workbook the workbook
 	 * @param layout   the layout
+	 * @param indexRow the index row
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
@@ -200,12 +202,14 @@ public class SuperGenerateExcelImpl {
 		return createCellStyle(workbook, layout, null, indexRow);
 	}
 
+
 	/**
 	 * Creates the cell style.
 	 *
 	 * @param workbook  the workbook
 	 * @param layout    the layout
 	 * @param excelDate the excel date
+	 * @param indexRow  the index row
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
@@ -356,7 +360,7 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param cell        the cell
 	 * @param sheetHeader the sheet header
-	 * @param indexRow
+	 * @param indexRow    the index row
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
@@ -440,6 +444,7 @@ public class SuperGenerateExcelImpl {
 		cellHeader.setCellComment(comment);
 	}
 
+
 	/**
 	 * Sets the cell summary.
 	 *
@@ -448,7 +453,7 @@ public class SuperGenerateExcelImpl {
 	 * @param sheetSummary the sheet summary
 	 * @param sheetHeader  the sheet header
 	 * @param row          the row
-	 * @param indexRow
+	 * @param indexRow     the index row
 	 * @throws Exception the exception
 	 */
 	protected void setCellSummary(Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow) throws Exception {
@@ -535,6 +540,7 @@ public class SuperGenerateExcelImpl {
 
 	}
 
+
 	/**
 	 * Make function.
 	 *
@@ -543,7 +549,7 @@ public class SuperGenerateExcelImpl {
 	 * @param function        the function
 	 * @param rowStartEndType the row start end type
 	 * @return the string
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	protected String makeFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
 		Pattern p = Pattern.compile(PATTERN);
@@ -599,12 +605,13 @@ public class SuperGenerateExcelImpl {
 
 	}
 
+
 	/**
 	 * Sets the cell formula excel.
 	 *
 	 * @param sheet    the sheet
 	 * @param mergeRow the merge row
-	 * @param indexRow
+	 * @param indexRow the index row
 	 * @throws Exception the exception
 	 */
 	protected void setCellFormulaExcel(Sheet sheet, MergeCell mergeRow, Integer indexRow) throws Exception {
@@ -630,6 +637,7 @@ public class SuperGenerateExcelImpl {
 		cell.setCellFormula(function);
 	}
 
+
 	/**
 	 * Sets the cell value excel.
 	 *
@@ -637,7 +645,7 @@ public class SuperGenerateExcelImpl {
 	 * @param cell        the cell
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
-	 * @param indexRow
+	 * @param indexRow    the index row
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
@@ -691,12 +699,14 @@ public class SuperGenerateExcelImpl {
 		return cellStyle;
 	}
 
+	
 	/**
 	 * Sets the cell style excel.
 	 *
 	 * @param cellStyle  the cell style
 	 * @param cell       the cell
 	 * @param layoutCell the layout cell
+	 * @param indexRow   the index row
 	 */
 	protected void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell, Integer indexRow) {
 		layoutCell.setColor(indexRow);
@@ -929,6 +939,7 @@ public class SuperGenerateExcelImpl {
 		}
 	}
 
+
 	/**
 	 * Creates the pivot.
 	 *
@@ -939,6 +950,7 @@ public class SuperGenerateExcelImpl {
 	 * @param lastRow     the last row
 	 * @param lastColumn  the last column
 	 * @param indexRow    the index row
+	 * @return the integer
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
 		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());

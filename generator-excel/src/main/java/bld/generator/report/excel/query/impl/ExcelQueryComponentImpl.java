@@ -97,7 +97,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	private <T extends RowSheet> void reflection(T t, Map<String, Object> mapResult) throws Exception {
 		Map<String, Object> mapResultApp = new HashMap<>();
 		for (String keyResult : mapResult.keySet()) {
-			String nameField = ExcelUtils.getNameParameter(keyResult);
+			String nameField = keyResult.contains("_")?ExcelUtils.getNameParameter(keyResult):keyResult;
 			mapResultApp.put(nameField, mapResult.get(keyResult));
 		}
 		BeanUtilsBean beanUtilsBean = BeanUtilsBean.getInstance();
