@@ -18,11 +18,12 @@ import bld.generator.report.excel.constant.ExcelConstant;
  * 
  * 
  * The Class DynamicChart.
+ * @param <T> the generic type
  * <br>
  * DynamicChart is used to generate charts through dynamic columns
  * 
  *
- * @param <T> the generic type
+ * 
  *  
  */
 public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynamicData<T> {

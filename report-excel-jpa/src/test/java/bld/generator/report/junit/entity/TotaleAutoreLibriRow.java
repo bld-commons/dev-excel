@@ -19,42 +19,88 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
  */
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-				excelColumn = @ExcelColumn(indexColumn = 2, columnName = "Totale per matricola"), 
-				excelFunction = @ExcelFunction(function = "sumif(${matricolaRowStart}:${matricolaRowEnd},${totMatricola},${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePerMatricola")) })
+				excelColumn = @ExcelColumn(indexColumn = 8, columnName = "Totale Prezzo"), 
+				excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePrezzo")) })
 public class TotaleAutoreLibriRow implements RowSheet {
 
-	/** The tot matricola. */
-	@ExcelColumn(columnName = "Matricola", indexColumn = 1)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
-	private Integer totMatricola;
-
-	/**
-	 * Instantiates a new totale autore libri row.
-	 *
-	 * @param totMatricola the tot matricola
-	 */
-	public TotaleAutoreLibriRow(Integer totMatricola) {
+	@ExcelColumn(columnName = "Totale", indexColumn = 0)
+	@ExcelCellLayout 
+	private String totale;
+	@ExcelColumn(columnName = "", indexColumn = 7)
+	@ExcelCellLayout
+	private Integer totAnno;	
+	@ExcelColumn(columnName = "", indexColumn = 6)
+	@ExcelCellLayout
+	private String totTitolo;
+	@ExcelColumn(columnName = "", indexColumn = 1)
+	@ExcelCellLayout
+	private String totNome;
+	@ExcelColumn(columnName = "", indexColumn = 2)
+	@ExcelCellLayout
+	private String totCognome;
+	@ExcelColumn(columnName = "", indexColumn = 3)
+	@ExcelCellLayout
+	private String totDataNascita;
+	@ExcelColumn(columnName = "", indexColumn = 4)
+	@ExcelCellLayout
+	private Character totSesso;
+	@ExcelColumn(columnName = "", indexColumn = 5)
+	@ExcelCellLayout
+	private String totDesGenere;
+	
+	public TotaleAutoreLibriRow(String totale) {
 		super();
-		this.totMatricola = totMatricola;
+		this.totale = totale;
+	}
+	public String getTotale() {
+		return totale;
+	}
+	public void setTotale(String totale) {
+		this.totale = totale;
+	}
+	public Integer getTotAnno() {
+		return totAnno;
+	}
+	public void setTotAnno(Integer totAnno) {
+		this.totAnno = totAnno;
+	}
+	public String getTotTitolo() {
+		return totTitolo;
+	}
+	public void setTotTitolo(String totTitolo) {
+		this.totTitolo = totTitolo;
+	}
+	public String getTotNome() {
+		return totNome;
+	}
+	public void setTotNome(String totNome) {
+		this.totNome = totNome;
+	}
+	public String getTotCognome() {
+		return totCognome;
+	}
+	public void setTotCognome(String totCognome) {
+		this.totCognome = totCognome;
+	}
+	public String getTotDataNascita() {
+		return totDataNascita;
+	}
+	public void setTotDataNascita(String totDataNascita) {
+		this.totDataNascita = totDataNascita;
+	}
+	public Character getTotSesso() {
+		return totSesso;
+	}
+	public void setTotSesso(Character totSesso) {
+		this.totSesso = totSesso;
+	}
+	public String getTotDesGenere() {
+		return totDesGenere;
+	}
+	public void setTotDesGenere(String totDesGenere) {
+		this.totDesGenere = totDesGenere;
 	}
 
-	/**
-	 * Gets the tot matricola.
-	 *
-	 * @return the tot matricola
-	 */
-	public Integer getTotMatricola() {
-		return totMatricola;
-	}
-
-	/**
-	 * Sets the tot matricola.
-	 *
-	 * @param totMatricola the new tot matricola
-	 */
-	public void setTotMatricola(Integer totMatricola) {
-		this.totMatricola = totMatricola;
-	}
 	
 	
 	

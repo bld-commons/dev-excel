@@ -29,10 +29,10 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	private VerticalAlignment verticalAlignment;
 	
 	/** The rgb foreground. */
-	private ExcelRgbColor rgbForeground;
+	private ExcelRgbColor[] rgbForeground;
 	
 	/** The rgb font. */
-	private ExcelRgbColor rgbFont;
+	private ExcelRgbColor[] rgbFont;
 	
 	/** The precision. */
 	private int precision;
@@ -76,12 +76,12 @@ public class ExcelCellLayoutImpl implements Cloneable{
 			}
 			
 			@Override
-			public ExcelRgbColor rgbForeground() {
+			public ExcelRgbColor[] rgbForeground() {
 				return rgbForeground;
 			}
 			
 			@Override
-			public ExcelRgbColor rgbFont() {
+			public ExcelRgbColor[] rgbFont() {
 				return rgbFont;
 			}
 			
@@ -131,7 +131,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 * @param fillPatternType     the fill pattern type
 	 * @param border              the border
 	 */
-	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
+	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor[] rgbForeground, ExcelRgbColor[] rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
 			ExcelBorder border)  {
 		super();
 		this.wrap = wrap;
@@ -160,7 +160,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 * @param border              the border
 	 * @param locked              the locked
 	 */
-	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor rgbForeground, ExcelRgbColor rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
+	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor[] rgbForeground, ExcelRgbColor[] rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
 			ExcelBorder border, boolean locked) {
 		super();
 		this.wrap = wrap;
@@ -182,8 +182,8 @@ public class ExcelCellLayoutImpl implements Cloneable{
 		super();
 		this.wrap = true;
 		this.verticalAlignment = VerticalAlignment.CENTER;
-		this.rgbForeground = ExcelConstant.RGB_FOREGROUND.getExcelRgbColor();
-		this.rgbFont = ExcelConstant.RGB_FONT.getExcelRgbColor();
+		this.setRgbForeground(ExcelConstant.RGB_FOREGROUND.getExcelRgbColor());
+		this.setRgbForeground(ExcelConstant.RGB_FONT.getExcelRgbColor());
 		this.precision = -1;
 		this.horizontalAlignment = HorizontalAlignment.RIGHT;
 		this.font = ExcelConstant.FONT.getExcelFont();
@@ -245,7 +245,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 *
 	 * @return the rgb foreground
 	 */
-	public ExcelRgbColor getRgbForeground() {
+	public ExcelRgbColor[] getRgbForeground() {
 		return rgbForeground;
 	}
 
@@ -254,7 +254,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 *
 	 * @param rgbForeground the new rgb foreground
 	 */
-	public void setRgbForeground(ExcelRgbColor rgbForeground) {
+	public void setRgbForeground(ExcelRgbColor... rgbForeground) {
 		this.rgbForeground = rgbForeground;
 	}
 
@@ -263,7 +263,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 *
 	 * @return the rgb font
 	 */
-	public ExcelRgbColor getRgbFont() {
+	public ExcelRgbColor[] getRgbFont() {
 		return rgbFont;
 	}
 
@@ -272,7 +272,7 @@ public class ExcelCellLayoutImpl implements Cloneable{
 	 *
 	 * @param rgbFont the new rgb font
 	 */
-	public void setRgbFont(ExcelRgbColor rgbFont) {
+	public void setRgbFont(ExcelRgbColor... rgbFont) {
 		this.rgbFont = rgbFont;
 	}
 

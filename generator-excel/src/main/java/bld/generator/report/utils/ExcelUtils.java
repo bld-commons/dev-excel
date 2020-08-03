@@ -7,6 +7,7 @@ package bld.generator.report.utils;
 
 import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.WordUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.BeansException;
@@ -36,7 +39,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	private static final String BLD_GENERATOR = "bld.generator";
 
 	/** The Constant ANNOTATIONS. */
-//	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
+	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
 	/** The Constant ANNOTATIONS. */
 	public static final String ANNOTATIONS = "annotations";
@@ -120,16 +123,24 @@ public class ExcelUtils implements ApplicationContextAware {
 					try {
 						classEntity.getMethod(setMethod, classField).invoke(entity, value);
 					} catch (Exception e) {
+						Annotation fieldAnnotation=null;
 						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith(BLD_GENERATOR)) {
-							Annotation fieldAnnotation = (Annotation) value;
-							value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
-							classEntity.getMethod(setMethod, classField).invoke(entity, value);
-
+								fieldAnnotation = (Annotation) value;
+								value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
+								classEntity.getMethod(setMethod, classField).invoke(entity, value);
+						}else if(value.getClass().isArray() && Annotation.class.isAssignableFrom(((Object[])value)[0].getClass())) {
+							Object[] list=(Object[]) Array.newInstance(field.getType().getComponentType(), ((Annotation[])value).length);
+							for(int i=0;i<((Annotation[])value).length;i++) {
+								fieldAnnotation=((Annotation[])value)[i];
+								Object object = reflectionAnnotation(field.getType().getComponentType().newInstance(), fieldAnnotation);
+								list[i]=object;
+							}
+							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] {list});
 						}
 					}
 
 				} catch (Exception e) {
-				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
+					logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
 		}
@@ -282,4 +293,6 @@ public class ExcelUtils implements ApplicationContextAware {
 			rowHeight=rowHeight*568;
 		return (short)rowHeight;
 	}
+	
+	
 }

@@ -6,6 +6,8 @@
 package bld.generator.report.excel.query.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.converters.CalendarConverter;
+import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -91,10 +97,15 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	private <T extends RowSheet> void reflection(T t, Map<String, Object> mapResult) throws Exception {
 		Map<String, Object> mapResultApp = new HashMap<>();
 		for (String keyResult : mapResult.keySet()) {
-			String nameField = ExcelUtils.getNameParameter(keyResult);
+			String nameField = keyResult.contains("_")?ExcelUtils.getNameParameter(keyResult):keyResult;
 			mapResultApp.put(nameField, mapResult.get(keyResult));
 		}
-		BeanUtils.populate(t, mapResultApp);
+		BeanUtilsBean beanUtilsBean = BeanUtilsBean.getInstance();
+		Converter converter = new DateConverter();
+		beanUtilsBean.getConvertUtils().register(converter, Date.class);
+		converter=new CalendarConverter(null);
+		beanUtilsBean.getConvertUtils().register(converter, Calendar.class);
+		BeanUtils.copyProperties(t, mapResultApp);
 	}
 
 	/**

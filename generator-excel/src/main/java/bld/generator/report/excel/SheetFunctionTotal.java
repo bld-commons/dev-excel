@@ -8,10 +8,9 @@ package bld.generator.report.excel;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SheetFunctionTotal.
+ *  @param <T> the generic type
  * <br>
  * SheetFunctionTotal is the object that represent the table for totals of the functions.
- * 
- * @param <T> the generic type
  * 
  * 
  */

@@ -12,6 +12,10 @@
         "name": "bld.commons.report.excel",
         "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.number.empty.rows",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
     
 ],"properties": [
@@ -34,6 +38,10 @@
     },{
         "name": "bld.commons.report.excel.date",
         "type": "java.lang.String",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.number.empty.rows",
+        "type": "java.lang.Integer",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
 ]

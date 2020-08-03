@@ -22,6 +22,8 @@ import java.lang.annotation.Target;
  * <li>StartColumn - to set the column start</li>
  * <li>StartRow - to set the row start</li>
  * <li>Order - to set index on sheets list</li>
+ * <li>AreaBorder - to define the border areas</li>
+ * <li>showHeader - to enable/disable the writing of the header</li>
  * </ul>
  * 
  * It is used on {@link bld.generator.report.excel.SheetData} and {@link bld.generator.report.excel.SheetSummary} classes.
@@ -73,5 +75,15 @@ public @interface ExcelSheetLayout {
 	 * @return the int
 	 */
 	public int order()default -1;
+	
+	
+	public ExcelAreaBorder[] areaBorder() default {};
+	
+	/**
+	 * Show header.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean showHeader() default true;
 	
 }

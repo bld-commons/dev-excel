@@ -12,10 +12,10 @@ import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
  * The Class SheetDynamicFunctionTotal.
+ * @param <T> the generic type
  * <br>
  * SheetDynamicFunctionTotal is the object that represent the table for totals of the functions with dynamic columns
  *
- * @param <T> the generic type
  */
 public abstract class SheetDynamicFunctionTotal<T extends DynamicRowSheet> extends SheetFunctionTotal<T> implements DynamicColumn {
 

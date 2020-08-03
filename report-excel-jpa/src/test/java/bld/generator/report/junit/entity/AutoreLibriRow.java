@@ -5,266 +5,128 @@
 */
 package bld.generator.report.junit.entity;
 
-import java.util.Calendar;
+import java.util.Date;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelPivotColumn;
+import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
+import bld.generator.report.excel.annotation.ExcelPivotFilter;
+import bld.generator.report.excel.annotation.ExcelPivotRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
-import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
  * The Class AutoreLibriRow.
  */
-@ExcelFunctionRows(excelFunctions = {
-		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
-					excelColumn = @ExcelColumn(indexColumn = 9, columnName = "Prezzo Totale"), 
-					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")),
-		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER), 
-				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test"), 
-				excelFunction=@ExcelFunction(function = "${Test Date.dataA}", nameFunction = "test"))
-		},
-excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
-						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"), 
-						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",nameFunction = "prezzoTotalePerAutore"))})
-
 public class AutoreLibriRow implements RowSheet {
 
-	
-	/** The nome. */
-	@ExcelColumn(columnName = "${autore-libri-row.nome.name-column}",indexColumn = 2)
-	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "matricola")
-	private String nome;
-	
-	/** The cognome. */
-	@ExcelColumn(columnName = "${autore-libri-row.cognome.name-column}",indexColumn = 3)
-	@ExcelCellLayout(rgbForeground = @ExcelRgbColor(green=0,red=0))
-	@ExcelMergeRow(referenceField = "matricola")
-	private String cognome;
-	
-	/** The data di nascita. */
-	@ExcelColumn(columnName = "Data di Nascita",indexColumn = 4)
-	@ExcelDate(format = ColumnDateFormat.YYYY_MM_DD)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
-	@ExcelMergeRow(referenceField = "matricola")
-	private Calendar dataDiNascita;
-	
-	/** The titolo. */
-	@ExcelColumn(columnName = "Titolo",indexColumn = 6)
-	@ExcelCellLayout
-	private String titolo;
-	
-	/** The genere. */
-	@ExcelColumn(columnName = "Genere",indexColumn = 5)
-	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "cognome")
-	private String genere;
-	
-	/** The matricola. */
-	@ExcelColumn(columnName = "${autore-libri-row.matricola.name-column}",indexColumn = 1)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,locked = true)
+	@ExcelColumn(columnName = "Matricola", indexColumn = 0)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)}) 
+	@ExcelPivotFilter
 	@ExcelMergeRow(referenceField = "")
-	private Integer matricola;
-	
-	/** The prezzo. */
-	@ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(red=(byte)255,green=0,blue=0))
-	@ExcelColumn(columnName = "Prezzo",indexColumn = 7)
-	@ExcelColumnWidth(width=31)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
+	private Integer idAutore;
+	@ExcelColumn(columnName = "Anno", indexColumn = 7)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelPivotColumn(order = 0)
+	private Integer anno;	
+	@ExcelColumn(columnName = "Prezzo", indexColumn = 8)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelPivotColumnFunction(dataConsolidateFunction = {DataConsolidateFunction.SUM,DataConsolidateFunction.AVERAGE},order = 0)
 	private Double prezzo;
+	@ExcelColumn(columnName = "Titolo", indexColumn = 6)
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelPivotRow(order = 3)
+	private String titolo;
+	@ExcelColumn(columnName = "Nome", indexColumn = 1)
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelPivotRow(order = 2)
+	@ExcelMergeRow(referenceField = "idAutore")
+	private String nome;
+	@ExcelColumn(columnName = "Cognome", indexColumn = 2)
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelPivotRow(order = 0)
+	@ExcelMergeRow(referenceField = "idAutore")
+	private String cognome;
+	@ExcelColumn(columnName = "Data di Nascita", indexColumn = 3)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelDate
+	@ExcelMergeRow(referenceField = "idAutore")
+	private Date dataNascita;
+	@ExcelColumn(columnName = "Sesso", indexColumn = 4)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelMergeRow(referenceField = "idAutore")
+	private Character sesso;
+	@ExcelColumn(columnName = "Genere", indexColumn = 5)
+	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
+	@ExcelMergeRow(referenceField = "idAutore")
+	private String desGenere;
 	
-	/** The supplemento. */
-	@ExcelColumn(columnName = "Supplemento",indexColumn = 8)
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
-	private Double supplemento;
-
 	
-	
-	/**
-	 * Instantiates a new autore libri row.
-	 */
 	public AutoreLibriRow() {
 		super();
+		
 	}
-
-	/**
-	 * Instantiates a new autore libri row.
-	 *
-	 * @param nome          the nome
-	 * @param cognome       the cognome
-	 * @param dataDiNascita the data di nascita
-	 * @param titolo        the titolo
-	 * @param genere        the genere
-	 * @param matricola     the matricola
-	 * @param prezzo        the prezzo
-	 * @param supplemento   the supplemento
-	 */
-	public AutoreLibriRow(String nome, String cognome, Calendar dataDiNascita, String titolo, String genere, Integer matricola,Double prezzo,Double supplemento) {
-		super();
-		this.nome = nome;
-		this.cognome = cognome;
-		this.dataDiNascita = dataDiNascita;
-		this.titolo = titolo;
-		this.genere = genere;
-		this.matricola = matricola;
-		this.prezzo=prezzo;
-		this.supplemento=supplemento;
+	public Integer getIdAutore() {
+		return idAutore;
 	}
-
-	/**
-	 * Gets the supplemento.
-	 *
-	 * @return the supplemento
-	 */
-	public Double getSupplemento() {
-		return supplemento;
+	public void setIdAutore(Integer idAutore) {
+		this.idAutore = idAutore;
 	}
-
-	/**
-	 * Sets the supplemento.
-	 *
-	 * @param supplemento the new supplemento
-	 */
-	public void setSupplemento(Double supplemento) {
-		this.supplemento = supplemento;
+	public Integer getAnno() {
+		return anno;
 	}
-
-	/**
-	 * Gets the nome.
-	 *
-	 * @return the nome
-	 */
-	public String getNome() {
-		return nome;
+	public void setAnno(Integer anno) {
+		this.anno = anno;
 	}
-
-	/**
-	 * Sets the nome.
-	 *
-	 * @param nome the new nome
-	 */
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	/**
-	 * Gets the cognome.
-	 *
-	 * @return the cognome
-	 */
-	public String getCognome() {
-		return cognome;
-	}
-
-	/**
-	 * Sets the cognome.
-	 *
-	 * @param cognome the new cognome
-	 */
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
-	/**
-	 * Gets the data di nascita.
-	 *
-	 * @return the data di nascita
-	 */
-	public Calendar getDataDiNascita() {
-		return dataDiNascita;
-	}
-
-	/**
-	 * Sets the data di nascita.
-	 *
-	 * @param dataDiNascita the new data di nascita
-	 */
-	public void setDataDiNascita(Calendar dataDiNascita) {
-		this.dataDiNascita = dataDiNascita;
-	}
-
-	/**
-	 * Gets the titolo.
-	 *
-	 * @return the titolo
-	 */
-	public String getTitolo() {
-		return titolo;
-	}
-
-	/**
-	 * Sets the titolo.
-	 *
-	 * @param titolo the new titolo
-	 */
-	public void setTitolo(String titolo) {
-		this.titolo = titolo;
-	}
-
-	/**
-	 * Gets the genere.
-	 *
-	 * @return the genere
-	 */
-	public String getGenere() {
-		return genere;
-	}
-
-	/**
-	 * Sets the genere.
-	 *
-	 * @param genere the new genere
-	 */
-	public void setGenere(String genere) {
-		this.genere = genere;
-	}
-
-	/**
-	 * Gets the matricola.
-	 *
-	 * @return the matricola
-	 */
-	public Integer getMatricola() {
-		return matricola;
-	}
-
-	/**
-	 * Sets the matricola.
-	 *
-	 * @param matricola the new matricola
-	 */
-	public void setMatricola(Integer matricola) {
-		this.matricola = matricola;
-	}
-
-	/**
-	 * Gets the prezzo.
-	 *
-	 * @return the prezzo
-	 */
 	public Double getPrezzo() {
 		return prezzo;
 	}
-
-	/**
-	 * Sets the prezzo.
-	 *
-	 * @param prezzo the new prezzo
-	 */
 	public void setPrezzo(Double prezzo) {
 		this.prezzo = prezzo;
 	}
+	public String getTitolo() {
+		return titolo;
+	}
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getCognome() {
+		return cognome;
+	}
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+	public Date getDataNascita() {
+		return dataNascita;
+	}
+	public void setDataNascita(Date dataNascita) {
+		this.dataNascita = dataNascita;
+	}
+	public Character getSesso() {
+		return sesso;
+	}
+	public void setSesso(Character sesso) {
+		this.sesso = sesso;
+	}
+	public String getDesGenere() {
+		return desGenere;
+	}
+	public void setDesGenere(String desGenere) {
+		this.desGenere = desGenere;
+	}
+
 	
 	
 	
