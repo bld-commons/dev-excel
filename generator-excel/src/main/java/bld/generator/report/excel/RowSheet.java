@@ -20,31 +20,31 @@ package bld.generator.report.excel;
  * <table style="width:100%;">
  * <tr>
  * 	<th style="width: 8%"></th>
- *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name 1</th>
- *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name 2</th>
- *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name 3</th>
- *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name N</th>
+ *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name of the field 1</th>
+ *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name of the field 2</th>
+ *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name of the field 3</th>
+ *   <th style="width: 23%; border: 1px solid #666; text-align: center;">column name of the field ...N</th>
  * </tr>
  * <tr>
  *   <td style="width: 8%; ">row 1</td>
- *   <td style="width: 23%; border: 1px solid #666;">value column 1</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 2</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 3</td>
- *  	<td style="width: 23%; border: 1px solid #666">value column N</td>
+ *   <td style="width: 23%; border: 1px solid #666;">value of the field 1</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 2</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 3</td>
+ *  	<td style="width: 23%; border: 1px solid #666">value of the field ...N</td>
  * </tr>
  * <tr>
  *   <td style="width: 8%; ">row 2</td>
- *   <td style="width: 23%; border: 1px solid #666;">value column 1</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 2</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 3</td>
- *  	<td style="width: 23%; border: 1px solid #666">value column N</td>
+ *   <td style="width: 23%; border: 1px solid #666;">value of the field 1</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 2</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 3</td>
+ *  	<td style="width: 23%; border: 1px solid #666">value of the field ...N</td>
  * </tr>
  * <tr>
  *   <td style="width: 8%; ">row N</td>
- *   <td style="width: 23%; border: 1px solid #666;">value column 1</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 2</td>
- *   <td style="width: 23%; border: 1px solid #666">value column 3</td>
- *   <td style="width: 23%; border: 1px solid #666">value column N</td>
+ *   <td style="width: 23%; border: 1px solid #666;">value of the field 1</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 2</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field 3</td>
+ *   <td style="width: 23%; border: 1px solid #666">value of the field ...N</td>
  * </tr>
  * 
  *</table>
