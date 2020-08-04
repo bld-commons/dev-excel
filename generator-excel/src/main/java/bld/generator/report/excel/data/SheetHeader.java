@@ -116,8 +116,7 @@ public class SheetHeader implements Cloneable {
 	 * @throws Exception the exception
 	 */
 	public ExcelDate getExcelDate() throws Exception {
-		if (this.excelDate == null && (Date.class.isAssignableFrom(this.field.getType())
-				|| Calendar.class.isAssignableFrom(this.field.getType())))
+		if (this.excelDate == null && this.field !=null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType())))
 			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
 		return excelDate;
 	}
