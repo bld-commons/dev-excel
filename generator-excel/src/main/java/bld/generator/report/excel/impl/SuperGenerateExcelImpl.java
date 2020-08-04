@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.impl;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -21,6 +20,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -321,7 +321,7 @@ public class SuperGenerateExcelImpl {
 					sheet.protectSheet("");
 				Object value = null;
 				if (entity != null)
-					value = new PropertyDescriptor(field.getName(), classRow).getReadMethod().invoke(entity);
+					value = PropertyUtils.getProperty(entity, field.getName());
 				listSheetHeader.add(new SheetHeader(field, value));
 				if (listTitle.contains(column.columnName()))
 					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");

@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.impl;
 
-import java.beans.PropertyDescriptor;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -241,7 +241,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					CellStyle cellStyle = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol()).getCellStyle();
 					cellStyle.setWrapText(true);
 					Cell cell = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
-					Object value = new PropertyDescriptor(field.getName(), report.getClass()).getReadMethod().invoke(report);
+					Object value = PropertyUtils.getProperty(report, field.getName());
 					ExcelDate excelDate = null;
 					if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType())) {
 						excelDate = ExcelUtils.getAnnotation(field, ExcelDate.class);
@@ -467,7 +467,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Field field = listSheetHeader.get(indexHeader).getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
-					value = new PropertyDescriptor(field.getName(), rowSheet.getClass()).getReadMethod().invoke(rowSheet);
+					value =PropertyUtils.getProperty(rowSheet, field.getName());
 					mapValue.put(field.getName(), value);
 				} else if (StringUtils.isNotBlank(sheetHeader.getKeyMap())) {
 					DynamicRowSheet dynamicRowSheet = (DynamicRowSheet) rowSheet;
@@ -517,7 +517,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField()))
 							throw new Exception("Only first column can have the propertie \"referenceColumn\" is blank!!!");
 						if (field != null)
-							valueBefore = new PropertyDescriptor(field.getName(), lastRowSheet.getClass()).getReadMethod().invoke(lastRowSheet);
+							valueBefore =PropertyUtils.getProperty(lastRowSheet, field.getName());
 						if (StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
@@ -526,8 +526,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeRow().referenceField();
-							Object valueRefColumn = new PropertyDescriptor(referenceField, rowSheet.getClass()).getReadMethod().invoke(rowSheet);
-							Object valueRefColumnBefore = new PropertyDescriptor(referenceField, lastRowSheet.getClass()).getReadMethod().invoke(lastRowSheet);
+							Object valueRefColumn =PropertyUtils.getProperty(rowSheet,referenceField);
+							Object valueRefColumnBefore =PropertyUtils.getProperty(lastRowSheet,referenceField);
 							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else {
@@ -783,7 +783,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (field.isAnnotationPresent(ExcelLabel.class)) {
 				Row row = sheet.createRow(indexRow);
 				ExcelLabel excelLabel = field.getAnnotation(ExcelLabel.class);
-				Object value = new PropertyDescriptor(field.getName(), classSheet).getReadMethod().invoke(baseSheet);
+				Object value =PropertyUtils.getProperty(baseSheet, field.getName());
 				if (value != null) {
 					if (!(value instanceof String))
 						throw new Exception(field.getName() + " field type is not supported: required String");
