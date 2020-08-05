@@ -650,7 +650,9 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
-		setCellStyleExcel(cellStyle != null ? cellStyle : createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(), indexRow), cell, layoutCell, indexRow);
+		if(cellStyle==null)
+			cellStyle=this.mapCellStyle.get(layoutCell);
+		setCellStyleExcel(cellStyle , cell, layoutCell, indexRow);
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
