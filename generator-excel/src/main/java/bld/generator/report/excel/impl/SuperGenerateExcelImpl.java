@@ -651,10 +651,11 @@ public class SuperGenerateExcelImpl {
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		layoutCell.setColor(indexRow);
-		if(cellStyle==null && this.mapCellStyle.containsKey(layoutCell))
-			cellStyle=this.mapCellStyle.get(layoutCell);
-		else if(cellStyle==null) {
-			cellStyle=createCellStyle(workbook, sheetHeader.getExcelCellLayout(),sheetHeader.getExcelDate(), indexRow);
+		if(cellStyle==null) {
+			if(this.mapCellStyle.containsKey(layoutCell))
+				cellStyle=this.mapCellStyle.get(layoutCell);
+			else 
+				cellStyle=createCellStyle(workbook, sheetHeader.getExcelCellLayout(),sheetHeader.getExcelDate(), indexRow);
 		}
 		setCellStyleExcel(cellStyle , cell, layoutCell, indexRow);
 		if (sheetHeader.getValue() instanceof Date)
