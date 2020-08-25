@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.WordUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.BeansException;
@@ -39,7 +37,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	private static final String BLD_GENERATOR = "bld.generator";
 
 	/** The Constant ANNOTATIONS. */
-	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
+//	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 	
 	/** The Constant ANNOTATIONS. */
 	public static final String ANNOTATIONS = "annotations";
@@ -140,7 +138,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					}
 
 				} catch (Exception e) {
-					logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
+				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
 		}

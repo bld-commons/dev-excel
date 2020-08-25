@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.impl;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -21,6 +20,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -321,7 +321,7 @@ public class SuperGenerateExcelImpl {
 					sheet.protectSheet("");
 				Object value = null;
 				if (entity != null)
-					value = new PropertyDescriptor(field.getName(), classRow).getReadMethod().invoke(entity);
+					value = PropertyUtils.getProperty(entity, field.getName());
 				listSheetHeader.add(new SheetHeader(field, value));
 				if (listTitle.contains(column.columnName()))
 					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
@@ -650,7 +650,14 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
-		setCellStyleExcel(cellStyle != null ? cellStyle : createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(), indexRow), cell, layoutCell, indexRow);
+		layoutCell.setColor(indexRow);
+		if(cellStyle==null) {
+			if(this.mapCellStyle.containsKey(layoutCell))
+				cellStyle=this.mapCellStyle.get(layoutCell);
+			else 
+				cellStyle=createCellStyle(workbook, sheetHeader.getExcelCellLayout(),sheetHeader.getExcelDate(), indexRow);
+		}
+		setCellStyleExcel(cellStyle , cell, layoutCell, indexRow);
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)

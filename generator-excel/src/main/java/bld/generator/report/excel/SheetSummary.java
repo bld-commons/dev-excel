@@ -32,16 +32,16 @@ import bld.generator.report.excel.constant.ExcelConstant;
  *    <th colspan="2" style="border: 1px solid #666; text-align: center;">Title</th>
  *  </tr>
  *  <tr>
- *    <td style="width:50%; border: 1px solid #666">property 1</td>
- *    <td style="width:50%; border: 1px solid #666">value 1</td>
+ *    <td style="width:50%; border: 1px solid #666">property name of the field 1</td>
+ *    <td style="width:50%; border: 1px solid #666">value of the field 1</td>
  *  </tr>
  *  <tr>
- *    <td style="width:50%; border: 1px solid #666">property 2</td>
- *    <td style="width:50%; border: 1px solid #666">value 2</td>
+ *    <td style="width:50%; border: 1px solid #666">property name of the field 2</td>
+ *    <td style="width:50%; border: 1px solid #666">value of the field 2</td>
  *  </tr>
  *  <tr>
- *    <td style="width:50%; border: 1px solid #666">property ...</td>
- *    <td style="width:50%;border: 1px solid #666">value ...</td>
+ *    <td style="width:50%; border: 1px solid #666">property name of the field ...N</td>
+ *    <td style="width:50%;border: 1px solid #666">value of the field ...N</td>
  *  </tr>
  *</table>
  */
