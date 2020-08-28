@@ -14,6 +14,7 @@ import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelPivotColumn;
 import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
@@ -38,6 +39,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(columnName = "Prezzo", indexColumn = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotColumnFunction(dataConsolidateFunction = {DataConsolidateFunction.SUM,DataConsolidateFunction.AVERAGE},order = 0)
+	@ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(red = (byte)255,green = (byte)0,blue = (byte)0))
 	private Double prezzo;
 	@ExcelColumn(columnName = "Titolo", indexColumn = 6)
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})

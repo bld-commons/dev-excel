@@ -126,6 +126,13 @@ public class ExcelUtils implements ApplicationContextAware {
 								fieldAnnotation = (Annotation) value;
 								value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
 								classEntity.getMethod(setMethod, classField).invoke(entity, value);
+						}else if(Annotation.class.isAssignableFrom(value.getClass()) && field.getType().isArray() && field.getType().getComponentType().getName().startsWith(BLD_GENERATOR)){
+							fieldAnnotation = (Annotation) value;
+							value = reflectionAnnotation(field.getType().getComponentType().newInstance(), fieldAnnotation);
+							Object[] array=(Object[]) Array.newInstance(field.getType().getComponentType(), 1);
+							Array.set(array, 0, value);
+							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] {array});
+							
 						}else if(value.getClass().isArray() && Annotation.class.isAssignableFrom(((Object[])value)[0].getClass())) {
 							Object[] list=(Object[]) Array.newInstance(field.getType().getComponentType(), ((Annotation[])value).length);
 							for(int i=0;i<((Annotation[])value).length;i++) {
@@ -138,6 +145,7 @@ public class ExcelUtils implements ApplicationContextAware {
 					}
 
 				} catch (Exception e) {
+					
 				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
