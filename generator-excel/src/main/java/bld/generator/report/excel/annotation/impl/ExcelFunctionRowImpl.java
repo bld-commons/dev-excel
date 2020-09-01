@@ -9,6 +9,7 @@ import java.lang.annotation.Annotation;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 
@@ -25,6 +26,9 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	
 	/** The excel function. */
 	private ExcelFunction excelFunction;
+	
+	/** The excel column width. */
+	private ExcelColumnWidth excelColumnWidth;
 	
 	/**
 	 * Clone.
@@ -65,7 +69,22 @@ public class ExcelFunctionRowImpl implements Cloneable{
 				return excelFunction;
 			}
 
+			@Override
+			public ExcelColumnWidth excelColumnWidth() {
+				return excelColumnWidth;
+			}
+
 		};
+	}
+
+	
+
+	/**
+	 * Instantiates a new excel function row impl.
+	 */
+	public ExcelFunctionRowImpl() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -74,13 +93,14 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	 * @param excelCellsLayout the excel cells layout
 	 * @param excelColumn      the excel column
 	 * @param excelFunction    the excel function
+	 * @param excelColumnWidth the excel column width
 	 */
-	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn,
-			ExcelFunction excelFunction) {
+	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth) {
 		super();
 		this.excelCellsLayout = excelCellsLayout;
 		this.excelColumn = excelColumn;
 		this.excelFunction = excelFunction;
+		this.excelColumnWidth = excelColumnWidth;
 	}
 
 	/**
@@ -129,6 +149,24 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	}
 
 	/**
+	 * Gets the excel column width.
+	 *
+	 * @return the excel column width
+	 */
+	public ExcelColumnWidth getExcelColumnWidth() {
+		return excelColumnWidth;
+	}
+
+	/**
+	 * Sets the excel column width.
+	 *
+	 * @param excelColumnWidth the new excel column width
+	 */
+	public void setExcelColumnWidth(ExcelColumnWidth excelColumnWidth) {
+		this.excelColumnWidth = excelColumnWidth;
+	}
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -139,6 +177,7 @@ public class ExcelFunctionRowImpl implements Cloneable{
 		int result = 1;
 		result = prime * result + ((excelCellsLayout == null) ? 0 : excelCellsLayout.hashCode());
 		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
+		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		return result;
 	}
@@ -168,6 +207,11 @@ public class ExcelFunctionRowImpl implements Cloneable{
 				return false;
 		} else if (!excelColumn.equals(other.excelColumn))
 			return false;
+		if (excelColumnWidth == null) {
+			if (other.excelColumnWidth != null)
+				return false;
+		} else if (!excelColumnWidth.equals(other.excelColumnWidth))
+			return false;
 		if (excelFunction == null) {
 			if (other.excelFunction != null)
 				return false;
@@ -175,6 +219,8 @@ public class ExcelFunctionRowImpl implements Cloneable{
 			return false;
 		return true;
 	}
+
+	
 
 
 	
