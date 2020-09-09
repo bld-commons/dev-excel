@@ -13,6 +13,8 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelDropDownList;
+import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
@@ -56,6 +58,12 @@ public class SheetHeader implements Cloneable {
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
+	
+	/** The excel drop down reference list. */
+	private ExcelDropDownReferenceList excelDropDownReferenceList;
+	
+	/** The excel drop down list. */
+	private ExcelDropDownList excelDropDownList;
 
 	/** The key map. */
 	private String keyMap;
@@ -101,7 +109,6 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel column.
 	 *
 	 * @return the excel column
-	 * @throws Exception the exception
 	 */
 	public ExcelColumn getExcelColumn() throws Exception {
 		if (this.excelColumn == null)
@@ -113,7 +120,6 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel date.
 	 *
 	 * @return the excel date
-	 * @throws Exception the exception
 	 */
 	public ExcelDate getExcelDate() throws Exception {
 		if (this.excelDate == null && this.field !=null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType())))
@@ -125,7 +131,6 @@ public class SheetHeader implements Cloneable {
 	 * Gets the excel cell layout.
 	 *
 	 * @return the excel cell layout
-	 * @throws Exception the exception
 	 */
 	public ExcelCellLayout getExcelCellLayout() throws Exception {
 		if (this.excelCellLayout == null)
@@ -351,5 +356,43 @@ public class SheetHeader implements Cloneable {
 	public void setExcelHeaderCellLayout(ExcelHeaderCellLayout excelHeaderCellLayout) {
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
 	}
+
+	/**
+	 * Gets the excel drop down reference list.
+	 *
+	 * @return the excel drop down reference list
+	 */
+	public ExcelDropDownReferenceList getExcelDropDownReferenceList() {
+		return excelDropDownReferenceList;
+	}
+
+	/**
+	 * Sets the excel drop down reference list.
+	 *
+	 * @param excelDropDown the new excel drop down reference list
+	 */
+	public void setExcelDropDownReferenceList(ExcelDropDownReferenceList excelDropDown) {
+		this.excelDropDownReferenceList = excelDropDown;
+	}
+
+	/**
+	 * Gets the excel drop down list.
+	 *
+	 * @return the excel drop down list
+	 */
+	public ExcelDropDownList getExcelDropDownList() {
+		return excelDropDownList;
+	}
+
+	/**
+	 * Sets the excel drop down list.
+	 *
+	 * @param excelDropDownList the new excel drop down list
+	 */
+	public void setExcelDropDownList(ExcelDropDownList excelDropDownList) {
+		this.excelDropDownList = excelDropDownList;
+	}
+	
+	
 
 }

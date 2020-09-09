@@ -14,6 +14,7 @@ import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelPivotColumn;
@@ -67,6 +68,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(columnName = "Genere", indexColumn = 5)
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelDropDownReferenceList(areaRange = "${Genere.genereRowStart}:${Genere.genereRowEnd}",suppressDropDownArrow = true)
 	private String desGenere;
 	
 	

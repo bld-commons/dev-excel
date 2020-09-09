@@ -32,7 +32,9 @@ import bld.generator.report.excel.constant.ExcelConstant;
 		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.NONE, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)),
 		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${idAutoreRowHeader}", border = @ExcelBorder(bottom = BorderStyle.NONE, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)),
 		@ExcelAreaBorder(areaRange = "${nomeRowHeader}:${sessoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED), includeSuperHeader = true),
-		@ExcelAreaBorder(areaRange = "${desGenereRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED),includeSuperHeader = true)})
+		@ExcelAreaBorder(areaRange = "${desGenereRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED),includeSuperHeader = true)}
+,order = 1
+		)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 @ExcelQuery(select = "select\n" + "	sp.anno,sp.prezzo,l.id_libro,l.titolo,a.id_autore,a.nome,a.cognome,a.data_nascita,a.sesso,g.des_genere\n" + "from\n" + "	storico_prezzo sp\n" + "inner join libro l on\n" + "	sp.id_libro = l.id_libro\n"

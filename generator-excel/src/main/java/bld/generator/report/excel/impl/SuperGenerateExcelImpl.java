@@ -37,6 +37,9 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Hyperlink;
@@ -45,6 +48,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -63,6 +67,8 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelDropDownList;
+import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -188,7 +194,6 @@ public class SuperGenerateExcelImpl {
 		return cellStyleHeader;
 	}
 
-
 	/**
 	 * Creates the cell style.
 	 *
@@ -201,7 +206,6 @@ public class SuperGenerateExcelImpl {
 	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, Integer indexRow) throws Exception {
 		return createCellStyle(workbook, layout, null, indexRow);
 	}
-
 
 	/**
 	 * Creates the cell style.
@@ -322,7 +326,14 @@ public class SuperGenerateExcelImpl {
 				Object value = null;
 				if (entity != null)
 					value = PropertyUtils.getProperty(entity, field.getName());
-				listSheetHeader.add(new SheetHeader(field, value));
+				SheetHeader sheetHeader = new SheetHeader(field, value);
+				if(field.isAnnotationPresent(ExcelDropDownReferenceList.class) && field.isAnnotationPresent(ExcelDropDownList.class))
+					throw new Exception("The field "+field.getName()+" can not have the following annotations @ExcelDropDownReferenceList and @ExceDropDownList set together");
+				if (field.isAnnotationPresent(ExcelDropDownReferenceList.class))
+					sheetHeader.setExcelDropDownReferenceList(field.getAnnotation(ExcelDropDownReferenceList.class));
+				if (field.isAnnotationPresent(ExcelDropDownList.class))
+					sheetHeader.setExcelDropDownList(field.getAnnotation(ExcelDropDownList.class));
+				listSheetHeader.add(sheetHeader);
 				if (listTitle.contains(column.columnName()))
 					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
 				listTitle.add(column.columnName());
@@ -397,10 +408,12 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow    the index row
 	 * @param mapMergeRow the map merge row
 	 * @param numColumn   the num column
+	 * @param sheetHeader 
 	 * @throws Exception the exception
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
+		this.addDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn);
 		mergeRow.setRowEnd(indexRow - 1);
 		// setCellValueExcel(mergeRow.getCellFrom(),
 		// mergeRow.getCellStyleFrom(),
@@ -445,7 +458,6 @@ public class SuperGenerateExcelImpl {
 		comment.setString(workbook.getCreationHelper().createRichTextString(commento));
 		cellHeader.setCellComment(comment);
 	}
-
 
 	/**
 	 * Sets the cell summary.
@@ -542,7 +554,6 @@ public class SuperGenerateExcelImpl {
 
 	}
 
-
 	/**
 	 * Make function.
 	 *
@@ -607,7 +618,6 @@ public class SuperGenerateExcelImpl {
 
 	}
 
-
 	/**
 	 * Sets the cell formula excel.
 	 *
@@ -639,7 +649,6 @@ public class SuperGenerateExcelImpl {
 		cell.setCellFormula(function);
 	}
 
-
 	/**
 	 * Sets the cell value excel.
 	 *
@@ -653,13 +662,13 @@ public class SuperGenerateExcelImpl {
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		layoutCell.setColor(indexRow);
-		if(cellStyle==null) {
-			if(this.mapCellStyle.containsKey(layoutCell))
-				cellStyle=this.mapCellStyle.get(layoutCell);
-			else 
-				cellStyle=createCellStyle(workbook, sheetHeader.getExcelCellLayout(),sheetHeader.getExcelDate(), indexRow);
+		if (cellStyle == null) {
+			if (this.mapCellStyle.containsKey(layoutCell))
+				cellStyle = this.mapCellStyle.get(layoutCell);
+			else
+				cellStyle = createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(), indexRow);
 		}
-		setCellStyleExcel(cellStyle , cell, layoutCell, indexRow);
+		setCellStyleExcel(cellStyle, cell, layoutCell, indexRow);
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
@@ -708,7 +717,6 @@ public class SuperGenerateExcelImpl {
 		return cellStyle;
 	}
 
-	
 	/**
 	 * Sets the cell style excel.
 	 *
@@ -822,6 +830,12 @@ public class SuperGenerateExcelImpl {
 					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
 					sheetHeader.setExcelHeaderCellLayout(extraColumnAnnotation.getExcelHeaderCellLayout());
 					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
+					if(extraColumnAnnotation.getExcelDropDownList()!=null && extraColumnAnnotation.getExcelDropDownReferenceList()!=null)
+						throw new Exception("The field "+keyMap+" can not have the following annotations @ExcelDropDownReferenceList and @ExceDropDownList set together");
+					if (extraColumnAnnotation.getExcelDropDownReferenceList()!=null)
+						sheetHeader.setExcelDropDownReferenceList(extraColumnAnnotation.getExcelDropDownReferenceList());
+					if (extraColumnAnnotation.getExcelDropDownList()!=null)
+						sheetHeader.setExcelDropDownList(extraColumnAnnotation.getExcelDropDownList());
 					if (extraColumnAnnotation.getExcelFunction() != null)
 						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
 
@@ -948,7 +962,6 @@ public class SuperGenerateExcelImpl {
 		}
 	}
 
-
 	/**
 	 * Creates the pivot.
 	 *
@@ -1005,5 +1018,53 @@ public class SuperGenerateExcelImpl {
 		return indexRow;
 
 	}
+
+	protected void addDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) throws Exception {
+		if(sheetHeader.getExcelDropDownReferenceList()!=null || sheetHeader.getExcelDropDownList()!=null) {
+			DataValidationConstraint constraint =null;
+			DataValidation dataValidation = null;
+			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
+			CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
+			if(sheetHeader.getExcelDropDownReferenceList()!=null) {
+				String areaRange=sheetHeader.getExcelDropDownReferenceList().areaRange();
+				areaRange=makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
+				areaRange=makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+				constraint = validationHelper.createFormulaListConstraint(areaRange);
+				dataValidation = validationHelper.createValidation(constraint, addressList);
+				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDownReferenceList().suppressDropDownArrow());
+			}else {
+				constraint = validationHelper.createExplicitListConstraint(sheetHeader.getExcelDropDownList().list());
+				dataValidation = validationHelper.createValidation(constraint, addressList);
+				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDownList().suppressDropDownArrow());
+			}
+			
+			sheet.addValidationData(dataValidation);
+
+		}
+	}
+	
+	
+	
+//	private void getDropDowOnCell(Workbook workbook, ExcelDati<RowExcel> excelDati, Sheet worksheet, CellStyle cellStyle, int indiceRiga, int inizioRigaSheet) {
+//		ExcelStatistico statistico = (ExcelStatistico) excelDati;
+//		for (String keyHeader : statistico.getMapCharts().keySet()) {
+//			Row headerRow = worksheet.createRow(indiceRiga);
+//			indiceRiga++;
+//			List<String[]> campi = setHeaderStatisticoExcelDati(worksheet, cellStyle, headerRow, statistico.getMapCharts().get(keyHeader), workbook, indiceRiga, inizioRigaSheet, excelDati.getHeader(), excelDati.getListRowExcel().size());
+//
+//			String daCella = calcoloCoordinateFunction(inizioRigaSheet + 1, excelDati.getHeader().indexOf(keyHeader), true),
+//					aCella = calcoloCoordinateFunction(inizioRigaSheet + excelDati.getListRowExcel().size(), excelDati.getHeader().indexOf(keyHeader), true);
+//			System.out.println("Da cella: " + daCella + " ---- A cella: " + aCella);
+//			DataValidationHelper validationHelper = worksheet.getDataValidationHelper();// new
+//																						// HSSFDataValidationHelper(worksheet);
+//			DataValidationConstraint constraint = validationHelper.createFormulaListConstraint(worksheet.getSheetName() + "!" + daCella + ":" + aCella);
+//			CellRangeAddressList addressList = new CellRangeAddressList(indiceRiga, indiceRiga, 0, 0);
+//			HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
+//			worksheet.addValidationData(dataValidation);
+//		}
+//		CreationHelper creatioHelper = workbook.getCreationHelper();
+//	}
+	
+	
 
 }

@@ -7,9 +7,10 @@ package bld.generator.report.junit.entity;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.SheetData;
+import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelQuery;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 
@@ -19,7 +20,8 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelHeaderLayout
 @ExcelSheetLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-public class GenereSheet extends SheetData<GenereRow>{
+@ExcelQuery(select = "select des_genere as genere from genere")
+public class GenereSheet extends QuerySheetData<GenereRow>{
 	
 	
 

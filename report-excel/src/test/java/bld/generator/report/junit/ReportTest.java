@@ -35,6 +35,7 @@ import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
+import bld.generator.report.excel.annotation.impl.ExcelDropDownListImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
@@ -230,6 +231,7 @@ public class ReportTest {
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20,false));
+		extraColumnAnnotation.setExcelDropDownList(new ExcelDropDownListImpl(true, new String[] {"test1","test2"}));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
 		
 		

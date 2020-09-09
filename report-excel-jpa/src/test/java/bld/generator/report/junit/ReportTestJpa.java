@@ -25,6 +25,7 @@ import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
+import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
@@ -77,11 +78,7 @@ public class ReportTestJpa {
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		
-		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
-		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
-		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
-		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
-		listBaseSheet.add(autoreLibriSheet);
+		
 
 		
 		
@@ -89,7 +86,14 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
 		
+		GenereSheet genereSheet=new GenereSheet("Genere");
+		listBaseSheet.add(genereSheet);
 		
+		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
+		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
+		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
+		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
+		listBaseSheet.add(autoreLibriSheet);
 		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);

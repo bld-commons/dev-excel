@@ -102,7 +102,6 @@ import bld.generator.report.utils.ExcelUtils;
 @Scope("prototype")
 public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements ScopeGenerateExcel {
 
-	
 	@Value("${bld.commons.number.empty.rows:2}")
 	private int numberEmptyRows;
 
@@ -467,7 +466,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Field field = listSheetHeader.get(indexHeader).getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
-					value =PropertyUtils.getProperty(rowSheet, field.getName());
+					value = PropertyUtils.getProperty(rowSheet, field.getName());
 					mapValue.put(field.getName(), value);
 				} else if (StringUtils.isNotBlank(sheetHeader.getKeyMap())) {
 					DynamicRowSheet dynamicRowSheet = (DynamicRowSheet) rowSheet;
@@ -509,29 +508,32 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							infoColumn.setLastRowReference(indexRow);
 							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 							mapMergeRow.put(numColumn, mergeRow);
-						} else
+						} else {
+							super.addDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
 							super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow);
+						}
+
 						repeat = false;
 					} else {
 						infoColumn.getMapRowMergeRow().put(indexRow, infoColumn.getMergeCell());
 						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField()))
 							throw new Exception("Only first column can have the propertie \"referenceColumn\" is blank!!!");
 						if (field != null)
-							valueBefore =PropertyUtils.getProperty(lastRowSheet, field.getName());
+							valueBefore = PropertyUtils.getProperty(lastRowSheet, field.getName());
 						if (StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
+								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeRow().referenceField();
-							Object valueRefColumn =PropertyUtils.getProperty(rowSheet,referenceField);
-							Object valueRefColumnBefore =PropertyUtils.getProperty(lastRowSheet,referenceField);
+							Object valueRefColumn = PropertyUtils.getProperty(rowSheet, referenceField);
+							Object valueRefColumnBefore = PropertyUtils.getProperty(lastRowSheet, referenceField);
 							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
-								mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
+								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else {
-								repeat = setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
+								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
 							}
 						}
 
@@ -559,7 +561,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader())
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 
-
 		if (sheetData instanceof FunctionsTotal) {
 			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal = (FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>) sheetData;
 			if (functionsTotal.getSheetFunctionsTotal() != null) {
@@ -586,10 +587,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			}
 		}
 
-
 		if (sheet instanceof XSSFSheet && sheetData.getClass().isAnnotationPresent(ExcelPivot.class))
 			indexRow = this.createPivot((XSSFSheet) sheet, sheetData, startRowSheet, excelSheetLayout.startColumn(), indexRow, listSheetHeader.size() + excelSheetLayout.startColumn() - 1, indexRow);
-		
+
 		for (ExcelAreaBorder areaBorder : excelSheetLayout.areaBorder()) {
 			String areaRange = areaBorder.areaRange();
 			areaRange = this.makeFunction(sheet, null, areaRange, RowStartEndType.ROW_EMPTY);
@@ -601,16 +601,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			int firstColumn = region.getFirstColumn();
 			int lastRow = region.getLastRow();
 			int lastColumn = region.getLastColumn();
-			
-			int rowSuperHeader=0;
-			if(areaBorder.includeSuperHeader() && sheetData.getClass().isAnnotationPresent(ExcelSuperHeaders.class)) {
-				ExcelSuperHeaders excelSuperHeaders=sheetData.getClass().getAnnotation(ExcelSuperHeaders.class);
-				rowSuperHeader=excelSuperHeaders.superHeaders().length;
+
+			int rowSuperHeader = 0;
+			if (areaBorder.includeSuperHeader() && sheetData.getClass().isAnnotationPresent(ExcelSuperHeaders.class)) {
+				ExcelSuperHeaders excelSuperHeaders = sheetData.getClass().getAnnotation(ExcelSuperHeaders.class);
+				rowSuperHeader = excelSuperHeaders.superHeaders().length;
 			}
-			if(sheet.getRow(firstRow-rowSuperHeader).getCell(firstColumn)!=null && sheet.getRow(firstRow-rowSuperHeader).getCell(lastColumn)!=null)
-				firstRow=firstRow-rowSuperHeader;
-			
-			
+			if (sheet.getRow(firstRow - rowSuperHeader).getCell(firstColumn) != null && sheet.getRow(firstRow - rowSuperHeader).getCell(lastColumn) != null)
+				firstRow = firstRow - rowSuperHeader;
+
 			for (int count = firstRow; count <= lastRow; count++) {
 				Cell cellLeft = sheet.getRow(count).getCell(firstColumn);
 				Cell cellRight = sheet.getRow(count).getCell(lastColumn);
@@ -783,7 +782,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (field.isAnnotationPresent(ExcelLabel.class)) {
 				Row row = sheet.createRow(indexRow);
 				ExcelLabel excelLabel = field.getAnnotation(ExcelLabel.class);
-				Object value =PropertyUtils.getProperty(baseSheet, field.getName());
+				Object value = PropertyUtils.getProperty(baseSheet, field.getName());
 				if (value != null) {
 					if (!(value instanceof String))
 						throw new Exception(field.getName() + " field type is not supported: required String");
