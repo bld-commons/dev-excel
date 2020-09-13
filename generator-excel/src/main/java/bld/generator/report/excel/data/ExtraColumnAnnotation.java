@@ -11,8 +11,7 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.annotation.ExcelDropDownList;
-import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
+import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
@@ -20,8 +19,7 @@ import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
-import bld.generator.report.excel.annotation.impl.ExcelDropDownListImpl;
-import bld.generator.report.excel.annotation.impl.ExcelDropDownReferenceListImpl;
+import bld.generator.report.excel.annotation.impl.ExcelDropDownImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
@@ -64,11 +62,8 @@ public class ExtraColumnAnnotation {
 	/** The excel header layout. */
 	private ExcelHeaderCellLayout excelHeaderCellLayout;
 
-	/** The excel drop down list. */
-	private ExcelDropDownList excelDropDownList;
-
-	/** The excel drop down reference list. */
-	private ExcelDropDownReferenceList excelDropDownReferenceList;
+	/** The excel drop down. */
+	private ExcelDropDown excelDropDown;
 
 	/**
 	 * Sets the excel cell layout.
@@ -140,24 +135,15 @@ public class ExtraColumnAnnotation {
 			this.excelColumnWidth = excelColumnWidthImpl.getExcelColumnWidth();
 	}
 
+	
 	/**
-	 * Sets the excel drop down list.
+	 * Sets the excel drop down.
 	 *
-	 * @param excelDropDownListImpl the new excel drop down list
+	 * @param excelDropDown the new excel drop down
 	 */
-	public void setExcelDropDownList(ExcelDropDownListImpl excelDropDownListImpl) {
-		if (excelDropDownListImpl != null)
-			this.excelDropDownList = excelDropDownListImpl.getExcelDropDownList();
-	}
-
-	/**
-	 * Sets the excel drop down reference list.
-	 *
-	 * @param excelDropDownReferenceListImpl the new excel drop down reference list
-	 */
-	public void setExcelDropDownReferenceList(ExcelDropDownReferenceListImpl excelDropDownReferenceListImpl) {
-		if (excelDropDownReferenceListImpl != null)
-			this.excelDropDownReferenceList = excelDropDownReferenceListImpl.getExcelDropDownReferenceList();
+	public void setExcelDropDown(ExcelDropDownImpl excelDropDown) {
+		if (excelDropDown != null)
+			this.excelDropDown = excelDropDown.getExcelDropDown();
 	}
 
 	/**
@@ -224,21 +210,12 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Gets the excel drop down list.
+	 * Gets the excel drop down.
 	 *
-	 * @return the excel drop down list
+	 * @return the excel drop down
 	 */
-	public ExcelDropDownList getExcelDropDownList() {
-		return excelDropDownList;
-	}
-
-	/**
-	 * Gets the excel drop down reference list.
-	 *
-	 * @return the excel drop down reference list
-	 */
-	public ExcelDropDownReferenceList getExcelDropDownReferenceList() {
-		return excelDropDownReferenceList;
+	public ExcelDropDown getExcelDropDown() {
+		return excelDropDown;
 	}
 
 	/**
@@ -254,8 +231,7 @@ public class ExtraColumnAnnotation {
 		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
 		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelDate == null) ? 0 : excelDate.hashCode());
-		result = prime * result + ((excelDropDownList == null) ? 0 : excelDropDownList.hashCode());
-		result = prime * result + ((excelDropDownReferenceList == null) ? 0 : excelDropDownReferenceList.hashCode());
+		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
@@ -297,15 +273,10 @@ public class ExtraColumnAnnotation {
 				return false;
 		} else if (!excelDate.equals(other.excelDate))
 			return false;
-		if (excelDropDownList == null) {
-			if (other.excelDropDownList != null)
+		if (excelDropDown == null) {
+			if (other.excelDropDown != null)
 				return false;
-		} else if (!excelDropDownList.equals(other.excelDropDownList))
-			return false;
-		if (excelDropDownReferenceList == null) {
-			if (other.excelDropDownReferenceList != null)
-				return false;
-		} else if (!excelDropDownReferenceList.equals(other.excelDropDownReferenceList))
+		} else if (!excelDropDown.equals(other.excelDropDown))
 			return false;
 		if (excelFunction == null) {
 			if (other.excelFunction != null)
@@ -325,4 +296,5 @@ public class ExtraColumnAnnotation {
 		return true;
 	}
 
+	
 }

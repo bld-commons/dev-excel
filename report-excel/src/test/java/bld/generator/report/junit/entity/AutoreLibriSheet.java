@@ -58,15 +58,6 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 		super(nameSheet);
 		this.label = label;
 	}
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<AutoreLibriRow> getRowClass() {
-		return AutoreLibriRow.class;
-	}
 
 	/** The label. */
 	@ExcelLabel

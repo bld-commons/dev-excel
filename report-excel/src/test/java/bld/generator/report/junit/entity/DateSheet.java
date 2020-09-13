@@ -30,14 +30,5 @@ public class DateSheet extends SheetData<DateRow> {
 		super(nameSheet);
 	}
 
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<DateRow> getRowClass() {
-		return DateRow.class;
-	}
 
 }

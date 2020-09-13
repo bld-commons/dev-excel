@@ -30,16 +30,5 @@ public class IndexSheet extends SheetData<IndexRow> {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<IndexRow> getRowClass() {
-		return IndexRow.class;
-	}
-
-	
 	
 }

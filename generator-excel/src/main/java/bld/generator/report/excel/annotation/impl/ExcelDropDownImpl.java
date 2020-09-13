@@ -1,18 +1,19 @@
 /*
  * @author Francesco Baldi
  * @mail francesco.baldi1987@gmail.com
- * @class bld.generator.report.excel.annotation.impl.ExcelDropDownReferenceListImpl.java
+ * @class bld.generator.report.excel.annotation.impl.ExcelDropDownImpl.java
  */
 package bld.generator.report.excel.annotation.impl;
 
 import java.lang.annotation.Annotation;
 
-import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
+import bld.generator.report.excel.annotation.ExcelDropDown;
+
 
 /**
- * The Class ExcelDropDownReferenceListImpl.
+ * The Class ExcelDropDownImpl.
  */
-public class ExcelDropDownReferenceListImpl {
+public class ExcelDropDownImpl {
 	
 	/** The suppress drop down arrow. */
 	private boolean suppressDropDownArrow;
@@ -20,17 +21,19 @@ public class ExcelDropDownReferenceListImpl {
 	/** The area range. */
 	private String areaRange;
 
+
+
 	/**
-	 * Gets the excel drop down reference list.
+	 * Gets the excel drop down.
 	 *
-	 * @return the excel drop down reference list
+	 * @return the excel drop down
 	 */
-	public ExcelDropDownReferenceList getExcelDropDownReferenceList() {
-		return new ExcelDropDownReferenceList() {
+	public ExcelDropDown getExcelDropDown() {
+		return new ExcelDropDown() {
 			
 			@Override
 			public Class<? extends Annotation> annotationType() {
-				return ExcelDropDownReferenceList.class;
+				return ExcelDropDown.class;
 			}
 			
 			@Override
@@ -45,20 +48,22 @@ public class ExcelDropDownReferenceListImpl {
 		};
 	}
 
+	
 	/**
-	 * Instantiates a new excel drop down reference list impl.
+	 * Instantiates a new excel drop down impl.
 	 */
-	public ExcelDropDownReferenceListImpl() {
+	public ExcelDropDownImpl() {
 		this.suppressDropDownArrow=true;
 	}
 
+	
 	/**
-	 * Instantiates a new excel drop down reference list impl.
+	 * Instantiates a new excel drop down impl.
 	 *
 	 * @param suppressDropDownArrow the suppress drop down arrow
 	 * @param areaRange             the area range
 	 */
-	public ExcelDropDownReferenceListImpl(boolean suppressDropDownArrow, String areaRange) {
+	public ExcelDropDownImpl(boolean suppressDropDownArrow, String areaRange) {
 		super();
 		this.suppressDropDownArrow = suppressDropDownArrow;
 		this.areaRange = areaRange;
@@ -67,7 +72,7 @@ public class ExcelDropDownReferenceListImpl {
 	/**
 	 * Checks if is suppress drop down arrow.
 	 *
-	 * @return true, if is suppress drop down arrow
+	 * @return the suppress drop down arrow
 	 */
 	public boolean isSuppressDropDownArrow() {
 		return suppressDropDownArrow;
@@ -128,7 +133,7 @@ public class ExcelDropDownReferenceListImpl {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ExcelDropDownReferenceListImpl other = (ExcelDropDownReferenceListImpl) obj;
+		ExcelDropDownImpl other = (ExcelDropDownImpl) obj;
 		if (areaRange == null) {
 			if (other.areaRange != null)
 				return false;

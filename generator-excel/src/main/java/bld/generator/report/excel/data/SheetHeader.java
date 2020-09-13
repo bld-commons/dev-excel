@@ -6,6 +6,7 @@
 package bld.generator.report.excel.data;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,12 +14,14 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.annotation.ExcelDropDownList;
-import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
+import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.constant.ExcelConstant;
+import bld.generator.report.excel.dropdown.CalendarDropDown;
+import bld.generator.report.excel.dropdown.DateDropDown;
+import bld.generator.report.excel.dropdown.TimestampDropDown;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
@@ -59,11 +62,9 @@ public class SheetHeader implements Cloneable {
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
 	
-	/** The excel drop down reference list. */
-	private ExcelDropDownReferenceList excelDropDownReferenceList;
+	/** The excel drop down. */
+	private ExcelDropDown excelDropDown;
 	
-	/** The excel drop down list. */
-	private ExcelDropDownList excelDropDownList;
 
 	/** The key map. */
 	private String keyMap;
@@ -122,7 +123,9 @@ public class SheetHeader implements Cloneable {
 	 * @return the excel date
 	 */
 	public ExcelDate getExcelDate() throws Exception {
-		if (this.excelDate == null && this.field !=null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType())))
+		if (this.excelDate == null && this.field !=null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType())
+				|| DateDropDown.class.isAssignableFrom(this.field.getType()) || CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType())				
+				))
 			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
 		return excelDate;
 	}
@@ -357,41 +360,131 @@ public class SheetHeader implements Cloneable {
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
 	}
 
+	
 	/**
-	 * Gets the excel drop down reference list.
+	 * Gets the excel drop down.
 	 *
-	 * @return the excel drop down reference list
+	 * @return the excel drop down
 	 */
-	public ExcelDropDownReferenceList getExcelDropDownReferenceList() {
-		return excelDropDownReferenceList;
+	public ExcelDropDown getExcelDropDown() {
+		return excelDropDown;
+	}
+
+
+	/**
+	 * Sets the excel drop down.
+	 *
+	 * @param excelDropDown the new excel drop down
+	 */
+	public void setExcelDropDown(ExcelDropDown excelDropDown) {
+		this.excelDropDown = excelDropDown;
 	}
 
 	/**
-	 * Sets the excel drop down reference list.
+	 * Hash code.
 	 *
-	 * @param excelDropDown the new excel drop down reference list
+	 * @return the int
 	 */
-	public void setExcelDropDownReferenceList(ExcelDropDownReferenceList excelDropDown) {
-		this.excelDropDownReferenceList = excelDropDown;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((excelCellLayout == null) ? 0 : excelCellLayout.hashCode());
+		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
+		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
+		result = prime * result + ((excelDate == null) ? 0 : excelDate.hashCode());
+		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
+		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
+		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((field == null) ? 0 : field.hashCode());
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((keyMap == null) ? 0 : keyMap.hashCode());
+		result = prime * result + numColumn;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
 	}
 
 	/**
-	 * Gets the excel drop down list.
+	 * Equals.
 	 *
-	 * @return the excel drop down list
+	 * @param obj the obj
+	 * @return true, if successful
 	 */
-	public ExcelDropDownList getExcelDropDownList() {
-		return excelDropDownList;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SheetHeader other = (SheetHeader) obj;
+		if (excelCellLayout == null) {
+			if (other.excelCellLayout != null)
+				return false;
+		} else if (!excelCellLayout.equals(other.excelCellLayout))
+			return false;
+		if (excelColumn == null) {
+			if (other.excelColumn != null)
+				return false;
+		} else if (!excelColumn.equals(other.excelColumn))
+			return false;
+		if (excelColumnWidth == null) {
+			if (other.excelColumnWidth != null)
+				return false;
+		} else if (!excelColumnWidth.equals(other.excelColumnWidth))
+			return false;
+		if (excelDate == null) {
+			if (other.excelDate != null)
+				return false;
+		} else if (!excelDate.equals(other.excelDate))
+			return false;
+		if (excelDropDown == null) {
+			if (other.excelDropDown != null)
+				return false;
+		} else if (!excelDropDown.equals(other.excelDropDown))
+			return false;
+		if (excelFunction == null) {
+			if (other.excelFunction != null)
+				return false;
+		} else if (!excelFunction.equals(other.excelFunction))
+			return false;
+		if (excelHeaderCellLayout == null) {
+			if (other.excelHeaderCellLayout != null)
+				return false;
+		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
+			return false;
+		if (excelMergeRow == null) {
+			if (other.excelMergeRow != null)
+				return false;
+		} else if (!excelMergeRow.equals(other.excelMergeRow))
+			return false;
+		if (field == null) {
+			if (other.field != null)
+				return false;
+		} else if (!field.equals(other.field))
+			return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		if (keyMap == null) {
+			if (other.keyMap != null)
+				return false;
+		} else if (!keyMap.equals(other.keyMap))
+			return false;
+		if (numColumn != other.numColumn)
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
 	}
 
-	/**
-	 * Sets the excel drop down list.
-	 *
-	 * @param excelDropDownList the new excel drop down list
-	 */
-	public void setExcelDropDownList(ExcelDropDownList excelDropDownList) {
-		this.excelDropDownList = excelDropDownList;
-	}
 	
 	
 

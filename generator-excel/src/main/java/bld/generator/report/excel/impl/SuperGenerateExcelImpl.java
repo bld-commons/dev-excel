@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -67,8 +68,7 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.annotation.ExcelDropDownList;
-import bld.generator.report.excel.annotation.ExcelDropDownReferenceList;
+import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -101,6 +101,7 @@ import bld.generator.report.excel.data.InfoColumn;
 import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.SheetHeader;
+import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
@@ -327,12 +328,10 @@ public class SuperGenerateExcelImpl {
 				if (entity != null)
 					value = PropertyUtils.getProperty(entity, field.getName());
 				SheetHeader sheetHeader = new SheetHeader(field, value);
-				if(field.isAnnotationPresent(ExcelDropDownReferenceList.class) && field.isAnnotationPresent(ExcelDropDownList.class))
-					throw new Exception("The field "+field.getName()+" can not have the following annotations @ExcelDropDownReferenceList and @ExceDropDownList set together");
-				if (field.isAnnotationPresent(ExcelDropDownReferenceList.class))
-					sheetHeader.setExcelDropDownReferenceList(field.getAnnotation(ExcelDropDownReferenceList.class));
-				if (field.isAnnotationPresent(ExcelDropDownList.class))
-					sheetHeader.setExcelDropDownList(field.getAnnotation(ExcelDropDownList.class));
+				if (field.isAnnotationPresent(ExcelDropDown.class) && field.getClass().isAssignableFrom(DropDown.class))
+					throw new Exception("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
+				if (field.isAnnotationPresent(ExcelDropDown.class))
+					sheetHeader.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 				listSheetHeader.add(sheetHeader);
 				if (listTitle.contains(column.columnName()))
 					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
@@ -408,7 +407,6 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow    the index row
 	 * @param mapMergeRow the map merge row
 	 * @param numColumn   the num column
-	 * @param sheetHeader 
 	 * @throws Exception the exception
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn) throws Exception {
@@ -698,6 +696,10 @@ public class SuperGenerateExcelImpl {
 			hyperlink.setAddress(address);
 			cell.setHyperlink(hyperlink);
 			cell.setCellValue(excelHyperlink.getValue());
+		} else if (sheetHeader.getValue() instanceof DropDown<?>) {
+			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
+			sheetHeader.setValue(dropDown.getValue());
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow);
 		}
 
 	}
@@ -830,12 +832,8 @@ public class SuperGenerateExcelImpl {
 					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
 					sheetHeader.setExcelHeaderCellLayout(extraColumnAnnotation.getExcelHeaderCellLayout());
 					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
-					if(extraColumnAnnotation.getExcelDropDownList()!=null && extraColumnAnnotation.getExcelDropDownReferenceList()!=null)
-						throw new Exception("The field "+keyMap+" can not have the following annotations @ExcelDropDownReferenceList and @ExceDropDownList set together");
-					if (extraColumnAnnotation.getExcelDropDownReferenceList()!=null)
-						sheetHeader.setExcelDropDownReferenceList(extraColumnAnnotation.getExcelDropDownReferenceList());
-					if (extraColumnAnnotation.getExcelDropDownList()!=null)
-						sheetHeader.setExcelDropDownList(extraColumnAnnotation.getExcelDropDownList());
+					if (extraColumnAnnotation.getExcelDropDown() != null)
+						sheetHeader.setExcelDropDown(extraColumnAnnotation.getExcelDropDown());
 					if (extraColumnAnnotation.getExcelFunction() != null)
 						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
 
@@ -1019,52 +1017,62 @@ public class SuperGenerateExcelImpl {
 
 	}
 
+	/**
+	 * Adds the drop down.
+	 *
+	 * @param sheet       the sheet
+	 * @param sheetHeader the sheet header
+	 * @param firstRow    the first row
+	 * @param lastRow     the last row
+	 * @param firstCol    the first col
+	 * @param lastCol     the last col
+	 * @throws Exception the exception
+	 */
 	protected void addDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) throws Exception {
-		if(sheetHeader.getExcelDropDownReferenceList()!=null || sheetHeader.getExcelDropDownList()!=null) {
-			DataValidationConstraint constraint =null;
+		if (sheetHeader.getExcelDropDown() != null || (sheetHeader.getField() != null && sheetHeader.getValue() != null && DropDown.class.isAssignableFrom(sheetHeader.getField().getType()))) {
+			DataValidationConstraint constraint = null;
 			DataValidation dataValidation = null;
 			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
 			CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
-			if(sheetHeader.getExcelDropDownReferenceList()!=null) {
-				String areaRange=sheetHeader.getExcelDropDownReferenceList().areaRange();
-				areaRange=makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
-				areaRange=makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+			if (sheetHeader.getExcelDropDown() != null) {
+				String areaRange = sheetHeader.getExcelDropDown().areaRange();
+				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
+				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
-				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDownReferenceList().suppressDropDownArrow());
-			}else {
-				constraint = validationHelper.createExplicitListConstraint(sheetHeader.getExcelDropDownList().list());
-				dataValidation = validationHelper.createValidation(constraint, addressList);
-				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDownList().suppressDropDownArrow());
+				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDown().suppressDropDownArrow());
+			} else {
+				DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
+				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
+					String[] list = new String[dropDown.getList().size()];
+					int i=0;
+					SimpleDateFormat sdf=new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
+					for(Object item:dropDown.getList()) {
+						
+						if(item instanceof Date) 
+							list[i]=sdf.format((Date)item);
+						else if(item instanceof Calendar) 
+							list[i]=sdf.format(((Calendar)item).getTime());
+						else if(item instanceof Timestamp) 
+							list[i]=sdf.format(new Date(((Timestamp)item).getTime()));
+						else
+							list[i]=item.toString();
+						
+						i++;
+					}
+					constraint = validationHelper.createExplicitListConstraint(list);
+					dataValidation = validationHelper.createValidation(constraint, addressList);
+					dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
+				}
+
+				
 			}
-			
+
 			sheet.addValidationData(dataValidation);
 
 		}
 	}
-	
-	
-	
-//	private void getDropDowOnCell(Workbook workbook, ExcelDati<RowExcel> excelDati, Sheet worksheet, CellStyle cellStyle, int indiceRiga, int inizioRigaSheet) {
-//		ExcelStatistico statistico = (ExcelStatistico) excelDati;
-//		for (String keyHeader : statistico.getMapCharts().keySet()) {
-//			Row headerRow = worksheet.createRow(indiceRiga);
-//			indiceRiga++;
-//			List<String[]> campi = setHeaderStatisticoExcelDati(worksheet, cellStyle, headerRow, statistico.getMapCharts().get(keyHeader), workbook, indiceRiga, inizioRigaSheet, excelDati.getHeader(), excelDati.getListRowExcel().size());
-//
-//			String daCella = calcoloCoordinateFunction(inizioRigaSheet + 1, excelDati.getHeader().indexOf(keyHeader), true),
-//					aCella = calcoloCoordinateFunction(inizioRigaSheet + excelDati.getListRowExcel().size(), excelDati.getHeader().indexOf(keyHeader), true);
-//			System.out.println("Da cella: " + daCella + " ---- A cella: " + aCella);
-//			DataValidationHelper validationHelper = worksheet.getDataValidationHelper();// new
-//																						// HSSFDataValidationHelper(worksheet);
-//			DataValidationConstraint constraint = validationHelper.createFormulaListConstraint(worksheet.getSheetName() + "!" + daCella + ":" + aCella);
-//			CellRangeAddressList addressList = new CellRangeAddressList(indiceRiga, indiceRiga, 0, 0);
-//			HSSFDataValidation dataValidation = new HSSFDataValidation(addressList, constraint);
-//			worksheet.addValidationData(dataValidation);
-//		}
-//		CreationHelper creatioHelper = workbook.getCreationHelper();
-//	}
-	
-	
+
+
 
 }

@@ -34,15 +34,6 @@ public class GenereSheet extends QuerySheetData<GenereRow>{
 		super(nameSheet);
 	}
 
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<GenereRow> getRowClass() {
-		return GenereRow.class;
-	}
 
 	
 

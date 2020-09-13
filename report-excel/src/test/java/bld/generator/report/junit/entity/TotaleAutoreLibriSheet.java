@@ -19,15 +19,5 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 public class TotaleAutoreLibriSheet extends SheetFunctionTotal<TotaleAutoreLibriRow>{
 
 	
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<TotaleAutoreLibriRow> getRowClass() {
-		return TotaleAutoreLibriRow.class;
-	}
-	
 
 }

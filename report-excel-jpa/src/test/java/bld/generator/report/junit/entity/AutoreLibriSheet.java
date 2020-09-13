@@ -70,15 +70,15 @@ public class AutoreLibriSheet extends QuerySheetData<AutoreLibriRow> implements 
 		this.label = label;
 	}
 
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<AutoreLibriRow> getRowClass() {
-		return AutoreLibriRow.class;
-	}
+//	/**
+//	 * Gets the row class.
+//	 *
+//	 * @return the row class
+//	 */
+//	@Override
+//	public Class<AutoreLibriRow> getRowClass() {
+//		return AutoreLibriRow.class;
+//	}
 
 	/** The label. */
 	@ExcelLabel

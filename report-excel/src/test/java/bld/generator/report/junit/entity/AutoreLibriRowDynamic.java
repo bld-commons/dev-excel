@@ -5,8 +5,6 @@
 */
 package bld.generator.report.junit.entity;
 
-import java.util.Calendar;
-
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import bld.generator.report.excel.DynamicRowSheet;
@@ -18,6 +16,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.dropdown.CalendarDropDown;
 
 /**
  * The Class AutoreLibriRowDynamic.
@@ -57,7 +56,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	@ExcelDate
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
-	private Calendar dataDiNascita;
+	private CalendarDropDown dataDiNascita;
 
 	/** The titolo. */
 	@ExcelColumn(columnName = "Titolo", indexColumn = 6)
@@ -105,7 +104,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	 * @param prezzo        the prezzo
 	 * @param supplemento   the supplemento
 	 */
-	public AutoreLibriRowDynamic(String nome, String cognome, Calendar dataDiNascita, String titolo, String genere,
+	public AutoreLibriRowDynamic(String nome, String cognome, CalendarDropDown dataDiNascita, String titolo, String genere,
 			Integer matricola, Double prezzo, Double supplemento) {
 		super();
 		this.nome = nome;
@@ -172,23 +171,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 		this.cognome = cognome;
 	}
 
-	/**
-	 * Gets the data di nascita.
-	 *
-	 * @return the data di nascita
-	 */
-	public Calendar getDataDiNascita() {
-		return dataDiNascita;
-	}
-
-	/**
-	 * Sets the data di nascita.
-	 *
-	 * @param dataDiNascita the new data di nascita
-	 */
-	public void setDataDiNascita(Calendar dataDiNascita) {
-		this.dataDiNascita = dataDiNascita;
-	}
+	
 
 	/**
 	 * Gets the titolo.
@@ -261,5 +244,15 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	public void setPrezzo(Double prezzo) {
 		this.prezzo = prezzo;
 	}
+
+	public CalendarDropDown getDataDiNascita() {
+		return dataDiNascita;
+	}
+
+	public void setDataDiNascita(CalendarDropDown dataDiNascita) {
+		this.dataDiNascita = dataDiNascita;
+	}
+	
+	
 
 }

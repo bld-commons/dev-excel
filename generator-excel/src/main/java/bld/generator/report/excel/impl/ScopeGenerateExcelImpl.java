@@ -88,6 +88,9 @@ import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.excel.data.SheetHeader;
+import bld.generator.report.excel.dropdown.CalendarDropDown;
+import bld.generator.report.excel.dropdown.DateDropDown;
+import bld.generator.report.excel.dropdown.TimestampDropDown;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
 
@@ -102,6 +105,7 @@ import bld.generator.report.utils.ExcelUtils;
 @Scope("prototype")
 public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements ScopeGenerateExcel {
 
+	/** The number empty rows. */
 	@Value("${bld.commons.number.empty.rows:2}")
 	private int numberEmptyRows;
 
@@ -478,7 +482,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 					ExcelDate excelDate = null;
 					LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
-					if (field != null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType()))) {
+					if (field != null && (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())    
+							|| DateDropDown.class.isAssignableFrom(field.getType()) || CalendarDropDown.class.isAssignableFrom(field.getType()) || TimestampDropDown.class.isAssignableFrom(field.getType()) 
+							)) {
 						excelDate = sheetHeader.getExcelDate();
 						layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
 					}
@@ -630,6 +636,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 	}
 
+	/**
+	 * Sets the border area.
+	 *
+	 * @param workbook    the workbook
+	 * @param sheet       the sheet
+	 * @param cell        the cell
+	 * @param borderStyle the border style
+	 * @param borderType  the border type
+	 */
 	private void setBorderArea(Workbook workbook, Sheet sheet, Cell cell, BorderStyle borderStyle, BorderType borderType) {
 		CellStyle cellStyle = workbook.createCellStyle();
 		cellStyle.cloneStyleFrom(cell.getCellStyle());
