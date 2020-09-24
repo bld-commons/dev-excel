@@ -29,7 +29,7 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
 					excelColumn = @ExcelColumn(indexColumn = 9, columnName = "Prezzo Totale"), 
-					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale")),
+					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale"),excelColumnWidth = @ExcelColumnWidth(width = 7)),
 		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER), 
 				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test"), 
 				excelFunction=@ExcelFunction(function = "${Test Date.dataA}", nameFunction = "test"))

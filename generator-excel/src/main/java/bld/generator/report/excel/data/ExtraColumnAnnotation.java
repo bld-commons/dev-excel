@@ -11,6 +11,7 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
@@ -18,25 +19,31 @@ import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import bld.generator.report.excel.annotation.impl.ExcelDateImpl;
+import bld.generator.report.excel.annotation.impl.ExcelDropDownImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 
 /**
  * The Class ExtraColumnAnnotation.<br>
- *  ExtraColumnAnnotation is used to configure the dynamic cells type and the style.<br>
- *  It must be set on mapExtraColumnAnnotation within the {@link bld.generator.report.excel.SheetDynamicData} classes. 
+ * ExtraColumnAnnotation is used to configure the dynamic cells type and the
+ * style.<br>
+ * It must be set on mapExtraColumnAnnotation within the
+ * {@link bld.generator.report.excel.SheetDynamicData} classes.
  */
 public class ExtraColumnAnnotation {
 
-	/** The excel column.<br> 
+	/**
+	 * The excel column.<br>
 	 * It is not null
-	 * */
+	 */
 	@NotNull
 	private ExcelColumn excelColumn;
 
-	/** The excel cell layout. <br>
-	 * it is not null.*/
+	/**
+	 * The excel cell layout. <br>
+	 * it is not null.
+	 */
 	@NotNull
 	private ExcelCellLayout excelCellLayout;
 
@@ -55,6 +62,8 @@ public class ExtraColumnAnnotation {
 	/** The excel header layout. */
 	private ExcelHeaderCellLayout excelHeaderCellLayout;
 
+	/** The excel drop down. */
+	private ExcelDropDown excelDropDown;
 
 	/**
 	 * Sets the excel cell layout.
@@ -76,7 +85,6 @@ public class ExtraColumnAnnotation {
 			this.excelDate = excelDateImpl.getExcelDate();
 	}
 
-	
 	/**
 	 * Sets the excel column.
 	 *
@@ -87,7 +95,6 @@ public class ExtraColumnAnnotation {
 			this.excelColumn = excelColumnImpl.getExcelColumn();
 	}
 
-	
 	/**
 	 * Sets the excel function.
 	 *
@@ -98,7 +105,6 @@ public class ExtraColumnAnnotation {
 			this.excelFunction = excelFunctionImpl.getExcelFunction();
 	}
 
-	
 	/**
 	 * Sets the excel merge row.
 	 *
@@ -108,7 +114,6 @@ public class ExtraColumnAnnotation {
 		if (excelMergeRowImpl != null)
 			this.excelMergeRow = excelMergeRowImpl.getExcelMergeRow();
 	}
-
 
 	/**
 	 * Sets the excel header layout.
@@ -130,6 +135,17 @@ public class ExtraColumnAnnotation {
 			this.excelColumnWidth = excelColumnWidthImpl.getExcelColumnWidth();
 	}
 
+	
+	/**
+	 * Sets the excel drop down.
+	 *
+	 * @param excelDropDown the new excel drop down
+	 */
+	public void setExcelDropDown(ExcelDropDownImpl excelDropDown) {
+		if (excelDropDown != null)
+			this.excelDropDown = excelDropDown.getExcelDropDown();
+	}
+
 	/**
 	 * Gets the excel column.
 	 *
@@ -137,15 +153,6 @@ public class ExtraColumnAnnotation {
 	 */
 	public ExcelColumn getExcelColumn() {
 		return excelColumn;
-	}
-
-	/**
-	 * Sets the excel column.
-	 *
-	 * @param excelColumn the new excel column
-	 */
-	public void setExcelColumn(ExcelColumn excelColumn) {
-		this.excelColumn = excelColumn;
 	}
 
 	/**
@@ -158,30 +165,12 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Sets the excel cell layout.
-	 *
-	 * @param excelCellLayout the new excel cell layout
-	 */
-	public void setExcelCellLayout(ExcelCellLayout excelCellLayout) {
-		this.excelCellLayout = excelCellLayout;
-	}
-
-	/**
 	 * Gets the excel date.
 	 *
 	 * @return the excel date
 	 */
 	public ExcelDate getExcelDate() {
 		return excelDate;
-	}
-
-	/**
-	 * Sets the excel date.
-	 *
-	 * @param excelDate the new excel date
-	 */
-	public void setExcelDate(ExcelDate excelDate) {
-		this.excelDate = excelDate;
 	}
 
 	/**
@@ -194,30 +183,12 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Sets the excel column width.
-	 *
-	 * @param excelColumnWidth the new excel column width
-	 */
-	public void setExcelColumnWidth(ExcelColumnWidth excelColumnWidth) {
-		this.excelColumnWidth = excelColumnWidth;
-	}
-
-	/**
 	 * Gets the excel merge row.
 	 *
 	 * @return the excel merge row
 	 */
 	public ExcelMergeRow getExcelMergeRow() {
 		return excelMergeRow;
-	}
-
-	/**
-	 * Sets the excel merge row.
-	 *
-	 * @param excelMergeRow the new excel merge row
-	 */
-	public void setExcelMergeRow(ExcelMergeRow excelMergeRow) {
-		this.excelMergeRow = excelMergeRow;
 	}
 
 	/**
@@ -230,15 +201,6 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Sets the excel function.
-	 *
-	 * @param excelFunction the new excel function
-	 */
-	public void setExcelFunction(ExcelFunction excelFunction) {
-		this.excelFunction = excelFunction;
-	}
-
-	/**
 	 * Gets the excel header layout.
 	 *
 	 * @return the excel header layout
@@ -248,12 +210,12 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
-	 * Sets the excel header layout.
+	 * Gets the excel drop down.
 	 *
-	 * @param excelHeaderCellLayout the new excel header layout
+	 * @return the excel drop down
 	 */
-	public void setExcelHeaderCellLayout(ExcelHeaderCellLayout excelHeaderCellLayout) {
-		this.excelHeaderCellLayout = excelHeaderCellLayout;
+	public ExcelDropDown getExcelDropDown() {
+		return excelDropDown;
 	}
 
 	/**
@@ -269,6 +231,7 @@ public class ExtraColumnAnnotation {
 		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
 		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelDate == null) ? 0 : excelDate.hashCode());
+		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
@@ -310,6 +273,11 @@ public class ExtraColumnAnnotation {
 				return false;
 		} else if (!excelDate.equals(other.excelDate))
 			return false;
+		if (excelDropDown == null) {
+			if (other.excelDropDown != null)
+				return false;
+		} else if (!excelDropDown.equals(other.excelDropDown))
+			return false;
 		if (excelFunction == null) {
 			if (other.excelFunction != null)
 				return false;
@@ -327,7 +295,6 @@ public class ExtraColumnAnnotation {
 			return false;
 		return true;
 	}
-	
-	
 
+	
 }

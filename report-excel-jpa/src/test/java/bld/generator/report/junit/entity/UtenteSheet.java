@@ -23,12 +23,5 @@ public class UtenteSheet extends QuerySheetData<UtenteRow> {
 		super(sheetName);
 	}
 
-	@Override
-	public Class<UtenteRow> getRowClass() {
-		return UtenteRow.class;
-	}
-
-
-	
 	
 }

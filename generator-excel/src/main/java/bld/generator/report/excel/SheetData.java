@@ -11,6 +11,7 @@ import java.util.List;
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.constant.ExcelConstant;
+import bld.generator.report.utils.ExcelUtils;
 
 
 /**
@@ -61,8 +62,9 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	/** The list row sheet. */
 	protected List<T> listRowSheet;
 	
+	/** The row class. */
+	private Class<T> rowClass;
 	
-		
 	/**
 	 * Instantiates a new sheet data.
 	 *
@@ -71,22 +73,8 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	public SheetData(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 		listRowSheet = new ArrayList<T>();
+		this.rowClass=ExcelUtils.getTClass(this);
 	}
-
-
-
-
-	
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	public abstract Class<T> getRowClass();
-
-
-
-
 
 	/**
 	 * Gets the list row sheet.
@@ -97,10 +85,6 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 		return listRowSheet;
 	}
 
-
-
-
-
 	/**
 	 * Sets the list row sheet.
 	 *
@@ -110,9 +94,14 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 		this.listRowSheet = listRowSheet;
 	}
 
-
-
-
+	/**
+	 * Gets the row class.
+	 *
+	 * @return the row class
+	 */
+	public Class<T> getRowClass() {
+		return rowClass;
+	}
 
 	/**
 	 * Hash code.
@@ -124,12 +113,9 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((listRowSheet == null) ? 0 : listRowSheet.hashCode());
+		result = prime * result + ((rowClass == null) ? 0 : rowClass.hashCode());
 		return result;
 	}
-
-
-
-
 
 	/**
 	 * Equals.
@@ -151,8 +137,14 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 				return false;
 		} else if (!listRowSheet.equals(other.listRowSheet))
 			return false;
+		if (rowClass == null) {
+			if (other.rowClass != null)
+				return false;
+		} else if (!rowClass.equals(other.rowClass))
+			return false;
 		return true;
 	}
+
 
 	
 	

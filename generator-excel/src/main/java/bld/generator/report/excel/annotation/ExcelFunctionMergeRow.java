@@ -20,6 +20,7 @@ import java.lang.annotation.Target;
  * <li>ExcelColumn - to define the header description and the position of column</li>
  * <li>ExcelMergeRow - it is used to merge cells after checking the equality the reference field values</li>
  * <li>ExcelFunction - to define the function</li>
+ * <li>ExcelColumnWidth - to set column width<7li>
  * </ul>
  *  
  *  ExcelFunctionMergeRow is parameter of the annotation {@link bld.generator.report.excel.annotation.ExcelFunctionRows}.
@@ -58,5 +59,11 @@ public @interface ExcelFunctionMergeRow {
 	 */
 	public ExcelFunction excelFunction();
 	
-	
+
+	/**
+	 * Excel column width.
+	 *
+	 * @return the excel column width
+	 */
+	public ExcelColumnWidth excelColumnWidth() default @ExcelColumnWidth; 
 }

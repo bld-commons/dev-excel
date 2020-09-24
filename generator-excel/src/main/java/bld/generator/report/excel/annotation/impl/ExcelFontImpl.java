@@ -97,11 +97,38 @@ public class ExcelFontImpl implements Cloneable{
 	 */
 	public ExcelFontImpl(UnderlineType underline, short size, boolean italic, FontType font, boolean bold) {
 		super();
-		this.underline = underline;
+		init(underline, size, italic, font, bold);
+	}
+
+	/**
+	 * Inits the.
+	 *
+	 * @param underline the underline
+	 * @param size      the size
+	 * @param italic    the italic
+	 * @param font      the font
+	 * @param bold      the bold
+	 */
+	private void init(UnderlineType underline, short size, boolean italic, FontType font, boolean bold) {
 		this.size = size;
+		this.underline = underline;
 		this.italic = italic;
 		this.font = font;
 		this.bold = bold;
+	}
+	
+	/**
+	 * Instantiates a new excel font impl.
+	 *
+	 * @param underline the underline
+	 * @param size      the size
+	 * @param italic    the italic
+	 * @param font      the font
+	 * @param bold      the bold
+	 */
+	public ExcelFontImpl(UnderlineType underline, int size, boolean italic, FontType font, boolean bold) {
+		super();
+		init(underline, (short)size, italic, font, bold);
 	}
 	
 	/**

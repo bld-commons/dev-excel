@@ -27,15 +27,4 @@ areaBorder = {@ExcelAreaBorder(areaRange = "${totaleRowStart}:${totalePrezzoRowE
 public class TotaleAutoreLibriSheet extends SheetFunctionTotal<TotaleAutoreLibriRow>{
 
 	
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<TotaleAutoreLibriRow> getRowClass() {
-		return TotaleAutoreLibriRow.class;
-	}
-	
-
 }

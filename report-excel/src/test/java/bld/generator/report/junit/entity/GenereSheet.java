@@ -32,17 +32,6 @@ public class GenereSheet extends SheetData<GenereRow>{
 		super(nameSheet);
 	}
 
-	/**
-	 * Gets the row class.
-	 *
-	 * @return the row class
-	 */
-	@Override
-	public Class<GenereRow> getRowClass() {
-		return GenereRow.class;
-	}
-
-	
 
 	
 }

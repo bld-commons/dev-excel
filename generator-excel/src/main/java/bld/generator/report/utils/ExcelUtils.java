@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -300,5 +301,30 @@ public class ExcelUtils implements ApplicationContextAware {
 		return (short)rowHeight;
 	}
 	
+	/**
+	 * Gets the t class.
+	 *
+	 * @return the t class
+	 */
+	public static <T>Class<T> getTClass(Object entity) {
+		return getTClass(entity, 0);
+	}
+
 	
+	/**
+	 * Gets the t class.
+	 *
+	 * @return the t class
+	 */
+	public static <T>Class<T> getTClass(Object entity,int i) {
+		ParameterizedType parameterizedType =null;
+		try {
+			parameterizedType = (ParameterizedType) entity.getClass().getGenericSuperclass();
+		} catch (Exception e) {
+			parameterizedType = (ParameterizedType) entity.getClass().getSuperclass().getGenericSuperclass();
+		}
+		Class<T> classT = (Class<T>) parameterizedType.getActualTypeArguments()[i];
+		return classT;
+	}
+
 }
