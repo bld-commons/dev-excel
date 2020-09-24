@@ -485,7 +485,7 @@ public class SuperGenerateExcelImpl {
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 		ExcelDate excelDate = null;
-		if (sheetHeader.getValue() instanceof Date || sheetHeader.getValue() instanceof Calendar || sheetHeader.getValue() instanceof Timestamp)
+		if (sheetHeader.getField()!=null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
 		Cell cellColumn1 = row.createCell(1);
