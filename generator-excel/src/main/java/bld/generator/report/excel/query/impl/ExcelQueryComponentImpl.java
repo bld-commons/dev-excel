@@ -23,6 +23,7 @@ import org.apache.commons.beanutils.converters.CalendarConverter;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,10 @@ import bld.generator.report.utils.ExcelUtils;
  */
 @Transactional
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
+
+	/** application context */
+	@Autowired
+	private ApplicationContext context;
 
 	/** The entity manager. */
 	@PersistenceContext
@@ -57,9 +62,15 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 */
 	@Override
 	public <T extends RowSheet> void executeQuery(QuerySheetData<T> querySheetData) throws Exception {
+		
 		if (CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
+			
 			ExcelQuery excelQuery = ExcelUtils.getAnnotation(querySheetData.getClass(), ExcelQuery.class);
-			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? getResultListNativeQuery(querySheetData, excelQuery.select()) : getResultListQuery(querySheetData, excelQuery.select()));
+			
+			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? 
+					getResultListNativeQuery(querySheetData, excelQuery) : 
+					getResultListQuery(querySheetData, excelQuery));
+			
 		}
 
 	}
@@ -73,9 +84,20 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 * @return the result list native query
 	 * @throws Exception the exception
 	 */
-	private <T extends RowSheet> List<T> getResultListNativeQuery(QuerySheetData<T> querySheetData, String select) throws Exception {
-		this.entityManager.flush();
-		List<Map<String, Object>> listResult = this.namedParameterJdbcTemplate.queryForList(select, querySheetData.getMapParameters());
+	private <T extends RowSheet> List<T> getResultListNativeQuery(QuerySheetData<T> querySheetData, ExcelQuery query) throws Exception {
+		
+		EntityManager em = entityManager;
+		NamedParameterJdbcTemplate template = namedParameterJdbcTemplate;
+		
+		if(!"default".equals(query.entityManagerName())){
+			em = (EntityManager) context.getBean(query.entityManagerName());
+		}
+		
+		if(!"default".equals(query.jdbcTemplateName())){
+			template = (NamedParameterJdbcTemplate) context.getBean(query.jdbcTemplateName());
+		}
+		
+		List<Map<String, Object>> listResult = template.queryForList(query.select(), querySheetData.getMapParameters());
 		List<T> listT = new ArrayList<T>();
 		for (Map<String, Object> mapResult : listResult) {
 			T t = querySheetData.getRowClass().newInstance();
@@ -116,8 +138,14 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 * @param select         the select
 	 * @return the result list query
 	 */
-	private <T extends RowSheet> List<T> getResultListQuery(QuerySheetData<T> querySheetData, String select) {
-		TypedQuery<T> query = this.entityManager.createQuery(select, querySheetData.getRowClass());
+	private <T extends RowSheet> List<T> getResultListQuery(QuerySheetData<T> querySheetData, ExcelQuery queryInput) {
+		
+		EntityManager em = entityManager;		
+		if(!"default".equals(queryInput.entityManagerName())){
+			em = (EntityManager) context.getBean(queryInput.entityManagerName());
+		}
+		
+		TypedQuery<T> query = em.createQuery(queryInput.select(), querySheetData.getRowClass());
 		if (querySheetData.getMapParameters() != null) {
 			for (String key : querySheetData.getMapParameters().keySet())
 				query.setParameter(key, querySheetData.getMapParameters().get(key));

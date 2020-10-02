@@ -36,6 +36,8 @@ public @interface ExcelQuery {
 	 */
 	public boolean nativeQuery() default true;
 	
+	public String entityManagerName() default "default";
 	
+	public String jdbcTemplateName() default "default";
 	
 }
