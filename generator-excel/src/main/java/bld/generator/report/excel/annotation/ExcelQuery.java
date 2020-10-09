@@ -37,5 +37,10 @@ public @interface ExcelQuery {
 	public boolean nativeQuery() default true;
 	
 	
+	public String unitName() default "";
+	
+	
+	public String namedParameterJdbcTemplate() default "namedParameterJdbcTemplate";	
+	
 	
 }
