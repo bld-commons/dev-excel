@@ -88,7 +88,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 */
 	private <T extends RowSheet> List<T> getResultListNativeQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) throws Exception {
 		if (!this.multipleDatasource) {
-			EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.unitName());
+			EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.entityManager());
 			entityManager.flush();
 		}
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = this.excelDataSource.getNamedParameterJdbcTemplate(excelQuery.namedParameterJdbcTemplate());
@@ -133,7 +133,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 * @return the result list query
 	 */
 	private <T extends RowSheet> List<T> getResultListQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) {
-		EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.unitName());
+		EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.entityManager());
 		TypedQuery<T> query = entityManager.createQuery(excelQuery.select(), querySheetData.getRowClass());
 		if (querySheetData.getMapParameters() != null) {
 			for (String key : querySheetData.getMapParameters().keySet())

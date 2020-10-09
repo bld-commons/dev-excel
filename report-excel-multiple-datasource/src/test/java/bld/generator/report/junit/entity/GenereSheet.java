@@ -21,7 +21,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelHeaderLayout
 @ExcelSheetLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-@ExcelQuery(select = "select des_genere as genere from genere",namedParameterJdbcTemplate = Db1DatabaseConfiguration.JDBC_TEMPLATE,unitName = Db1DatabaseConfiguration.DB1_ENTITY_MANAGER)
+@ExcelQuery(select = "select des_genere as genere from genere",namedParameterJdbcTemplate = Db1DatabaseConfiguration.JDBC_TEMPLATE,entityManager = Db1DatabaseConfiguration.DB1_ENTITY_MANAGER)
 public class GenereSheet extends QuerySheetData<GenereRow>{
 	
 	

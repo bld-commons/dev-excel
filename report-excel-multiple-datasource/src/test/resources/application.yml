@@ -37,24 +37,24 @@ logging:
 
 
 
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/excel_db
-    username: ${EXCEL_USER_DB}
-    password: ${EXCEL_PASSWORD_DB}
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        default_schema: public
-        jdbc:
-          lob:
-            non_contextual_creation: true 
-        format_sql: true    
-        ddl-auto: auto
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/excel_db
+#    username: ${EXCEL_USER_DB}
+#    password: ${EXCEL_PASSWORD_DB}
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        default_schema: public
+#        jdbc:
+#          lob:
+#            non_contextual_creation: true 
+#        format_sql: true    
+#        ddl-auto: auto
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: true
+#    
     
     
     
@@ -73,8 +73,8 @@ postgres:
 postgres2:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5433/keyc9
-    username: keyc9
-    password: k3y_Cl3Ak
+    username: ${EXCEL_USER_DB2}    
+    password: ${EXCEL_PASSWORD_DB2}
     driver-class-name:  org.postgresql.Driver
   jpa:
     hibernate:

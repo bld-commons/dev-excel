@@ -37,9 +37,19 @@ public @interface ExcelQuery {
 	public boolean nativeQuery() default true;
 	
 	
-	public String unitName() default "";
+	/**
+	 * Entity manager.
+	 *
+	 * @return the string
+	 */
+	public String entityManager() default "";
 	
 	
+	/**
+	 * Named parameter jdbc template.
+	 *
+	 * @return the string
+	 */
 	public String namedParameterJdbcTemplate() default "namedParameterJdbcTemplate";	
 	
 	

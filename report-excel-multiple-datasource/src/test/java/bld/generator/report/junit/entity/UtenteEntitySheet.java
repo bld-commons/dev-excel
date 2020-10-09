@@ -17,7 +17,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 //		+ "WHERE cognome=:cognome "
 //		+ "order by cognome,nome")
 @ExcelQuery(select="select new bld.generator.report.junit.entity.UtenteEntityRow(u.id,u.firstName,u.lastName,u.email) from UserEntity u  order by u.lastName,u.firstName", 
-nativeQuery = false, namedParameterJdbcTemplate = Db2DatabaseConfiguration.JDBC_TEMPLATE,unitName = Db2DatabaseConfiguration.DB2_ENTITY_MANAGER)
+nativeQuery = false, namedParameterJdbcTemplate = Db2DatabaseConfiguration.JDBC_TEMPLATE,entityManager = Db2DatabaseConfiguration.DB2_ENTITY_MANAGER)
 public class UtenteEntitySheet extends QuerySheetData<UtenteEntityRow> {
 	
 
