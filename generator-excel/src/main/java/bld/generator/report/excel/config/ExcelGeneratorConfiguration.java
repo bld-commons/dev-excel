@@ -23,7 +23,8 @@ import bld.generator.report.utils.ValueProps;
 @Configuration
 public class ExcelGeneratorConfiguration {
 	
-	private static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
+	/** The Constant SPRING_DATASOURCE_URL. */
+	public static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
 
 	/** The generate excel. */
 	@Autowired
@@ -52,6 +53,11 @@ public class ExcelGeneratorConfiguration {
 	}
 
 	
+	/**
+	 * Excel query component.
+	 *
+	 * @return the excel query component
+	 */
 	@Bean
 	@ConditionalOnProperty(value= {SPRING_DATASOURCE_URL,ExcelDataSource.MULTIPLE_DATASOURCE})
 	public ExcelQueryComponent excelQueryComponent() {

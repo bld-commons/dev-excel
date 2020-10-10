@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.bld-commons.excel</groupId>
 	<artifactId>report-excel-multiple-datasource</artifactId>
-	<name>report-excel-jpa</name>
-	<description>Report Excel JPA</description>
+	<name>report-excel-multiple-datasource</name>
+	<description>Report Excel Multiple Datasource</description>
 
 	<parent>
 		<groupId>com.github.bld-commons</groupId>

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 import bld.generator.report.excel.query.ExcelDataSource;
 
 /**
- * The Class ExcelMultipleDataSource.
+ * The Class ExcelMultipleDataSource.<br>
+ * ExcelMultipleDataSource works if the "bld.commons.multiple.datasource" property is enabled
  */
 @Component
 @ConditionalOnProperty(name = ExcelDataSource.MULTIPLE_DATASOURCE, havingValue = "true", matchIfMissing = false)
