@@ -55,7 +55,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 //	@Autowired
 //	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	@Autowired
+	@Autowired(required = false)
 	private ExcelDataSource excelDataSource;
 
 	@Value("${" + ExcelDataSource.MULTIPLE_DATASOURCE + ":false}")
