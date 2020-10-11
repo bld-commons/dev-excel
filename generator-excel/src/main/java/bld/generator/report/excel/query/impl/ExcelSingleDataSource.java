@@ -23,7 +23,6 @@ import bld.generator.report.excel.query.ExcelDataSource;
  * </ul>
  */
 @Component
-//@ConditionalOnProperty(name = ExcelDataSource.MULTIPLE_DATASOURCE, havingValue = "false", matchIfMissing = true)
 @ConditionalOnExpression(value = "!${"+ExcelDataSource.MULTIPLE_DATASOURCE+":false} and !T(org.springframework.util.StringUtils).isEmpty('${"+ExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
 public class ExcelSingleDataSource extends ExcelBaseDataSource implements ExcelDataSource {
 
