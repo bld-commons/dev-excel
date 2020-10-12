@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * <li>ExcelColumn - to define the header description and the position of column</li>
  * <li>ExcelFunction - to define the function</li>
  * <li>ExcelColumnWidth - to set column width<7li>
+ * <li>ExcelHeaderCellLayout - to define header cell layout</li>
  * </ul>
  *  
  *  It is parameter of the annotation {@link bld.generator.report.excel.annotation.ExcelFunctionRows}.
@@ -59,6 +60,14 @@ public @interface ExcelFunctionRow {
 	 * @return the excel column width
 	 */
 	public ExcelColumnWidth excelColumnWidth() default @ExcelColumnWidth; 
+	
+	
+	/**
+	 * Excel header cell layout.
+	 *
+	 * @return the excel header cell layout
+	 */
+	public ExcelHeaderCellLayout excelHeaderCellLayout() default  @ExcelHeaderCellLayout;
 	
 	
 }

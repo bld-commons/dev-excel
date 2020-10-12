@@ -14,8 +14,13 @@ import java.lang.annotation.Target;
 
 /**
  * The Interface ExcelQuery. <br>
- * ExcelQuery is used to get the list of rows directly from the database; this functionality works if the project is configured with spring-data-jpa and if the property is set to "spring.datasource.url"<br>
- * It is used on {@link bld.generator.report.excel.QuerySheetData} classes.
+ * ExcelQuery is used to get the list of rows directly from the database; this functionality works if the project is configured with spring-data-jpa and if one of the following properties is set:
+ * <ul>
+ * <li>spring.datasource.url</li>
+ * <li>bld.commons.multiple.datasource</li>
+ * </ul>
+ * It is used on {@link bld.generator.report.excel.QuerySheetData} classes.<br>
+ * The "entityManager" and "namedParameterJdbcTemplate" properties must be set only if there is a configuration enabled for multiple data sources.
  */
 @Documented
 @Retention(RUNTIME)
@@ -36,6 +41,21 @@ public @interface ExcelQuery {
 	 */
 	public boolean nativeQuery() default true;
 	
+	
+	/**
+	 * Entity manager.
+	 *
+	 * @return the string
+	 */
+	public String entityManager() default "";
+	
+	
+	/**
+	 * Named parameter jdbc template.
+	 *
+	 * @return the string
+	 */
+	public String namedParameterJdbcTemplate() default "namedParameterJdbcTemplate";	
 	
 	
 }

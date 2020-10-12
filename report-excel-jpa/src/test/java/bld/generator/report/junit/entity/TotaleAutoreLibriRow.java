@@ -13,6 +13,8 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import bld.generator.report.excel.annotation.ExcelRgbColor;
 
 /**
  * The Class TotaleAutoreLibriRow.
@@ -20,7 +22,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
 				excelColumn = @ExcelColumn(indexColumn = 8, columnName = "Totale Prezzo"), 
-				excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePrezzo")) })
+				excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePrezzo"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0))) })
 public class TotaleAutoreLibriRow implements RowSheet {
 
 	@ExcelColumn(columnName = "Totale", indexColumn = 0)

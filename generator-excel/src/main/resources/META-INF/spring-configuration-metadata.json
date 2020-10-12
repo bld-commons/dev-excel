@@ -16,8 +16,11 @@
         "name": "bld.commons.number.empty.rows",
         "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.multiple.datasource",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
-    
 ],"properties": [
     {
         "name": "bld.commons.resource.path.xls",
@@ -43,6 +46,11 @@
         "name": "bld.commons.number.empty.rows",
         "type": "java.lang.Integer",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.multiple.datasource",
+        "type": "java.lang.Boolean",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
+    
 ]
 }

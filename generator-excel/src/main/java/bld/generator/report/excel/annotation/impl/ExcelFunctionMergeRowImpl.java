@@ -12,6 +12,7 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
+import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 
 /**
@@ -33,6 +34,9 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
+	
+	/** The excel header cell layout. */
+	private ExcelHeaderCellLayout excelHeaderCellLayout;
 
 	/**
 	 * Clone.
@@ -80,8 +84,12 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 
 			@Override
 			public ExcelColumnWidth excelColumnWidth() {
-				// TODO Auto-generated method stub
 				return excelColumnWidth;
+			}
+
+			@Override
+			public ExcelHeaderCellLayout excelHeaderCellLayout() {
+				return excelHeaderCellLayout;
 			}
 
 		};
@@ -103,6 +111,28 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 		this.excelMergeRow = excelMergeRow;
 		this.excelFunction = excelFunction;
 		this.excelColumnWidth = excelColumnWidth;
+	}
+	
+	
+
+	/**
+	 * Instantiates a new excel function merge row impl.
+	 *
+	 * @param excelCellsLayout the excel cells layout
+	 * @param excelColumn the excel column
+	 * @param excelMergeRow the excel merge row
+	 * @param excelFunction the excel function
+	 * @param excelColumnWidth the excel column width
+	 * @param excelHeaderCellLayout the excel header cell layout
+	 */
+	public ExcelFunctionMergeRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelMergeRow excelMergeRow, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout) {
+		super();
+		this.excelCellsLayout = excelCellsLayout;
+		this.excelColumn = excelColumn;
+		this.excelMergeRow = excelMergeRow;
+		this.excelFunction = excelFunction;
+		this.excelColumnWidth = excelColumnWidth;
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
 	}
 
 	/**
@@ -196,6 +226,24 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 	}
 
 	/**
+	 * Gets the excel header cell layout.
+	 *
+	 * @return the excel header cell layout
+	 */
+	public ExcelHeaderCellLayout getExcelHeaderCellLayout() {
+		return excelHeaderCellLayout;
+	}
+
+	/**
+	 * Sets the excel header cell layout.
+	 *
+	 * @param excelHeaderCellLayout the new excel header cell layout
+	 */
+	public void setExcelHeaderCellLayout(ExcelHeaderCellLayout excelHeaderCellLayout) {
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
+	}
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -208,6 +256,7 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
 		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
+		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
 		return result;
 	}
@@ -246,6 +295,11 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 			if (other.excelFunction != null)
 				return false;
 		} else if (!excelFunction.equals(other.excelFunction))
+			return false;
+		if (excelHeaderCellLayout == null) {
+			if (other.excelHeaderCellLayout != null)
+				return false;
+		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
 			return false;
 		if (excelMergeRow == null) {
 			if (other.excelMergeRow != null)

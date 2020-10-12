@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import bld.generator.report.excel.GenerateExcel;
+import bld.generator.report.excel.query.ExcelDataSource;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.query.impl.ExcelQueryComponentImpl;
 import bld.generator.report.utils.ValueProps;
@@ -22,6 +23,9 @@ import bld.generator.report.utils.ValueProps;
 @Configuration
 public class ExcelGeneratorConfiguration {
 	
+	/** The Constant SPRING_DATASOURCE_URL. */
+	public static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
+
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
@@ -49,8 +53,13 @@ public class ExcelGeneratorConfiguration {
 	}
 
 	
+	/**
+	 * Excel query component.
+	 *
+	 * @return the excel query component
+	 */
 	@Bean
-	@ConditionalOnProperty(value="spring.datasource.url")
+	@ConditionalOnProperty(value= {SPRING_DATASOURCE_URL,ExcelDataSource.MULTIPLE_DATASOURCE})
 	public ExcelQueryComponent excelQueryComponent() {
 		return new ExcelQueryComponentImpl();
 	}

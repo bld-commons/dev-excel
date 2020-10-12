@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.bld-commons.excel</groupId>
-	<artifactId>report-excel</artifactId>
-	<name>report-excel</name>
-	<description>Report Excel</description>
+	<artifactId>report-excel-jpa</artifactId>
+	<name>report-excel-jpa</name>
+	<description>Report Excel JPA</description>
 
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>3.0.2</version>
 	</parent>
 
 
@@ -19,7 +21,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -36,6 +37,10 @@
 			<artifactId>generator-excel</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.github.bld-commons.excel</groupId>
+			<artifactId>read-excel</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 		</dependency>
@@ -43,6 +48,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 	</dependencies>
 
