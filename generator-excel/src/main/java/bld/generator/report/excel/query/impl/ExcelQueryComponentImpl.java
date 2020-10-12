@@ -47,17 +47,11 @@ import bld.generator.report.utils.ExcelUtils;
 @Component
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 
-//	/** The entity manager. */
-//	@PersistenceContext
-//	private EntityManager entityManager;
-//
-//	/** The named parameter jdbc template. */
-//	@Autowired
-//	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+	/** The excel data source. */
 	@Autowired(required = false)
 	private ExcelDataSource excelDataSource;
 
+	/** The multiple datasource. */
 	@Value("${" + ExcelDataSource.MULTIPLE_DATASOURCE + ":false}")
 	private boolean multipleDatasource;
 
