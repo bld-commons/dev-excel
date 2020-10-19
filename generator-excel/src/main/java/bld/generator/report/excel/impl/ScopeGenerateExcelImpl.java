@@ -480,7 +480,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				}
 				if(sheetHeader.getExcelImage()!=null) {
 					if(!(value instanceof String || value instanceof byte[]))
-						throw new Exception("The annotation ExcelImage can to be used only on fields of type String or byte[]");
+						throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
 					if(value instanceof String) {
 						InputStream inputStream=new FileInputStream((String)value);
 						value=IOUtils.toByteArray(inputStream);

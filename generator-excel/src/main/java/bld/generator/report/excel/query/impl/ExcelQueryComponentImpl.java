@@ -23,6 +23,7 @@ import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelQuery;
+import bld.generator.report.excel.config.ExcelGeneratorConfiguration;
 import bld.generator.report.excel.query.ExcelDataSource;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
@@ -45,6 +47,7 @@ import bld.generator.report.utils.ExcelUtils;
  */
 @Transactional
 @Component
+@ConditionalOnProperty(value= {ExcelGeneratorConfiguration.SPRING_DATASOURCE_URL,ExcelDataSource.MULTIPLE_DATASOURCE})
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 
 	/** The excel data source. */

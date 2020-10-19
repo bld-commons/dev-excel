@@ -377,6 +377,7 @@ public class SuperGenerateExcelImpl {
 	 * @param cell        the cell
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
+	 * @param sheet       the sheet
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
@@ -659,6 +660,7 @@ public class SuperGenerateExcelImpl {
 	 * @param cellStyle   the cell style
 	 * @param sheetHeader the sheet header
 	 * @param indexRow    the index row
+	 * @param sheet       the sheet
 	 * @throws Exception the exception
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,Sheet sheet) throws Exception {
@@ -1078,6 +1080,15 @@ public class SuperGenerateExcelImpl {
 		}
 	}
 
+	/**
+	 * Adds the image.
+	 *
+	 * @param workbook    the workbook
+	 * @param sheet       the sheet
+	 * @param sheetHeader the sheet header
+	 * @param cell        the cell
+	 * @throws Exception the exception
+	 */
 	private void addImage(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception{
 		
 		ExcelImage excelImage=sheetHeader.getExcelImage();
