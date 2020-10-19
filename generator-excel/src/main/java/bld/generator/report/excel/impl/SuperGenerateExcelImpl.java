@@ -44,6 +44,7 @@ import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Hyperlink;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -76,6 +77,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelPivot;
 import bld.generator.report.excel.annotation.ExcelPivotColumn;
@@ -378,8 +380,8 @@ public class SuperGenerateExcelImpl {
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow) throws Exception {
-		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow); // writeCellEmpty(workbook,
+	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow,Sheet sheet) throws Exception {
+		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet); // writeCellEmpty(workbook,
 		// cellStyle,
 		// cell,
 		// sheetHeader);
@@ -487,7 +489,7 @@ public class SuperGenerateExcelImpl {
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 		ExcelDate excelDate = null;
-		if (sheetHeader.getField()!=null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
+		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
 		Cell cellColumn1 = row.createCell(1);
@@ -521,7 +523,7 @@ public class SuperGenerateExcelImpl {
 				listFunctionCell.add(functionCell);
 			}
 		} else
-			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow);
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet);
 
 	}
 
@@ -614,7 +616,7 @@ public class SuperGenerateExcelImpl {
 				listFunctionCell.add(functionCell);
 			}
 		else
-			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(), 0);
+			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(), 0,sheet);
 
 	}
 
@@ -659,7 +661,7 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow    the index row
 	 * @throws Exception the exception
 	 */
-	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow) throws Exception {
+	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		layoutCell.setColor(indexRow);
 		if (cellStyle == null) {
@@ -698,10 +700,12 @@ public class SuperGenerateExcelImpl {
 			hyperlink.setAddress(address);
 			cell.setHyperlink(hyperlink);
 			cell.setCellValue(excelHyperlink.getValue());
-		} else if (sheetHeader.getValue() instanceof DropDown<?>) {
+		} else if (sheetHeader.getValue() instanceof byte[])
+			this.addImage(workbook, sheet, sheetHeader, cell);
+		else if (sheetHeader.getValue() instanceof DropDown<?>) {
 			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 			sheetHeader.setValue(dropDown.getValue());
-			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow);
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet);
 		}
 
 	}
@@ -1047,19 +1051,19 @@ public class SuperGenerateExcelImpl {
 				DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
 					String[] list = new String[dropDown.getList().size()];
-					int i=0;
-					SimpleDateFormat sdf=new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
-					for(Object item:dropDown.getList()) {
-						
-						if(item instanceof Date) 
-							list[i]=sdf.format((Date)item);
-						else if(item instanceof Calendar) 
-							list[i]=sdf.format(((Calendar)item).getTime());
-						else if(item instanceof Timestamp) 
-							list[i]=sdf.format(new Date(((Timestamp)item).getTime()));
+					int i = 0;
+					SimpleDateFormat sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
+					for (Object item : dropDown.getList()) {
+
+						if (item instanceof Date)
+							list[i] = sdf.format((Date) item);
+						else if (item instanceof Calendar)
+							list[i] = sdf.format(((Calendar) item).getTime());
+						else if (item instanceof Timestamp)
+							list[i] = sdf.format(new Date(((Timestamp) item).getTime()));
 						else
-							list[i]=item.toString();
-						
+							list[i] = item.toString();
+
 						i++;
 					}
 					constraint = validationHelper.createExplicitListConstraint(list);
@@ -1067,7 +1071,6 @@ public class SuperGenerateExcelImpl {
 					dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
 				}
 
-				
 			}
 
 			sheet.addValidationData(dataValidation);
@@ -1075,6 +1078,23 @@ public class SuperGenerateExcelImpl {
 		}
 	}
 
+	private void addImage(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception{
+		
+		ExcelImage excelImage=sheetHeader.getExcelImage();
+		
+		int pictureureIdx = workbook.addPicture((byte[])sheetHeader.getValue(), excelImage.pictureType().nativeId);
+		CreationHelper helper = workbook.getCreationHelper();
+		Drawing<?> drawing = sheet.createDrawingPatriarch();
 
+		ClientAnchor anchor = helper.createClientAnchor();
+        
+		anchor.setCol1(cell.getColumnIndex());
+		anchor.setRow1(cell.getRowIndex());
+		anchor.setAnchorType(excelImage.anchorType());
+		
+		Picture pict = drawing.createPicture(anchor, pictureureIdx);
+		pict.resize( excelImage.resizeWidth(),excelImage.resizeHeight());
+		
+	}
 
 }

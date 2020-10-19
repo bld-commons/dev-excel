@@ -11,7 +11,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelSheetLayout
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
-@ExcelQuery(select = "SELECT id_utente, nome, cognome, data_nascita "
+@ExcelQuery(select = "SELECT id_utente, nome, cognome, data_nascita,image,path "
 		+ "FROM utente "
 		+ "WHERE cognome=:cognome "
 		+ "order by cognome,nome")

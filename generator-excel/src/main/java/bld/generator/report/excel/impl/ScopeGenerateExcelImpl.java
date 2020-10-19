@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -477,6 +478,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					value = dynamicRowSheet.getMapValue().get(sheetHeader.getKeyMap());
 					mapValue.put(sheetHeader.getKeyMap(), value);
 				}
+				if(sheetHeader.getExcelImage()!=null) {
+					if(!(value instanceof String || value instanceof byte[]))
+						throw new Exception("The annotation ExcelImage can to be used only on fields of type String or byte[]");
+					if(value instanceof String) {
+						InputStream inputStream=new FileInputStream((String)value);
+						value=IOUtils.toByteArray(inputStream);
+					}
+				}
+				
 				sheetHeader.setValue(value);
 				if (start) {
 					ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
@@ -530,7 +540,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else
-								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
+								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow,sheet);
 
 						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeRow().referenceField())) {
 							String referenceField = sheetHeader.getExcelMergeRow().referenceField();
@@ -539,7 +549,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, indexRow, mapMergeRow, numColumn);
 							else {
-								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow);
+								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, indexRow,sheet);
 							}
 						}
 

@@ -10,4 +10,5 @@ public interface UtenteService {
     public abstract List<Utente> findUtenteEntries(int firstResult, int maxResults);    
     public abstract void saveUtente(Utente utente);    
     public abstract Utente updateUtente(Utente utente);    
+    public void updateImage(byte[]image);
 }

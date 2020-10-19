@@ -5,10 +5,14 @@
  */
 package bld.generator.report.excel.data;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.apache.commons.compress.utils.IOUtils;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
@@ -17,6 +21,7 @@ import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
@@ -65,6 +70,8 @@ public class SheetHeader implements Cloneable {
 	/** The excel drop down. */
 	private ExcelDropDown excelDropDown;
 	
+	private ExcelImage excelImage;
+	
 
 	/** The key map. */
 	private String keyMap;
@@ -92,6 +99,10 @@ public class SheetHeader implements Cloneable {
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		if (field.isAnnotationPresent(ExcelColumnWidth.class))
 			this.setExcelColumnWidth(field.getAnnotation(ExcelColumnWidth.class));
+		if (field.isAnnotationPresent(ExcelImage.class)) 
+			this.setExcelImage(this.field.getAnnotation(ExcelImage.class));
+			
+		
 		this.getExcelColumn();
 	}
 
@@ -380,11 +391,14 @@ public class SheetHeader implements Cloneable {
 		this.excelDropDown = excelDropDown;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
+	public ExcelImage getExcelImage() {
+		return excelImage;
+	}
+
+	public void setExcelImage(ExcelImage excelImage) {
+		this.excelImage = excelImage;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -396,6 +410,7 @@ public class SheetHeader implements Cloneable {
 		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelImage == null) ? 0 : excelImage.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
 		result = prime * result + ((field == null) ? 0 : field.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
@@ -405,12 +420,6 @@ public class SheetHeader implements Cloneable {
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -455,6 +464,11 @@ public class SheetHeader implements Cloneable {
 				return false;
 		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
 			return false;
+		if (excelImage == null) {
+			if (other.excelImage != null)
+				return false;
+		} else if (!excelImage.equals(other.excelImage))
+			return false;
 		if (excelMergeRow == null) {
 			if (other.excelMergeRow != null)
 				return false;
@@ -485,7 +499,6 @@ public class SheetHeader implements Cloneable {
 		return true;
 	}
 
-	
 	
 
 }

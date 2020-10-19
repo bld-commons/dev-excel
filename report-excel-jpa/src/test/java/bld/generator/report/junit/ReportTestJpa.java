@@ -6,6 +6,7 @@
 package bld.generator.report.junit;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
+import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
@@ -58,6 +60,9 @@ public class ReportTestJpa {
 	/** The read excel. */
 	@Autowired
 	private ReadExcel readExcel;
+	
+	@Autowired
+	private UtenteService utenteService;
 	
 
 	/**
@@ -135,6 +140,13 @@ public class ReportTestJpa {
 		
 		
 		
+	}
+	
+	@Test
+	public void testWriteImage() throws Exception{
+		InputStream inputStream=new FileInputStream("/home/francesco/Documents/git-project/dev-excel/linux.jpg");
+		byte[] value=IOUtils.toByteArray(inputStream);
+		this.utenteService.updateImage(value);
 	}
 	
 	
