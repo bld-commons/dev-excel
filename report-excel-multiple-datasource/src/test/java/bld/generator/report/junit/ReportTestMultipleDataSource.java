@@ -80,18 +80,15 @@ public class ReportTestMultipleDataSource {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		
 		
-
+		UtenteSheet utenteSheet=new UtenteSheet("Utente");
+		utenteSheet.getMapParameters().put("cognome", "Rossi");
+		listBaseSheet.add(utenteSheet);
 		
+		UtenteEntitySheet utenteEntitySheet=new UtenteEntitySheet("Utente Entity");
+		listBaseSheet.add(utenteEntitySheet);
 		
-//		UtenteSheet utenteSheet=new UtenteSheet("Utente");
-//		utenteSheet.getMapParameters().put("cognome", "Rossi");
-//		listBaseSheet.add(utenteSheet);
-//		
-//		UtenteEntitySheet utenteEntitySheet=new UtenteEntitySheet("Utente Entity");
-//		listBaseSheet.add(utenteEntitySheet);
-//		
-//		GenereSheet genereSheet=new GenereSheet("Genere");
-//		listBaseSheet.add(genereSheet);
+		GenereSheet genereSheet=new GenereSheet("Genere");
+		listBaseSheet.add(genereSheet);
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
