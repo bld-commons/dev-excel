@@ -29,6 +29,10 @@ public class Utente {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date dataNascita;
+    @Column(name = "image")
+    private byte[] image;
+    @Column(name = "path")
+    private String path;
     public String getNome() {
         return nome;
     }
@@ -60,4 +64,18 @@ public class Utente {
     public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+	public byte[] getImage() {
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
+    
 }
