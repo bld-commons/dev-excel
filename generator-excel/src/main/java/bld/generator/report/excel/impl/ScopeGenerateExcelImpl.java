@@ -390,7 +390,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				addComment(workbook, worksheet, rowHeader, cellHeader, excelSummary.comment());
 			cellHeader = rowHeader.createCell(excelSheetLayout.startColumn() + 1);
 			cellHeader.setCellStyle(cellStyleHeader);
-			worksheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, 0, 1));
+			worksheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, excelSheetLayout.startColumn(), excelSheetLayout.startColumn()+1));
 			setColumnWidth(worksheet, excelSheetLayout.startColumn(), excelSummary.widthColumn1());
 			setColumnWidth(worksheet, excelSheetLayout.startColumn() + 1, excelSummary.widthColumn2());
 			indexRow++;

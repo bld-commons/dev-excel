@@ -28,7 +28,7 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 /**
  * The Class CasaEditrice.
  */
-@ExcelSheetLayout(startRow = 1)
+@ExcelSheetLayout(startRow = 1,startColumn = 1)
 @ExcelSummary(title = "Casa Editrice")
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
