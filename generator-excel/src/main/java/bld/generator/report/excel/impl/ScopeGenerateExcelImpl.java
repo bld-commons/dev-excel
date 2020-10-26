@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -400,7 +399,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		Row row = null;
 		for (SheetHeader sheetHeader : listSheetHeader) {
 			row = worksheet.createRow(indexRow);
-			setCellSummary(workbook, worksheet, sheetSummary, sheetHeader, row, indexRow);
+			setCellSummary(excelSheetLayout,workbook, worksheet, sheetSummary, sheetHeader, row, indexRow);
 			indexRow++;
 		}
 		return indexRow;
@@ -478,14 +477,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					value = dynamicRowSheet.getMapValue().get(sheetHeader.getKeyMap());
 					mapValue.put(sheetHeader.getKeyMap(), value);
 				}
-				if(sheetHeader.getExcelImage()!=null) {
-					if(!(value instanceof String || value instanceof byte[]))
-						throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
-					if(value instanceof String) {
-						InputStream inputStream=new FileInputStream((String)value);
-						value=IOUtils.toByteArray(inputStream);
-					}
-				}
+				value = manageExcelImage(sheetHeader, value);
 				
 				sheetHeader.setValue(value);
 				if (start) {
@@ -645,6 +637,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return indexRow;
 
 	}
+
 
 	/**
 	 * Sets the border area.

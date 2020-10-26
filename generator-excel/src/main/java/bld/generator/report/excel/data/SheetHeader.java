@@ -5,14 +5,10 @@
  */
 package bld.generator.report.excel.data;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.apache.commons.compress.utils.IOUtils;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;

@@ -5,6 +5,10 @@
 */
 package bld.generator.report.excel.impl;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -22,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -330,6 +335,11 @@ public class SuperGenerateExcelImpl {
 				if (entity != null)
 					value = PropertyUtils.getProperty(entity, field.getName());
 				SheetHeader sheetHeader = new SheetHeader(field, value);
+				if(value !=null) {
+					value=manageExcelImage(sheetHeader, value);
+					sheetHeader.setValue(value);
+				}
+				
 				if (field.isAnnotationPresent(ExcelDropDown.class) && field.getClass().isAssignableFrom(DropDown.class))
 					throw new Exception("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
 				if (field.isAnnotationPresent(ExcelDropDown.class))
@@ -464,6 +474,7 @@ public class SuperGenerateExcelImpl {
 
 	/**
 	 * Sets the cell summary.
+	 * @param excelSheetLayout 
 	 *
 	 * @param workbook     the workbook
 	 * @param sheet        the sheet
@@ -473,7 +484,7 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow     the index row
 	 * @throws Exception the exception
 	 */
-	protected void setCellSummary(Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow) throws Exception {
+	protected void setCellSummary(ExcelSheetLayout excelSheetLayout, Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow) throws Exception {
 		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
 		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
 		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;
@@ -483,7 +494,7 @@ public class SuperGenerateExcelImpl {
 		}
 		row.setHeight(heightRow);
 		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout(), indexRow);
-		Cell cellColumn0 = row.createCell(0);
+		Cell cellColumn0 = row.createCell(excelSheetLayout.startColumn());
 		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary, indexRow);
 		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().columnName()));
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
@@ -493,7 +504,7 @@ public class SuperGenerateExcelImpl {
 		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
-		Cell cellColumn1 = row.createCell(1);
+		Cell cellColumn1 = row.createCell(excelSheetLayout.startColumn()+1);
 
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex());
 		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
@@ -1106,6 +1117,18 @@ public class SuperGenerateExcelImpl {
 		Picture pict = drawing.createPicture(anchor, pictureureIdx);
 		pict.resize( excelImage.resizeWidth(),excelImage.resizeHeight());
 		
+	}
+	
+	protected Object manageExcelImage(SheetHeader sheetHeader, Object value) throws Exception, FileNotFoundException, IOException {
+		if(sheetHeader.getExcelImage()!=null) {
+			if(!(value instanceof String || value instanceof byte[]))
+				throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
+			if(value instanceof String) {
+				InputStream inputStream=new FileInputStream((String)value);
+				value=IOUtils.toByteArray(inputStream);
+			}
+		}
+		return value;
 	}
 
 }
