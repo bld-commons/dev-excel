@@ -33,7 +33,6 @@ import bld.generator.report.excel.constant.ExcelConstant;
 		@ExcelAreaBorder(areaRange = "${idAutoreRowHeader}:${idAutoreRowHeader}", border = @ExcelBorder(bottom = BorderStyle.NONE, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED)),
 		@ExcelAreaBorder(areaRange = "${nomeRowHeader}:${sessoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED), includeSuperHeader = true),
 		@ExcelAreaBorder(areaRange = "${desGenereRowHeader}:${prezzoRowEnd}", border = @ExcelBorder(bottom = BorderStyle.MEDIUM_DASHED, top = BorderStyle.MEDIUM_DASHED, right = BorderStyle.MEDIUM_DASHED, left = BorderStyle.MEDIUM_DASHED),includeSuperHeader = true)}
-,order = 1
 		)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)

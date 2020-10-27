@@ -102,6 +102,7 @@ import bld.generator.report.excel.comparator.PivotRowComparator;
 import bld.generator.report.excel.comparator.SheetColumnComparator;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 import bld.generator.report.excel.constant.RowStartEndType;
+import bld.generator.report.excel.data.DropDownCell;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.data.FunctionCell;
 import bld.generator.report.excel.data.InfoColumn;
@@ -153,6 +154,8 @@ public class SuperGenerateExcelImpl {
 
 	/** The list function cell. */
 	protected List<FunctionCell> listFunctionCell = new ArrayList<>();
+	
+	protected List<DropDownCell> listDropDown = new ArrayList<>();
 
 	/** The value props. */
 	@Autowired
@@ -426,7 +429,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
-		this.addDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn);
+		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn);
 		mergeRow.setRowEnd(indexRow - 1);
 		// setCellValueExcel(mergeRow.getCellFrom(),
 		// mergeRow.getCellStyleFrom(),
@@ -532,7 +535,7 @@ public class SuperGenerateExcelImpl {
 				functionCell.setCell(cell);
 				functionCell.setIndexRow(indexRow);
 				functionCell.setSheetHeader(sheetHeader);
-				listFunctionCell.add(functionCell);
+				this.listFunctionCell.add(functionCell);
 			}
 		} else
 			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet);
@@ -1035,6 +1038,17 @@ public class SuperGenerateExcelImpl {
 		return indexRow;
 
 	}
+	
+	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) {
+		DropDownCell dropDownCell=null;
+		dropDownCell=new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol);
+		try {
+			this.addDropDown(dropDownCell);
+		} catch (Exception e) {
+			this.listDropDown.add(dropDownCell);
+		}
+	}
+	
 
 	/**
 	 * Adds the drop down.
@@ -1047,16 +1061,22 @@ public class SuperGenerateExcelImpl {
 	 * @param lastCol     the last col
 	 * @throws Exception the exception
 	 */
-	protected void addDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) throws Exception {
+	protected void addDropDown(DropDownCell dropDownCell) throws Exception {
+		SheetHeader sheetHeader=dropDownCell.getSheetHeader();
+		Sheet sheet=dropDownCell.getSheet();
 		if (sheetHeader.getExcelDropDown() != null || (sheetHeader.getField() != null && sheetHeader.getValue() != null && DropDown.class.isAssignableFrom(sheetHeader.getField().getType()))) {
 			DataValidationConstraint constraint = null;
 			DataValidation dataValidation = null;
 			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
-			CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
+			CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
 			if (sheetHeader.getExcelDropDown() != null) {
 				String areaRange = sheetHeader.getExcelDropDown().areaRange();
 				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
 				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+				Pattern p = Pattern.compile(PATTERN);
+				Matcher m = p.matcher(areaRange);
+				if (m.find())
+					throw new Exception("The formula '"+areaRange+"' is not valid");
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
 				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDown().suppressDropDownArrow());

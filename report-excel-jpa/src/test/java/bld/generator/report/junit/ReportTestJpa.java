@@ -91,14 +91,15 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
 		
-		GenereSheet genereSheet=new GenereSheet("Genere");
-		listBaseSheet.add(genereSheet);
+		
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
 		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 		listBaseSheet.add(autoreLibriSheet);
+		GenereSheet genereSheet=new GenereSheet("Genere");
+		listBaseSheet.add(genereSheet);
 		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);

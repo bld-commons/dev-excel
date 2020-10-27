@@ -82,6 +82,7 @@ import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.constant.BorderType;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.RowStartEndType;
+import bld.generator.report.excel.data.DropDownCell;
 import bld.generator.report.excel.data.FunctionCell;
 import bld.generator.report.excel.data.InfoColumn;
 import bld.generator.report.excel.data.LayoutCell;
@@ -296,6 +297,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		this.mapCellHeaderStyle = new HashMap<>();
 		this.mapFieldColumn = new HashMap<>();
 		this.listFunctionCell = new ArrayList<>();
+		this.listDropDown=new ArrayList<>();
 		for (BaseSheet sheet : listSheet) {
 			Sheet worksheet = null;
 			this.mapWidthColumn = new HashMap<>();
@@ -333,7 +335,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
 			worksheet.setForceFormulaRecalculation(true);
 		}
-
+		for(DropDownCell dropDownCell:this.listDropDown)
+				super.addDropDown(dropDownCell);
 		return workbook;
 	}
 
@@ -517,7 +520,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 							mapMergeRow.put(numColumn, mergeRow);
 						} else {
-							super.addDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
+							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
 							super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow);
 						}
 
