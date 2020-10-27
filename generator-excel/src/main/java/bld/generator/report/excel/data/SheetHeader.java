@@ -96,7 +96,9 @@ public class SheetHeader implements Cloneable {
 		if (field.isAnnotationPresent(ExcelColumnWidth.class))
 			this.setExcelColumnWidth(field.getAnnotation(ExcelColumnWidth.class));
 		if (field.isAnnotationPresent(ExcelImage.class)) 
-			this.setExcelImage(this.field.getAnnotation(ExcelImage.class));
+			this.setExcelImage(field.getAnnotation(ExcelImage.class));
+		if (field.isAnnotationPresent(ExcelDropDown.class))
+			this.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 			
 		
 		this.getExcelColumn();

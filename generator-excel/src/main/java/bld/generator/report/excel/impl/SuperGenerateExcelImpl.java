@@ -507,8 +507,9 @@ public class SuperGenerateExcelImpl {
 		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
-		Cell cellColumn1 = row.createCell(excelSheetLayout.startColumn()+1);
-
+		int column=excelSheetLayout.startColumn()+1;
+		Cell cellColumn1 = row.createCell(column);
+		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column);
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex());
 		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
 

@@ -8,6 +8,8 @@ package bld.generator.report.junit;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -26,6 +28,7 @@ import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
+import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
@@ -91,6 +94,8 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
 		
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
+		listBaseSheet.add(casaEditrice);
 		
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
