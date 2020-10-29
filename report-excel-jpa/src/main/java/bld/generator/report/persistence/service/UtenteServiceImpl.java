@@ -43,10 +43,11 @@ public class UtenteServiceImpl implements UtenteService {
         return utenteRepository.save(utente);
     }
 	@Override
-	public void updateImage(byte[] image) {
-		String sql="update Utente u set u.image=:image";
+	public void updateImage(byte[] image,String path) {
+		String sql="update Utente u set u.image=:image,u.path=:path";
 		Query query = this.manager.createQuery(sql);
 		query.setParameter("image", image);
+		query.setParameter("path", path);
 		query.executeUpdate();
 	}
 }
