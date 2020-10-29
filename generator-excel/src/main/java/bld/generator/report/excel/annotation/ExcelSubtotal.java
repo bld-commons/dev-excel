@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 /**
- * The Interface ExcelSubtotal.
+ * The Interface ExcelSubtotal.<br>
  * ExcelSubtotal and {@link bld.generator.report.excel.annotation.ExcelSubtotals} are used To calculate the subtotals grouped by the value of the first column, the function type is defined by the "dataConsolidateFunction" property.<br>
  * This annotation is added to fields within classes of type "{@link bld.generator.report.excel.RowSheet}".<br>
  * The property ExcelCellLayout define the cell layout.
