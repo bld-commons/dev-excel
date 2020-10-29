@@ -86,4 +86,8 @@ public @interface ExcelSheetLayout {
 	 */
 	public boolean showHeader() default true;
 	
+	
+	public boolean groupRow() default false;
+	
+	public boolean groupColumn() default false;
 }
