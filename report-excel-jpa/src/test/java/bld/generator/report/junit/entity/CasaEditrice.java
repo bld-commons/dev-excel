@@ -15,10 +15,12 @@ import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
@@ -27,7 +29,7 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 /**
  * The Class CasaEditrice.
  */
-@ExcelSheetLayout
+@ExcelSheetLayout(startRow = 1,startColumn = 1)
 @ExcelSummary(title = "Casa Editrice")
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
@@ -35,6 +37,7 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 		@ExcelFunctionRow(excelFunction = @ExcelFunction(function = "sum(${Libri d'autore.prezzoRowStart}:${Libri d'autore.prezzoRowEnd})", nameFunction = "sommaAutore"), excelColumn = @ExcelColumn(indexColumn = 7, columnName = "test somma"))
 })
 public class CasaEditrice extends SheetSummary {
+
 
 	/** The nome. */
 	@ExcelColumn(columnName = "Nome", indexColumn = 1, comment = "Test comment")
@@ -60,6 +63,19 @@ public class CasaEditrice extends SheetSummary {
 	@ExcelColumn(columnName = "Genere B", indexColumn = 5)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer genereB;
+	
+	@ExcelColumn(columnName = "Image", indexColumn = 6)
+	@ExcelCellLayout
+	@ExcelImage
+	@ExcelRowHeight(height = 5)
+	private String image;
+	
+	@ExcelColumn(columnName = "Genere", indexColumn = 5.5)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	@ExcelDropDown(areaRange = "${Genere.genereRowStart}:${Genere.genereRowEnd}",suppressDropDownArrow = true)
+	private String desGenere;
+	
+
 
 	/**
 	 * Gets the nome.
@@ -115,19 +131,25 @@ public class CasaEditrice extends SheetSummary {
 		this.citta = citta;
 	}
 
-	/**
-	 * Instantiates a new casa editrice.
-	 *
-	 * @param nome          the nome
-	 * @param dataDiNascita the data di nascita
-	 * @param citta         the citta
-	 * @param nameSheet     the name sheet
-	 */
-	public CasaEditrice(String nome, Calendar dataDiNascita, String citta, String nameSheet) {
-		super(nameSheet);
+	public CasaEditrice(@Size(max = 31) String sheetName, String nome, Calendar dataDiNascita, String citta, String image,String desGenere) {
+		super(sheetName);
 		this.nome = nome;
 		this.dataDiNascita = dataDiNascita;
 		this.citta = citta;
+		this.image = image;
+		this.desGenere=desGenere;
+	}
+	
+	
+	public CasaEditrice(@Size(max = 31) String sheetName, String nome, Calendar dataDiNascita, String citta, Integer generaA, Integer genereB, String image,String desGenere) {
+		super(sheetName);
+		this.nome = nome;
+		this.dataDiNascita = dataDiNascita;
+		this.citta = citta;
+		this.generaA = generaA;
+		this.genereB = genereB;
+		this.image = image;
+		this.desGenere=desGenere;
 	}
 
 	/**
@@ -155,4 +177,22 @@ public class CasaEditrice extends SheetSummary {
 		this.genereB = genereB;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getDesGenere() {
+		return desGenere;
+	}
+
+	public void setDesGenere(String desGenere) {
+		this.desGenere = desGenere;
+	}
+
+	
+	
 }

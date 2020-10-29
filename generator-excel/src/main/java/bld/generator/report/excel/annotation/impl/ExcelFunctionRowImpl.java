@@ -161,6 +161,24 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	}
 
 	/**
+	 * Gets the excel header cell layout.
+	 *
+	 * @return the excel header cell layout
+	 */
+	public ExcelHeaderCellLayout getExcelHeaderCellLayout() {
+		return excelHeaderCellLayout;
+	}
+
+	/**
+	 * Sets the excel header cell layout.
+	 *
+	 * @param excelHeaderCellLayout the new excel header cell layout
+	 */
+	public void setExcelHeaderCellLayout(ExcelHeaderCellLayout excelHeaderCellLayout) {
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
+	}
+
+	/**
 	 * Sets the excel column.
 	 *
 	 * @param excelColumn the new excel column

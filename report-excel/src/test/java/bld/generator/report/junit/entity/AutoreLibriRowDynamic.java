@@ -5,17 +5,21 @@
 */
 package bld.generator.report.junit.entity;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import bld.generator.report.excel.DynamicRowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
+import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
 
 /**
@@ -37,6 +41,7 @@ import bld.generator.report.excel.dropdown.CalendarDropDown;
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "prezzoTotalePerAutore",anotherTable = false)) 
 				}
 		)
+@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
 public class AutoreLibriRowDynamic extends DynamicRowSheet {
 
 	/** The nome. */
@@ -78,6 +83,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	/** The prezzo. */
 	@ExcelColumn(columnName = "Prezzo", indexColumn = 7)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2)
+	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double prezzo;
 
 	/** The supplemento. */

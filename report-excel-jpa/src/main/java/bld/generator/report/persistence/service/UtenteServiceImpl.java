@@ -1,6 +1,10 @@
 package bld.generator.report.persistence.service;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,10 @@ import bld.generator.report.persistence.domain.UtenteRepository;
 public class UtenteServiceImpl implements UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
+    
+    @PersistenceContext
+    private EntityManager manager;
+    
     public long countAllUtentes() {
         return utenteRepository.count();
     }
@@ -34,4 +42,11 @@ public class UtenteServiceImpl implements UtenteService {
     public Utente updateUtente(Utente utente) {
         return utenteRepository.save(utente);
     }
+	@Override
+	public void updateImage(byte[] image) {
+		String sql="update Utente u set u.image=:image";
+		Query query = this.manager.createQuery(sql);
+		query.setParameter("image", image);
+		query.executeUpdate();
+	}
 }

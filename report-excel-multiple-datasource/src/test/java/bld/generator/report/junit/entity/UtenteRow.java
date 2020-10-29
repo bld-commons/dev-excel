@@ -8,7 +8,9 @@ import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
-
+import bld.generator.report.excel.annotation.ExcelImage;
+import bld.generator.report.excel.annotation.ExcelRowHeight;
+@ExcelRowHeight(height = 3)
 public class UtenteRow implements RowSheet {
 	
 	@ExcelColumn(columnName = "Id", indexColumn = 0)
@@ -25,18 +27,31 @@ public class UtenteRow implements RowSheet {
 	@ExcelDate
 	private Date dataNascita;
 	
-
+	@ExcelColumn(columnName = "Immagine", indexColumn = 4)
+	@ExcelCellLayout
+	@ExcelImage(resizeHeight = 0.7, resizeWidth = 0.6)
+	private byte[] image;	
+	
+	@ExcelColumn(columnName = "Path", indexColumn = 5)
+	@ExcelCellLayout
+	@ExcelImage(resizeHeight = 0.97, resizeWidth = 0.97)
+	private String path;	
+	
 	public UtenteRow() {
 	}
 
 
-	public UtenteRow(Integer idUtente, String nome, String cognome, Date dataNascita) {
+
+	public UtenteRow(Integer idUtente, String nome, String cognome, Date dataNascita, byte[] image, String path) {
 		super();
 		this.idUtente = idUtente;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dataNascita = dataNascita;
+		this.image = image;
+		this.path = path;
 	}
+
 
 
 	public Integer getIdUtente() {
@@ -76,6 +91,30 @@ public class UtenteRow implements RowSheet {
 
 	public void setDataNascita(Date dataNascita) {
 		this.dataNascita = dataNascita;
+	}
+
+
+
+	public byte[] getImage() {
+		return image;
+	}
+
+
+
+	public String getPath() {
+		return path;
+	}
+
+
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
+
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 	
 	

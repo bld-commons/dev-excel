@@ -6,7 +6,10 @@
 package bld.generator.report.junit;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -25,10 +28,12 @@ import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
+import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
+import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
@@ -59,6 +64,9 @@ public class ReportTestJpa {
 	@Autowired
 	private ReadExcel readExcel;
 	
+	@Autowired
+	private UtenteService utenteService;
+	
 
 	/**
 	 * Sets the up.
@@ -86,14 +94,17 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
 		
-		GenereSheet genereSheet=new GenereSheet("Genere");
-		listBaseSheet.add(genereSheet);
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
+		listBaseSheet.add(casaEditrice);
+		
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
 		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 		listBaseSheet.add(autoreLibriSheet);
+		GenereSheet genereSheet=new GenereSheet("Genere");
+		listBaseSheet.add(genereSheet);
 		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
@@ -135,6 +146,13 @@ public class ReportTestJpa {
 		
 		
 		
+	}
+	
+	@Test
+	public void testWriteImage() throws Exception{
+		InputStream inputStream=new FileInputStream("/home/francesco/Documents/git-project/dev-excel/linux.jpg");
+		byte[] value=IOUtils.toByteArray(inputStream);
+		this.utenteService.updateImage(value);
 	}
 	
 	

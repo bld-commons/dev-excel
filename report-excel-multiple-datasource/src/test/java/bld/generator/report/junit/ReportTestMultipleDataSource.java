@@ -80,9 +80,6 @@ public class ReportTestMultipleDataSource {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		
 		
-
-		
-		
 		UtenteSheet utenteSheet=new UtenteSheet("Utente");
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);

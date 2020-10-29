@@ -22,7 +22,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * <li>ExcelCellsLayout - to define cell layout</li>
  * <li>ExcelColumn - to define the header description and the position of column</li>
  * <li>ExcelFunction - to define the function</li>
- * <li>ExcelColumnWidth - to set column width<7li>
+ * <li>ExcelColumnWidth - to set column width</li>
  * <li>ExcelHeaderCellLayout - to define header cell layout</li>
  * </ul>
  *  

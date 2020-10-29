@@ -33,8 +33,9 @@ public class ValuePropsImpl implements ValueProps {
 		if(StringUtils.isNotBlank(props) && props.startsWith("${") && props.endsWith("}")) {
 			keyProperties=props.substring(2);
 			keyProperties=keyProperties.substring(0, keyProperties.length() - 1);
+			keyProperties=this.env.getProperty(keyProperties, props);
 		}
-		return this.env.getProperty(keyProperties, props);
+		return keyProperties;
 	}
 
 }

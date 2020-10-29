@@ -120,7 +120,7 @@ public class ReportTest {
 		indexSheet.setListRowSheet(listIndice);
 		listBaseSheet.add(indexSheet);
 		
-		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg");
 		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet=new DateSheet("Test Date");
@@ -177,7 +177,7 @@ public class ReportTest {
 	@Test
 	public void testDynamic() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
-		CasaEditrice casaEditrice = new CasaEditrice("Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "Casa Editrice");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg");
 		listBaseSheet.add(casaEditrice);
 
 		List<Calendar> listDate=new ArrayList<>();

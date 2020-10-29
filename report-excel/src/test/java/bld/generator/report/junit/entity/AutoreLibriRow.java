@@ -7,6 +7,7 @@ package bld.generator.report.junit.entity;
 
 import java.util.Calendar;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import bld.generator.report.excel.RowSheet;
@@ -14,6 +15,7 @@ import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelDate;
+import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
@@ -21,6 +23,8 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
+import bld.generator.report.excel.annotation.ExcelSubtotal;
+import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
@@ -37,7 +41,7 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
 						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"), 
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",nameFunction = "prezzoTotalePerAutore"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))})
-
+@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
 public class AutoreLibriRow implements RowSheet {
 
 	
@@ -82,11 +86,13 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(columnName = "Prezzo",indexColumn = 7)
 	@ExcelColumnWidth(width=31)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
+	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double prezzo;
 	
 	/** The supplemento. */
 	@ExcelColumn(columnName = "Supplemento",indexColumn = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
+	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double supplemento;
 
 	
