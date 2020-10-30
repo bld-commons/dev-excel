@@ -11,9 +11,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelFunctionRow.
  * ExcelFunctionMergeRow is used to configure the cell layout and define the excel function.<br>
@@ -68,6 +68,14 @@ public @interface ExcelFunctionRow {
 	 * @return the excel header cell layout
 	 */
 	public ExcelHeaderCellLayout excelHeaderCellLayout() default  @ExcelHeaderCellLayout;
+	
+	
+	/**
+	 * Excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
 	
 	
 }

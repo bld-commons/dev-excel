@@ -362,6 +362,7 @@ public class SuperGenerateExcelImpl {
 				sheetHeader.setExcelFunction(excelFunction.excelFunction());
 				sheetHeader.setExcelColumnWidth(excelFunction.excelColumnWidth());
 				sheetHeader.setExcelHeaderCellLayout(excelFunction.excelHeaderCellLayout());
+				sheetHeader.setExcelSubtotal(excelFunction.excelSubtotal());
 				listSheetHeader.add(sheetHeader);
 
 			}
@@ -373,6 +374,7 @@ public class SuperGenerateExcelImpl {
 				sheetHeader.setExcelMergeRow(excelFunctionMerge.excelMergeRow());
 				sheetHeader.setExcelColumnWidth(excelFunctionMerge.excelColumnWidth());
 				sheetHeader.setExcelHeaderCellLayout(excelFunctionMerge.excelHeaderCellLayout());
+				sheetHeader.setExcelSubtotal(excelFunctionMerge.excelSubtotal());
 				listSheetHeader.add(sheetHeader);
 
 			}

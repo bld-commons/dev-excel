@@ -5,15 +5,11 @@
 */
 package bld.generator.report.junit;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.poi.util.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,18 +26,12 @@ import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.GenereSheet;
+import bld.generator.report.junit.entity.SalaryRow;
+import bld.generator.report.junit.entity.SalarySheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
-import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
-import bld.read.report.excel.ReadExcel;
-import bld.read.report.excel.constant.ExcelType;
-import bld.read.report.excel.domain.ExcelRead;
-import bld.read.report.junit.entity.ReadAutoreLibriRow;
-import bld.read.report.junit.entity.ReadAutoreLibriSheet;
-import bld.read.report.junit.entity.ReadGenereRow;
-import bld.read.report.junit.entity.ReadGenereSheet;
 
 /**
  * The Class ReportTest.
@@ -60,12 +50,12 @@ public class ReportTestJpa {
 	@Autowired
 	private GenerateExcel generateExcel;
 	
-	/** The read excel. */
-	@Autowired
-	private ReadExcel readExcel;
-	
-	@Autowired
-	private UtenteService utenteService;
+//	/** The read excel. */
+//	@Autowired
+//	private ReadExcel readExcel;
+//	
+//	@Autowired
+//	private UtenteService utenteService;
 	
 
 	/**
@@ -86,10 +76,6 @@ public class ReportTestJpa {
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		
-		
-
-		
-		
 		UtenteSheet utenteSheet=new UtenteSheet("Utente");
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
@@ -105,6 +91,16 @@ public class ReportTestJpa {
 		listBaseSheet.add(autoreLibriSheet);
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		listBaseSheet.add(genereSheet);
+		SalarySheet salarySheet=new SalarySheet("salary");
+		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		listBaseSheet.add(salarySheet);
 		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
@@ -116,44 +112,45 @@ public class ReportTestJpa {
 	
 
 	
-	/**
-	 * Test read.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void testRead() throws Exception{
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
-		byte[] report=IOUtils.toByteArray(inputStream);
-		ExcelRead excelRead=new ExcelRead();
-		excelRead.setReportExcel(report);
-		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
-//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
-		excelRead=this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet;
-		try {
-			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
-			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
-				System.out.println(row.toString());
-			
-			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
-			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
-				System.out.println(row.toString());
-		} catch (Exception e) {
-			ExceptionUtils.getStackTrace(e);
-		}
-		
-		
-		
-	}
-	
-	@Test
-	public void testWriteImage() throws Exception{
-		InputStream inputStream=new FileInputStream("/home/francesco/Documents/git-project/dev-excel/linux.jpg");
-		byte[] value=IOUtils.toByteArray(inputStream);
-		this.utenteService.updateImage(value);
-	}
+//	/**
+//	 * Test read.
+//	 *
+//	 * @throws Exception the exception
+//	 */
+//	@Test
+//	public void testRead() throws Exception{
+//		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
+//		byte[] report=IOUtils.toByteArray(inputStream);
+//		ExcelRead excelRead=new ExcelRead();
+//		excelRead.setReportExcel(report);
+//		excelRead.setExcelType(ExcelType.XLSX);
+//		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
+////		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
+//		excelRead=this.readExcel.convertExcelToEntity(excelRead);
+//		ReadAutoreLibriSheet sheet;
+//		try {
+//			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+//			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+//				System.out.println(row.toString());
+//			
+//			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+//			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
+//				System.out.println(row.toString());
+//		} catch (Exception e) {
+//			ExceptionUtils.getStackTrace(e);
+//		}
+//		
+//		
+//		
+//	}
+//	
+//	@Test
+//	public void testWriteImage() throws Exception{
+//		String path="/home/francesco/Documents/git-project/dev-excel/linux.jpg";
+//		InputStream inputStream=new FileInputStream(path);
+//		byte[] value=IOUtils.toByteArray(inputStream);
+//		this.utenteService.updateImage(value,path);
+//	}
 	
 	
 

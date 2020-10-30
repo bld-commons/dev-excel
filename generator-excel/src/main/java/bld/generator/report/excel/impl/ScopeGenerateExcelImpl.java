@@ -601,6 +601,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					String nameField = null;
 					if (sheetHeader.getField() != null)
 						nameField = sheetHeader.getField().getName();
+					else if(sheetHeader.getExcelFunction()!=null)
+						nameField=sheetHeader.getExcelFunction().nameFunction();
 					ExcelCellLayout excelCellLayout = null;
 					if (indexHeader == 0) {
 
@@ -613,16 +615,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelLabelSubtotal, emptyRow, sheetHeader, excelCellLayout);
 						sheetHeader.setExcelCellLayout(excelLabelSubtotal.excelCellLayout());
 
-					} else if (sheetHeader.getExcelSubtotal() != null) {
+					} else if (sheetHeader.getExcelSubtotal() != null && sheetHeader.getExcelSubtotal().enable()) {
 						sheetHeader.setValue(null);
 						excelCellLayout = sheetHeader.getExcelSubtotal().excelCellLayout();
 						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelLabelSubtotal, emptyRow, sheetHeader, excelCellLayout);
 						String function = "subtotal(" + sheetHeader.getExcelSubtotal().dataConsolidateFunction().getValue() + "," + RowStartEndType.ROW_START.getParameter(nameField) + ":" + RowStartEndType.ROW_END.getParameter(nameField) + ")";
 						if (emptyRows.size() - 1 == emptyRows.indexOf(emptyRow))
-							lastRowSubtotal=startRowSheet;
+							lastRowSubtotal = startRowSheet;
 						function = makeFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_START);
 						function = makeFunction(sheet, emptyRow.getEmptyRow() - 1, function, RowStartEndType.ROW_END);
-						ExcelFunctionImpl excelFuctionImpl = new ExcelFunctionImpl(function, sheetHeader.getField().getName() + "Function", false);
+						ExcelFunctionImpl excelFuctionImpl = null;
+							excelFuctionImpl = new ExcelFunctionImpl(function, nameField + "Function", false);
 						sheetHeader.setExcelFunction(excelFuctionImpl.getExcelFunction());
 
 					} else {

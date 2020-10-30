@@ -130,9 +130,5 @@ public class AutoreLibriRow implements RowSheet {
 	public void setDesGenere(String desGenere) {
 		this.desGenere = desGenere;
 	}
-
-	
-	
-	
 	
 }

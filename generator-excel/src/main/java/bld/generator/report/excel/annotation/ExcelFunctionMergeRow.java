@@ -11,6 +11,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+
 /**
  * The Interface ExcelFunctionMergeRow.<br>
  * ExcelFunctionMergeRow is used to configure the cell layout merged and define
@@ -77,4 +79,11 @@ public @interface ExcelFunctionMergeRow {
 	 * @return the excel header cell layout
 	 */
 	public ExcelHeaderCellLayout excelHeaderCellLayout() default @ExcelHeaderCellLayout;
+	
+	/**
+	 * Excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
 }
