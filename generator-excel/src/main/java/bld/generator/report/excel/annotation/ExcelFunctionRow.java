@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * <li>ExcelFunction - to define the function</li>
  * <li>ExcelColumnWidth - to set column width</li>
  * <li>ExcelHeaderCellLayout - to define header cell layout</li>
+ * <li>ExcelSubtotal - to execute subtotal function</li>
  * </ul>
  *  
  *  It is parameter of the annotation {@link bld.generator.report.excel.annotation.ExcelFunctionRows}.
