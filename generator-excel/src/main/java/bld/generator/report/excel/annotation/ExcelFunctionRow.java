@@ -11,6 +11,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 /**
@@ -67,6 +68,14 @@ public @interface ExcelFunctionRow {
 	 * @return the excel header cell layout
 	 */
 	public ExcelHeaderCellLayout excelHeaderCellLayout() default  @ExcelHeaderCellLayout;
+	
+	
+	/**
+	 * Excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
 	
 	
 }

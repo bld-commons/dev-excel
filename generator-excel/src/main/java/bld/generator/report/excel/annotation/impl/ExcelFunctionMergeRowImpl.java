@@ -14,6 +14,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelSubtotal;
 
 /**
  * The Class ExcelFunctionMergeRowImpl.
@@ -37,6 +38,9 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 	
 	/** The excel header cell layout. */
 	private ExcelHeaderCellLayout excelHeaderCellLayout;
+	
+	/** The excel subtotal. */
+	private ExcelSubtotal excelSubtotal;
 
 	/**
 	 * Clone.
@@ -92,6 +96,11 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 				return excelHeaderCellLayout;
 			}
 
+			@Override
+			public ExcelSubtotal excelSubtotal() {
+				return excelSubtotal;
+			}
+
 		};
 	}
 
@@ -115,17 +124,21 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 	
 	
 
+	
+
 	/**
 	 * Instantiates a new excel function merge row impl.
 	 *
-	 * @param excelCellsLayout the excel cells layout
-	 * @param excelColumn the excel column
-	 * @param excelMergeRow the excel merge row
-	 * @param excelFunction the excel function
-	 * @param excelColumnWidth the excel column width
+	 * @param excelCellsLayout      the excel cells layout
+	 * @param excelColumn           the excel column
+	 * @param excelMergeRow         the excel merge row
+	 * @param excelFunction         the excel function
+	 * @param excelColumnWidth      the excel column width
 	 * @param excelHeaderCellLayout the excel header cell layout
+	 * @param excelSubtotal         the excel subtotal
 	 */
-	public ExcelFunctionMergeRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelMergeRow excelMergeRow, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout) {
+	public ExcelFunctionMergeRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelMergeRow excelMergeRow, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout,
+			ExcelSubtotal excelSubtotal) {
 		super();
 		this.excelCellsLayout = excelCellsLayout;
 		this.excelColumn = excelColumn;
@@ -133,6 +146,7 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 		this.excelFunction = excelFunction;
 		this.excelColumnWidth = excelColumnWidth;
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
+		this.excelSubtotal = excelSubtotal;
 	}
 
 	/**
@@ -244,6 +258,24 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 	}
 
 	/**
+	 * Gets the excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal getExcelSubtotal() {
+		return excelSubtotal;
+	}
+
+	/**
+	 * Sets the excel subtotal.
+	 *
+	 * @param excelSubtotal the new excel subtotal
+	 */
+	public void setExcelSubtotal(ExcelSubtotal excelSubtotal) {
+		this.excelSubtotal = excelSubtotal;
+	}
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -258,6 +290,7 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
 
@@ -305,6 +338,11 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 			if (other.excelMergeRow != null)
 				return false;
 		} else if (!excelMergeRow.equals(other.excelMergeRow))
+			return false;
+		if (excelSubtotal == null) {
+			if (other.excelSubtotal != null)
+				return false;
+		} else if (!excelSubtotal.equals(other.excelSubtotal))
 			return false;
 		return true;
 	}

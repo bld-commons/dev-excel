@@ -13,6 +13,7 @@ import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import bld.generator.report.excel.annotation.ExcelSubtotal;
 
 /**
  * The Class ExcelFunctionRowImpl.
@@ -33,6 +34,9 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	
 	/** The excel header cell layout. */
 	private ExcelHeaderCellLayout excelHeaderCellLayout;
+	
+	/** The excel subtotal. */
+	private ExcelSubtotal excelSubtotal;
 	
 	/**
 	 * Clone.
@@ -83,6 +87,11 @@ public class ExcelFunctionRowImpl implements Cloneable{
 				return excelHeaderCellLayout;
 			}
 
+			@Override
+			public ExcelSubtotal excelSubtotal() {
+				return excelSubtotal;
+			}
+
 		};
 	}
 
@@ -115,22 +124,25 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	
 	
 
+
 	/**
 	 * Instantiates a new excel function row impl.
 	 *
-	 * @param excelCellsLayout the excel cells layout
-	 * @param excelColumn the excel column
-	 * @param excelFunction the excel function
-	 * @param excelColumnWidth the excel column width
+	 * @param excelCellsLayout      the excel cells layout
+	 * @param excelColumn           the excel column
+	 * @param excelFunction         the excel function
+	 * @param excelColumnWidth      the excel column width
 	 * @param excelHeaderCellLayout the excel header cell layout
+	 * @param excelSubtotal         the excel subtotal
 	 */
-	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout) {
+	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout, ExcelSubtotal excelSubtotal) {
 		super();
 		this.excelCellsLayout = excelCellsLayout;
 		this.excelColumn = excelColumn;
 		this.excelFunction = excelFunction;
 		this.excelColumnWidth = excelColumnWidth;
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
+		this.excelSubtotal = excelSubtotal;
 	}
 
 	/**
@@ -214,6 +226,26 @@ public class ExcelFunctionRowImpl implements Cloneable{
 		this.excelColumnWidth = excelColumnWidth;
 	}
 
+	
+	
+	/**
+	 * Gets the excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal getExcelSubtotal() {
+		return excelSubtotal;
+	}
+
+	/**
+	 * Sets the excel subtotal.
+	 *
+	 * @param excelSubtotal the new excel subtotal
+	 */
+	public void setExcelSubtotal(ExcelSubtotal excelSubtotal) {
+		this.excelSubtotal = excelSubtotal;
+	}
+
 	/**
 	 * Hash code.
 	 *
@@ -228,6 +260,7 @@ public class ExcelFunctionRowImpl implements Cloneable{
 		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
 
@@ -270,6 +303,11 @@ public class ExcelFunctionRowImpl implements Cloneable{
 			if (other.excelHeaderCellLayout != null)
 				return false;
 		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
+			return false;
+		if (excelSubtotal == null) {
+			if (other.excelSubtotal != null)
+				return false;
+		} else if (!excelSubtotal.equals(other.excelSubtotal))
 			return false;
 		return true;
 	}

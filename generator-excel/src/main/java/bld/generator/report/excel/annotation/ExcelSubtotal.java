@@ -40,4 +40,12 @@ public @interface ExcelSubtotal {
 	 * @return the excel cell layout
 	 */
 	public ExcelCellLayout excelCellLayout() default @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,font = @ExcelFont(bold = true));
+	
+	
+	/**
+	 * Enable.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean enable() default true;
 }
