@@ -39,7 +39,8 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 				excelFunction=@ExcelFunction(function = "${Test Date.dataA}", nameFunction = "test"))
 		},
 excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
-						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"), 
+						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"),
+						excelSubtotal = @ExcelSubtotal(enable = true, excelCellLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,font=@ExcelFont(bold=true)), dataConsolidateFunction = DataConsolidateFunction.SUM),
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",nameFunction = "prezzoTotalePerAutore"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))})
 @ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
 public class AutoreLibriRow implements RowSheet {

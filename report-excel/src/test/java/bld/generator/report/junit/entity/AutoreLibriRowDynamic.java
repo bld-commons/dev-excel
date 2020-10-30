@@ -31,8 +31,8 @@ import bld.generator.report.excel.dropdown.CalendarDropDown;
 						excelColumn = @ExcelColumn(indexColumn = 9, columnName = "Prezzo Totale"), 
 						excelFunction = @ExcelFunction(function = "sum(${prezzo},${supplemento})",anotherTable = false, nameFunction = "prezzoTotale")),
 				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test Sum on Merged Cell"), excelSubtotal = @ExcelSubtotal(enable = true,
-				excelCellLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,font=@ExcelFont(bold=true)), dataConsolidateFunction = DataConsolidateFunction.SUM),
+				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test Sum on Merged Cell"), 
+				excelSubtotal = @ExcelSubtotal(enable = true, excelCellLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,font=@ExcelFont(bold=true)), dataConsolidateFunction = DataConsolidateFunction.SUM),
 				excelFunction = @ExcelFunction(function = "sum(${prezzoTotalePerAutore},${prezzoTotale})",anotherTable = false, nameFunction = "testSumMergedCell"))
 				
 				}, 
