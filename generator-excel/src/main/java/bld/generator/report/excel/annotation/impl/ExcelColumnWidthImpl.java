@@ -5,39 +5,16 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
 
 /**
  * The Class ExcelColumnWidthImpl.
  */
-public class ExcelColumnWidthImpl {
+public class ExcelColumnWidthImpl extends ExcelAnnotationImpl<ExcelColumnWidth>{
 
 	
 	/** The width. */
 	private int width;
-
-	/**
-	 * Gets the excel column width.
-	 *
-	 * @return the excel column width
-	 */
-	public ExcelColumnWidth getExcelColumnWidth() {
-		ExcelColumnWidth excelColumnWidth=new ExcelColumnWidth() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelColumnWidth.class;
-			}
-			
-			@Override
-			public int width() {
-				return width;
-			}
-		};
-		return excelColumnWidth;
-	}
 
 	/**
 	 * Instantiates a new excel column width impl.
@@ -47,6 +24,13 @@ public class ExcelColumnWidthImpl {
 	public ExcelColumnWidthImpl(int width) {
 		super();
 		this.width = width;
+	}
+
+	/**
+	 * Instantiates a new excel column width impl.
+	 */
+	public ExcelColumnWidthImpl() {
+		super();
 	}
 
 	/**

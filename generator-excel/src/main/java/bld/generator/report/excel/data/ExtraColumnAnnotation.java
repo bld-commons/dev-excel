@@ -15,6 +15,7 @@ import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
@@ -23,6 +24,7 @@ import bld.generator.report.excel.annotation.impl.ExcelDropDownImpl;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
+import bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
 
 /**
  * The Class ExtraColumnAnnotation.<br>
@@ -64,6 +66,9 @@ public class ExtraColumnAnnotation {
 
 	/** The excel drop down. */
 	private ExcelDropDown excelDropDown;
+	
+	/** The excel subtotal. */
+	private ExcelSubtotal excelSubtotal;
 
 	/**
 	 * Sets the excel cell layout.
@@ -72,7 +77,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelCellLayout(ExcelCellLayoutImpl excelCellLayoutImpl) {
 		if (excelCellLayoutImpl != null)
-			this.excelCellLayout = excelCellLayoutImpl.getExcelCellLayout();
+			this.excelCellLayout = excelCellLayoutImpl.getAnnotation();
 	}
 
 	/**
@@ -82,7 +87,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelDate(ExcelDateImpl excelDateImpl) {
 		if (excelDateImpl != null)
-			this.excelDate = excelDateImpl.getExcelDate();
+			this.excelDate = excelDateImpl.getAnnotation();
 	}
 
 	/**
@@ -92,7 +97,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelColumn(ExcelColumnImpl excelColumnImpl) {
 		if (excelColumnImpl != null)
-			this.excelColumn = excelColumnImpl.getExcelColumn();
+			this.excelColumn = excelColumnImpl.getAnnotation();
 	}
 
 	/**
@@ -102,7 +107,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelFunction(ExcelFunctionImpl excelFunctionImpl) {
 		if (excelFunctionImpl != null)
-			this.excelFunction = excelFunctionImpl.getExcelFunction();
+			this.excelFunction = excelFunctionImpl.getAnnotation();
 	}
 
 	/**
@@ -112,7 +117,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelMergeRow(ExcelMergeRowImpl excelMergeRowImpl) {
 		if (excelMergeRowImpl != null)
-			this.excelMergeRow = excelMergeRowImpl.getExcelMergeRow();
+			this.excelMergeRow = excelMergeRowImpl.getAnnotation();
 	}
 
 	/**
@@ -122,7 +127,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelHeaderCellLayout(ExcelHeaderCellLayoutImpl excelHeaderCellLayoutImpl) {
 		if (excelHeaderCellLayoutImpl != null)
-			this.excelHeaderCellLayout = excelHeaderCellLayoutImpl.getExcelHeaderCellLayout();
+			this.excelHeaderCellLayout = excelHeaderCellLayoutImpl.getAnnotation();
 	}
 
 	/**
@@ -132,7 +137,7 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelColumnWidth(ExcelColumnWidthImpl excelColumnWidthImpl) {
 		if (excelColumnWidthImpl != null)
-			this.excelColumnWidth = excelColumnWidthImpl.getExcelColumnWidth();
+			this.excelColumnWidth = excelColumnWidthImpl.getAnnotation();
 	}
 
 	
@@ -143,7 +148,26 @@ public class ExtraColumnAnnotation {
 	 */
 	public void setExcelDropDown(ExcelDropDownImpl excelDropDown) {
 		if (excelDropDown != null)
-			this.excelDropDown = excelDropDown.getExcelDropDown();
+			this.excelDropDown = excelDropDown.getAnnotation();
+	}
+
+	/**
+	 * Gets the excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
+	public ExcelSubtotal getExcelSubtotal() {
+		return excelSubtotal;
+	}
+
+	/**
+	 * Sets the excel subtotal.
+	 *
+	 * @param excelSubtotal the new excel subtotal
+	 */
+	public void setExcelSubtotal(ExcelSubtotalImpl excelSubtotal) {
+		if(excelSubtotal!=null)
+		this.excelSubtotal = excelSubtotal.getAnnotation();
 	}
 
 	/**
@@ -218,11 +242,6 @@ public class ExtraColumnAnnotation {
 		return excelDropDown;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -235,15 +254,10 @@ public class ExtraColumnAnnotation {
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -292,6 +306,11 @@ public class ExtraColumnAnnotation {
 			if (other.excelMergeRow != null)
 				return false;
 		} else if (!excelMergeRow.equals(other.excelMergeRow))
+			return false;
+		if (excelSubtotal == null) {
+			if (other.excelSubtotal != null)
+				return false;
+		} else if (!excelSubtotal.equals(other.excelSubtotal))
 			return false;
 		return true;
 	}

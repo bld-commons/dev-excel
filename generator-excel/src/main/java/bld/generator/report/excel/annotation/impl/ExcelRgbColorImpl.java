@@ -5,14 +5,12 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 
 /**
  * The Class ExcelRgbColorImpl.
  */
-public class ExcelRgbColorImpl implements Cloneable{
+public class ExcelRgbColorImpl extends ExcelAnnotationImpl<ExcelRgbColor>{
 
 	/** The blue. */
 	private byte blue;
@@ -23,47 +21,13 @@ public class ExcelRgbColorImpl implements Cloneable{
 	/** The green. */
 	private byte green;
 	
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+	
 
 	/**
-	 * Gets the excel rgb color.
-	 *
-	 * @return the excel rgb color
+	 * Instantiates a new excel rgb color impl.
 	 */
-	public ExcelRgbColor getExcelRgbColor() {
-		ExcelRgbColor excelRgbColor = null;
-		excelRgbColor = new ExcelRgbColor() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelRgbColor.class;
-			}
-
-			@Override
-			public byte red() {
-				return red;
-			}
-
-			@Override
-			public byte green() {
-				return green;
-			}
-
-			@Override
-			public byte blue() {
-				return blue;
-			}
-		};
-		return excelRgbColor;
+	public ExcelRgbColorImpl() {
+		super();
 	}
 
 	/**
@@ -80,6 +44,13 @@ public class ExcelRgbColorImpl implements Cloneable{
 		this.green = green;
 	}
 	
+	/**
+	 * Instantiates a new excel rgb color impl.
+	 *
+	 * @param red the red
+	 * @param green the green
+	 * @param blue the blue
+	 */
 	public ExcelRgbColorImpl(int red, int green,int blue) {
 		super();
 		this.blue = (byte)blue;

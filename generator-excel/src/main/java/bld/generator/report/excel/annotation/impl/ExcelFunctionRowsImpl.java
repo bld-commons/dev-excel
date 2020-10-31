@@ -5,7 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -15,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
 /**
  * The Class ExcelFunctionRowsImpl.
  */
-public class ExcelFunctionRowsImpl implements Cloneable{
+public class ExcelFunctionRowsImpl extends ExcelAnnotationImpl<ExcelFunctionRows>{
 
 	
 	/** The excel functions. */
@@ -24,39 +23,12 @@ public class ExcelFunctionRowsImpl implements Cloneable{
 	/** The excel function merges. */
 	private ExcelFunctionMergeRow[] excelFunctionMerges;
 	
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
 	/**
-	 * Gets the excel function row.
-	 *
-	 * @return the excel function row
+	 * Instantiates a new excel function rows impl.
 	 */
-	public ExcelFunctionRows getExcelFunctionRow() {
-		return new ExcelFunctionRows() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelFunctionRows.class;
-			}
-
-			@Override
-			public ExcelFunctionRow[] excelFunctions() {
-				return excelFunctions;
-			}
-
-			@Override
-			public ExcelFunctionMergeRow[] excelFunctionMerges() {
-				return excelFunctionMerges;
-			}};
+	public ExcelFunctionRowsImpl() {
+		super();
 	}
 
 	/**

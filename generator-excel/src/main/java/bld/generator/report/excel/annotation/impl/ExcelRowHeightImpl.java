@@ -5,37 +5,23 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 
 /**
  * The Class ExcelRowHeightImpl.
  */
-public class ExcelRowHeightImpl {
+public class ExcelRowHeightImpl extends ExcelAnnotationImpl<ExcelRowHeight>{
 
 	/** The height. */
 	private short height;
 
+	
+
 	/**
-	 * Gets the excel row height.
-	 *
-	 * @return the excel row height
+	 * Instantiates a new excel row height impl.
 	 */
-	public ExcelRowHeight getExcelRowHeight() {
-		ExcelRowHeight excelRowHeight = new ExcelRowHeight() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelRowHeight.class;
-			}
-
-			@Override
-			public short height() {
-				return height;
-			}
-		};
-		return excelRowHeight;
+	public ExcelRowHeightImpl() {
+		super();
 	}
 
 	/**

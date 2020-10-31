@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.poi.ss.usermodel.BorderStyle;
 
 import bld.generator.report.excel.annotation.ExcelBorder;
@@ -14,56 +12,19 @@ import bld.generator.report.excel.annotation.ExcelBorder;
 /**
  * The Class ExcelBorderImpl.
  */
-public class ExcelBorderImpl implements Cloneable{
+public class ExcelBorderImpl extends ExcelAnnotationImpl<ExcelBorder> {
 
-	
 	/** The left. */
 	private BorderStyle left;
-	
+
 	/** The top. */
 	private BorderStyle top;
-	
+
 	/** The right. */
 	private BorderStyle right;
-	
+
 	/** The bottom. */
 	private BorderStyle bottom;
-
-	/**
-	 * Gets the excel border.
-	 *
-	 * @return the excel border
-	 */
-	public ExcelBorder getExcelBorder() {
-		ExcelBorder excelBorder=new ExcelBorder() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelBorder.class;
-			}
-			
-			@Override
-			public BorderStyle top() {
-				return top;
-			}
-			
-			@Override
-			public BorderStyle right() {
-				return right;
-			}
-			
-			@Override
-			public BorderStyle left() {
-				return left;
-			}
-			
-			@Override
-			public BorderStyle bottom() {
-				return bottom;
-			}
-		};
-		return excelBorder;
-	}
 
 	/**
 	 * Instantiates a new excel border impl.
@@ -73,35 +34,19 @@ public class ExcelBorderImpl implements Cloneable{
 	 * @param right  the right
 	 * @param bottom the bottom
 	 */
-	public ExcelBorderImpl(BorderStyle left, BorderStyle top, BorderStyle right, BorderStyle bottom){
+	public ExcelBorderImpl(BorderStyle left, BorderStyle top, BorderStyle right, BorderStyle bottom) {
 		super();
 		this.left = left;
 		this.top = top;
 		this.right = right;
 		this.bottom = bottom;
 	}
-	
+
 	/**
 	 * Instantiates a new excel border impl.
 	 */
-	public ExcelBorderImpl(){
+	public ExcelBorderImpl() {
 		super();
-		this.left = BorderStyle.THIN;
-		this.top = BorderStyle.THIN;
-		this.right = BorderStyle.THIN;
-		this.bottom = BorderStyle.THIN;
-	}
-
-
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
 	}
 
 	/**
@@ -218,6 +163,4 @@ public class ExcelBorderImpl implements Cloneable{
 		return true;
 	}
 
-
-	
 }

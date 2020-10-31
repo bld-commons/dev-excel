@@ -38,16 +38,16 @@ public class ExcelConstant {
 	public final static ExcelBorderImpl BORDER=new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN);
 	
 	/** The Constant EXCEL_CELL_LAYOUT_INTEGER. */
-	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_INTEGER=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getExcelRgbColor()}, new ExcelRgbColor[]{RGB_FONT.getExcelRgbColor()}, -1, HorizontalAlignment.RIGHT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_INTEGER=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getAnnotation()}, new ExcelRgbColor[]{RGB_FONT.getAnnotation()}, -1, HorizontalAlignment.RIGHT, FONT.getAnnotation(), FillPatternType.SOLID_FOREGROUND, BORDER.getAnnotation());
 	
 	/** The Constant EXCEL_CELL_LAYOUT_DOUBLE. */
-	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DOUBLE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getExcelRgbColor()}, new ExcelRgbColor[]{RGB_FONT.getExcelRgbColor()}, 2, HorizontalAlignment.RIGHT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DOUBLE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getAnnotation()}, new ExcelRgbColor[]{RGB_FONT.getAnnotation()}, 2, HorizontalAlignment.RIGHT, FONT.getAnnotation(), FillPatternType.SOLID_FOREGROUND, BORDER.getAnnotation());
 	
 	/** The Constant EXCEL_CELL_LAYOUT_STRING. */
-	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_STRING=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getExcelRgbColor()}, new ExcelRgbColor[]{RGB_FONT.getExcelRgbColor()}, -1, HorizontalAlignment.LEFT, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_STRING=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getAnnotation()}, new ExcelRgbColor[]{RGB_FONT.getAnnotation()}, -1, HorizontalAlignment.LEFT, FONT.getAnnotation(), FillPatternType.SOLID_FOREGROUND, BORDER.getAnnotation());
 	
 	/** The Constant EXCEL_CELL_LAYOUT_DATE. */
-	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DATE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getExcelRgbColor()}, new ExcelRgbColor[]{RGB_FONT.getExcelRgbColor()}, -1, HorizontalAlignment.CENTER, FONT.getExcelFont(), FillPatternType.SOLID_FOREGROUND, BORDER.getExcelBorder());
+	public final static ExcelCellLayoutImpl EXCEL_CELL_LAYOUT_DATE=new ExcelCellLayoutImpl(true, VerticalAlignment.CENTER, new ExcelRgbColor[]{RGB_FOREGROUND.getAnnotation()}, new ExcelRgbColor[]{RGB_FONT.getAnnotation()}, -1, HorizontalAlignment.CENTER, FONT.getAnnotation(), FillPatternType.SOLID_FOREGROUND, BORDER.getAnnotation());
 	
 	/** The Constant EXCEL_DATE_DD_MM_YYYY. */
 	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);

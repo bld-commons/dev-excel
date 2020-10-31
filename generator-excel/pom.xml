@@ -14,6 +14,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>io.leangen.geantyref</groupId>
+			<artifactId>geantyref</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>

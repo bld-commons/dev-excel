@@ -626,7 +626,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						function = makeFunction(sheet, emptyRow.getEmptyRow() - 1, function, RowStartEndType.ROW_END);
 						ExcelFunctionImpl excelFuctionImpl = null;
 							excelFuctionImpl = new ExcelFunctionImpl(function, nameField + "Function", false);
-						sheetHeader.setExcelFunction(excelFuctionImpl.getExcelFunction());
+						sheetHeader.setExcelFunction(excelFuctionImpl.getAnnotation());
 
 					} else {
 						sheetHeader.setValue(null);

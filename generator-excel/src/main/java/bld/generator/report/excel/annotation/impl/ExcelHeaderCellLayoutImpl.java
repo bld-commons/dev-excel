@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -19,7 +17,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 /**
  * The Class ExcelHeaderCellLayoutImpl.
  */
-public class ExcelHeaderCellLayoutImpl implements Cloneable {
+public class ExcelHeaderCellLayoutImpl extends ExcelAnnotationImpl<ExcelHeaderCellLayout> {
 
 	/** The wrap. */
 	private boolean wrap;
@@ -51,82 +49,12 @@ public class ExcelHeaderCellLayoutImpl implements Cloneable {
 	/** The locked. */
 	private boolean locked;
 
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
 	/**
-	 * Gets the excel header cell layout.
-	 *
-	 * @return the excel header cell layout
+	 * Instantiates a new excel header cell layout impl.
 	 */
-	public ExcelHeaderCellLayout getExcelHeaderCellLayout() {
-		ExcelHeaderCellLayout excelHeaderLayout = new ExcelHeaderCellLayout() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelHeaderCellLayout.class;
-			}
-
-			@Override
-			public boolean wrap() {
-				return wrap;
-			}
-
-			@Override
-			public VerticalAlignment verticalAlignment() {
-				return verticalAlignment;
-			}
-
-			@Override
-			public ExcelRgbColor rgbForeground() {
-				return rgbForeground;
-			}
-
-			@Override
-			public ExcelRgbColor rgbFont() {
-				return rgbFont;
-			}
-
-			@Override
-			public HorizontalAlignment horizontalAlignment() {
-				return horizontalAlignment;
-			}
-
-			@Override
-			public ExcelFont font() {
-				return font;
-			}
-
-			@Override
-			public FillPatternType fillPatternType() {
-				return fillPatternType;
-			}
-
-			@Override
-			public ExcelBorder border() {
-				return border;
-			}
-
-			@Override
-			public int rotation() {
-				return rotation;
-			}
-
-			@Override
-			public boolean locked() {
-				return locked;
-			}
-
-		};
-		return excelHeaderLayout;
+	public ExcelHeaderCellLayoutImpl() {
+		super();
 	}
 
 	/**

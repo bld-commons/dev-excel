@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -37,6 +38,7 @@ import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
+import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
@@ -45,6 +47,7 @@ import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
+import bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.RowStartEndType;
@@ -227,10 +230,15 @@ public class ReportTest {
 		list.add(autoreLibriRow);
 
 		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore","Test di etichetta su report");
+		ExcelCellLayoutImpl excelCellLayoutImplSubTotal=(ExcelCellLayoutImpl) ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.clone();
 		
+				
+		ExcelFontImpl fontSubtotal=new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true);
+		excelCellLayoutImplSubTotal.setFont(fontSubtotal.getAnnotation());
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21,false));
+		extraColumnAnnotation.setExcelSubtotal(new ExcelSubtotalImpl(excelCellLayoutImplSubTotal.getAnnotation(), true, DataConsolidateFunction.SUM));
 		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum("+RowStartEndType.ROW_EMPTY.getParameter("anno1")+":"+RowStartEndType.ROW_EMPTY.getParameter("anno3")+")", "totalePrezzoAnni",false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 		
@@ -243,7 +251,7 @@ public class ReportTest {
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelHeaderCellLayout(new ExcelHeaderCellLayoutImpl(true, VerticalAlignment.CENTER, (new ExcelRgbColorImpl(255, 0, 0)).getExcelRgbColor(), (new ExcelRgbColorImpl(0, 0, 0)).getExcelRgbColor(), HorizontalAlignment.CENTER, (new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true)).getExcelFont(), FillPatternType.SOLID_FOREGROUND, (new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN)).getExcelBorder(), 0, false));
+		extraColumnAnnotation.setExcelHeaderCellLayout(new ExcelHeaderCellLayoutImpl(true, VerticalAlignment.CENTER, (new ExcelRgbColorImpl(255, 0, 0)).getAnnotation(), (new ExcelRgbColorImpl(0, 0, 0)).getAnnotation(), HorizontalAlignment.CENTER, (new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true)).getAnnotation(), FillPatternType.SOLID_FOREGROUND, (new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN)).getAnnotation(), 0, false));
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20,false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);

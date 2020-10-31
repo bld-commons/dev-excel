@@ -115,7 +115,7 @@ public class SheetHeader implements Cloneable {
 	 */
 	public ExcelColumnWidth getExcelColumnWidth() {
 		if (excelColumnWidth == null)
-			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getExcelColumnWidth();
+			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getAnnotation();
 		return excelColumnWidth;
 	}
 

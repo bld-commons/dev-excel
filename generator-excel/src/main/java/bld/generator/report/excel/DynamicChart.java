@@ -52,7 +52,7 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 */
 	public void addExcelChart(ExcelChartImpl excelChartImpl) {
 		if (excelChartImpl != null)
-			this.listExcelChart.add(excelChartImpl.getExcelChart());
+			this.listExcelChart.add(excelChartImpl.getAnnotation());
 	}
 
 

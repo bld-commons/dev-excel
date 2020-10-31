@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
@@ -16,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelChart;
 /**
  * The Class ExcelChartImpl.
  */
-public class ExcelChartImpl implements Cloneable {
+public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 
 	/** The field name. */
 	private String fieldName;
@@ -41,87 +39,15 @@ public class ExcelChartImpl implements Cloneable {
 
 	/** The function. */
 	private String function;
-	
+
 	/** The x axis. */
 	private String xAxis;
-	
+
 	/** The group. */
 	private boolean group;
-	
+
 	/** The title. */
 	private String title;
-
-	/**
-	 * Gets the excel chart.
-	 *
-	 * @return the excel chart
-	 */
-	public ExcelChart getExcelChart() {
-		return new ExcelChart() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelChart.class;
-			}
-
-			@Override
-			public String fieldName() {
-				return fieldName;
-			}
-
-			@Override
-			public ChartTypes chartTypes() {
-				return chartTypes;
-			}
-
-			@Override
-			public int sizeRow() {
-				return sizeRow;
-			}
-
-			@Override
-			public int sizeColumn() {
-				return sizeColumn;
-			}
-
-			@Override
-			public LegendPosition legendPosition() {
-				return legendPosition;
-			}
-
-			@Override
-			public AxisPosition categoryAxis() {
-				return categoryAxis;
-			}
-
-			@Override
-			public AxisPosition valueAxis() {
-				return valueAxis;
-			}
-
-			@Override
-			public String function() {
-				return function;
-			}
-
-			@Override
-			public String xAxis() {
-				return xAxis;
-			}
-
-			@Override
-			public boolean group() {
-				return group;
-			}
-
-			@Override
-			public String title() {
-				return title;
-			}
-
-		};
-	}
-
 
 	/**
 	 * Instantiates a new excel chart impl.
@@ -153,19 +79,12 @@ public class ExcelChartImpl implements Cloneable {
 		this.title = title;
 	}
 
-
-
 	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
+	 * Instantiates a new excel chart impl.
 	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public ExcelChartImpl() {
+		super();
 	}
-
 
 	/**
 	 * Gets the field name.
@@ -176,7 +95,6 @@ public class ExcelChartImpl implements Cloneable {
 		return fieldName;
 	}
 
-
 	/**
 	 * Sets the field name.
 	 *
@@ -185,7 +103,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
 	}
-
 
 	/**
 	 * Gets the chart types.
@@ -196,7 +113,6 @@ public class ExcelChartImpl implements Cloneable {
 		return chartTypes;
 	}
 
-
 	/**
 	 * Sets the chart types.
 	 *
@@ -205,7 +121,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setChartTypes(ChartTypes chartTypes) {
 		this.chartTypes = chartTypes;
 	}
-
 
 	/**
 	 * Gets the size row.
@@ -216,7 +131,6 @@ public class ExcelChartImpl implements Cloneable {
 		return sizeRow;
 	}
 
-
 	/**
 	 * Sets the size row.
 	 *
@@ -225,7 +139,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setSizeRow(int sizeRow) {
 		this.sizeRow = sizeRow;
 	}
-
 
 	/**
 	 * Gets the size column.
@@ -236,7 +149,6 @@ public class ExcelChartImpl implements Cloneable {
 		return sizeColumn;
 	}
 
-
 	/**
 	 * Sets the size column.
 	 *
@@ -245,7 +157,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setSizeColumn(int sizeColumn) {
 		this.sizeColumn = sizeColumn;
 	}
-
 
 	/**
 	 * Gets the legend position.
@@ -256,7 +167,6 @@ public class ExcelChartImpl implements Cloneable {
 		return legendPosition;
 	}
 
-
 	/**
 	 * Sets the legend position.
 	 *
@@ -265,7 +175,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setLegendPosition(LegendPosition legendPosition) {
 		this.legendPosition = legendPosition;
 	}
-
 
 	/**
 	 * Gets the category axis.
@@ -276,7 +185,6 @@ public class ExcelChartImpl implements Cloneable {
 		return categoryAxis;
 	}
 
-
 	/**
 	 * Sets the category axis.
 	 *
@@ -285,7 +193,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setCategoryAxis(AxisPosition categoryAxis) {
 		this.categoryAxis = categoryAxis;
 	}
-
 
 	/**
 	 * Gets the value axis.
@@ -296,7 +203,6 @@ public class ExcelChartImpl implements Cloneable {
 		return valueAxis;
 	}
 
-
 	/**
 	 * Sets the value axis.
 	 *
@@ -305,7 +211,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setValueAxis(AxisPosition valueAxis) {
 		this.valueAxis = valueAxis;
 	}
-
 
 	/**
 	 * Gets the function.
@@ -316,7 +221,6 @@ public class ExcelChartImpl implements Cloneable {
 		return function;
 	}
 
-
 	/**
 	 * Sets the function.
 	 *
@@ -325,7 +229,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setFunction(String function) {
 		this.function = function;
 	}
-
 
 	/**
 	 * Gets the x axis.
@@ -336,7 +239,6 @@ public class ExcelChartImpl implements Cloneable {
 		return xAxis;
 	}
 
-
 	/**
 	 * Sets the x axis.
 	 *
@@ -345,7 +247,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setxAxis(String xAxis) {
 		this.xAxis = xAxis;
 	}
-
 
 	/**
 	 * Checks if is group.
@@ -356,7 +257,6 @@ public class ExcelChartImpl implements Cloneable {
 		return group;
 	}
 
-
 	/**
 	 * Sets the group.
 	 *
@@ -365,7 +265,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setGroup(boolean group) {
 		this.group = group;
 	}
-
 
 	/**
 	 * Gets the title.
@@ -376,7 +275,6 @@ public class ExcelChartImpl implements Cloneable {
 		return title;
 	}
 
-
 	/**
 	 * Sets the title.
 	 *
@@ -385,7 +283,6 @@ public class ExcelChartImpl implements Cloneable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 
 	/**
 	 * Hash code.
@@ -409,7 +306,6 @@ public class ExcelChartImpl implements Cloneable {
 		result = prime * result + ((xAxis == null) ? 0 : xAxis.hashCode());
 		return result;
 	}
-
 
 	/**
 	 * Equals.
@@ -463,7 +359,4 @@ public class ExcelChartImpl implements Cloneable {
 		return true;
 	}
 
-	
-	
-	
 }

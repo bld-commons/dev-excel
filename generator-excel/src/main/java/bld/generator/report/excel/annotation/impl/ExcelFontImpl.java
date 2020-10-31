@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.UnderlineType;
@@ -14,77 +12,22 @@ import bld.generator.report.excel.constant.UnderlineType;
 /**
  * The Class ExcelFontImpl.
  */
-public class ExcelFontImpl implements Cloneable{
+public class ExcelFontImpl extends ExcelAnnotationImpl<ExcelFont> {
 
-	
 	/** The underline. */
 	private UnderlineType underline;
-	
+
 	/** The size. */
 	private short size;
-	
+
 	/** The italic. */
 	private boolean italic;
-	
+
 	/** The font. */
 	private FontType font;
-	
+
 	/** The bold. */
 	private boolean bold;
-	
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-	 * Gets the excel font.
-	 *
-	 * @return the excel font
-	 */
-	public ExcelFont getExcelFont() {
-		ExcelFont excelFont=null;
-		if(underline!=null && font!=null)
-		excelFont=new ExcelFont() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelFont.class;
-			}
-			
-			@Override
-			public UnderlineType underline() {
-				return underline;
-			}
-			
-			@Override
-			public short size() {
-				return size;
-			}
-			
-			@Override
-			public boolean italic() {
-				return italic;
-			}
-			
-			@Override
-			public FontType font() {
-				return font;
-			}
-			
-			@Override
-			public boolean bold() {
-				return bold;
-			}
-		}; 
-		return excelFont;
-	}
 
 	/**
 	 * Instantiates a new excel font impl.
@@ -116,7 +59,7 @@ public class ExcelFontImpl implements Cloneable{
 		this.font = font;
 		this.bold = bold;
 	}
-	
+
 	/**
 	 * Instantiates a new excel font impl.
 	 *
@@ -128,19 +71,14 @@ public class ExcelFontImpl implements Cloneable{
 	 */
 	public ExcelFontImpl(UnderlineType underline, int size, boolean italic, FontType font, boolean bold) {
 		super();
-		init(underline, (short)size, italic, font, bold);
+		init(underline, (short) size, italic, font, bold);
 	}
-	
+
 	/**
 	 * Instantiates a new excel font impl.
 	 */
 	public ExcelFontImpl() {
 		super();
-		this.underline = UnderlineType.NONE;
-		this.size = 11;
-		this.italic = false;
-		this.font = FontType.CALIBRI;
-		this.bold = false;
 	}
 
 	/**
@@ -278,6 +216,4 @@ public class ExcelFontImpl implements Cloneable{
 		return true;
 	}
 
-
-	
 }

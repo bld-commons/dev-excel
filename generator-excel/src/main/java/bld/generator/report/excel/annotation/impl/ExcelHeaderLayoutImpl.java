@@ -5,15 +5,13 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 
 /**
  * The Class ExcelHeaderLayoutImpl.
  */
-public class ExcelHeaderLayoutImpl implements Cloneable{
+public class ExcelHeaderLayoutImpl extends ExcelAnnotationImpl<ExcelHeaderLayout>{
 
 	/** The row height. */
 	private short rowHeight;
@@ -24,42 +22,12 @@ public class ExcelHeaderLayoutImpl implements Cloneable{
 	
 	
 
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
 	/**
-	 * Gets the excel header layout.
-	 *
-	 * @return the excel header layout
+	 * Instantiates a new excel header layout impl.
 	 */
-	public ExcelHeaderLayout getExcelHeaderLayout() {
-		ExcelHeaderLayout excelHeaderLayout = new ExcelHeaderLayout() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelHeaderLayout.class;
-			}
-
-			
-			@Override
-			public short rowHeight() {
-				return rowHeight;
-			}
-
-			@Override
-			public ExcelHeaderCellLayout excelHeaderCellLayout() {
-				return this.excelHeaderCellLayout();
-			}
-		};
-		return excelHeaderLayout;
+	public ExcelHeaderLayoutImpl() {
+		super();
 	}
 
 	/**

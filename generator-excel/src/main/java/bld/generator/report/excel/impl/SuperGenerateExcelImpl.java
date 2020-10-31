@@ -852,16 +852,7 @@ public class SuperGenerateExcelImpl {
 					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
 					if (extraColumnAnnotation.getExcelColumn() == null)
 						throw new Exception("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
-					sheetHeader.setExcelColumn(extraColumnAnnotation.getExcelColumn());
-					sheetHeader.setExcelDate(extraColumnAnnotation.getExcelDate());
-					sheetHeader.setExcelMergeRow(extraColumnAnnotation.getExcelMergeRow());
-					sheetHeader.setExcelHeaderCellLayout(extraColumnAnnotation.getExcelHeaderCellLayout());
-					sheetHeader.setExcelColumnWidth(extraColumnAnnotation.getExcelColumnWidth());
-					if (extraColumnAnnotation.getExcelDropDown() != null)
-						sheetHeader.setExcelDropDown(extraColumnAnnotation.getExcelDropDown());
-					if (extraColumnAnnotation.getExcelFunction() != null)
-						sheetHeader.setExcelFunction(extraColumnAnnotation.getExcelFunction());
-
+					PropertyUtils.copyProperties(sheetHeader, extraColumnAnnotation);
 					sheetHeader.setKeyMap(keyMap);
 					listSheetHeader.add(sheetHeader);
 				}
