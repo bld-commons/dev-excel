@@ -13,20 +13,17 @@ import bld.generator.report.excel.annotation.ExcelSubtotal;
 /**
  * The Class ExcelSubtotalImpl.
  */
-public class ExcelSubtotalImpl extends ExcelAnnotationImpl<ExcelSubtotal>{
-	
-	
+public class ExcelSubtotalImpl extends ExcelAnnotationImpl<ExcelSubtotal> {
+
 	/** The excel cell layout. */
-	protected ExcelCellLayout excelCellLayout;
-	
+	private ExcelCellLayout excelCellLayout;
+
 	/** The enable. */
-	protected boolean enable;
-	
+	private boolean enable;
+
 	/** The data consolidate function. */
-	protected DataConsolidateFunction dataConsolidateFunction;
-
+	private DataConsolidateFunction dataConsolidateFunction;
 	
-
 	/**
 	 * Instantiates a new excel subtotal impl.
 	 */
@@ -143,5 +140,4 @@ public class ExcelSubtotalImpl extends ExcelAnnotationImpl<ExcelSubtotal>{
 		return true;
 	}
 
-	
 }

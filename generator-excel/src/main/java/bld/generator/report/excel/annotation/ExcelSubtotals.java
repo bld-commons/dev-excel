@@ -54,4 +54,11 @@ public @interface ExcelSubtotals {
 	public String labelTotalGroup();
 	
 	
+	/**
+	 * Sum for group.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean sumForGroup() default true;
+	
 }

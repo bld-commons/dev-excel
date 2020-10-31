@@ -48,4 +48,5 @@ public @interface ExcelSubtotal {
 	 * @return true, if successful
 	 */
 	public boolean enable() default true;
+	
 }

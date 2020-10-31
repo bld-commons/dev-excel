@@ -16,6 +16,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import bld.generator.report.excel.config.annotation.IgnoreCheck;
 import bld.generator.report.utils.ExcelUtils;
 import io.leangen.geantyref.TypeFactory;
 
@@ -24,10 +25,22 @@ import io.leangen.geantyref.TypeFactory;
  *
  * @param <T> the generic type
  */
+@IgnoreCheck
 public abstract class ExcelAnnotationImpl<T extends Annotation> implements Cloneable{
 	
 	/** The Constant logger. */
+	@IgnoreCheck
 	private final static Log logger = LogFactory.getLog(ExcelAnnotationImpl.class);
+	
+	@IgnoreCheck
+	private Class<T>classAnnotation;
+	
+
+	public ExcelAnnotationImpl() {
+		super();
+		this.classAnnotation=ExcelUtils.getTClass(this);
+	}
+
 
 	/**
 	 * Clone.
@@ -49,11 +62,10 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 	public T getAnnotation(){
 		T annotation=null;
 		try {
-			Class<T> classAnnotation=ExcelUtils.getTClass(this);
 			Set<Field> listField = ExcelUtils.getListField(this.getClass());
 			Map<String,Object>mapParameters=new HashMap<>();
 			for(Field field:listField) {
-				if(!field.getName().equals("logger")) {
+				if(!field.isAnnotationPresent(IgnoreCheck.class)) {
 					Object value=PropertyUtils.getProperty(this, field.getName());
 					if(value!=null)
 						mapParameters.put(field.getName(), value);
@@ -65,6 +77,14 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 		}
 		return annotation;
 	}
+
+
+	public Class<T> getClassAnnotation() {
+		return classAnnotation;
+	}
+	
+	
+	
 	
 	
 }

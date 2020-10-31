@@ -468,10 +468,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			int splitRow = 0;
 			String nameField = listSheetHeader.get(0).getField().getName();
-			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class) && lastRowSheet != null && !PropertyUtils.getProperty(lastRowSheet, nameField).equals(PropertyUtils.getProperty(rowSheet, nameField))) {
+			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class) && rowSheet.getClass().getAnnotation(ExcelSubtotals.class).sumForGroup()  && lastRowSheet != null && !PropertyUtils.getProperty(lastRowSheet, nameField).equals(PropertyUtils.getProperty(rowSheet, nameField))) {
 				splitRow = 1;
 				emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, nameField)));
-
 			}
 
 			row = sheet.createRow(indexRow);
@@ -586,9 +585,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			super.mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn);
 
 		if (sheetData.getRowClass().isAnnotationPresent(ExcelSubtotals.class)) {
-			emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, listSheetHeader.get(0).getField().getName())));
-			ExcelSubtotals excelLabelSubtotal = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
-			emptyRows.add(new SubtotalRow(indexRow++, excelLabelSubtotal.labelTotalGroup()));
+			ExcelSubtotals excelSubtotals = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
+			if(excelSubtotals.sumForGroup())
+				emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, listSheetHeader.get(0).getField().getName())));
+			emptyRows.add(new SubtotalRow(indexRow++, excelSubtotals.labelTotalGroup()));
 			int lastRowSubtotal = startRowSheet;
 			for (SubtotalRow emptyRow : emptyRows) {
 				row = sheet.createRow(emptyRow.getEmptyRow());
@@ -607,18 +607,18 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (indexHeader == 0) {
 
 						if (emptyRows.size() - 1 > emptyRows.indexOf(emptyRow))
-							sheetHeader.setValue(excelLabelSubtotal.startLabel().trim() + " " + emptyRow.getLabel().trim() + " " + excelLabelSubtotal.endLabel().trim());
+							sheetHeader.setValue(excelSubtotals.startLabel().trim() + " " + emptyRow.getLabel().trim() + " " + excelSubtotals.endLabel().trim());
 						else
 							sheetHeader.setValue(emptyRow.getLabel().trim());
-						excelCellLayout = excelLabelSubtotal.excelCellLayout();
+						excelCellLayout = excelSubtotals.excelCellLayout();
 
-						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelLabelSubtotal, emptyRow, sheetHeader, excelCellLayout);
-						sheetHeader.setExcelCellLayout(excelLabelSubtotal.excelCellLayout());
+						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelSubtotals, emptyRow, sheetHeader, excelCellLayout);
+						sheetHeader.setExcelCellLayout(excelSubtotals.excelCellLayout());
 
 					} else if (sheetHeader.getExcelSubtotal() != null && sheetHeader.getExcelSubtotal().enable()) {
 						sheetHeader.setValue(null);
 						excelCellLayout = sheetHeader.getExcelSubtotal().excelCellLayout();
-						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelLabelSubtotal, emptyRow, sheetHeader, excelCellLayout);
+						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelSubtotals, emptyRow, sheetHeader, excelCellLayout);
 						String function = "subtotal(" + sheetHeader.getExcelSubtotal().dataConsolidateFunction().getValue() + "," + RowStartEndType.ROW_START.getParameter(nameField) + ":" + RowStartEndType.ROW_END.getParameter(nameField) + ")";
 						if (emptyRows.size() - 1 == emptyRows.indexOf(emptyRow))
 							lastRowSubtotal = startRowSheet;
