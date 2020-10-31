@@ -37,6 +37,7 @@ public class ExcelGeneratorConfiguration {
 	/** The Constant SPRING_DATASOURCE_URL. */
 	public static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
 
+	/** The Constant logger. */
 	private final static Log logger = LogFactory.getLog(ExcelGeneratorConfiguration.class);
 
 	/** The generate excel. */
@@ -65,6 +66,11 @@ public class ExcelGeneratorConfiguration {
 		return valueProps;
 	}
 
+	/**
+	 * Check entity annotation.
+	 *
+	 * @throws Exception the exception
+	 */
 	@SuppressWarnings("rawtypes")
 	@PostConstruct
 	public void checkEntityAnnotation() throws Exception {
