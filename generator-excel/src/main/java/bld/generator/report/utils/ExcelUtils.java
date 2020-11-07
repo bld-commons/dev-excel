@@ -98,7 +98,7 @@ public class ExcelUtils implements ApplicationContextAware {
 		Map<String, Field> mapField = getMapField(entity.getClass());
 		Class<K> classAnnotation = (Class<K>) annotation.getClass();
 		Class<T> classEntity = (Class<T>) entity.getClass();
-		List<Method> listMethod = Arrays.asList(classAnnotation.getMethods());
+		List<Method> listMethod = Arrays.asList(classAnnotation.getDeclaredMethods());
 		for (Method method : listMethod) {
 			if (mapField.containsKey(method.getName())) {
 				Field field = mapField.get(method.getName());
