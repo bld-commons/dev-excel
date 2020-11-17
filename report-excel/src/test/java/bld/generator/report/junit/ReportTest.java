@@ -34,6 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.BaseSheet;
+import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.MergeSheet;
@@ -48,6 +49,7 @@ import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
 import bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
+import bld.generator.report.excel.constant.AttachmentType;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.RowStartEndType;
@@ -122,8 +124,10 @@ public class ReportTest {
 		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
 		indexSheet.setListRowSheet(listIndice);
 		listBaseSheet.add(indexSheet);
-		
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg");
+		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/home/francesco/Downloads/profilo5.pdf");
+		excelAttachment.setAttachmentType(AttachmentType.PDF);
+		excelAttachment.setFileName("test");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg",excelAttachment);
 		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet=new DateSheet("Test Date");
@@ -180,7 +184,10 @@ public class ReportTest {
 	@Test
 	public void testDynamic() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg");
+		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/test.docx");
+		excelAttachment.setAttachmentType(AttachmentType.DOCX);
+		excelAttachment.setFileName("test");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg",excelAttachment);
 		listBaseSheet.add(casaEditrice);
 
 		List<Calendar> listDate=new ArrayList<>();
@@ -360,5 +367,4 @@ public class ReportTest {
 	}
 	
 	
-
 }

@@ -36,6 +36,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.sl.usermodel.PictureData.PictureType;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -65,6 +66,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bld.generator.report.excel.DynamicColumn;
+import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
@@ -154,7 +156,7 @@ public class SuperGenerateExcelImpl {
 
 	/** The list function cell. */
 	protected List<FunctionCell> listFunctionCell = new ArrayList<>();
-	
+
 	protected List<DropDownCell> listDropDown = new ArrayList<>();
 
 	/** The value props. */
@@ -338,11 +340,11 @@ public class SuperGenerateExcelImpl {
 				if (entity != null)
 					value = PropertyUtils.getProperty(entity, field.getName());
 				SheetHeader sheetHeader = new SheetHeader(field, value);
-				if(value !=null) {
-					value=manageExcelImage(sheetHeader, value);
+				if (value != null) {
+					value = manageExcelImage(sheetHeader, value);
 					sheetHeader.setValue(value);
 				}
-				
+
 				if (field.isAnnotationPresent(ExcelDropDown.class) && field.getClass().isAssignableFrom(DropDown.class))
 					throw new Exception("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
 				if (field.isAnnotationPresent(ExcelDropDown.class))
@@ -396,8 +398,8 @@ public class SuperGenerateExcelImpl {
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow,Sheet sheet) throws Exception {
-		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet); // writeCellEmpty(workbook,
+	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
+		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet); // writeCellEmpty(workbook,
 		// cellStyle,
 		// cell,
 		// sheetHeader);
@@ -479,14 +481,15 @@ public class SuperGenerateExcelImpl {
 
 	/**
 	 * Sets the cell summary.
-	 * @param excelSheetLayout 
+	 * 
+	 * @param excelSheetLayout
 	 *
-	 * @param workbook     the workbook
-	 * @param sheet        the sheet
-	 * @param sheetSummary the sheet summary
-	 * @param sheetHeader  the sheet header
-	 * @param row          the row
-	 * @param indexRow     the index row
+	 * @param workbook         the workbook
+	 * @param sheet            the sheet
+	 * @param sheetSummary     the sheet summary
+	 * @param sheetHeader      the sheet header
+	 * @param row              the row
+	 * @param indexRow         the index row
 	 * @throws Exception the exception
 	 */
 	protected void setCellSummary(ExcelSheetLayout excelSheetLayout, Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow) throws Exception {
@@ -509,7 +512,7 @@ public class SuperGenerateExcelImpl {
 		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
-		int column=excelSheetLayout.startColumn()+1;
+		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
 		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column);
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex());
@@ -541,7 +544,7 @@ public class SuperGenerateExcelImpl {
 				this.listFunctionCell.add(functionCell);
 			}
 		} else
-			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet);
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet);
 
 	}
 
@@ -634,7 +637,7 @@ public class SuperGenerateExcelImpl {
 				listFunctionCell.add(functionCell);
 			}
 		else
-			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(), 0,sheet);
+			setCellValueExcel(workbook, mergeRow.getCellFrom(), mergeRow.getCellStyleFrom(), mergeRow.getSheetHeader(), 0, sheet);
 
 	}
 
@@ -680,7 +683,7 @@ public class SuperGenerateExcelImpl {
 	 * @param sheet       the sheet
 	 * @throws Exception the exception
 	 */
-	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,Sheet sheet) throws Exception {
+	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell();
 		layoutCell.setColor(indexRow);
 		if (cellStyle == null) {
@@ -719,12 +722,14 @@ public class SuperGenerateExcelImpl {
 			hyperlink.setAddress(address);
 			cell.setHyperlink(hyperlink);
 			cell.setCellValue(excelHyperlink.getValue());
+		} else if (sheetHeader.getValue() instanceof ExcelAttachment<?>) {
+			this.addAttachment(workbook, sheet, sheetHeader, cell);
 		} else if (sheetHeader.getValue() instanceof byte[])
 			this.addImage(workbook, sheet, sheetHeader, cell);
 		else if (sheetHeader.getValue() instanceof DropDown<?>) {
 			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 			sheetHeader.setValue(dropDown.getValue());
-			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow,sheet);
+			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet);
 		}
 
 	}
@@ -1032,17 +1037,16 @@ public class SuperGenerateExcelImpl {
 		return indexRow;
 
 	}
-	
+
 	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) {
-		DropDownCell dropDownCell=null;
-		dropDownCell=new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol);
+		DropDownCell dropDownCell = null;
+		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol);
 		try {
 			this.addDropDown(dropDownCell);
 		} catch (Exception e) {
 			this.listDropDown.add(dropDownCell);
 		}
 	}
-	
 
 	/**
 	 * Adds the drop down.
@@ -1056,8 +1060,8 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void addDropDown(DropDownCell dropDownCell) throws Exception {
-		SheetHeader sheetHeader=dropDownCell.getSheetHeader();
-		Sheet sheet=dropDownCell.getSheet();
+		SheetHeader sheetHeader = dropDownCell.getSheetHeader();
+		Sheet sheet = dropDownCell.getSheet();
 		if (sheetHeader.getExcelDropDown() != null || (sheetHeader.getField() != null && sheetHeader.getValue() != null && DropDown.class.isAssignableFrom(sheetHeader.getField().getType()))) {
 			DataValidationConstraint constraint = null;
 			DataValidation dataValidation = null;
@@ -1070,7 +1074,7 @@ public class SuperGenerateExcelImpl {
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())
-					throw new Exception("The formula '"+areaRange+"' is not valid");
+					throw new Exception("The formula '" + areaRange + "' is not valid");
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
 				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDown().suppressDropDownArrow());
@@ -1114,35 +1118,66 @@ public class SuperGenerateExcelImpl {
 	 * @param cell        the cell
 	 * @throws Exception the exception
 	 */
-	private void addImage(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception{
-		
-		ExcelImage excelImage=sheetHeader.getExcelImage();
-		
-		int pictureureIdx = workbook.addPicture((byte[])sheetHeader.getValue(), excelImage.pictureType().nativeId);
+	private void addImage(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception {
+		ExcelImage excelImage = sheetHeader.getExcelImage();
+		int pictureureIdx = workbook.addPicture((byte[]) sheetHeader.getValue(), excelImage.pictureType().nativeId);
 		CreationHelper helper = workbook.getCreationHelper();
 		Drawing<?> drawing = sheet.createDrawingPatriarch();
 
 		ClientAnchor anchor = helper.createClientAnchor();
-        
+
 		anchor.setCol1(cell.getColumnIndex());
 		anchor.setRow1(cell.getRowIndex());
 		anchor.setAnchorType(excelImage.anchorType());
-		
+
 		Picture pict = drawing.createPicture(anchor, pictureureIdx);
-		pict.resize( excelImage.resizeWidth(),excelImage.resizeHeight());
-		
+		pict.resize(excelImage.resizeWidth(), excelImage.resizeHeight());
+
 	}
-	
+
 	protected Object manageExcelImage(SheetHeader sheetHeader, Object value) throws Exception, FileNotFoundException, IOException {
-		if(sheetHeader.getExcelImage()!=null) {
-			if(!(value instanceof String || value instanceof byte[]))
-				throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
-			if(value instanceof String) {
-				InputStream inputStream=new FileInputStream((String)value);
-				value=IOUtils.toByteArray(inputStream);
-			}
+		if (sheetHeader.getExcelImage() != null) {
+			value = manageExcelAttachment(value);
 		}
 		return value;
+	}
+
+	private byte[] manageExcelAttachment(Object value) throws Exception, FileNotFoundException, IOException {
+		byte[] file = null;
+		if (!(value instanceof String || value instanceof byte[]))
+			throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
+		if (value instanceof String) {
+			InputStream inputStream = new FileInputStream((String) value);
+			file = IOUtils.toByteArray(inputStream);
+		}
+		return file;
+	}
+
+	private void addAttachment(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception {
+		if (sheetHeader.getValue() != null && sheetHeader.getValue() instanceof ExcelAttachment<?>) {
+			ExcelAttachment<?> excelAttachment = (ExcelAttachment<?>) sheetHeader.getValue();
+			byte[] file = manageExcelAttachment(excelAttachment.getAttachment());
+			String fileNameExtension= excelAttachment.getFileName() + excelAttachment.getAttachmentType().getFileExtension();
+			int storageId = workbook.addOlePackage(file, fileNameExtension, fileNameExtension,fileNameExtension);
+			byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream(excelAttachment.getAttachmentType().getImage()));
+			int iconId = workbook.addPicture(image, PictureType.JPEG.nativeId);
+
+			Drawing<?> drawing = sheet.createDrawingPatriarch();
+
+//			ClientAnchor anchor = helper.createClientAnchor();
+//
+//			anchor.setCol1(cell.getColumnIndex());
+//			anchor.setRow1(cell.getRowIndex());
+			ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, cell.getColumnIndex(), cell.getRowIndex(), cell.getColumnIndex() +1, cell.getRowIndex()+1);
+			anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
+
+			// ObjectData objectData =drawing.createObjectData(anchor, storageId,
+			// pictureureIdx);
+			drawing.createObjectData(anchor, storageId, iconId);
+			
+			
+		}
+
 	}
 
 }

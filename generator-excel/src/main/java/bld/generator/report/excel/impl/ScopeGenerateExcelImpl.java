@@ -74,11 +74,11 @@ import bld.generator.report.excel.annotation.ExcelCharts;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
-import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.annotation.ExcelPivot;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
@@ -228,6 +228,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		return byteExcel;
 	}
 
+	
 	/**
 	 * Sets the cover parameters.
 	 *
@@ -251,7 +252,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					Cell cell = worksheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
 					Object value = PropertyUtils.getProperty(report, field.getName());
 					ExcelDate excelDate = null;
-					if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType())) {
+					if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())) {
 						excelDate = ExcelUtils.getAnnotation(field, ExcelDate.class);
 						cellStyle = dateCellStyle(workbook, cellStyle, excelDate.format().getValue());
 						cell.setCellStyle(cellStyle);
