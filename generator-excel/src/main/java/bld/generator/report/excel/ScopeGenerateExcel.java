@@ -31,4 +31,13 @@ public interface ScopeGenerateExcel {
 	 */
 	public byte[] createFileXlsx(ReportExcel report) throws Exception;
 
+	/**
+	 * Creates the big data file xlsx.
+	 *
+	 * @param report the report
+	 * @return the byte[]
+	 * @throws Exception the exception
+	 */
+	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception;
+
 }

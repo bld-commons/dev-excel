@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,8 @@ import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
+import bld.generator.report.junit.entity.BigDataUtenteRow;
+import bld.generator.report.junit.entity.BigDataUtenteSheet;
 import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.SalaryRow;
@@ -31,6 +34,8 @@ import bld.generator.report.junit.entity.SalarySheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
+import bld.generator.report.persistence.domain.Utente;
+import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
@@ -49,6 +54,9 @@ public class ReportTestJpa {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
+	
+	@Autowired
+	private UtenteService utenteService;
 	
 //	/** The read excel. */
 //	@Autowired
@@ -76,6 +84,7 @@ public class ReportTestJpa {
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		
+		
 		UtenteSheet utenteSheet=new UtenteSheet("Utente");
 		utenteSheet.getMapParameters().put("cognome", "Rossi");
 		listBaseSheet.add(utenteSheet);
@@ -101,11 +110,28 @@ public class ReportTestJpa {
 		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
 		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
 		listBaseSheet.add(salarySheet);
-		ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
+		
+		
+		List<Utente> listUtente=this.utenteService.findAllUtentes();
+		BigDataUtenteSheet bigDataUtenteSheet=new BigDataUtenteSheet("Big Data");
+		int maxRandom=listUtente.size()-1;
+		for(int i=0;i<500000;i++) {
+			BigDataUtenteRow utenteRow=new BigDataUtenteRow();
+			PropertyUtils.copyProperties(utenteRow, listUtente.get((int)(Math.random()*maxRandom)));
+			bigDataUtenteSheet.getListRowSheet().add(utenteRow);
+		}
+		listBaseSheet.add(bigDataUtenteSheet);
+		
+		try {
+			ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
-		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
+			byte[] byteReport = this.generateExcel.createBigDataFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+			ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

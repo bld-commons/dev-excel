@@ -29,7 +29,7 @@ public class UtenteRow implements RowSheet {
 	private Date dataNascita;
 	@ExcelColumn(columnName = "Immagine", indexColumn = 4)
 	@ExcelCellLayout
-	@ExcelImage(resizeHeight = 0.7, resizeWidth = 0.6)
+	@ExcelImage
 	private byte[] image;	
 	
 	@ExcelColumn(columnName = "Path", indexColumn = 5)
