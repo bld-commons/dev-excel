@@ -41,3 +41,89 @@ The main classes to start developing the read-excel library are:
 For the complete documnetation of the read-excel library, click on the following link:
 
   - https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html
+  
+  
+   Below is a summary table with the features of the functions for generating
+ excel files.<br>
+  
+  <table style="width:50%; border: 1px solid #666;">
+  <tr>
+  <th style="width: 23%; border: 1px solid #666; text-align: center;"></th>
+  <th style="width: 23%; border: 1px solid #666; text-align: center;">HSSF</th>
+  <th style="width: 23%; border: 1px solid #666; text-align: center;">XSSF</th>
+  <th style="width: 23%; border: 1px solid #666; text-align: center;">SXSSF</th>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Function</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">createFileXls</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">createFileXlsx</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">createBigDataFileXlsx</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">CPU and memory efficiency</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Varies</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">varies</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Good</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Read Files</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Write Files</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Create sheets/rows/cells</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Delete sheets/rows/cells</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Styling cells</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Shift rows</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Cloning sheets</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Formula evaluation</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Cell comments</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  <tr>
+  <td style="width: 23%; border: 1px solid #666;">Picture</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">Yes</td>
+  <td style="width: 23%; border: 1px solid #666;text-align: center;">No</td>
+  </tr>
+  </table>
+  
