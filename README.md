@@ -43,8 +43,7 @@ For the complete documnetation of the read-excel library, click on the following
   - https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html
   
   
-   Below is a summary table with the features of the functions for generating
- excel files.<br>
+ Below is a summary table with the features of the functions for generating excel files within class GeneateExcel.
   
   <table style="width:50%; border: 1px solid #666;">
   <tr>
