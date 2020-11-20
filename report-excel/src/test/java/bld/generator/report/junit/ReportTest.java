@@ -168,11 +168,16 @@ public class ReportTest {
 		listBaseSheet.add(genereSheet);
 		
 		
-		ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
+		try {
+			ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
 
-		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
+			byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+			ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

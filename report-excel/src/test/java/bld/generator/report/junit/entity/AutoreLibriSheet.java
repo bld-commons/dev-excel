@@ -23,7 +23,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout(startRow = 1,groupRow = true)
+@ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 @ExcelFreezePane(rowFreez = 5, columnFreez = 1)

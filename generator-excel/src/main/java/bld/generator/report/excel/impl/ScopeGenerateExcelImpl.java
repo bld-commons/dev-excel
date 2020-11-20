@@ -344,7 +344,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		this.mapFieldColumn = new HashMap<>();
 		this.listFunctionCell = new ArrayList<>();
 		this.listDropDown = new ArrayList<>();
-		FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+		
 		for (BaseSheet baseSheet : listSheet) {
 			Date startSheet = new Date();
 			Sheet sheet = null;
@@ -362,7 +362,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 			Footer footer = sheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
-
+			FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 			sheet.setForceFormulaRecalculation(true);
 			if (baseSheet instanceof MergeSheet) {
 				this.generateMergeSheet(workbook, sheet, (MergeSheet) baseSheet, formulaEvaluator);
@@ -371,8 +371,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			} else if (baseSheet instanceof SheetData) {
 				this.generateSheetData(workbook, sheet, (SheetData<? extends RowSheet>) baseSheet, 0, false, formulaEvaluator);
 			}
-
-			// evaluateAllFormulaCells(workbook, sheet);
+		//	formulaEvaluator.evaluateAll();
 			Date endSheet = new Date();
 			double time = (endSheet.getTime() - startSheet.getTime()) / 1000.0;
 			logger.info("Time writing sheet \"" + baseSheet.getSheetName() + "\": " + time + "s");

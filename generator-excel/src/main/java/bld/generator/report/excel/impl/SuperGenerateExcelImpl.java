@@ -566,6 +566,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void setCellFormulaAndEvaluateCell(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet,FormulaEvaluator formulaEvaluator) throws Exception {
 		setCellFormula(cell, cellStyle, sheetHeader, indexRow, sheet);
+		logger.info("Coordinate formula cell: \nSheet: "+cell.getSheet().getSheetName()+" Row: "+cell.getRowIndex()+" Column: "+cell.getColumnIndex());
 		formulaEvaluator.evaluateFormulaCell(cell);
 	}
 
@@ -593,7 +594,7 @@ public class SuperGenerateExcelImpl {
 		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
 		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
 		
-		logger.debug("Function: " + function);
+		logger.info("Function: " + function);
 		cell.setCellFormula(function);
 	}
 
