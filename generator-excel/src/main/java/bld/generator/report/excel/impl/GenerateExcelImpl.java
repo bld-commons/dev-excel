@@ -19,7 +19,6 @@ import bld.generator.report.excel.data.ReportExcel;
  * Below is a summary table with the features of the functions for generating
  * excel files.<br>
  * 
- * 
  * <table style="width:50%; border: 1px solid #666;">
  * <tr>
  * <th style="width: 23%; border: 1px solid #666; text-align: center;"></th>
