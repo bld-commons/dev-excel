@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
@@ -19,7 +17,7 @@ import bld.generator.report.excel.annotation.ExcelSubtotal;
 /**
  * The Class ExcelFunctionMergeRowImpl.
  */
-public class ExcelFunctionMergeRowImpl implements Cloneable {
+public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunctionMergeRow> {
 
 	/** The excel cells layout. */
 	private ExcelCellLayout excelCellsLayout;
@@ -35,73 +33,18 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
-	
+
 	/** The excel header cell layout. */
 	private ExcelHeaderCellLayout excelHeaderCellLayout;
-	
+
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
 
 	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
+	 * Instantiates a new excel function merge row impl.
 	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-	 * Gets the excel function merge.
-	 *
-	 * @return the excel function merge
-	 */
-	public ExcelFunctionMergeRow getExcelFunctionMerge() {
-		return new ExcelFunctionMergeRow() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelFunctionMergeRow.class;
-			}
-
-			@Override
-			public ExcelCellLayout excelCellsLayout() {
-				return excelCellsLayout;
-			}
-
-			@Override
-			public ExcelColumn excelColumn() {
-				return excelColumn;
-			}
-
-			@Override
-			public ExcelMergeRow excelMergeRow() {
-				return excelMergeRow;
-			}
-
-			@Override
-			public ExcelFunction excelFunction() {
-				return excelFunction;
-			}
-
-			@Override
-			public ExcelColumnWidth excelColumnWidth() {
-				return excelColumnWidth;
-			}
-
-			@Override
-			public ExcelHeaderCellLayout excelHeaderCellLayout() {
-				return excelHeaderCellLayout;
-			}
-
-			@Override
-			public ExcelSubtotal excelSubtotal() {
-				return excelSubtotal;
-			}
-
-		};
+	public ExcelFunctionMergeRowImpl() {
+		super();
 	}
 
 	/**
@@ -121,10 +64,6 @@ public class ExcelFunctionMergeRowImpl implements Cloneable {
 		this.excelFunction = excelFunction;
 		this.excelColumnWidth = excelColumnWidth;
 	}
-	
-	
-
-	
 
 	/**
 	 * Instantiates a new excel function merge row impl.

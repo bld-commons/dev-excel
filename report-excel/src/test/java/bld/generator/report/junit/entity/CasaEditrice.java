@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
@@ -68,6 +69,11 @@ public class CasaEditrice extends SheetSummary {
 	@ExcelImage
 	@ExcelRowHeight(height = 5)
 	private String image;
+	
+	@ExcelColumn(columnName = "Document", indexColumn = 7)
+	@ExcelCellLayout
+	@ExcelRowHeight(height = 5)
+	private ExcelAttachment<String> document;
 
 
 	/**
@@ -124,12 +130,13 @@ public class CasaEditrice extends SheetSummary {
 		this.citta = citta;
 	}
 
-	public CasaEditrice(@Size(max = 31) String sheetName, String nome, Calendar dataDiNascita, String citta, String image) {
+	public CasaEditrice(@Size(max = 31) String sheetName, String nome, Calendar dataDiNascita, String citta, String image, ExcelAttachment<String> document) {
 		super(sheetName);
 		this.nome = nome;
 		this.dataDiNascita = dataDiNascita;
 		this.citta = citta;
 		this.image = image;
+		this.document=document;
 	}
 	
 	
@@ -174,6 +181,14 @@ public class CasaEditrice extends SheetSummary {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public ExcelAttachment<String> getDocument() {
+		return document;
+	}
+
+	public void setDocument(ExcelAttachment<String> document) {
+		this.document = document;
 	}
 
 	

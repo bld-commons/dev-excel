@@ -23,15 +23,21 @@ autore-libri-row:
 
 
 
-
-
 logging:
   level:
-    root: WARN
     org:
-      springframework:
-        web: DEBUG
-      hibernate: ERROR
+      springframework: INFO
 
+#logging:
+#  level:
+#    root: WARN
+#    org:
+#      springframework:
+#        web: DEBUG
+#      hibernate: ERROR
+
+
+server:
+  port: 8080
 
 

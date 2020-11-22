@@ -5,16 +5,12 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
-import org.apache.commons.lang3.StringUtils;
-
 import bld.generator.report.excel.annotation.ExcelColumn;
 
 /**
  * The Class ExcelColumnImpl.
  */
-public class ExcelColumnImpl implements Cloneable{
+public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 
 	/** The column name. */
 	private String columnName;
@@ -24,67 +20,34 @@ public class ExcelColumnImpl implements Cloneable{
 
 	/** The index column. */
 	private double indexColumn;
-	
+
 	/** The ignore. */
 	private boolean ignore;
+
 	
 	
 	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
+	 * Instantiates a new excel column impl.
 	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public ExcelColumnImpl() {
+		super();
 	}
+	
+	
 
 	/**
-	 * Gets the excel column.
+	 * Instantiates a new excel column impl.
 	 *
-	 * @return the excel column
+	 * @param columnName the column name
+	 * @param indexColumn the index column
 	 */
-	public ExcelColumn getExcelColumn() {
-		ExcelColumn excelColumn = null;
-		if (StringUtils.isNotBlank(columnName) )
-			excelColumn = new ExcelColumn() {
-
-				@Override
-				public Class<? extends Annotation> annotationType() {
-					return ExcelColumn.class;
-				}
-
-				@Override
-				public String columnName() {
-					return columnName;
-				}
-
-				@Override
-				public String comment() {
-					return comment;
-				}
-
-				@Override
-				public double indexColumn() {
-					return indexColumn;
-				}
-
-				@Override
-				public boolean ignore() {
-					
-					return ignore;
-				}
-
-			
-
-			};
-
-		return excelColumn;
+	public ExcelColumnImpl(String columnName, double indexColumn) {
+		super();
+		this.columnName = columnName;
+		this.indexColumn = indexColumn;
 	}
 
-	
-	
+
 
 	/**
 	 * Instantiates a new excel column impl.
@@ -223,9 +186,5 @@ public class ExcelColumnImpl implements Cloneable{
 			return false;
 		return true;
 	}
-
-	
-
-	
 
 }

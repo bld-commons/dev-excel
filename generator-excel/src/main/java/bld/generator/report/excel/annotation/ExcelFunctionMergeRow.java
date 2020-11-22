@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
  * <li>ExcelFunction - to define the function</li>
  * <li>ExcelColumnWidth - to set column width<7li>
  * <li>ExcelHeaderCellLayout - to define header cell layout</li>
+ * <li>ExcelSubtotal - to execute subtotal function</li>
  * </ul>
  * 
  * ExcelFunctionMergeRow is parameter of the annotation

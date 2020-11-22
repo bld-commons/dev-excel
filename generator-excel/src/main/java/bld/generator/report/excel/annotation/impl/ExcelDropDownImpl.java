@@ -5,58 +5,26 @@
  */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelDropDown;
-
 
 /**
  * The Class ExcelDropDownImpl.
  */
-public class ExcelDropDownImpl {
-	
+public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
+
 	/** The suppress drop down arrow. */
 	private boolean suppressDropDownArrow;
-	
+
 	/** The area range. */
 	private String areaRange;
 
-
-
-	/**
-	 * Gets the excel drop down.
-	 *
-	 * @return the excel drop down
-	 */
-	public ExcelDropDown getExcelDropDown() {
-		return new ExcelDropDown() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelDropDown.class;
-			}
-			
-			@Override
-			public boolean suppressDropDownArrow() {
-				return suppressDropDownArrow;
-			}
-			
-			@Override
-			public String areaRange() {
-				return areaRange;
-			}
-		};
-	}
-
-	
 	/**
 	 * Instantiates a new excel drop down impl.
 	 */
 	public ExcelDropDownImpl() {
-		this.suppressDropDownArrow=true;
+		this.suppressDropDownArrow = true;
 	}
 
-	
 	/**
 	 * Instantiates a new excel drop down impl.
 	 *
@@ -144,5 +112,4 @@ public class ExcelDropDownImpl {
 		return true;
 	}
 
-	
 }

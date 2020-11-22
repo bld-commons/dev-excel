@@ -5,69 +5,22 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelFunction;
 
 /**
  * The Class ExcelFunctionImpl.
  */
-public class ExcelFunctionImpl implements Cloneable{
+public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 
-	
 	/** The function. */
 	private String function;
-	
+
 	/** The name function. */
 	private String nameFunction;
-	
+
 	/** The another table. */
 	private boolean anotherTable;
-	
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
 
-	/**
-	 * Gets the excel function.
-	 *
-	 * @return the excel function
-	 */
-	public ExcelFunction getExcelFunction() {
-		return new ExcelFunction() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelFunction.class;
-			}
-
-			@Override
-			public String function() {
-				return function;
-			}
-
-			@Override
-			public String nameFunction() {
-				return nameFunction;
-			}
-
-			@Override
-			public boolean anotherTable() {
-				return anotherTable;
-			}
-			
-		};
-	}
-
-	
-	
 	/**
 	 * Instantiates a new excel function impl.
 	 *
@@ -78,11 +31,14 @@ public class ExcelFunctionImpl implements Cloneable{
 		super();
 		this.function = function;
 		this.nameFunction = nameFunction;
-		this.anotherTable=true;
 	}
 
-	
-
+	/**
+	 * Instantiates a new excel function impl.
+	 */
+	public ExcelFunctionImpl() {
+		super();
+	}
 
 	/**
 	 * Instantiates a new excel function impl.
@@ -197,7 +153,4 @@ public class ExcelFunctionImpl implements Cloneable{
 		this.anotherTable = anotherTable;
 	}
 
-	
-	
-	
 }

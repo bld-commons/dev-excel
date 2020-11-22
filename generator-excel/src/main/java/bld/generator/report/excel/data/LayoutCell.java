@@ -16,7 +16,7 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 /**
  * The Class LayoutCell.
  */
-public class LayoutCell {
+public class LayoutCell implements Cloneable {
 
 	/** The border. */
 	private ExcelBorder border;
@@ -54,14 +54,26 @@ public class LayoutCell {
 	/** The locked. */
 	private boolean locked;
 
+	/** The font color. */
 	private ExcelColor fontColor;
 
+	/** The foreground color. */
 	private ExcelColor foregroundColor;
 
+	/**
+	 * Gets the font color.
+	 *
+	 * @return the font color
+	 */
 	public ExcelColor getFontColor() {
 		return fontColor;
 	}
 
+	/**
+	 * Gets the foreground color.
+	 *
+	 * @return the foreground color
+	 */
 	public ExcelColor getForegroundColor() {
 		return foregroundColor;
 	}
@@ -282,7 +294,6 @@ public class LayoutCell {
 		this.locked = locked;
 	}
 
-
 	/**
 	 * Sets the color.
 	 *
@@ -377,7 +388,17 @@ public class LayoutCell {
 			return false;
 		return true;
 	}
-	
-	
 
+	/**
+	 * Clone.
+	 *
+	 * @return the object
+	 * @throws CloneNotSupportedException the clone not supported exception
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
+	
 }

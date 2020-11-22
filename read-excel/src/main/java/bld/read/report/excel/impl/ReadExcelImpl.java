@@ -109,7 +109,7 @@ public class ReadExcelImpl implements ReadExcel {
 			Class<? extends SheetRead<? extends RowSheetRead>> classSheet=(Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
 			excelRead.getMapSheet().put(classSheet, sheetType);
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
-			logger.info("Sheet: " + sheetType.getSheetName());
+			logger.debug("Sheet: " + sheetType.getSheetName());
 			if(sheetType.getSheetName().length()>ExcelConstant.SHEET_NAME_SIZE)
 				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
 			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
@@ -123,7 +123,7 @@ public class ReadExcelImpl implements ReadExcel {
 			Map<String,Method>mapMethod=new HashMap<>();
 			setMapMethod(mapMethod, genericClassType.getSuperclass().getMethods());
 			setMapMethod(mapMethod, genericClassType.getMethods());
-			logger.info("Generic class type: " + genericClassType.getName());
+			logger.debug("Generic class type: " + genericClassType.getName());
 			for (int indexRow = startRow; indexRow <= worksheet.getPhysicalNumberOfRows(); indexRow++) {
 				T rowSheetRead = genericClassType.newInstance();
 				Row row = worksheet.getRow(indexRow);
@@ -149,9 +149,9 @@ public class ReadExcelImpl implements ReadExcel {
 							if (cell != null && cell.getCellType() != CellType.BLANK) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase()
 										+ field.getName().substring(1);
-								logger.info("Set Function: " + nameMethod);
+								logger.debug("Set Function: " + nameMethod);
 								Class<?> classField = field.getType();
-								logger.info("The field " + field.getName() + " is of " + classField.getSimpleName()
+								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName()
 										+ " type");
 								Object value = null;
 								if (Number.class.isAssignableFrom(classField)) {
@@ -180,11 +180,11 @@ public class ReadExcelImpl implements ReadExcel {
 									String stringValue=cell.getStringCellValue();
 									value = stringValue.length()>0?stringValue.charAt(0):null;
 								}else {
-									logger.info("The type \"" + field.getType().getSimpleName()+ "\" is not manage");
+									logger.debug("The type \"" + field.getType().getSimpleName()+ "\" is not manage");
 								}
 								if (value != null) {
 									String nameColumn=(""+field.getName().charAt(0)).toUpperCase()+field.getName().substring(1);
-									logger.info(nameColumn + ": " + value);
+									logger.debug(nameColumn + ": " + value);
 									Method method=mapMethod.get(SET + nameColumn);
 									method.invoke(rowSheetRead, value);
 									rowEmpty = false;

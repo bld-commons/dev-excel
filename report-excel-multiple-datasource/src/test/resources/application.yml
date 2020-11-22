@@ -29,11 +29,8 @@ autore-libri-row:
 
 logging:
   level:
-    root: WARN
     org:
-      springframework:
-        web: DEBUG
-      hibernate: ERROR
+      springframework: DEBUG
 
 
 

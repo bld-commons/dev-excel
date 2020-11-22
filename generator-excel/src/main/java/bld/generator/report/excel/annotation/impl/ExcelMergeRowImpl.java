@@ -5,47 +5,23 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 
 /**
  * The Class ExcelMergeRowImpl.
  */
-public class ExcelMergeRowImpl implements Cloneable{
+public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
 
 	
 	/** The reference field. */
 	private String referenceField;
 	
+	
 	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
+	 * Instantiates a new excel merge row impl.
 	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-	 * Gets the excel merge row.
-	 *
-	 * @return the excel merge row
-	 */
-	public ExcelMergeRow getExcelMergeRow() {
-		return new ExcelMergeRow() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelMergeRow.class;
-			}
-
-			@Override
-			public String referenceField() {
-				return referenceField;
-			}};
+	public ExcelMergeRowImpl() {
+		super();
 	}
 
 	/**

@@ -5,8 +5,6 @@
  */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -15,48 +13,17 @@ import bld.generator.report.excel.annotation.ExcelSubtotal;
 /**
  * The Class ExcelSubtotalImpl.
  */
-public class ExcelSubtotalImpl {
-	
-	
+public class ExcelSubtotalImpl extends ExcelAnnotationImpl<ExcelSubtotal> {
+
 	/** The excel cell layout. */
-	protected ExcelCellLayout excelCellLayout;
-	
+	private ExcelCellLayout excelCellLayout;
+
 	/** The enable. */
-	protected boolean enable;
-	
+	private boolean enable;
+
 	/** The data consolidate function. */
-	protected DataConsolidateFunction dataConsolidateFunction;
-
-	/**
-	 * Gets the excel subtotal.
-	 *
-	 * @return the excel subtotal
-	 */
-	public ExcelSubtotal getExcelSubtotal() {
-		return new ExcelSubtotal() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelSubtotal.class;
-			}
-			
-			@Override
-			public ExcelCellLayout excelCellLayout() {
-				return excelCellLayout;
-			}
-			
-			@Override
-			public boolean enable() {
-				return enable;
-			}
-			
-			@Override
-			public DataConsolidateFunction dataConsolidateFunction() {
-				return dataConsolidateFunction;
-			}
-		};
-	}
-
+	private DataConsolidateFunction dataConsolidateFunction;
+	
 	/**
 	 * Instantiates a new excel subtotal impl.
 	 */

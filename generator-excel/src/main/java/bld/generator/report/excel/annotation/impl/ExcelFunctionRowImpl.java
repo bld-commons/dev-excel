@@ -5,8 +5,6 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
@@ -18,7 +16,7 @@ import bld.generator.report.excel.annotation.ExcelSubtotal;
 /**
  * The Class ExcelFunctionRowImpl.
  */
-public class ExcelFunctionRowImpl implements Cloneable{
+public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 
 	/** The excel cells layout. */
 	private ExcelCellLayout excelCellsLayout;
@@ -39,70 +37,10 @@ public class ExcelFunctionRowImpl implements Cloneable{
 	private ExcelSubtotal excelSubtotal;
 	
 	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-	 * Gets the excel function.
-	 *
-	 * @return the excel function
-	 */
-	public ExcelFunctionRow getExcelFunction() {
-		return new ExcelFunctionRow() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelFunctionRow.class;
-			}
-
-			@Override
-			public ExcelCellLayout excelCellsLayout() {
-				return excelCellsLayout;
-			}
-
-			@Override
-			public ExcelColumn excelColumn() {
-				return excelColumn;
-			}
-
-			@Override
-			public ExcelFunction excelFunction() {
-				return excelFunction;
-			}
-
-			@Override
-			public ExcelColumnWidth excelColumnWidth() {
-				return excelColumnWidth;
-			}
-
-			@Override
-			public ExcelHeaderCellLayout excelHeaderCellLayout() {
-				return excelHeaderCellLayout;
-			}
-
-			@Override
-			public ExcelSubtotal excelSubtotal() {
-				return excelSubtotal;
-			}
-
-		};
-	}
-
-	
-
-	/**
 	 * Instantiates a new excel function row impl.
 	 */
 	public ExcelFunctionRowImpl() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

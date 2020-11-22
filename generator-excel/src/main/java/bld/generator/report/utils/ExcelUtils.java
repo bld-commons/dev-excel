@@ -11,7 +11,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,20 +95,10 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the t
 	 */
 	public static <T, K extends Annotation> T reflectionAnnotation(T entity, K annotation) {
-		
-		
-		List<Field> listField = new ArrayList<>();
-		Class<?>classT=entity.getClass();
-		do {
-			listField.addAll(Arrays.asList(classT.getDeclaredFields()));
-			classT=classT.getSuperclass();
-		}while(classT.getSuperclass()!=null && !classT.getName().equals(Object.class.getName()));
-		Map<String, Field> mapField = new HashMap<>();
-		for (Field field : listField)
-			mapField.put(field.getName(), field);
+		Map<String, Field> mapField = getMapField(entity.getClass());
 		Class<K> classAnnotation = (Class<K>) annotation.getClass();
 		Class<T> classEntity = (Class<T>) entity.getClass();
-		List<Method> listMethod = Arrays.asList(classAnnotation.getMethods());
+		List<Method> listMethod = Arrays.asList(classAnnotation.getDeclaredMethods());
 		for (Method method : listMethod) {
 			if (mapField.containsKey(method.getName())) {
 				Field field = mapField.get(method.getName());
@@ -146,7 +135,6 @@ public class ExcelUtils implements ApplicationContextAware {
 					}
 
 				} catch (Exception e) {
-					
 				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
 				}
 			}
@@ -276,6 +264,14 @@ public class ExcelUtils implements ApplicationContextAware {
 			classApp = classApp.getSuperclass();
 		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
 		return listField;
+	}
+	
+	public static Map<String,Field>getMapField(Class<?> classComponentExcel){
+		Set<Field> listField =getListField(classComponentExcel);
+		Map<String, Field> mapField = new HashMap<>();
+		for (Field field : listField)
+			mapField.put(field.getName(), field);
+		return mapField;
 	}
 	
 	

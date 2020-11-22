@@ -9,6 +9,9 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+
+import org.apache.commons.collections4.map.HashedMap;
 
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
@@ -63,24 +66,31 @@ public class SheetHeader implements Cloneable {
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
-	
+
 	/** The excel drop down. */
 	private ExcelDropDown excelDropDown;
-	
+
+	/** The excel image. */
 	private ExcelImage excelImage;
-	
+
+	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
-	
+
+	/** The map layout cell. */
+	private Map<Integer, LayoutCell> mapLayoutCell;
 
 	/** The key map. */
 	private String keyMap;
+
+	/** The color size. */
+	private int colorSize;
 
 	/**
 	 * Instantiates a new sheet header.
 	 */
 	public SheetHeader() {
 		super();
-
+		this.mapLayoutCell = new HashedMap<>();
 	}
 
 	/**
@@ -98,14 +108,41 @@ public class SheetHeader implements Cloneable {
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		if (field.isAnnotationPresent(ExcelColumnWidth.class))
 			this.setExcelColumnWidth(field.getAnnotation(ExcelColumnWidth.class));
-		if (field.isAnnotationPresent(ExcelImage.class)) 
+		if (field.isAnnotationPresent(ExcelImage.class))
 			this.setExcelImage(field.getAnnotation(ExcelImage.class));
 		if (field.isAnnotationPresent(ExcelDropDown.class))
 			this.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 		if (field.isAnnotationPresent(ExcelSubtotal.class))
 			this.setExcelSubtotal(field.getAnnotation(ExcelSubtotal.class));
-		
+		this.excelColumn = ExcelUtils.getAnnotation(this.field, ExcelColumn.class);
+		this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
+		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
+				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType()))
+			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
+		manageMapLayoutCell();
+
 		this.getExcelColumn();
+	}
+
+	/**
+	 * Manage map layout cell.
+	 *
+	 * @throws Exception the exception
+	 */
+	private void manageMapLayoutCell() throws Exception {
+		this.mapLayoutCell = new HashedMap<>();
+		if (this.excelCellLayout != null) {
+			LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
+			if (this.excelDate != null)
+				layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
+			this.colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
+			for (int colorModul = 0; colorModul < colorSize; colorModul++) {
+				LayoutCell layoutCellTemp = (LayoutCell) layoutCell.clone();
+				layoutCellTemp.setColor(colorModul);
+				this.mapLayoutCell.put(colorModul, layoutCellTemp);
+			}
+		}
+
 	}
 
 	/**
@@ -115,7 +152,7 @@ public class SheetHeader implements Cloneable {
 	 */
 	public ExcelColumnWidth getExcelColumnWidth() {
 		if (excelColumnWidth == null)
-			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getExcelColumnWidth();
+			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getAnnotation();
 		return excelColumnWidth;
 	}
 
@@ -124,9 +161,7 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @return the excel column
 	 */
-	public ExcelColumn getExcelColumn() throws Exception {
-		if (this.excelColumn == null)
-			this.excelColumn = ExcelUtils.getAnnotation(this.field, ExcelColumn.class);
+	public ExcelColumn getExcelColumn() {
 		return this.excelColumn;
 	}
 
@@ -135,11 +170,8 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @return the excel date
 	 */
-	public ExcelDate getExcelDate() throws Exception {
-		if (this.excelDate == null && this.field !=null && (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType())
-				|| DateDropDown.class.isAssignableFrom(this.field.getType()) || CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType())				
-				))
-			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
+	public ExcelDate getExcelDate() {
+
 		return excelDate;
 	}
 
@@ -148,9 +180,7 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @return the excel cell layout
 	 */
-	public ExcelCellLayout getExcelCellLayout() throws Exception {
-		if (this.excelCellLayout == null)
-			this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
+	public ExcelCellLayout getExcelCellLayout() {
 		return this.excelCellLayout;
 	}
 
@@ -177,20 +207,20 @@ public class SheetHeader implements Cloneable {
 	/**
 	 * Gets the layout cell.
 	 *
+	 * @param indexRow the index row
 	 * @return the layout cell
-	 * @throws Exception the exception
 	 */
-	public LayoutCell getLayoutCell() throws Exception {
-		LayoutCell layoutCell = null;
-		if (this.getExcelCellLayout() != null)
-			layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), this.getExcelCellLayout());
-		try {
-			if (this.getExcelDate() != null)
-				layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, this.getExcelDate());
-		} catch (Exception e) {
+	public LayoutCell getLayoutCell(Integer indexRow) {
+		return this.mapLayoutCell.get(indexRow % colorSize);
+	}
 
-		}
-		return layoutCell;
+	/**
+	 * Gets the map layout cell.
+	 *
+	 * @return the map layout cell
+	 */
+	public Map<Integer, LayoutCell> getMapLayoutCell() {
+		return mapLayoutCell;
 	}
 
 	/**
@@ -324,8 +354,9 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @param excelDate the new excel date
 	 */
-	public void setExcelDate(ExcelDate excelDate) {
+	public void setExcelDate(ExcelDate excelDate) throws Exception {
 		this.excelDate = excelDate;
+		this.manageMapLayoutCell();
 	}
 
 	/**
@@ -342,8 +373,9 @@ public class SheetHeader implements Cloneable {
 	 *
 	 * @param excelCellLayout the new excel cell layout
 	 */
-	public void setExcelCellLayout(ExcelCellLayout excelCellLayout) {
+	public void setExcelCellLayout(ExcelCellLayout excelCellLayout) throws Exception {
 		this.excelCellLayout = excelCellLayout;
+		this.manageMapLayoutCell();
 	}
 
 	/**
@@ -373,7 +405,6 @@ public class SheetHeader implements Cloneable {
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
 	}
 
-	
 	/**
 	 * Gets the excel drop down.
 	 *
@@ -382,7 +413,6 @@ public class SheetHeader implements Cloneable {
 	public ExcelDropDown getExcelDropDown() {
 		return excelDropDown;
 	}
-
 
 	/**
 	 * Sets the excel drop down.
@@ -393,22 +423,47 @@ public class SheetHeader implements Cloneable {
 		this.excelDropDown = excelDropDown;
 	}
 
+	/**
+	 * Gets the excel image.
+	 *
+	 * @return the excel image
+	 */
 	public ExcelImage getExcelImage() {
 		return excelImage;
 	}
 
+	/**
+	 * Sets the excel image.
+	 *
+	 * @param excelImage the new excel image
+	 */
 	public void setExcelImage(ExcelImage excelImage) {
 		this.excelImage = excelImage;
 	}
 
+	/**
+	 * Gets the excel subtotal.
+	 *
+	 * @return the excel subtotal
+	 */
 	public ExcelSubtotal getExcelSubtotal() {
 		return excelSubtotal;
 	}
 
+	/**
+	 * Sets the excel subtotal.
+	 *
+	 * @param excelSubTotal the new excel subtotal
+	 */
 	public void setExcelSubtotal(ExcelSubtotal excelSubTotal) {
 		this.excelSubtotal = excelSubTotal;
 	}
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -431,6 +486,12 @@ public class SheetHeader implements Cloneable {
 		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -514,7 +575,5 @@ public class SheetHeader implements Cloneable {
 			return false;
 		return true;
 	}
-
-	
 
 }

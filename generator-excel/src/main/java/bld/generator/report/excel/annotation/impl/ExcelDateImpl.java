@@ -6,52 +6,18 @@
 
 package bld.generator.report.excel.annotation.impl;
 
-import java.lang.annotation.Annotation;
-
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
 /**
  * The Class ExcelDateImpl.
  */
-public class ExcelDateImpl implements Cloneable{
+public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 
 	
 	/** The format. */
 	private ColumnDateFormat format;
 	
-	/**
-	 * Clone.
-	 *
-	 * @return the object
-	 * @throws CloneNotSupportedException the clone not supported exception
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
-	/**
-	 * Gets the excel date.
-	 *
-	 * @return the excel date
-	 */
-	public ExcelDate getExcelDate() {
-		return new ExcelDate() {
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return ExcelDate.class;
-			}
-
-			@Override
-			public ColumnDateFormat format() {
-				return format;
-			}
-			
-		};
-	}
-
 	/**
 	 * Instantiates a new excel date impl.
 	 *
@@ -60,6 +26,13 @@ public class ExcelDateImpl implements Cloneable{
 	public ExcelDateImpl(ColumnDateFormat format){
 		super();
 		this.format = format;
+	}
+
+	/**
+	 * Instantiates a new excel date impl.
+	 */
+	public ExcelDateImpl() {
+		super();
 	}
 
 	/**
