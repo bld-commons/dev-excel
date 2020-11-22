@@ -1,5 +1,7 @@
 bld:
   commons:
+    check:
+      annotation: true
     resource:
       path:
         xls: /excel/Copertina.xls
