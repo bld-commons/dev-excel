@@ -9,7 +9,7 @@ import bld.generator.report.excel.constant.AttachmentType;
 
 /**
  * The Class ExcelAttachment.<br>
- * ExcelAttachment is used to attachment files. <br>
+ * ExcelAttachment is used to attachment files within file excel.<br>
  * It is composed by:
  * <ul>
  * <li>Attachment - to define the file</li>
@@ -17,6 +17,7 @@ import bld.generator.report.excel.constant.AttachmentType;
  * <li>FileName - to define file name</li>
  * </ul>
  * The "attachment" field can be a byte array or a string, the string type represent the file path.<br>
+ * It is used by {@link bld.generator.report.excel.RowSheet} classes.<br>
  * @param <T> the generic type
  */
 public class ExcelAttachment<T> {
