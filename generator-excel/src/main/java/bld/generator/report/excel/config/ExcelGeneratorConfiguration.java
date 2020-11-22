@@ -19,6 +19,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import bld.generator.report.excel.GenerateExcel;
@@ -33,6 +35,8 @@ import bld.generator.report.utils.ValueProps;
  */
 @Configuration
 public class ExcelGeneratorConfiguration {
+
+	private static final String BLD_COMMONS_CHECK_ANNOTATION = "bld.commons.check.annotation";
 
 	/** The Constant SPRING_DATASOURCE_URL. */
 	public static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
@@ -72,7 +76,8 @@ public class ExcelGeneratorConfiguration {
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("rawtypes")
-	@PostConstruct
+	@Bean
+	@ConditionalOnProperty(name = BLD_COMMONS_CHECK_ANNOTATION, havingValue = "true", matchIfMissing = false)
 	public void checkEntityAnnotation() throws Exception {
 		Reflections reflections = new Reflections("bld.generator.report.excel.annotation.impl");
 

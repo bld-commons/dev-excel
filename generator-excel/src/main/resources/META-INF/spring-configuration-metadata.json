@@ -20,6 +20,10 @@
         "name": "bld.commons.multiple.datasource",
         "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.check.annotation",
+        "type": "org.springframework.boot.autoconfigure.web.ServerProperties",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
 ],"properties": [
     {
@@ -48,6 +52,10 @@
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     },{
         "name": "bld.commons.multiple.datasource",
+        "type": "java.lang.Boolean",
+        "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+    },{
+        "name": "bld.commons.check.annotation",
         "type": "java.lang.Boolean",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     }
