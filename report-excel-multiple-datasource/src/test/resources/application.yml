@@ -1,5 +1,7 @@
 bld:
   commons:
+    check:
+      annotation: true
     multiple:
       datasource: true
     resource:

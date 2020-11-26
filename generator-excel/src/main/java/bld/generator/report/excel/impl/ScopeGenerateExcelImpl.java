@@ -359,7 +359,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 			} else
 				sheet = workbook.createSheet("Undefined " + (indexSheetName++));
-
+			logger.info("Sheet name: "+sheet.getSheetName());
 			Footer footer = sheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 			FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
@@ -476,6 +476,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private Integer generateSheetData(Workbook workbook, Sheet sheet, SheetData<? extends RowSheet> sheetData, Integer indexRow, boolean isMergeSheet, FormulaEvaluator formulaEvaluator) throws Exception {
+		logger.info("SheetData: "+sheetData.getClass().getSimpleName());
+		logger.info("RowSheet: "+sheetData.getRowClass().getSimpleName());
 		if (this.excelQueryComponent != null && sheetData instanceof QuerySheetData)
 			this.excelQueryComponent.executeQuery((QuerySheetData<? extends RowSheet>) sheetData);
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
@@ -517,13 +519,14 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		List<SubtotalRow> emptyRows = new ArrayList<>();
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			int splitRow = 0;
-			String nameField = listSheetHeader.get(0).getField().getName();
-			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class) && rowSheet.getClass().getAnnotation(ExcelSubtotals.class).sumForGroup() && lastRowSheet != null
-					&& !PropertyUtils.getProperty(lastRowSheet, nameField).equals(PropertyUtils.getProperty(rowSheet, nameField))) {
-				splitRow = 1;
-				emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, nameField)));
+			if(rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class)) {
+				String nameField = listSheetHeader.get(0).getField().getName();
+				if (rowSheet.getClass().getAnnotation(ExcelSubtotals.class).sumForGroup() && lastRowSheet != null
+						&& !PropertyUtils.getProperty(lastRowSheet, nameField).equals(PropertyUtils.getProperty(rowSheet, nameField))) {
+					splitRow = 1;
+					emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, nameField)));
+				}
 			}
-
 			row = sheet.createRow(indexRow);
 			Map<String, Object> mapValue = new HashMap<>();
 			CellStyle cellStyle = null;
