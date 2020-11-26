@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.reflections.Reflections;
@@ -71,8 +69,8 @@ public class ExcelGeneratorConfiguration {
 	}
 
 	/**
-	 * Check entity annotation.
-	 *
+	 * Check entity annotation.<br>
+	 * <b>The property "bld.commons.check.annotation" must be false.</b><br> 
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("rawtypes")

@@ -31,6 +31,7 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 		super();
 		this.function = function;
 		this.nameFunction = nameFunction;
+		this.anotherTable=true;
 	}
 
 	/**
