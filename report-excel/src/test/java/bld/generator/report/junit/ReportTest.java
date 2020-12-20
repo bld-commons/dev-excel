@@ -74,8 +74,8 @@ import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
-import bld.read.report.junit.entity.ReadAutoreLibriRow;
-import bld.read.report.junit.entity.ReadAutoreLibriSheet;
+import bld.read.report.junit.entity.OperatoriSanitariRow;
+import bld.read.report.junit.entity.OperatoriSanitariSheet;
 import bld.read.report.junit.entity.ReadGenereRow;
 import bld.read.report.junit.entity.ReadGenereSheet;
 
@@ -346,18 +346,19 @@ public class ReportTest {
 	 */
 	@Test
 	public void testRead() throws Exception{
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
+		FileInputStream inputStream = new FileInputStream("/mnt/report/eCovidVaccini.xlsx");
 		byte[] report=IOUtils.toByteArray(inputStream);
 		ExcelRead excelRead=new ExcelRead();
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
+		excelRead.getListSheetRead().add(new OperatoriSanitariSheet("Operatori Sanitari"));
+//		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
 //		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet;
+		OperatoriSanitariSheet sheet;
 		try {
-			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
-			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+			sheet = excelRead.getSheet(OperatoriSanitariSheet.class);
+			for(OperatoriSanitariRow row:sheet.getListRowSheet()) 
 				System.out.println(row.toString());
 			
 			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
