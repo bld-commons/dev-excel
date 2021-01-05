@@ -23,7 +23,7 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 public class ReportExcel {
 
 	/** The titolo. */
-	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.titolo}")
+	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.title}")
 	private String title;
 	
 	/** The date. */
