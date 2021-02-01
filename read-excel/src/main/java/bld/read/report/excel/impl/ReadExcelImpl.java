@@ -125,7 +125,7 @@ public class ReadExcelImpl implements ReadExcel {
 			setMapMethod(mapMethod, genericClassType.getMethods());
 			logger.debug("Generic class type: " + genericClassType.getName());
 			for (int indexRow = startRow; indexRow <= worksheet.getPhysicalNumberOfRows(); indexRow++) {
-				T rowSheetRead = genericClassType.newInstance();
+				T rowSheetRead = genericClassType.getDeclaredConstructor().newInstance();
 				Row row = worksheet.getRow(indexRow);
 				if (row != null) {
 					Set<Field> listField = new HashSet<>(Arrays.asList(rowSheetRead.getClass().getDeclaredFields()));
@@ -161,7 +161,7 @@ public class ReadExcelImpl implements ReadExcel {
 									else if (BigDecimal.class.isAssignableFrom(classField))
 										value = BigDecimal.valueOf(numberValue);
 									else if (Float.class.isAssignableFrom(classField))
-										value = new Float(numberValue);
+										value = Float.valueOf(numberValue.floatValue());
 									else if (Long.class.isAssignableFrom(classField))
 										value = numberValue.longValue();
 								} else if (String.class.isAssignableFrom(classField)) {

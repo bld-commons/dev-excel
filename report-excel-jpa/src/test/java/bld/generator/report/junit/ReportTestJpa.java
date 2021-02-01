@@ -28,6 +28,7 @@ import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.BigDataUtenteRow;
 import bld.generator.report.junit.entity.BigDataUtenteSheet;
 import bld.generator.report.junit.entity.CasaEditrice;
+import bld.generator.report.junit.entity.CensimentoSheet;
 import bld.generator.report.junit.entity.GenereSheet;
 import bld.generator.report.junit.entity.SalaryRow;
 import bld.generator.report.junit.entity.SalarySheet;
@@ -132,10 +133,27 @@ public class ReportTestJpa {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		
 	}
 
 	
+	@Test
+	public void testChart() {
+		CensimentoSheet censimento=new CensimentoSheet("Censimento");
+		ReportExcel excel=new ReportExcel();
+		excel.setTitle("Censimento");
+		excel.getListBaseSheet().add(censimento);
+		
+		byte[] byteReport=null;
+		try {
+			byteReport = this.generateExcel.createFileXlsx(excel);
+			ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	
 //	/**

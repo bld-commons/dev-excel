@@ -10,10 +10,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.xddf.usermodel.PresetColor;
+import org.apache.poi.xddf.usermodel.chart.AxisCrossBetween;
+import org.apache.poi.xddf.usermodel.chart.AxisCrosses;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelChart.
  * 
@@ -110,8 +114,47 @@ public @interface ExcelChart {
 	public boolean group() default false;
 	
 	
+	/**
+	 * Title.
+	 *
+	 * @return the string
+	 */
 	public String title()default "";
 	
+
+	/**
+	 * Line color.
+	 *
+	 * @return the preset color
+	 */
+	public PresetColor[] lineColor() default PresetColor.BLACK;
 	
+	/**
+	 * Axis line color.
+	 *
+	 * @return the preset color
+	 */
+	public PresetColor axisLineColor() default PresetColor.BLACK;
+	
+	/**
+	 * Grid line color.
+	 *
+	 * @return the preset color
+	 */
+	public PresetColor gridLineColor() default PresetColor.GRAY;
+	
+	/**
+	 * Crosses.
+	 *
+	 * @return the axis crosses
+	 */
+	public AxisCrosses crosses () default AxisCrosses.AUTO_ZERO;
+	
+	/**
+	 * Cross between.
+	 *
+	 * @return the axis cross between
+	 */
+	public AxisCrossBetween crossBetween() default AxisCrossBetween.BETWEEN;
 
 }
