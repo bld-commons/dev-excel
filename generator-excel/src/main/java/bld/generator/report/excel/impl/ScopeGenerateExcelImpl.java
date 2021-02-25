@@ -679,6 +679,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					String nameField = null;
 					if (sheetHeader.getField() != null)
 						nameField = sheetHeader.getField().getName();
+					else if(sheetHeader.getKeyMap()!=null)
+						nameField=sheetHeader.getKeyMap();
 					else if (sheetHeader.getExcelFunction() != null)
 						nameField = sheetHeader.getExcelFunction().nameFunction();
 					ExcelCellLayout excelCellLayout = null;

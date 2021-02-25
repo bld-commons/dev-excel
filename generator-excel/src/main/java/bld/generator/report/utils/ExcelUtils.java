@@ -135,7 +135,7 @@ public class ExcelUtils implements ApplicationContextAware {
 									((Annotation[]) value).length);
 							for (int i = 0; i < ((Annotation[]) value).length; i++) {
 								fieldAnnotation = ((Annotation[]) value)[i];
-								Object object = reflectionAnnotation(field.getType().getComponentType().newInstance(),
+								Object object = reflectionAnnotation(field.getType().getComponentType().getDeclaredConstructor().newInstance(),
 										fieldAnnotation);
 								list[i] = object;
 							}
