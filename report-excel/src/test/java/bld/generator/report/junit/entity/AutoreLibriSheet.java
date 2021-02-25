@@ -8,15 +8,14 @@ package bld.generator.report.junit.entity;
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.SheetData;
-import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
+import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.constant.ExcelConstant;
 
@@ -26,7 +25,7 @@ import bld.generator.report.excel.constant.ExcelConstant;
 @ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
-@ExcelFreezePane(rowFreez = 5, columnFreez = 1)
+//@ExcelFreezePane(rowFreez = 5, columnFreez = 1)
 @ExcelSuperHeaders(superHeaders = { @ExcelSuperHeader(headerGroups = {
 				@ExcelSuperHeaderCell(columnName = "Anagrafica", columnRange = "${matricola}:${dataDiNascita}"),
 				@ExcelSuperHeaderCell(columnName = "Libri", columnRange = "${genere}:${supplemento}")

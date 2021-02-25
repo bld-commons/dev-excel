@@ -83,7 +83,7 @@ public class ExcelGeneratorConfiguration {
 		for (Class<? extends ExcelAnnotationImpl> classExcelAnnotationImpl : allClasses) {
 			if (!classExcelAnnotationImpl.isAnnotationPresent(IgnoreCheck.class)) {
 				logger.debug("Start Check class: " + classExcelAnnotationImpl.getName());
-				ExcelAnnotationImpl<?> excelAnnotationImpl = classExcelAnnotationImpl.newInstance();
+				ExcelAnnotationImpl<?> excelAnnotationImpl = classExcelAnnotationImpl.getDeclaredConstructor().newInstance();
 				Class<? extends Annotation> classAnnotation = excelAnnotationImpl.getClassAnnotation();
 				List<Method> listMethod = Arrays.asList(classAnnotation.getDeclaredMethods());
 				Map<String, Field> mapField = ExcelUtils.getMapField(classExcelAnnotationImpl);

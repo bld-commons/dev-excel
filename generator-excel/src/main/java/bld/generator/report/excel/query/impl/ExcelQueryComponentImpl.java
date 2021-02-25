@@ -92,7 +92,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 		List<Map<String, Object>> listResult = namedParameterJdbcTemplate.queryForList(excelQuery.select(), querySheetData.getMapParameters());
 		List<T> listT = new ArrayList<T>();
 		for (Map<String, Object> mapResult : listResult) {
-			T t = querySheetData.getRowClass().newInstance();
+			T t = querySheetData.getRowClass().getDeclaredConstructor().newInstance();
 			reflection(t, mapResult);
 			listT.add(t);
 		}

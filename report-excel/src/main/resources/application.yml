@@ -10,7 +10,7 @@ bld:
       format: dd/MM/yyyy
     report:
       excel:
-        titolo: A12
+        title: A12
         date: A18
 
 

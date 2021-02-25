@@ -39,7 +39,7 @@
         "type": "java.lang.String",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     },{
-        "name": "bld.commons.report.excel.titolo",
+        "name": "bld.commons.report.excel.title",
         "type": "java.lang.String",
         "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
     },{

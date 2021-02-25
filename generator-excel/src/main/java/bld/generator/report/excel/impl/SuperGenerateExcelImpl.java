@@ -116,6 +116,7 @@ import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SuperGenerateExcelImpl.
  */
@@ -584,30 +585,32 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable()) {
-			function = makeFunction(sheet, null, function, RowStartEndType.ROW_START);
-			function = makeFunction(sheet, null, function, RowStartEndType.ROW_END);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END);
 		}
-		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_START);
-		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
-		function = makeFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_START);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
 		
 		logger.debug("Function: " + function);
 		cell.setCellFormula(function);
 	}
 
+	
 	/**
-	 * Make function.
+	 * Builds the function.
 	 *
-	 * @param sheet           the sheet
-	 * @param indexRow        the index row
-	 * @param function        the function
+	 * @param sheet the sheet
+	 * @param indexRow the index row
+	 * @param function the function
 	 * @param rowStartEndType the row start end type
+	 * @param dollar the dollar
 	 * @return the string
 	 * @throws Exception the exception
 	 */
-	protected String makeFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
+	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType,boolean dollar) throws Exception {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
@@ -629,14 +632,29 @@ public class SuperGenerateExcelImpl {
 					row = infoColumn.getLastRow();
 				if (keyParameter.contains(".")) {
 					String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
+					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(),dollar));
 				} else
-					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum()));
+					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(),dollar));
 			}
 
 		}
 		return function;
 	}
+	
+	/**
+	 * Builds the function.
+	 *
+	 * @param sheet the sheet
+	 * @param indexRow the index row
+	 * @param function the function
+	 * @param rowStartEndType the row start end type
+	 * @return the string
+	 * @throws Exception the exception
+	 */
+	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
+		return buildFunction(sheet, indexRow, function, rowStartEndType, false);
+	}
+	
 
 	/**
 	 * Sets the cell value excel.
@@ -693,15 +711,15 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = makeFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
 		if (excelFunction.anotherTable()) {
-			function = makeFunction(sheet, null, function, RowStartEndType.ROW_START);
-			function = makeFunction(sheet, null, function, RowStartEndType.ROW_END);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END);
 		}
 
-		function = makeFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
-		function = makeFunction(sheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
-		function = makeFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
+		function = buildFunction(sheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
 		logger.debug("Function: " + function);
 		cell.setCellFormula(function);
 		return cell;
@@ -972,7 +990,7 @@ public class SuperGenerateExcelImpl {
 						setCellValue = false;
 					}
 
-					String mergeCell = this.makeFunction(sheet, indexStartSuperHeader, headerGroup.columnRange(), RowStartEndType.ROW_EMPTY);
+					String mergeCell = this.buildFunction(sheet, indexStartSuperHeader, headerGroup.columnRange(), RowStartEndType.ROW_EMPTY);
 					sheet.addMergedRegion(CellRangeAddress.valueOf(mergeCell));
 
 				}
@@ -1029,8 +1047,8 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
 		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());
-		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn);
-		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn);
+		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn,false);
+		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn,false);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
 		indexRow += 3;
@@ -1108,8 +1126,8 @@ public class SuperGenerateExcelImpl {
 			CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
 			if (sheetHeader.getExcelDropDown() != null) {
 				String areaRange = sheetHeader.getExcelDropDown().areaRange();
-				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
-				areaRange = makeFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
+				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())

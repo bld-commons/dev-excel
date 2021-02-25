@@ -6,6 +6,7 @@
 
 package bld.generator.report.excel.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
 import bld.generator.report.excel.constant.ColumnDateFormat;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ReportExcel. <br>
  * ReportExcel is the class that represents the excel object. <br>
@@ -22,8 +24,8 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
  */
 public class ReportExcel {
 
-	/** The titolo. */
-	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.titolo}")
+	/** The title. */
+	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.title}")
 	private String title;
 	
 	/** The date. */
@@ -34,10 +36,20 @@ public class ReportExcel {
 	/** The list base sheet. */
 	private List<BaseSheet> listBaseSheet;
 
+	
+	
+
+	public ReportExcel(String title) {
+		super();
+		this.title = title;
+		this.date=new Date();
+		this.listBaseSheet=new ArrayList<>();
+	}
+
 	/**
 	 * Instantiates a new report excel.
 	 *
-	 * @param title        the titolo
+	 * @param title the title
 	 * @param listBaseSheet the list base sheet
 	 */
 	public ReportExcel(String title, List<BaseSheet> listBaseSheet) {
@@ -53,21 +65,22 @@ public class ReportExcel {
 	public ReportExcel() {
 		super();
 		this.date=new Date();
+		this.listBaseSheet=new ArrayList<>();
 	}
-
+	
 	/**
-	 * Gets the titolo.
+	 * Gets the title.
 	 *
-	 * @return the titolo
+	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
-
+	
 	/**
-	 * Sets the titolo.
+	 * Sets the title.
 	 *
-	 * @param title the new titolo
+	 * @param title the new title
 	 */
 	public void setTitle(String title) {
 		this.title = title;

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The Class ExcelUtils.
- *  
+ * 
  */
 @SuppressWarnings("unchecked")
 @Component
@@ -38,18 +38,16 @@ public class ExcelUtils implements ApplicationContextAware {
 
 	/** The Constant ANNOTATIONS. */
 //	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
-	
+
 	/** The Constant ANNOTATIONS. */
 	public static final String ANNOTATIONS = "annotations";
-	
+
 	/** The Constant ANNOTATION_DATA. */
 	public static final String ANNOTATION_DATA = "annotationData";
-	
-	
-	
+
 	/** The application context. */
 	private static ApplicationContext applicationContext;
-	
+
 	/** The Constant AUTO_SIZE_HEIGHT. */
 	public final static short AUTO_SIZE_HEIGHT = -1;
 
@@ -62,9 +60,11 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the annotation
 	 * @throws Exception the exception
 	 */
-	public static <T extends Annotation> T getAnnotation(Class<?> classExcel, Class<T> classAnnotation) throws Exception {
+	public static <T extends Annotation> T getAnnotation(Class<?> classExcel, Class<T> classAnnotation)
+			throws Exception {
 		if (!classExcel.isAnnotationPresent(classAnnotation))
-			throw new Exception("Annotation " + classAnnotation.getSimpleName() + " is not presented on " + classExcel.getSimpleName());
+			throw new Exception("Annotation " + classAnnotation.getSimpleName() + " is not presented on "
+					+ classExcel.getSimpleName());
 		else
 			return classExcel.getAnnotation(classAnnotation);
 	}
@@ -80,7 +80,8 @@ public class ExcelUtils implements ApplicationContextAware {
 	 */
 	public static <T extends Annotation> T getAnnotation(Field field, Class<T> classAnnotation) throws Exception {
 		if (!field.isAnnotationPresent(classAnnotation))
-			throw new Exception("Annotation " + classAnnotation.getSimpleName() + " is not presented on " + field.getName());
+			throw new Exception(
+					"Annotation " + classAnnotation.getSimpleName() + " is not presented on " + field.getName());
 		else
 			return field.getAnnotation(classAnnotation);
 	}
@@ -111,38 +112,47 @@ public class ExcelUtils implements ApplicationContextAware {
 					try {
 						classEntity.getMethod(setMethod, classField).invoke(entity, value);
 					} catch (Exception e) {
-						Annotation fieldAnnotation=null;
-						if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().getName().startsWith(BLD_GENERATOR)) {
-								fieldAnnotation = (Annotation) value;
-								value = reflectionAnnotation(classField.newInstance(), fieldAnnotation);
-								classEntity.getMethod(setMethod, classField).invoke(entity, value);
-						}else if(Annotation.class.isAssignableFrom(value.getClass()) && field.getType().isArray() && field.getType().getComponentType().getName().startsWith(BLD_GENERATOR)){
+						Annotation fieldAnnotation = null;
+						if (Annotation.class.isAssignableFrom(value.getClass())
+								&& field.getType().getName().startsWith(BLD_GENERATOR)) {
 							fieldAnnotation = (Annotation) value;
-							value = reflectionAnnotation(field.getType().getComponentType().newInstance(), fieldAnnotation);
-							Object[] array=(Object[]) Array.newInstance(field.getType().getComponentType(), 1);
+							value = reflectionAnnotation(classField.getDeclaredConstructor().newInstance(),
+									fieldAnnotation);
+							classEntity.getMethod(setMethod, classField).invoke(entity, value);
+						} else if (Annotation.class.isAssignableFrom(value.getClass()) && field.getType().isArray()
+								&& field.getType().getComponentType().getName().startsWith(BLD_GENERATOR)) {
+							fieldAnnotation = (Annotation) value;
+							value = reflectionAnnotation(
+									field.getType().getComponentType().getDeclaredConstructor().newInstance(),
+									fieldAnnotation);
+							Object[] array = (Object[]) Array.newInstance(field.getType().getComponentType(), 1);
 							Array.set(array, 0, value);
-							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] {array});
-							
-						}else if(value.getClass().isArray() && Annotation.class.isAssignableFrom(((Object[])value)[0].getClass())) {
-							Object[] list=(Object[]) Array.newInstance(field.getType().getComponentType(), ((Annotation[])value).length);
-							for(int i=0;i<((Annotation[])value).length;i++) {
-								fieldAnnotation=((Annotation[])value)[i];
-								Object object = reflectionAnnotation(field.getType().getComponentType().newInstance(), fieldAnnotation);
-								list[i]=object;
+							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] { array });
+
+						} else if (value.getClass().isArray()
+								&& Annotation.class.isAssignableFrom(((Object[]) value)[0].getClass())) {
+							Object[] list = (Object[]) Array.newInstance(field.getType().getComponentType(),
+									((Annotation[]) value).length);
+							for (int i = 0; i < ((Annotation[]) value).length; i++) {
+								fieldAnnotation = ((Annotation[]) value)[i];
+								Object object = reflectionAnnotation(field.getType().getComponentType().getDeclaredConstructor().newInstance(),
+										fieldAnnotation);
+								list[i] = object;
 							}
-							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] {list});
+							classEntity.getMethod(setMethod, classField).invoke(entity, new Object[] { list });
 						}
 					}
 
 				} catch (Exception e) {
-				//	logger.debug("The field " + nameField + " does not exist in annotation " + classAnnotation.getSimpleName());
+					// logger.debug("The field " + nameField + " does not exist in annotation " +
+					// classAnnotation.getSimpleName());
 				}
 			}
 		}
 
 		return entity;
 	}
-	
+
 	/**
 	 * Adds the annotation.
 	 *
@@ -151,13 +161,15 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @param annotation      the annotation
 	 * @throws Exception the exception
 	 */
-	public static void addAnnotation(Class<?>classe,Class<? extends Annotation>classAnnotation,Annotation annotation) throws Exception {
+	public static void addAnnotation(Class<?> classe, Class<? extends Annotation> classAnnotation,
+			Annotation annotation) throws Exception {
 		Field annotationFieldData = Class.class.getDeclaredField(ANNOTATION_DATA);
 		annotationFieldData.setAccessible(true);
 		Object annotationData = annotationFieldData.get(classe);
 		Field annotationsField = annotationData.getClass().getDeclaredField(ANNOTATIONS);
 		annotationsField.setAccessible(true);
-		Map<Class<? extends Annotation>, Annotation> annotations = (Map<Class<? extends Annotation>, Annotation>) annotationsField.get(annotationData);
+		Map<Class<? extends Annotation>, Annotation> annotations = (Map<Class<? extends Annotation>, Annotation>) annotationsField
+				.get(annotationData);
 		annotations.put(classAnnotation, annotation);
 	}
 
@@ -168,9 +180,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext ac) throws BeansException {
-		applicationContext=ac;
+		applicationContext = ac;
 	}
-	
+
 	/**
 	 * Gets the application context.
 	 *
@@ -179,8 +191,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	public static ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}
-	
-	
+
 	/**
 	 * Gets the name parameter.
 	 *
@@ -188,10 +199,10 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the name parameter
 	 */
 	public static String getNameParameter(String parameter) {
-		parameter=WordUtils.capitalize(parameter.replace("_", " ")).replace(" ", "");
-		return (parameter.charAt(0)+"").toLowerCase()+parameter.substring(1);
+		parameter = WordUtils.capitalize(parameter.replace("_", " ")).replace(" ", "");
+		return (parameter.charAt(0) + "").toLowerCase() + parameter.substring(1);
 	}
-	
+
 	/**
 	 * Write to file.
 	 *
@@ -200,7 +211,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @param typeFile the type file
 	 * @param dati     the dati
 	 */
-	public static void writeToFile(String pathFile,String fileName, String typeFile, byte[] dati) {
+	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] dati) {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(pathFile + fileName + typeFile);
@@ -211,7 +222,7 @@ public class ExcelUtils implements ApplicationContextAware {
 		}
 
 	}
-	
+
 	/**
 	 * Calcolo coordinate function.
 	 *
@@ -219,9 +230,12 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @param column the column
 	 * @return the string
 	 */
-	public static String calcoloCoordinateFunction(int row, int column) {
+	public static String calcoloCoordinateFunction(int row, int column, boolean dollar) {
 		int mod = 0;
 		int div = column;
+		String addDollar = "";
+		if (dollar)
+			addDollar = "$";
 		String coordinata = "";
 		do {
 			mod = div % 26;
@@ -229,11 +243,10 @@ public class ExcelUtils implements ApplicationContextAware {
 			div = (div / 26) - 1;
 			coordinata = Character.toString((char) mod) + coordinata;
 		} while (div >= 0);
-		coordinata = coordinata + row;
+		coordinata = addDollar + coordinata + addDollar + row;
 
 		return coordinata;
 	}
-
 
 	/**
 	 * Gets the key column.
@@ -247,16 +260,14 @@ public class ExcelUtils implements ApplicationContextAware {
 			key = sheet.getSheetName() + "." + key;
 		return key;
 	}
-	
-	
-	
+
 	/**
 	 * Gets the list field.
 	 *
 	 * @param classComponentExcel the class component excel
 	 * @return the list field
 	 */
-	public static Set<Field>getListField(Class<?> classComponentExcel){
+	public static Set<Field> getListField(Class<?> classComponentExcel) {
 		Set<Field> listField = new HashSet<>();
 		Class<?> classApp = classComponentExcel;
 		do {
@@ -265,16 +276,15 @@ public class ExcelUtils implements ApplicationContextAware {
 		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
 		return listField;
 	}
-	
-	public static Map<String,Field>getMapField(Class<?> classComponentExcel){
-		Set<Field> listField =getListField(classComponentExcel);
+
+	public static Map<String, Field> getMapField(Class<?> classComponentExcel) {
+		Set<Field> listField = getListField(classComponentExcel);
 		Map<String, Field> mapField = new HashMap<>();
 		for (Field field : listField)
 			mapField.put(field.getName(), field);
 		return mapField;
 	}
-	
-	
+
 	/**
 	 * Width column.
 	 *
@@ -282,9 +292,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the short
 	 */
 	public static short widthColumn(int widthColumn) {
-		return (short)(widthColumn*1036);
+		return (short) (widthColumn * 1036);
 	}
-	
+
 	/**
 	 * Hight row.
 	 *
@@ -292,28 +302,27 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the short
 	 */
 	public static short rowHeight(int rowHeight) {
-		if(rowHeight!=AUTO_SIZE_HEIGHT)
-			rowHeight=rowHeight*568;
-		return (short)rowHeight;
+		if (rowHeight != AUTO_SIZE_HEIGHT)
+			rowHeight = rowHeight * 568;
+		return (short) rowHeight;
 	}
-	
+
 	/**
 	 * Gets the t class.
 	 *
 	 * @return the t class
 	 */
-	public static <T>Class<T> getTClass(Object entity) {
+	public static <T> Class<T> getTClass(Object entity) {
 		return getTClass(entity, 0);
 	}
 
-	
 	/**
 	 * Gets the t class.
 	 *
 	 * @return the t class
 	 */
-	public static <T>Class<T> getTClass(Object entity,int i) {
-		ParameterizedType parameterizedType =null;
+	public static <T> Class<T> getTClass(Object entity, int i) {
+		ParameterizedType parameterizedType = null;
 		try {
 			parameterizedType = (ParameterizedType) entity.getClass().getGenericSuperclass();
 		} catch (Exception e) {
