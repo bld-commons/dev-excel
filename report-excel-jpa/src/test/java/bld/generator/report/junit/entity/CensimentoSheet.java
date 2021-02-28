@@ -20,8 +20,8 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 		+ "order by n.des_nazione,c.anno")
 
 @ExcelCharts(
-		excelCharts = { @ExcelChart(fieldName = "${desNazione}", function = "${numNasciteRowStart}:${numNasciteRowEnd}", sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=false),
-		@ExcelChart(fieldName = "${desNazione}", function = "${numDecessiRowStart}:${numDecessiRowEnd}", sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=false)}
+		excelCharts = { @ExcelChart(fieldName = "${desNazione}", function = "${numNasciteRowStart}:${numNasciteRowEnd}", sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=true),
+		@ExcelChart(fieldName = "${desNazione}", function = "${numDecessiRowStart}:${numDecessiRowEnd}", sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=true)}
 		)
 public class CensimentoSheet extends QuerySheetData<CensimentoRow> {
 

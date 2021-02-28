@@ -1017,12 +1017,12 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			leftAxis.setCrosses(excelChart.crosses());
 			leftAxis.setCrossBetween(excelChart.crossBetween());
 		}
-		xAxis=sheet.getSheetName()+"!"+xAxis;
+		xAxis="'"+sheet.getSheetName().replace("'", "''")+"'!"+xAxis;
 		logger.debug("-----------------xAxis: " + xAxis);
 		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(sheet, CellRangeAddress.valueOf(xAxis));
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), bottomAxis, leftAxis);
 		XDDFChartData.Series series = null;
-		seriesChart=sheet.getSheetName()+"!"+seriesChart;
+		seriesChart="'"+sheet.getSheetName().replace("'", "''")+"'!"+seriesChart;
 		logger.debug("------------seriesChart: " + seriesChart);
 		series = chartData.addSeries(xs, XDDFDataSourcesFactory.fromNumericCellRange(sheet, CellRangeAddress.valueOf(seriesChart)));
 		series.setTitle(title, null);
