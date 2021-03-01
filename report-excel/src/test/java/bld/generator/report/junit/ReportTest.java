@@ -375,7 +375,7 @@ public class ReportTest {
 						+ RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),
 				RowStartEndType.ROW_HEADER.getParameter("anno1") + ":"
 						+ RowStartEndType.ROW_HEADER.getParameter("anno3"),
-				false, null,new PresetColor[] {PresetColor.BLUE,PresetColor.RED,PresetColor.ORANGE},PresetColor.BLACK,PresetColor.GRAY,AxisCrosses.AUTO_ZERO,AxisCrossBetween.BETWEEN);
+				true, null,new PresetColor[] {PresetColor.BLUE,PresetColor.RED,PresetColor.ORANGE},PresetColor.BLACK,PresetColor.GRAY,AxisCrosses.AUTO_ZERO,AxisCrossBetween.BETWEEN);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
 		excelChartImpl = new ExcelChartImpl("titolo", ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM,
