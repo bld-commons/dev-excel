@@ -25,6 +25,7 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
  * <br>
  * This annotation is composed by:<br>
  * <ul>
+ * <li>id - is the chart grouping identifier</li>
  * <li>FieldName - chart identifier</li>
  * <li>Function - is the chart function</li>
  * <li>ChartTypes - to set the chart type</li>
@@ -44,6 +45,11 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 public @interface ExcelChart {
 
 	
+	/**
+	 * Id.
+	 *
+	 * @return the string
+	 */
 	public String id();
 	
 	/**
