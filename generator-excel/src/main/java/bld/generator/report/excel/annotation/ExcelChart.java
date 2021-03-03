@@ -43,6 +43,9 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 @Target({})
 public @interface ExcelChart {
 
+	
+	public String id();
+	
 	/**
 	 * Title.
 	 *

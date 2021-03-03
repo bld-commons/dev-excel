@@ -16,11 +16,13 @@ import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
 import bld.generator.report.excel.annotation.ExcelChart;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelChartImpl.
  */
 public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
+
+	/** The id. */
+	private String id;
 
 	/** The field name. */
 	private String fieldName;
@@ -69,13 +71,11 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 
 	/** The cross between. */
 	private AxisCrossBetween crossBetween;
-	
-	
-	
 
 	/**
 	 * Instantiates a new excel chart impl.
 	 *
+	 * @param id the id
 	 * @param fieldName the field name
 	 * @param chartTypes the chart types
 	 * @param sizeRow the size row
@@ -93,11 +93,12 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 	 * @param crosses the crosses
 	 * @param crossBetween the cross between
 	 */
-	public ExcelChartImpl(String fieldName, ChartTypes chartTypes, int sizeRow, int sizeColumn,
+	public ExcelChartImpl(String id,String fieldName, ChartTypes chartTypes, int sizeRow, int sizeColumn,
 			LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String function,
 			String xAxis, boolean group, String title, PresetColor[] lineColor, PresetColor axisLineColor,
 			PresetColor gridLineColor, AxisCrosses crosses, AxisCrossBetween crossBetween) {
 		super();
+		this.id=id;
 		this.fieldName = fieldName;
 		this.chartTypes = chartTypes;
 		this.sizeRow = sizeRow;
@@ -114,6 +115,24 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 		this.gridLineColor = gridLineColor;
 		this.crosses = crosses;
 		this.crossBetween = crossBetween;
+	}
+
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * Sets the id.
+	 *
+	 * @param id the new id
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**
@@ -501,5 +520,4 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 		return true;
 	}
 
-	
 }

@@ -1185,6 +1185,8 @@ public class SuperGenerateExcelImpl {
 
 		anchor.setCol1(cell.getColumnIndex());
 		anchor.setRow1(cell.getRowIndex());
+		anchor.setCol2(cell.getColumnIndex()+1);
+		anchor.setRow2(cell.getRowIndex()+1);
 		anchor.setAnchorType(excelImage.anchorType());
 
 		Picture pict = drawing.createPicture(anchor, pictureureIdx);
