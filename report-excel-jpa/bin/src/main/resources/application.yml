@@ -1,5 +1,7 @@
 bld:
   commons:
+    check:
+      annotation: true
     resource:
       path:
         xls: /excel/Copertina.xls
@@ -27,15 +29,13 @@ autore-libri-row:
 
 logging:
   level:
-    root: WARN
     org:
-      springframework:
-        web: DEBUG
-      hibernate: ERROR
+      springframework: INFO
 
 
 
-
+server:
+  port: 8081
     
     
     

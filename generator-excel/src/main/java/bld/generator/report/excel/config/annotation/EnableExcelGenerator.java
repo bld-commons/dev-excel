@@ -9,21 +9,15 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.AliasFor;
 
-import bld.generator.report.excel.config.EnableExcelGeneratorConfig;
+import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 
 @Configuration
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
-@Import(EnableExcelGeneratorConfig.class)
+@Import(EnableExcelGeneratorConfiguration.class)
 public @interface EnableExcelGenerator {
 
-	@AliasFor(attribute = "basePackages")
-	public String[] value() default "bld.generator";
-
-	@AliasFor(attribute = "value")
-	public String[] basePackages() default "bld.generator";
 
 }

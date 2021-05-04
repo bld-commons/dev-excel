@@ -161,8 +161,6 @@ public class SuperGenerateExcelImpl {
 
 	/** The list drop down. */
 	protected List<DropDownCell> listDropDown = new ArrayList<>();
-	
-	
 
 	/** The value props. */
 	@Autowired
@@ -422,8 +420,8 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void mergeRowAndRemoveMap(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn,FormulaEvaluator formulaEvaluator) throws Exception {
-		mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn,formulaEvaluator);
+	protected void mergeRowAndRemoveMap(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn, FormulaEvaluator formulaEvaluator) throws Exception {
+		mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn, formulaEvaluator);
 		mapMergeRow.remove(numColumn);
 	}
 
@@ -438,11 +436,11 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn,FormulaEvaluator formulaEvaluator) throws Exception {
+	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn, FormulaEvaluator formulaEvaluator) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
 		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn);
 		mergeRow.setRowEnd(indexRow - 1);
-		runMergeCell(workbook, sheet, mergeRow,formulaEvaluator);
+		runMergeCell(workbook, sheet, mergeRow, formulaEvaluator);
 	}
 
 	/**
@@ -454,8 +452,8 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void runMergeCell(Workbook workbook, Sheet sheet, MergeCell mergeCell,FormulaEvaluator formulaEvaluator) throws Exception {
-		setCellValueExcel(workbook, sheet, mergeCell,formulaEvaluator);
+	protected void runMergeCell(Workbook workbook, Sheet sheet, MergeCell mergeCell, FormulaEvaluator formulaEvaluator) throws Exception {
+		setCellValueExcel(workbook, sheet, mergeCell, formulaEvaluator);
 		if (mergeCell.getRowStart() < mergeCell.getRowEnd() || mergeCell.getColumnFrom() < mergeCell.getColumnTo())
 			sheet.addMergedRegion(new CellRangeAddress(mergeCell.getRowStart(), mergeCell.getRowEnd(), mergeCell.getColumnFrom(), mergeCell.getColumnTo()));
 	}
@@ -497,7 +495,7 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void setCellSummary(ExcelSheetLayout excelSheetLayout, Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow,FormulaEvaluator formulaEvaluator) throws Exception {
+	protected void setCellSummary(ExcelSheetLayout excelSheetLayout, Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
 		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
 		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;
@@ -520,7 +518,7 @@ public class SuperGenerateExcelImpl {
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
 		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column);
-		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex(),formulaEvaluator);
+		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex(), formulaEvaluator);
 		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
 
 	}
@@ -537,11 +535,11 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void setCellValueExcel(Workbook workbook, Sheet sheet, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow,FormulaEvaluator formulaEvaluator) throws Exception {
+	protected void setCellValueExcel(Workbook workbook, Sheet sheet, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 
 		if (sheetHeader.getExcelFunction() != null) {
 			try {
-				setCellFormulaAndEvaluateCell(cell, cellStyle, sheetHeader, indexRow, sheet,formulaEvaluator);
+				setCellFormulaAndEvaluateCell(cell, cellStyle, sheetHeader, indexRow, sheet, formulaEvaluator);
 			} catch (Exception e) {
 				FunctionCell functionCell = new FunctionCell();
 				functionCell.setCell(cell);
@@ -565,7 +563,7 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void setCellFormulaAndEvaluateCell(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet,FormulaEvaluator formulaEvaluator) throws Exception {
+	protected void setCellFormulaAndEvaluateCell(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet, FormulaEvaluator formulaEvaluator) throws Exception {
 		setCellFormula(cell, cellStyle, sheetHeader, indexRow, sheet);
 		formulaEvaluator.evaluateFormulaCell(cell);
 	}
@@ -593,24 +591,23 @@ public class SuperGenerateExcelImpl {
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_START);
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
-		
+
 		logger.debug("Function: " + function);
 		cell.setCellFormula(function);
 	}
 
-	
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param dollar the dollar
+	 * @param dollar          the dollar
 	 * @return the string
 	 * @throws Exception the exception
 	 */
-	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType,boolean dollar) throws Exception {
+	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean dollar) throws Exception {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 		while (m.find()) {
@@ -632,21 +629,21 @@ public class SuperGenerateExcelImpl {
 					row = infoColumn.getLastRow();
 				if (keyParameter.contains(".")) {
 					String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(),dollar));
+					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
 				} else
-					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(),dollar));
+					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
 			}
 
 		}
 		return function;
 	}
-	
+
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
 	 * @return the string
 	 * @throws Exception the exception
@@ -654,7 +651,6 @@ public class SuperGenerateExcelImpl {
 	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
 		return buildFunction(sheet, indexRow, function, rowStartEndType, false);
 	}
-	
 
 	/**
 	 * Sets the cell value excel.
@@ -665,10 +661,10 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	private void setCellValueExcel(Workbook workbook, Sheet sheet, MergeCell mergeRow,FormulaEvaluator formulaEvaluator) throws Exception {
+	private void setCellValueExcel(Workbook workbook, Sheet sheet, MergeCell mergeRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		if (mergeRow.getSheetHeader().getExcelFunction() != null)
 			try {
-				setCellFormulaAndEvaluate(sheet, mergeRow, 0,formulaEvaluator);
+				setCellFormulaAndEvaluate(sheet, mergeRow, 0, formulaEvaluator);
 			} catch (Exception e) {
 				FunctionCell functionCell = new FunctionCell();
 				functionCell.setMergeRow(mergeRow);
@@ -689,7 +685,7 @@ public class SuperGenerateExcelImpl {
 	 * @param formulaEvaluator the formula evaluator
 	 * @throws Exception the exception
 	 */
-	protected void setCellFormulaAndEvaluate(Sheet sheet, MergeCell mergeRow, Integer indexRow,FormulaEvaluator formulaEvaluator) throws Exception {
+	protected void setCellFormulaAndEvaluate(Sheet sheet, MergeCell mergeRow, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		Cell cell = setCellFormula(sheet, mergeRow, indexRow);
 		formulaEvaluator.evaluateFormulaCell(cell);
 	}
@@ -834,7 +830,10 @@ public class SuperGenerateExcelImpl {
 		sheet.setMargin(Sheet.RightMargin, excelMarginSheet.right());
 		sheet.setMargin(Sheet.TopMargin, excelMarginSheet.top());
 		sheet.setMargin(Sheet.BottomMargin, excelMarginSheet.bottom());
-		sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
+		if (layoutSheet.scale() != (short) 100)
+			sheet.getPrintSetup().setScale(layoutSheet.scale());
+		if (layoutSheet.landscape())
+			sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
 		rowHeader.setHeight(ExcelUtils.rowHeight(layoutHeader.rowHeight()));
 		if (layoutHeader.excelHeaderCellLayout().locked())
 			sheet.protectSheet("");
@@ -1047,8 +1046,8 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
 		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());
-		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn,false);
-		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn,false);
+		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn, false);
+		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn, false);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
 		indexRow += 3;
@@ -1185,8 +1184,8 @@ public class SuperGenerateExcelImpl {
 
 		anchor.setCol1(cell.getColumnIndex());
 		anchor.setRow1(cell.getRowIndex());
-		anchor.setCol2(cell.getColumnIndex()+1);
-		anchor.setRow2(cell.getRowIndex()+1);
+		anchor.setCol2(cell.getColumnIndex() + 1);
+		anchor.setRow2(cell.getRowIndex() + 1);
 		anchor.setAnchorType(excelImage.anchorType());
 
 		Picture pict = drawing.createPicture(anchor, pictureureIdx);
@@ -1227,8 +1226,8 @@ public class SuperGenerateExcelImpl {
 		if (value instanceof String) {
 			InputStream inputStream = new FileInputStream((String) value);
 			file = IOUtils.toByteArray(inputStream);
-		}else
-			file=(byte[])value;
+		} else
+			file = (byte[]) value;
 		return file;
 	}
 

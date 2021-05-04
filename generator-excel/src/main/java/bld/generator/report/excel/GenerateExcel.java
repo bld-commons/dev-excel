@@ -39,4 +39,8 @@ public interface GenerateExcel {
 	 * @throws Exception the exception
 	 */
 	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception;
+	
+	
+	
+	public byte[] exportToPdf(byte[] reportExcel) throws Exception;
 }

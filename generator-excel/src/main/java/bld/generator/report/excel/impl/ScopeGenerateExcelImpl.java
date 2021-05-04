@@ -5,6 +5,7 @@
 */
 package bld.generator.report.excel.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -66,6 +67,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.aspose.cells.PdfSaveOptions;
+import com.aspose.cells.SaveFormat;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.DynamicChart;
@@ -1220,5 +1224,16 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		return indexRow;
 	}
+	
+	
+	public byte[] exportToPdf(byte[] reportExcel) throws Exception{
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(reportExcel);
+		com.aspose.cells.Workbook workbook=new com.aspose.cells.Workbook(inputStream);
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		PdfSaveOptions saveOptions = new PdfSaveOptions(SaveFormat.PDF);
+		workbook.save(byteArrayOutputStream, saveOptions);
+		return byteArrayOutputStream.toByteArray();
+	}
+	
 
 }

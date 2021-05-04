@@ -1,5 +1,7 @@
 bld:
   commons:
+    check:
+      annotation: true
     resource:
       path:
         xls: /excel/Copertina.xls
@@ -8,7 +10,7 @@ bld:
       format: dd/MM/yyyy
     report:
       excel:
-        titolo: A12
+        title: A12
         date: A18
 
 
@@ -27,11 +29,8 @@ autore-libri-row:
 
 logging:
   level:
-    root: WARN
     org:
-      springframework:
-        web: DEBUG
-      hibernate: ERROR
+      springframework: INFO
 
 
 
@@ -39,7 +38,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/excel_db
     username: ${EXCEL_USER_DB}
-    password: ${EXCEL_PASSWORD_DB}
+    password: Pa$$word87!
   jpa:
     show-sql: true
     properties:
