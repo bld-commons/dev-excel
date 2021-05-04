@@ -57,7 +57,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -155,7 +154,7 @@ public class ReportTest {
 				"Libri d'autore"));
 		indexSheet.setListRowSheet(listIndice);
 		listBaseSheet.add(indexSheet);
-		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/home/francesco/Downloads/contratto-rtg-adsl-voce.pdf");
+		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/contratto-rtg-adsl-voce.pdf");
 		excelAttachment.setAttachmentType(AttachmentType.PDF);
 		excelAttachment.setFileName("test");
 		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori",

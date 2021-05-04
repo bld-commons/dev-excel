@@ -13,19 +13,15 @@ import org.apache.commons.logging.LogFactory;
 import org.reflections.Reflections;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import bld.generator.report.excel.GenerateExcel;
-import bld.generator.report.excel.ScopeGenerateExcel;
 import bld.generator.report.excel.annotation.impl.ExcelAnnotationImpl;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
-import bld.generator.report.excel.impl.GenerateExcelImpl;
-import bld.generator.report.excel.impl.ScopeGenerateExcelImpl;
 import bld.generator.report.utils.ExcelUtils;
-import bld.generator.report.utils.ValueProps;
-import bld.generator.report.utils.ValuePropsImpl;
 
 @Configuration
+@ComponentScan(basePackages = "bld.generator")
 public class EnableExcelGeneratorConfiguration {
 	private static final String BLD_COMMONS_CHECK_ANNOTATION = "bld.commons.check.annotation";
 
@@ -35,37 +31,6 @@ public class EnableExcelGeneratorConfiguration {
 	/** The Constant logger. */
 	private final static Log logger = LogFactory.getLog(EnableExcelGeneratorConfiguration.class);
 
-
-	/**
-	 * Gets the generate excel.
-	 *
-	 * @return the generate excel
-	 */
-	@Bean({"generateExcel","generateExcelImpl"})
-	public GenerateExcel getGenerateExcel() {
-		return new GenerateExcelImpl();
-	}
-
-	/**
-	 * Gets the value props.
-	 *
-	 * @return the value props
-	 */
-	@Bean({"valueProps","valuePropsImpl"})
-	public ValueProps getValueProps() {
-		return new ValuePropsImpl();
-	}
-	
-	
-	@Bean({"scopeGenerateExcel","scopeGenerateExcelImpl"})
-	public ScopeGenerateExcel getScopeGenerateExcel() {
-		return new ScopeGenerateExcelImpl();
-	}
-	
-	@Bean
-	public ExcelUtils excelUtils() {
-		return new ExcelUtils();
-	}
 
 	/**
 	 * Check entity annotation.<br>
