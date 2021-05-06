@@ -6,7 +6,6 @@
 package bld.report.junit;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +13,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,7 +23,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xddf.usermodel.PresetColor;
 import org.apache.poi.xddf.usermodel.XDDFColor;
 import org.apache.poi.xddf.usermodel.XDDFLineProperties;
@@ -56,7 +53,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -86,9 +82,6 @@ import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
 import bld.generator.report.excel.impl.GenerateExcelImpl;
 import bld.generator.report.utils.ExcelUtils;
-import bld.read.report.excel.ReadExcel;
-import bld.read.report.excel.constant.ExcelType;
-import bld.read.report.excel.domain.ExcelRead;
 import bld.report.generator.junit.entity.AutoreLibriRow;
 import bld.report.generator.junit.entity.AutoreLibriRowDynamic;
 import bld.report.generator.junit.entity.AutoreLibriSheet;
@@ -102,10 +95,6 @@ import bld.report.generator.junit.entity.IndexRow;
 import bld.report.generator.junit.entity.IndexSheet;
 import bld.report.generator.junit.entity.TotaleAutoreLibriRow;
 import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
-import bld.report.read.junit.entity.ReadAutoreLibriRow;
-import bld.report.read.junit.entity.ReadAutoreLibriSheet;
-import bld.report.read.junit.entity.ReadGenereRow;
-import bld.report.read.junit.entity.ReadGenereSheet;
 
 /**
  * The Class ReportTest.
@@ -113,8 +102,8 @@ import bld.report.read.junit.entity.ReadGenereSheet;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ConfigurationProperties
-@ComponentScan(basePackages = {"bld.report","bld.read" })
 @EnableExcelGenerator
+
 @EnableTransactionManagement
 public class ReportTest {
 
@@ -125,9 +114,7 @@ public class ReportTest {
 	@Autowired
 	private GenerateExcelImpl generateExcel;
 
-	/** The read excel. */
-	@Autowired
-	private ReadExcel readExcel;
+	
 
 	/**
 	 * Sets the up.
@@ -212,9 +199,9 @@ public class ReportTest {
 
 			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
 			
-			byte[] byteReportPdf = this.generateExcel.exportToPdf(byteReport);
-			
-			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".pdf", byteReportPdf);
+//			byte[] byteReportPdf = this.generateExcel.exportToPdf(byteReport);
+//			
+//			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".pdf", byteReportPdf);
 			
 			
 		} catch (Exception e) {
@@ -414,35 +401,7 @@ public class ReportTest {
 
 	}
 
-	/**
-	 * Test read.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void testRead() throws Exception {
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
-		byte[] report = IOUtils.toByteArray(inputStream);
-		ExcelRead excelRead = new ExcelRead();
-		excelRead.setReportExcel(report);
-		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
-//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
-		excelRead = this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet;
-		try {
-			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
-			for (ReadAutoreLibriRow row : sheet.getListRowSheet())
-				System.out.println(row.toString());
 
-			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
-			for (ReadGenereRow row : readGenereSheet.getListRowSheet())
-				System.out.println(row.toString());
-		} catch (Exception e) {
-			ExceptionUtils.getStackTrace(e);
-		}
-
-	}
 
 	@Test
 	public void testRadar() throws Exception {

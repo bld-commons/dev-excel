@@ -14,9 +14,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-cells</artifactId>
-			<version>18.4</version>
+			<groupId>com.fathzer</groupId>
+			<artifactId>javaluator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>

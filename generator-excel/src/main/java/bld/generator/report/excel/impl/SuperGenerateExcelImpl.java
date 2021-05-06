@@ -129,6 +129,8 @@ public class SuperGenerateExcelImpl {
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
 
+	// private static final String PATTERN_QUAD = "\\[.*?\\]";
+
 	/** The Constant $. */
 	private static final String $ = "${";
 
@@ -592,7 +594,7 @@ public class SuperGenerateExcelImpl {
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
 
-		logger.debug("Function: " + function);
+		logger.info("Function: " + function);
 		cell.setCellFormula(function);
 	}
 
@@ -610,23 +612,78 @@ public class SuperGenerateExcelImpl {
 	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean dollar) throws Exception {
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
+
 		while (m.find()) {
 			String parameter = m.group();
-			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue() + "}", "").trim();
+			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").trim();
+			String exprenssionIndex = "";
+			if (keyParameter.contains("[")) {
+				exprenssionIndex = keyParameter.substring(keyParameter.indexOf("[") + 1, keyParameter.length() - 1);
+				keyParameter = keyParameter.substring(0, keyParameter.indexOf("["));
+
+			}
 			if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(sheet, keyParameter))) {
 				InfoColumn infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
 				Integer row = indexRow;
-
+				Integer start = null;
+				Integer end = null;
+				Double evalute = null;
 				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
 					row = infoColumn.getRowHeader();
 					if (row == null)
 						throw new Exception("The header not exist");
-				} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty())
+				} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty() && infoColumn.getMapRowMergeRow().containsKey(indexRow)) {
 					row = infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
-				else if (row == null && RowStartEndType.ROW_START.equals(rowStartEndType))
-					row = infoColumn.getFirstRow();
-				else if (row == null && RowStartEndType.ROW_END.equals(rowStartEndType))
-					row = infoColumn.getLastRow();
+					if (StringUtils.isNotEmpty(exprenssionIndex)) {
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
+						if (evalute != null)
+							row = evalute.intValue();
+						else
+							continue;
+					}
+				} else if (row == null && RowStartEndType.ROW_START.equals(rowStartEndType)) {
+					if (StringUtils.isNotEmpty(exprenssionIndex)) {
+						start = infoColumn.getFirstRow();
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "start", start);
+						if (evalute != null)
+							row = evalute.intValue();
+						else
+							continue;
+					} else
+						row = infoColumn.getFirstRow();
+
+				} else if (row == null && RowStartEndType.ROW_END.equals(rowStartEndType)) {
+					if (StringUtils.isNotEmpty(exprenssionIndex)) {
+						end = infoColumn.getLastRow();
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "end", end);
+						if (evalute != null)
+							row = evalute.intValue();
+						else
+							continue;
+					} else
+						row = infoColumn.getLastRow();
+				} else if (row != null && StringUtils.isNotEmpty(exprenssionIndex)) {
+					switch (rowStartEndType) {
+					case ROW_EMPTY:
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
+						break;
+					case ROW_END:
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "end", row);
+						break;
+					case ROW_HEADER:
+						break;
+					case ROW_START:
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "start", row);
+						break;
+					default:
+						break;
+
+					}
+					if (evalute != null)
+						row = evalute.intValue();
+					else
+						continue;
+				}
 				if (keyParameter.contains(".")) {
 					String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
 					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
@@ -716,7 +773,7 @@ public class SuperGenerateExcelImpl {
 		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
 		function = buildFunction(sheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
 		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
-		logger.debug("Function: " + function);
+		logger.info("Function: " + function);
 		cell.setCellFormula(function);
 		return cell;
 	}

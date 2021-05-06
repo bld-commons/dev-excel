@@ -170,7 +170,9 @@ public class InfoColumn extends InfoField {
 		this.lastRow = lastRow;
 	}
 
-
+	public void incrementLastRow(Integer increment) {
+		this.lastRow=this.lastRow+increment;
+	}
 
 
 	/**

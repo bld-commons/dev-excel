@@ -21,7 +21,7 @@ import bld.generator.report.excel.config.annotation.IgnoreCheck;
 import bld.generator.report.utils.ExcelUtils;
 
 @Configuration
-@ComponentScan(basePackages = "bld.generator")
+@ComponentScan("bld.generator")
 public class EnableExcelGeneratorConfiguration {
 	private static final String BLD_COMMONS_CHECK_ANNOTATION = "bld.commons.check.annotation";
 

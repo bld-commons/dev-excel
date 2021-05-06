@@ -12,6 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 /**
  * The Interface ExcelFunctionMergeRow.<br>
@@ -44,7 +45,7 @@ public @interface ExcelFunctionMergeRow {
 	 *
 	 * @return the excel cell layout
 	 */
-	public ExcelCellLayout excelCellsLayout() default @ExcelCellLayout;
+	public ExcelCellLayout excelCellsLayout() default @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2);
 
 	/**
 	 * Excel column.

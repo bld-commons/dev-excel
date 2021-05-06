@@ -41,7 +41,5 @@ public interface ScopeGenerateExcel {
 	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception;
 	
 	
-	
-	public byte[] exportToPdf(byte[] reportExcel) throws Exception;
 
 }

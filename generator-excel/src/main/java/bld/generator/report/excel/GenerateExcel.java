@@ -42,5 +42,5 @@ public interface GenerateExcel {
 	
 	
 	
-	public byte[] exportToPdf(byte[] reportExcel) throws Exception;
+	
 }

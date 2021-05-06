@@ -17,9 +17,9 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
+import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
 
 /**

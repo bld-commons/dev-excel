@@ -148,10 +148,5 @@ public class GenerateExcelImpl implements GenerateExcel {
 		return scopeGenerateExcelImpl.createBigDataFileXlsx(report);
 	}
 
-	@Override
-	public byte[] exportToPdf(byte[] reportExcel) throws Exception {
-		ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
-		return scopeGenerateExcelImpl.exportToPdf(reportExcel);
-	}
 
 }
