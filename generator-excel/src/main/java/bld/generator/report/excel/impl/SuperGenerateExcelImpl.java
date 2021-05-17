@@ -628,7 +628,7 @@ public class SuperGenerateExcelImpl {
 				Integer start = null;
 				Integer end = null;
 				Double evalute = null;
-				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
+				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType) && StringUtils.isEmpty(exprenssionIndex)) {
 					row = infoColumn.getRowHeader();
 					if (row == null)
 						throw new Exception("The header not exist");
@@ -684,11 +684,14 @@ public class SuperGenerateExcelImpl {
 					else
 						continue;
 				}
-				if (keyParameter.contains(".")) {
-					String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-					function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-				} else
-					function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+				try {
+					if (keyParameter.contains(".")) {
+						String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
+						function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+					} else
+						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+				} catch (Exception e) {
+				}
 			}
 
 		}

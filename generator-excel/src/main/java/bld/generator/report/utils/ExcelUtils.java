@@ -349,7 +349,7 @@ public class ExcelUtils implements ApplicationContextAware {
 			variables.set(param, value.doubleValue());
 			evaluate=eval.evaluate(exprenssionIndex, variables);
 		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
+			//logger.error(ExceptionUtils.getStackTrace(e));
 		}
 		return evaluate;
 	}

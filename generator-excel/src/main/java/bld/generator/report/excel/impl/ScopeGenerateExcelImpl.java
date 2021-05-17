@@ -120,6 +120,10 @@ import bld.generator.report.utils.ExcelUtils;
 @Scope("prototype")
 public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements ScopeGenerateExcel {
 
+	private static final String END = "[end]";
+
+	private static final String START = "[start]";
+
 	/** The number empty rows. */
 	@Value("${bld.commons.number.empty.rows:2}")
 	private int numberEmptyRows;
@@ -802,8 +806,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				if (excelChart.group()) {
 					if (!ids.contains(excelChart.id())) {
 						ids.add(excelChart.id());
-						boolean isVertical = xAxis.contains(RowStartEndType.ROW_START.getValue())
-								|| xAxis.contains(RowStartEndType.ROW_END.getValue());
+						boolean isVertical = xAxis.contains(RowStartEndType.ROW_START.getValue()) || xAxis.replace(" ", "").contains(START)
+								|| xAxis.contains(RowStartEndType.ROW_END.getValue()) || xAxis.contains(END);
 						xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true);
 						xAxis = setInfoColumnByMapCharts(xAxis, sheet, null);
 						indexRow = generateChart((XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart,
@@ -814,7 +818,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						if (keyChart.endsWith(excelChart.function())) {
 							InfoChart infoChart = mapChart.get(excelChart.id()).get(keyChart);
 							String seriesChart = "";
-							if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue())) {
+							if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue()) || infoChart.getFunction().replace(" ", "").contains(START)) {
 								seriesChart = setInfoColumnByMapCharts(infoChart.getFunction(), sheet, infoChart);
 								xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
@@ -884,11 +888,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	}
 
 	private String setInfoColumnByMapCharts(String function, Sheet sheet, InfoChart infoChart) throws Exception {
-		Pattern p = Pattern.compile("\\$\\{.*?RowStart}");
+		Pattern p = Pattern.compile("\\$\\{.*?(RowStart|\\[start\\])}");
 		Matcher m = p.matcher(function);
 		if (m.find()) {
 			String fieldName = ExcelUtils.getKeyColumn(sheet,
-					m.group().replace(RowStartEndType.ROW_START.getValue() + "}", "").replace("${", ""));
+					m.group().replace(RowStartEndType.ROW_START.getValue() , "").replace("${", "").replace(START, "").replace("}", ""));
 			if (infoChart != null) {
 				mapFieldColumn.get(fieldName).setFirstRow(infoChart.getFirstRow());
 				mapFieldColumn.get(fieldName).setLastRow(infoChart.getLastRow());
@@ -1073,7 +1077,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (String keyChart : mapChart.keySet()) {
 			InfoChart infoChart = mapChart.get(keyChart);
 			String seriesChart = "";
-			if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue())) {
+			if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue())||infoChart.getFunction().replace(" ", "").contains(START)) {
 				seriesChart = setInfoColumnByMapCharts(infoChart.getFunction(), sheet, infoChart);
 				// xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
