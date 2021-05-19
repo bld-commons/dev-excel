@@ -113,20 +113,22 @@ public class ReportTestJpa {
 		listBaseSheet.add(salarySheet);
 		
 		
-		List<Utente> listUtente=this.utenteService.findAllUtentes();
-		BigDataUtenteSheet bigDataUtenteSheet=new BigDataUtenteSheet("Big Data");
-		int maxRandom=listUtente.size()-1;
-		for(int i=0;i<500000;i++) {
-			BigDataUtenteRow utenteRow=new BigDataUtenteRow();
-			PropertyUtils.copyProperties(utenteRow, listUtente.get((int)(Math.random()*maxRandom)));
-			bigDataUtenteSheet.getListRowSheet().add(utenteRow);
-		}
-		listBaseSheet.add(bigDataUtenteSheet);
+//		List<Utente> listUtente=this.utenteService.findAllUtentes();
+//		BigDataUtenteSheet bigDataUtenteSheet=new BigDataUtenteSheet("Big Data");
+//		int maxRandom=listUtente.size()-1;
+//		for(int i=0;i<500000;i++) {
+//			BigDataUtenteRow utenteRow=new BigDataUtenteRow();
+//			PropertyUtils.copyProperties(utenteRow, listUtente.get((int)(Math.random()*maxRandom)));
+//			bigDataUtenteSheet.getListRowSheet().add(utenteRow);
+//		}
+//		listBaseSheet.add(bigDataUtenteSheet);
 		
 		try {
 			ReportExcel excel = new ReportExcel("Mondadori JPA", listBaseSheet);
 
-			byte[] byteReport = this.generateExcel.createBigDataFileXlsx(excel);
+			//byte[] byteReport = this.generateExcel.createBigDataFileXlsx(excel);
+			
+			byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
 			ExcelUtils.writeToFile(PATH_FILE,excel.getTitle(), ".xlsx", byteReport);
 		} catch (Exception e) {

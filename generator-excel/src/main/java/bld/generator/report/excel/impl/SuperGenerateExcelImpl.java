@@ -628,10 +628,17 @@ public class SuperGenerateExcelImpl {
 				Integer start = null;
 				Integer end = null;
 				Double evalute = null;
-				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType) && StringUtils.isEmpty(exprenssionIndex)) {
+				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
 					row = infoColumn.getRowHeader();
 					if (row == null)
 						throw new Exception("The header not exist");
+					if (StringUtils.isNotEmpty(exprenssionIndex)) {
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
+						if (evalute != null)
+							row = evalute.intValue();
+						else
+							continue;
+					}
 				} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty() && infoColumn.getMapRowMergeRow().containsKey(indexRow)) {
 					row = infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
 					if (StringUtils.isNotEmpty(exprenssionIndex)) {
@@ -671,6 +678,8 @@ public class SuperGenerateExcelImpl {
 						evalute = ExcelUtils.evaluate(exprenssionIndex, "end", row);
 						break;
 					case ROW_HEADER:
+						row = infoColumn.getRowHeader();
+						evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
 						break;
 					case ROW_START:
 						evalute = ExcelUtils.evaluate(exprenssionIndex, "start", row);
@@ -1281,13 +1290,15 @@ public class SuperGenerateExcelImpl {
 	 */
 	private byte[] manageExcelAttachment(Object value) throws Exception, FileNotFoundException, IOException {
 		byte[] file = null;
-		if (!(value instanceof String || value instanceof byte[]))
-			throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
-		if (value instanceof String) {
-			InputStream inputStream = new FileInputStream((String) value);
-			file = IOUtils.toByteArray(inputStream);
-		} else
-			file = (byte[]) value;
+		if(value!=null) {
+			if (!(value instanceof String || value instanceof byte[]))
+				throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
+			if (value instanceof String) {
+				InputStream inputStream = new FileInputStream((String) value);
+				file = IOUtils.toByteArray(inputStream);
+			} else
+				file = (byte[]) value;
+		}
 		return file;
 	}
 
