@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.WordUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.BeansException;
@@ -38,8 +35,6 @@ import com.fathzer.soft.javaluator.StaticVariableSet;
 @SuppressWarnings("unchecked")
 @Component
 public class ExcelUtils implements ApplicationContextAware {
-	
-	private final static Log logger = LogFactory.getLog(ExcelUtils.class);
 
 	/** The Constant BLD_GENERATOR. */
 	private static final String BLD_GENERATOR = "bld.generator";
