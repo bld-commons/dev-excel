@@ -12,6 +12,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+
+
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelSheetLayout.<br>
  * ExcelSheetLayout is used to configure the sheet layout through:
@@ -77,6 +80,11 @@ public @interface ExcelSheetLayout {
 	public int order()default -1;
 	
 	
+	/**
+	 * Area border.
+	 *
+	 * @return the excel area border[]
+	 */
 	public ExcelAreaBorder[] areaBorder() default {};
 	
 	/**
@@ -87,7 +95,26 @@ public @interface ExcelSheetLayout {
 	public boolean showHeader() default true;
 	
 	
+	/**
+	 * Group row.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean groupRow() default false;
 	
+	/**
+	 * Group column.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean groupColumn() default false;
+	
+	
+	/**
+	 * Paper size.
+	 *
+	 * @return the paper size
+	 */
+	public short scale() default 100;
+	
 }

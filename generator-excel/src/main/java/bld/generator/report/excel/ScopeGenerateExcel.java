@@ -39,5 +39,7 @@ public interface ScopeGenerateExcel {
 	 * @throws Exception the exception
 	 */
 	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception;
+	
+	
 
 }

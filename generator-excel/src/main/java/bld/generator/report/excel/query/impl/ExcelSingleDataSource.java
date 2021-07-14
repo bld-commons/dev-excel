@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
-import bld.generator.report.excel.config.ExcelGeneratorConfiguration;
+import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 import bld.generator.report.excel.query.ExcelDataSource;
 
 /**
@@ -23,7 +23,7 @@ import bld.generator.report.excel.query.ExcelDataSource;
  * </ul>
  */
 @Component
-@ConditionalOnExpression(value = "!${"+ExcelDataSource.MULTIPLE_DATASOURCE+":false} and !T(org.springframework.util.StringUtils).isEmpty('${"+ExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
+@ConditionalOnExpression(value = "!${"+ExcelDataSource.MULTIPLE_DATASOURCE+":false} and !T(org.springframework.util.StringUtils).isEmpty('${"+EnableExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
 public class ExcelSingleDataSource extends ExcelBaseDataSource implements ExcelDataSource {
 
 	/** The entity manager. */

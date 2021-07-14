@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelQuery;
-import bld.generator.report.excel.config.ExcelGeneratorConfiguration;
+import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 import bld.generator.report.excel.query.ExcelDataSource;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.utils.ExcelUtils;
@@ -47,7 +47,7 @@ import bld.generator.report.utils.ExcelUtils;
  */
 @Transactional
 @Component
-@ConditionalOnExpression(value = "${"+ExcelDataSource.MULTIPLE_DATASOURCE+":false} or !T(org.springframework.util.StringUtils).isEmpty('${"+ExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
+@ConditionalOnExpression(value = "${"+ExcelDataSource.MULTIPLE_DATASOURCE+":false} or !T(org.springframework.util.StringUtils).isEmpty('${"+EnableExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
 public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 
 	/** The excel data source. */

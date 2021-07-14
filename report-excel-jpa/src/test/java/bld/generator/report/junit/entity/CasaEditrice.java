@@ -72,7 +72,7 @@ public class CasaEditrice extends SheetSummary {
 	
 	@ExcelColumn(columnName = "Genere", indexColumn = 5.5)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
-	@ExcelDropDown(areaRange = "${Genere.genereRowStart}:${Genere.genereRowEnd}",suppressDropDownArrow = true)
+	@ExcelDropDown(areaRange = "${Genere.genere[start]}:${Genere.genere[end]}",suppressDropDownArrow = true)
 	private String desGenere;
 	
 

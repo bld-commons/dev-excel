@@ -27,6 +27,7 @@ public enum RowStartEndType {
 	
 	/** The value. */
 	private String value;
+	
 
 
 	/**

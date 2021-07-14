@@ -25,6 +25,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.fathzer.soft.javaluator.DoubleEvaluator;
+import com.fathzer.soft.javaluator.StaticVariableSet;
+
 /**
  * The Class ExcelUtils.
  * 
@@ -330,6 +333,20 @@ public class ExcelUtils implements ApplicationContextAware {
 		}
 		Class<T> classT = (Class<T>) parameterizedType.getActualTypeArguments()[i];
 		return classT;
+	}
+	
+	
+	public static Double evaluate(String exprenssionIndex,String param,Number value) {
+		Double evaluate=null;
+		try {
+			DoubleEvaluator eval = new DoubleEvaluator();
+			StaticVariableSet<Double> variables = new StaticVariableSet<Double>();
+			variables.set(param, value.doubleValue());
+			evaluate=eval.evaluate(exprenssionIndex, variables);
+		} catch (Exception e) {
+			//logger.error(ExceptionUtils.getStackTrace(e));
+		}
+		return evaluate;
 	}
 
 }

@@ -11,11 +11,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -130,9 +128,8 @@ public class ReadExcelImpl implements ReadExcel {
 				T rowSheetRead = genericClassType.getDeclaredConstructor().newInstance();
 				Row row = worksheet.getRow(indexRow);
 				if (row != null) {
-					Set<Field> listField = new HashSet<>(Arrays.asList(rowSheetRead.getClass().getDeclaredFields()));
-					listField.addAll(Arrays.asList(rowSheetRead.getClass().getSuperclass().getDeclaredFields()));
-					boolean rowEmpty = true;
+					Set<Field> listField = ExcelUtils.getListField(rowSheetRead.getClass());
+					boolean rowEmpty=true;
 					for (Field field : listField) {
 						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 							ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
