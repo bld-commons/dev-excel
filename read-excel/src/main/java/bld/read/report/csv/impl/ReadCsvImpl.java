@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.read.report.csv.impl;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -33,23 +36,57 @@ import bld.read.report.csv.domain.CsvRead;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.domain.RowSheetRead;
 
+/**
+ * The Class ReadCsvImpl.
+ */
 @Component
+@SuppressWarnings("resource")
 public class ReadCsvImpl implements ReadCsv {
 
+	/** The Constant logger. */
 	private static final Log logger = LogFactory.getLog(ReadCsvImpl.class);
 
+	/**
+	 * Convert csv to entity.
+	 *
+	 * @param <T>     the generic type
+	 * @param csvRead the csv read
+	 * @param classT  the class T
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	@Override
 	public <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, Class<T> classT) throws Exception {
 		InputStream inputStream = new ByteArrayInputStream(csvRead.getCsv());
 		return this.convertCsvToEntity(csvRead, inputStream, classT);
 	}
 
+	/**
+	 * Convert csv to entity.
+	 *
+	 * @param <T>      the generic type
+	 * @param csvRead  the csv read
+	 * @param pathFile the path file
+	 * @param classT   the class T
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	@Override
 	public <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile, Class<T> classT) throws Exception {
 		InputStream inputStream = new FileInputStream(pathFile);
 		return this.convertCsvToEntity(csvRead, inputStream, classT);
 	}
 
+	/**
+	 * Convert csv to entity.
+	 *
+	 * @param <T>         the generic type
+	 * @param csvRead     the csv read
+	 * @param inputStream the input stream
+	 * @param classT      the class T
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	private <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, InputStream inputStream, Class<T> classT) throws Exception {
 
 		Reader csvReader = new InputStreamReader(inputStream);
@@ -109,6 +146,14 @@ public class ReadCsvImpl implements ReadCsv {
 		return csvRead.getListRowSheet();
 	}
 
+	/**
+	 * Gets the date.
+	 *
+	 * @param date  the date
+	 * @param field the field
+	 * @return the date
+	 * @throws Exception the exception
+	 */
 	private Date getDate(String date, Field field) throws Exception {
 		CsvDateFormat csvDateFormat = ExcelUtils.getAnnotation(field, CsvDateFormat.class);
 		String format = csvDateFormat.value().getValue().replace("/", csvDateFormat.separator());

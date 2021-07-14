@@ -11,16 +11,22 @@ import bld.read.report.excel.domain.RowSheetRead;
 
 /**
  * The Class CsvRead.
+ *
+ * @param <T> the generic type
  */
 public class CsvRead<T extends RowSheetRead> {
 
 	/** The csv. */
 	private byte[] csv;
 	
+	/** The list row sheet. */
 	private List<T>listRowSheet;
 	
 	
 
+	/**
+	 * Instantiates a new csv read.
+	 */
 	public CsvRead() {
 		super();
 		this.listRowSheet=new ArrayList<>();
@@ -44,6 +50,11 @@ public class CsvRead<T extends RowSheetRead> {
 		this.csv = csv;
 	}
 
+	/**
+	 * Gets the list row sheet.
+	 *
+	 * @return the list row sheet
+	 */
 	public List<T> getListRowSheet() {
 		return listRowSheet;
 	}
