@@ -52,20 +52,10 @@ public @interface ExcelChart {
 	 */
 	public String id();
 	
-	/**
-	 * Title.
-	 *
-	 * @return the string
-	 */
-	public String fieldName();
-
-	/**
-	 * Function.
-	 *
-	 * @return the string
-	 */
-	public String function();
-
+	public ExcelChartCategory[] excelChartCategories();
+	
+	public String xAxis();
+	
 	/**
 	 * Chart types.
 	 *
@@ -108,12 +98,6 @@ public @interface ExcelChart {
 	 */
 	public AxisPosition valueAxis() default AxisPosition.LEFT;
 	
-	/**
-	 * X axis.
-	 *
-	 * @return the string
-	 */
-	public String xAxis();
 	
 	/**
 	 * Group.
@@ -165,5 +149,13 @@ public @interface ExcelChart {
 	 * @return the axis cross between
 	 */
 	public AxisCrossBetween crossBetween() default AxisCrossBetween.BETWEEN;
+	
 
+	
+	public boolean showLeaderLines() default true;
+	
+	public ExcelChartDataLabel excelChartDataLabel() default @ExcelChartDataLabel;
+	
+	public boolean smooth() default true;
+	
 }
