@@ -60,8 +60,11 @@ import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.ExcelHyperlink;
 import bld.generator.report.excel.MergeSheet;
+import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
+import bld.generator.report.excel.annotation.impl.ExcelChartCategoryImpl;
+import bld.generator.report.excel.annotation.impl.ExcelChartDataLabelImpl;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
@@ -103,7 +106,6 @@ import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
 @SpringBootTest
 @ConfigurationProperties
 @EnableExcelGenerator
-
 @EnableTransactionManagement
 public class ReportTest {
 
@@ -113,8 +115,6 @@ public class ReportTest {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcelImpl generateExcel;
-
-	
 
 	/**
 	 * Sets the up.
@@ -135,18 +135,14 @@ public class ReportTest {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		IndexSheet indexSheet = new IndexSheet("Indice");
 		List<IndexRow> listIndice = new ArrayList<>();
-		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"),
-				"Casa Editrice"));
-		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"),
-				"Libri d'autore"));
+		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"), "Casa Editrice"));
+		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
 		indexSheet.setListRowSheet(listIndice);
 		listBaseSheet.add(indexSheet);
 		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/contratto-rtg-adsl-voce.pdf");
 		excelAttachment.setAttachmentType(AttachmentType.PDF);
 		excelAttachment.setFileName("test");
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori",
-				new GregorianCalendar(1955, Calendar.MAY, 10), "Roma",
-				"/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
 		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet = new DateSheet("Test Date");
@@ -157,19 +153,12 @@ public class ReportTest {
 		listBaseSheet.add(dateSheet);
 
 		List<AutoreLibriRow> list = new ArrayList<>();
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14),
-				"Profondo Rosso questo è un test per verificare che la cella va a capo automaticamente", "Thriller", 1,
-				25.5, 3.0));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto",
-				"Thriller", 1, 30.0, 2.2));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Sto Cazzo",
-				"Comico", 1, 12.24, 1.2));
-		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Amore",
-				"Sentimentale", 1, 35.455, 4.7));
-		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Rosso",
-				"Sentimentale", 2, 42.0, 6.94));
-		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Arancio",
-				"Sentimentale", 2, 23.24, 3.0));
+		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Profondo Rosso questo è un test per verificare che la cella va a capo automaticamente", "Thriller", 1, 25.5, 3.0));
+		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Complotto", "Thriller", 1, 30.0, 2.2));
+		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Sto Cazzo", "Comico", 1, 12.24, 1.2));
+		list.add(new AutoreLibriRow("Mario", "Rossi", new GregorianCalendar(1960, Calendar.JULY, 14), "Amore", "Sentimentale", 1, 35.455, 4.7));
+		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Rosso", "Sentimentale", 2, 42.0, 6.94));
+		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Arancio", "Sentimentale", 2, 23.24, 3.0));
 
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore", "Test label");
 		autoreLibriSheet.setListRowSheet(list);
@@ -198,12 +187,11 @@ public class ReportTest {
 			byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
 			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
-			
+
 //			byte[] byteReportPdf = this.generateExcel.exportToPdf(byteReport);
 //			
 //			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".pdf", byteReportPdf);
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -221,9 +209,7 @@ public class ReportTest {
 		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/test.docx");
 		excelAttachment.setAttachmentType(AttachmentType.DOCX);
 		excelAttachment.setFileName("test");
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori",
-				new GregorianCalendar(1955, Calendar.MAY, 10), "Roma",
-				"/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
 		listBaseSheet.add(casaEditrice);
 
 		List<Calendar> listDate = new ArrayList<>();
@@ -231,18 +217,14 @@ public class ReportTest {
 		listDate.add(new GregorianCalendar(1945, Calendar.JULY, 14));
 
 		List<AutoreLibriRowDynamic> list = new ArrayList<>();
-		AutoreLibriRowDynamic autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi",
-				new CalendarDropDown(null, listDate), "Profondo Rosso",
-				"Thriller", 1, 25.5, 3.0);
+		AutoreLibriRowDynamic autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(null, listDate), "Profondo Rosso", "Thriller", 1, 25.5, 3.0);
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);
 
 		list.add(autoreLibriRow);
 
-		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi",
-				new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Complotto", "Thriller",
-				1, 30.0, 2.2);
+		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Complotto", "Thriller", 1, 30.0, 2.2);
 
 		autoreLibriRow.getMapValue().put("anno1", 34);
 		autoreLibriRow.getMapValue().put("ignoreColumn", "Test");
@@ -250,76 +232,55 @@ public class ReportTest {
 		autoreLibriRow.getMapValue().put("anno3", 44);
 		list.add(autoreLibriRow);
 
-		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi",
-				new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Sto Cazzo", "Comico",
-				1, 12.24, 1.2);
+		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Sto Cazzo", "Comico", 1, 12.24, 1.2);
 		autoreLibriRow.getMapValue().put("anno1", 10.4);
 		autoreLibriRow.getMapValue().put("anno2", 15.12);
 		autoreLibriRow.getMapValue().put("anno3", 12.4);
 		list.add(autoreLibriRow);
 
-		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi",
-				new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Amore", "Sentimentale",
-				1, 35.455, 4.7);
+		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Amore", "Sentimentale", 1, 35.455, 4.7);
 		autoreLibriRow.getMapValue().put("anno1", 30.4);
 		autoreLibriRow.getMapValue().put("anno2", 35.12);
 		autoreLibriRow.getMapValue().put("anno3", 32.4);
 		list.add(autoreLibriRow);
 
-		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi",
-				new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Rosso", "Sentimentale",
-				2, 42.0, 6.94);
+		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi", new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Rosso", "Sentimentale", 2, 42.0, 6.94);
 
 		autoreLibriRow.getMapValue().put("anno1", 40.4);
 		autoreLibriRow.getMapValue().put("anno2", 45.12);
 		autoreLibriRow.getMapValue().put("anno3", 42.4);
 		list.add(autoreLibriRow);
 
-		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi",
-				new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Arancio",
-				"Sentimentale", 2, 23.24, 3.0);
+		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi", new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Arancio", "Sentimentale", 2, 23.24, 3.0);
 		autoreLibriRow.getMapValue().put("anno1", 20.4);
 		autoreLibriRow.getMapValue().put("anno2", 25.12);
 		autoreLibriRow.getMapValue().put("anno3", 22.4);
 		list.add(autoreLibriRow);
 
-		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore",
-				"Test di etichetta su report");
-		ExcelCellLayoutImpl excelCellLayoutImplSubTotal = (ExcelCellLayoutImpl) ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE
-				.clone();
+		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore", "Test di etichetta su report");
+		ExcelCellLayoutImpl excelCellLayoutImplSubTotal = (ExcelCellLayoutImpl) ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.clone();
 
 		ExcelFontImpl fontSubtotal = new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true);
 		excelCellLayoutImplSubTotal.setFont(fontSubtotal.getAnnotation());
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21, false));
-		extraColumnAnnotation.setExcelSubtotal(
-				new ExcelSubtotalImpl(excelCellLayoutImplSubTotal.getAnnotation(), true, DataConsolidateFunction.SUM));
-		extraColumnAnnotation
-				.setExcelFunction(new ExcelFunctionImpl("sum(" + RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":"
-						+ RowStartEndType.ROW_EMPTY.getParameter("anno3") + ")", "totalePrezzoAnni", false));
+		extraColumnAnnotation.setExcelSubtotal(new ExcelSubtotalImpl(excelCellLayoutImplSubTotal.getAnnotation(), true, DataConsolidateFunction.SUM));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(" + RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3") + ")", "totalePrezzoAnni", false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(
-				"sum(" + RowStartEndType.ROW_START.getParameter("totalePrezzoAnni") + ":"
-						+ RowStartEndType.ROW_END.getParameter("totalePrezzoAnni") + ")",
-				"totalePrezzoAnniAutore", false));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(" + RowStartEndType.ROW_START.getParameter("totalePrezzoAnni") + ":" + RowStartEndType.ROW_END.getParameter("totalePrezzoAnni") + ")", "totalePrezzoAnniAutore", false));
 		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
 		extraColumnAnnotation.setExcelColumnWidth(new ExcelColumnWidthImpl(10));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelHeaderCellLayout(new ExcelHeaderCellLayoutImpl(true, VerticalAlignment.CENTER,
-				(new ExcelRgbColorImpl(255, 0, 0)).getAnnotation(), (new ExcelRgbColorImpl(0, 0, 0)).getAnnotation(),
-				HorizontalAlignment.CENTER,
-				(new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true)).getAnnotation(),
-				FillPatternType.SOLID_FOREGROUND,
-				(new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN))
-						.getAnnotation(),
-				0, false));
+		extraColumnAnnotation.setExcelHeaderCellLayout(new ExcelHeaderCellLayoutImpl(true, VerticalAlignment.CENTER, (new ExcelRgbColorImpl(255, 0, 0)).getAnnotation(), (new ExcelRgbColorImpl(0, 0, 0)).getAnnotation(), HorizontalAlignment.CENTER,
+				(new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true)).getAnnotation(), FillPatternType.SOLID_FOREGROUND,
+				(new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN)).getAnnotation(), 0, false));
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20, false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
@@ -342,42 +303,35 @@ public class ReportTest {
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2015", null, 30, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno1")
-				+ "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno1"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno1") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno1"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno1", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2016", null, 30.1, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno2")
-				+ "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno2"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno2") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno2"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno2", extraColumnAnnotation);
 
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2017", null, 30.2, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3")
-				+ "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
+		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno3", extraColumnAnnotation);
 
 		autoreLibriSheet.setListRowSheet(list);
-
+		ExcelChartDataLabelImpl excelChartDataLabel = new ExcelChartDataLabelImpl();
+		ExcelChartCategoryImpl excelChartCategoryImpl=new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("percAnno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
 		ExcelChartImpl excelChartImpl = null;
-		excelChartImpl = new ExcelChartImpl("percAnno","titolo", ChartTypes.LINE, 10, 3, LegendPosition.BOTTOM, AxisPosition.BOTTOM,
-				AxisPosition.LEFT,
-				RowStartEndType.ROW_EMPTY.getParameter("percAnno1") + ":"
-						+ RowStartEndType.ROW_EMPTY.getParameter("percAnno3"),
-				RowStartEndType.ROW_HEADER.getParameter("anno1") + ":"
-						+ RowStartEndType.ROW_HEADER.getParameter("anno3"),
-				true, null,new PresetColor[] {PresetColor.BLUE,PresetColor.RED,PresetColor.ORANGE},PresetColor.BLACK,PresetColor.GRAY,AxisCrosses.AUTO_ZERO,AxisCrossBetween.BETWEEN);
+		excelChartImpl = new ExcelChartImpl("percAnno",new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()},  ChartTypes.LINE, 15, 20, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
+				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), true, null,
+				new PresetColor[] { PresetColor.BLUE, PresetColor.RED, PresetColor.ORANGE }, PresetColor.BLACK, PresetColor.GRAY, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
-		excelChartImpl = new ExcelChartImpl("prezzAnno","titolo", ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM,
-				AxisPosition.BOTTOM, AxisPosition.LEFT,
-				RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3"),
-				RowStartEndType.ROW_HEADER.getParameter("anno1") + ":"
-						+ RowStartEndType.ROW_HEADER.getParameter("anno3"),
-				false, "Titoli",new PresetColor[] {PresetColor.RED},PresetColor.GREEN,PresetColor.BLUE,AxisCrosses.AUTO_ZERO,AxisCrossBetween.BETWEEN);
+		
+		excelChartCategoryImpl=new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3"));
+		excelChartImpl = new ExcelChartImpl("prezzAnno", new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()}, ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
+				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), false, "Titoli",
+				new PresetColor[] { PresetColor.RED }, PresetColor.GREEN, PresetColor.BLUE, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet = new TotaleAutoreLibriSheet();
@@ -399,7 +353,6 @@ public class ReportTest {
 		ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
 
 	}
-
 
 
 
@@ -439,33 +392,27 @@ public class ReportTest {
 			XDDFCategoryAxis bottomAxis = chart.createCategoryAxis(AxisPosition.BOTTOM);
 			// major gridlines of category axis are the cobweb radial lines
 			XDDFShapeProperties bottomAxisGridLinesShapeProperties = bottomAxis.getOrAddMajorGridProperties();
-			bottomAxisGridLinesShapeProperties.setLineProperties(
-					new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.BLACK))));
+			bottomAxisGridLinesShapeProperties.setLineProperties(new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.BLACK))));
 
 			XDDFValueAxis leftAxis = chart.createValueAxis(AxisPosition.LEFT);
 			leftAxis.setMajorUnit(1d);
 			// left axis line color is needed for radial lines
 			XDDFShapeProperties leftAxisShapeProperties = leftAxis.getOrAddShapeProperties();
-			leftAxisShapeProperties.setLineProperties(
-					new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.BLACK))));
+			leftAxisShapeProperties.setLineProperties(new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.BLACK))));
 			// major gridlines of values axis are the cobweb ring lines
 			XDDFShapeProperties leftAxisGridLinesShapeProperties = leftAxis.getOrAddMajorGridProperties();
-			leftAxisGridLinesShapeProperties.setLineProperties(
-					new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.GRAY))));
+			leftAxisGridLinesShapeProperties.setLineProperties(new XDDFLineProperties(new XDDFSolidFillProperties(XDDFColor.from(PresetColor.GRAY))));
 
 			leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
 			leftAxis.setCrossBetween(AxisCrossBetween.BETWEEN);
 
-			XDDFDataSource<String> cat = XDDFDataSourcesFactory.fromStringCellRange(sheet,
-					new CellRangeAddress(1, categories.length, 0, 0));
-			XDDFNumericalDataSource<Double> val = XDDFDataSourcesFactory.fromNumericCellRange(sheet,
-					new CellRangeAddress(1, categories.length, 1, 1));
+			XDDFDataSource<String> cat = XDDFDataSourcesFactory.fromStringCellRange(sheet, new CellRangeAddress(1, categories.length, 0, 0));
+			XDDFNumericalDataSource<Double> val = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, categories.length, 1, 1));
 
 			XDDFChartData data = chart.createData(ChartTypes.RADAR, bottomAxis, leftAxis);
 			data.setVaryColors(false);
 			XDDFChartData.Series series = data.addSeries(cat, val);
-			series.setTitle(sheet.getRow(0).getCell(1).getStringCellValue(),
-					new CellReference(sheet.getRow(0).getCell(1)));
+			series.setTitle(sheet.getRow(0).getCell(1).getStringCellValue(), new CellReference(sheet.getRow(0).getCell(1)));
 			solidLineSeries(series, PresetColor.BLUE);
 			chart.plot(data);
 
@@ -487,7 +434,7 @@ public class ReportTest {
 	}
 
 	private static void solidLineSeries(XDDFChartData.Series series, PresetColor color) {
-		XDDFSolidFillProperties fill=new XDDFSolidFillProperties(XDDFColor.from(color));
+		XDDFSolidFillProperties fill = new XDDFSolidFillProperties(XDDFColor.from(color));
 		XDDFLineProperties line = new XDDFLineProperties();
 		line.setFillProperties(fill);
 		XDDFShapeProperties properties = series.getShapeProperties();

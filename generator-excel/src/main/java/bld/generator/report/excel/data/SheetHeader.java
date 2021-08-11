@@ -353,6 +353,7 @@ public class SheetHeader implements Cloneable {
 	 * Sets the excel date.
 	 *
 	 * @param excelDate the new excel date
+	 * @throws Exception the exception
 	 */
 	public void setExcelDate(ExcelDate excelDate) throws Exception {
 		this.excelDate = excelDate;
@@ -372,6 +373,7 @@ public class SheetHeader implements Cloneable {
 	 * Sets the excel cell layout.
 	 *
 	 * @param excelCellLayout the new excel cell layout
+	 * @throws Exception the exception
 	 */
 	public void setExcelCellLayout(ExcelCellLayout excelCellLayout) throws Exception {
 		this.excelCellLayout = excelCellLayout;

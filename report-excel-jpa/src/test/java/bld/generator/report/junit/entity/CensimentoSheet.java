@@ -4,6 +4,7 @@ import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.annotation.ExcelChart;
+import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.ExcelCharts;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
@@ -20,8 +21,8 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 		+ "order by n.des_nazione,c.anno")
 
 @ExcelCharts(
-		excelCharts = { @ExcelChart(id="nasicte",fieldName = "${desNazione}", function = "${numNascite[start]}:${numNascite[end]}", sizeColumn = 10, sizeRow = 20, xAxis = "${anno[start]}:${anno[end]}",group=true),
-		@ExcelChart(id="decessi",fieldName = "${desNazione}", function = "${numDecessiRowStart}:${numDecessiRowEnd}", sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=false)}
+		excelCharts = { @ExcelChart(id="nasicte",excelChartCategories = @ExcelChartCategory(fieldName = "${desNazione}", function = "${numNascite[start]}:${numNascite[end]}"), sizeColumn = 10, sizeRow = 20, xAxis = "${anno[start]}:${anno[end]}",group=true),
+		@ExcelChart(id="decessi",excelChartCategories = @ExcelChartCategory(fieldName = "${desNazione}", function = "${numDecessiRowStart}:${numDecessiRowEnd}"), sizeColumn = 10, sizeRow = 20, xAxis = "${annoRowStart}:${annoRowEnd}",group=false)}
 		)
 public class CensimentoSheet extends QuerySheetData<CensimentoRow> {
 

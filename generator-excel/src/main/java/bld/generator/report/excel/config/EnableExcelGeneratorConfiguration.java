@@ -1,3 +1,9 @@
+/**
+ * @author Francesco Baldi
+ * @email francesco.baldi1987@gmail.com
+ * @class bld.generator.report.excel.config.EnableExcelGeneratorConfiguration.java
+ * 
+ */
 package bld.generator.report.excel.config;
 
 import java.lang.annotation.Annotation;
@@ -20,9 +26,14 @@ import bld.generator.report.excel.annotation.impl.ExcelAnnotationImpl;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
 import bld.generator.report.utils.ExcelUtils;
 
+/**
+ * The Class EnableExcelGeneratorConfiguration.
+ */
 @Configuration
 @ComponentScan("bld.generator")
 public class EnableExcelGeneratorConfiguration {
+	
+	/** The Constant BLD_COMMONS_CHECK_ANNOTATION. */
 	private static final String BLD_COMMONS_CHECK_ANNOTATION = "bld.commons.check.annotation";
 
 	/** The Constant SPRING_DATASOURCE_URL. */

@@ -61,7 +61,7 @@ postgres:
   datasource:
     jdbc-url: jdbc:postgresql://localhost:5432/excel_db
     username: ${EXCEL_USER_DB}
-    password: ${EXCEL_PASSWORD_DB}
+    password: Pa$$word87!
     driver-class-name:  org.postgresql.Driver
   jpa:
     hibernate:

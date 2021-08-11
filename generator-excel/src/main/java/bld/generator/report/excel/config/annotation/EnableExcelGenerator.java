@@ -1,3 +1,9 @@
+/**
+ * @author Francesco Baldi
+ * @email francesco.baldi1987@gmail.com
+ * @class bld.generator.report.excel.config.annotation.EnableExcelGenerator.java
+ * 
+ */
 package bld.generator.report.excel.config.annotation;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -12,6 +18,9 @@ import org.springframework.context.annotation.Import;
 
 import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 
+/**
+ * The Interface EnableExcelGenerator.
+ */
 @Configuration
 @Documented
 @Retention(RUNTIME)

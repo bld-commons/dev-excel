@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,7 +55,7 @@ public class ReadCsvImpl implements ReadCsv {
 	 * @throws Exception the exception
 	 */
 	@Override
-	public <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, Class<T> classT) throws Exception {
+	public <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, Class<T> classT) throws Exception {
 		InputStream inputStream = new ByteArrayInputStream(csvRead.getCsv());
 		return this.convertCsvToEntity(csvRead, inputStream, classT);
 	}
@@ -72,7 +71,7 @@ public class ReadCsvImpl implements ReadCsv {
 	 * @throws Exception the exception
 	 */
 	@Override
-	public <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile, Class<T> classT) throws Exception {
+	public <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile, Class<T> classT) throws Exception {
 		InputStream inputStream = new FileInputStream(pathFile);
 		return this.convertCsvToEntity(csvRead, inputStream, classT);
 	}
@@ -87,7 +86,7 @@ public class ReadCsvImpl implements ReadCsv {
 	 * @return the list
 	 * @throws Exception the exception
 	 */
-	private <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, InputStream inputStream, Class<T> classT) throws Exception {
+	private <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, InputStream inputStream, Class<T> classT) throws Exception {
 
 		Reader csvReader = new InputStreamReader(inputStream);
 		Map<String, Field> mapField = new HashMap<>();
@@ -143,7 +142,7 @@ public class ReadCsvImpl implements ReadCsv {
 			logger.info(t.toString());
 			csvRead.getListRowSheet().add(t);
 		}
-		return csvRead.getListRowSheet();
+		return csvRead;
 	}
 
 	/**

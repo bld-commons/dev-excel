@@ -4,8 +4,6 @@
  */
 package bld.read.report.csv;
 
-import java.util.List;
-
 import bld.read.report.csv.domain.CsvRead;
 import bld.read.report.excel.domain.RowSheetRead;
 
@@ -25,7 +23,7 @@ public interface ReadCsv {
 	 * @return the list
 	 * @throws Exception the exception
 	 */
-	public abstract <T extends RowSheetRead> List<T>  convertCsvToEntity(CsvRead<T> csvRead,Class<T> classT) throws Exception;
+	public abstract <T extends RowSheetRead> CsvRead<T>  convertCsvToEntity(CsvRead<T> csvRead,Class<T> classT) throws Exception;
 
 	
 	
@@ -39,6 +37,6 @@ public interface ReadCsv {
 	 * @return the list
 	 * @throws Exception the exception
 	 */
-	public abstract <T extends RowSheetRead> List<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile,Class<T> classT) throws Exception;
+	public abstract <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile,Class<T> classT) throws Exception;
 	
 }

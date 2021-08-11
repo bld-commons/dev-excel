@@ -32,10 +32,14 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 	@IgnoreCheck
 	private final static Log logger = LogFactory.getLog(ExcelAnnotationImpl.class);
 	
+	/** The class annotation. */
 	@IgnoreCheck
 	private Class<T>classAnnotation;
 	
 
+	/**
+	 * Instantiates a new excel annotation impl.
+	 */
 	public ExcelAnnotationImpl() {
 		super();
 		this.classAnnotation=ExcelUtils.getTClass(this);
@@ -79,6 +83,11 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 	}
 
 
+	/**
+	 * Gets the class annotation.
+	 *
+	 * @return the class annotation
+	 */
 	public Class<T> getClassAnnotation() {
 		return classAnnotation;
 	}

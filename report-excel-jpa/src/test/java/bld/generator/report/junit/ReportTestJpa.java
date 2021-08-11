@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,15 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.junit.entity.AutoreLibriSheet;
-import bld.generator.report.junit.entity.BigDataUtenteRow;
-import bld.generator.report.junit.entity.BigDataUtenteSheet;
 import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.CensimentoSheet;
 import bld.generator.report.junit.entity.GenereSheet;
@@ -35,14 +32,13 @@ import bld.generator.report.junit.entity.SalarySheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
-import bld.generator.report.persistence.domain.Utente;
 import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})

@@ -23,6 +23,7 @@ import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
  */
 public class ExcelConstant {
 	
+	/** The Constant SHEET_NAME_SIZE. */
 	public final static int SHEET_NAME_SIZE=31;
 	
 	/** The Constant RGB_FOREGROUND. */

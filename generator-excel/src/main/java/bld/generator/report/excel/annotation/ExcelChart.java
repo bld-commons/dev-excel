@@ -10,6 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.xddf.usermodel.PresetColor;
 import org.apache.poi.xddf.usermodel.chart.AxisCrossBetween;
 import org.apache.poi.xddf.usermodel.chart.AxisCrosses;
@@ -53,19 +54,19 @@ public @interface ExcelChart {
 	public String id();
 	
 	/**
-	 * Title.
+	 * Excel chart categories.
 	 *
-	 * @return the string
+	 * @return the excel chart category[]
 	 */
-	public String fieldName();
-
+	public ExcelChartCategory[] excelChartCategories();
+	
 	/**
-	 * Function.
+	 * X axis.
 	 *
 	 * @return the string
 	 */
-	public String function();
-
+	public String xAxis();
+	
 	/**
 	 * Chart types.
 	 *
@@ -108,12 +109,6 @@ public @interface ExcelChart {
 	 */
 	public AxisPosition valueAxis() default AxisPosition.LEFT;
 	
-	/**
-	 * X axis.
-	 *
-	 * @return the string
-	 */
-	public String xAxis();
 	
 	/**
 	 * Group.
@@ -165,5 +160,36 @@ public @interface ExcelChart {
 	 * @return the axis cross between
 	 */
 	public AxisCrossBetween crossBetween() default AxisCrossBetween.BETWEEN;
+	
 
+	
+	/**
+	 * Show leader lines.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean showLeaderLines() default true;
+	
+	/**
+	 * Excel chart data label.
+	 *
+	 * @return the excel chart data label
+	 */
+	public ExcelChartDataLabel excelChartDataLabel() default @ExcelChartDataLabel;
+	
+	/**
+	 * Smooth.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean smooth() default true;
+	
+	/**
+	 * Spreadsheet version.
+	 *
+	 * @return the spreadsheet version
+	 */
+	public SpreadsheetVersion spreadsheetVersion() default SpreadsheetVersion.EXCEL2007;
+	
+	
 }
