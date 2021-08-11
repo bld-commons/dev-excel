@@ -324,14 +324,14 @@ public class ReportTest {
 		ExcelChartImpl excelChartImpl = null;
 		excelChartImpl = new ExcelChartImpl("percAnno",new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()},  ChartTypes.LINE, 15, 20, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
 				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), true, null,
-				new PresetColor[] { PresetColor.BLUE, PresetColor.RED, PresetColor.ORANGE }, PresetColor.BLACK, PresetColor.GRAY, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true);
+				new PresetColor[] { PresetColor.BLUE, PresetColor.RED, PresetColor.ORANGE }, PresetColor.BLACK, PresetColor.GRAY, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
 		
 		excelChartCategoryImpl=new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3"));
 		excelChartImpl = new ExcelChartImpl("prezzAnno", new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()}, ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
 				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), false, "Titoli",
-				new PresetColor[] { PresetColor.RED }, PresetColor.GREEN, PresetColor.BLUE, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true);
+				new PresetColor[] { PresetColor.RED }, PresetColor.GREEN, PresetColor.BLUE, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet = new TotaleAutoreLibriSheet();

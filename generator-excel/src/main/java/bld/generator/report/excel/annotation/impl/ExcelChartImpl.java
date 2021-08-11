@@ -6,7 +6,9 @@
 package bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
+import java.util.Objects;
 
+import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.xddf.usermodel.PresetColor;
 import org.apache.poi.xddf.usermodel.chart.AxisCrossBetween;
 import org.apache.poi.xddf.usermodel.chart.AxisCrosses;
@@ -26,6 +28,7 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 	/** The id. */
 	private String id;
 
+	/** The excel chart categories. */
 	private ExcelChartCategory[] excelChartCategories;
 
 	/** The chart types. */
@@ -72,17 +75,48 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 	/** The cross between. */
 	private AxisCrossBetween crossBetween;
 	
+	/** The show leader lines. */
 	private boolean showLeaderLines;
 
+	/** The excel chart data label. */
 	private ExcelChartDataLabel excelChartDataLabel;
 	
+	/** The smooth. */
 	private boolean smooth;
 
+	/** The spreadsheet version. */
+	private SpreadsheetVersion spreadsheetVersion;
+	
+	
 	
 
-
+	/**
+	 * Instantiates a new excel chart impl.
+	 *
+	 * @param id the id
+	 * @param excelChartCategories the excel chart categories
+	 * @param chartTypes the chart types
+	 * @param sizeRow the size row
+	 * @param sizeColumn the size column
+	 * @param legendPosition the legend position
+	 * @param categoryAxis the category axis
+	 * @param valueAxis the value axis
+	 * @param xAxis the x axis
+	 * @param group the group
+	 * @param title the title
+	 * @param lineColor the line color
+	 * @param axisLineColor the axis line color
+	 * @param gridLineColor the grid line color
+	 * @param crosses the crosses
+	 * @param crossBetween the cross between
+	 * @param showLeaderLines the show leader lines
+	 * @param excelChartDataLabel the excel chart data label
+	 * @param smooth the smooth
+	 * @param spreadsheetVersion the spreadsheet version
+	 */
 	public ExcelChartImpl(String id, ExcelChartCategory[] excelChartCategories, ChartTypes chartTypes, int sizeRow, int sizeColumn, LegendPosition legendPosition, AxisPosition categoryAxis, AxisPosition valueAxis, String xAxis, boolean group,
-			String title, PresetColor[] lineColor, PresetColor axisLineColor, PresetColor gridLineColor, AxisCrosses crosses, AxisCrossBetween crossBetween, boolean showLeaderLines, ExcelChartDataLabel excelChartDataLabel, boolean smooth) {
+			String title, PresetColor[] lineColor, PresetColor axisLineColor, PresetColor gridLineColor, AxisCrosses crosses, AxisCrossBetween crossBetween, boolean showLeaderLines, ExcelChartDataLabel excelChartDataLabel, boolean smooth,
+			SpreadsheetVersion spreadsheetVersion) {
 		super();
 		this.id = id;
 		this.excelChartCategories = excelChartCategories;
@@ -103,12 +137,41 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 		this.showLeaderLines = showLeaderLines;
 		this.excelChartDataLabel = excelChartDataLabel;
 		this.smooth = smooth;
+		this.spreadsheetVersion = spreadsheetVersion;
 	}
 
+	/**
+	 * Gets the spreadsheet version.
+	 *
+	 * @return the spreadsheet version
+	 */
+	public SpreadsheetVersion getSpreadsheetVersion() {
+		return spreadsheetVersion;
+	}
+
+	/**
+	 * Sets the spreadsheet version.
+	 *
+	 * @param spreadsheetVersion the new spreadsheet version
+	 */
+	public void setSpreadsheetVersion(SpreadsheetVersion spreadsheetVersion) {
+		this.spreadsheetVersion = spreadsheetVersion;
+	}
+
+	/**
+	 * Gets the excel chart categories.
+	 *
+	 * @return the excel chart categories
+	 */
 	public ExcelChartCategory[] getExcelChartCategories() {
 		return excelChartCategories;
 	}
 
+	/**
+	 * Sets the excel chart categories.
+	 *
+	 * @param excelChartCategories the new excel chart categories
+	 */
 	public void setExcelChartCategories(ExcelChartCategory[] excelChartCategories) {
 		this.excelChartCategories = excelChartCategories;
 	}
@@ -396,60 +459,84 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 	
 	
 
+	/**
+	 * Checks if is show leader lines.
+	 *
+	 * @return true, if is show leader lines
+	 */
 	public boolean isShowLeaderLines() {
 		return showLeaderLines;
 	}
 
+	/**
+	 * Sets the show leader lines.
+	 *
+	 * @param showLeaderLines the new show leader lines
+	 */
 	public void setShowLeaderLines(boolean showLeaderLines) {
 		this.showLeaderLines = showLeaderLines;
 	}
 
+	/**
+	 * Gets the excel chart data label.
+	 *
+	 * @return the excel chart data label
+	 */
 	public ExcelChartDataLabel getExcelChartDataLabel() {
 		return excelChartDataLabel;
 	}
 
+	/**
+	 * Sets the excel chart data label.
+	 *
+	 * @param excelChartDataLabel the new excel chart data label
+	 */
 	public void setExcelChartDataLabel(ExcelChartDataLabel excelChartDataLabel) {
 		this.excelChartDataLabel = excelChartDataLabel;
 	}
 
 
 
+	/**
+	 * Checks if is smooth.
+	 *
+	 * @return true, if is smooth
+	 */
 	public boolean isSmooth() {
 		return smooth;
 	}
 
+	/**
+	 * Sets the smooth.
+	 *
+	 * @param smooth the new smooth
+	 */
 	public void setSmooth(boolean smooth) {
 		this.smooth = smooth;
 	}
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((axisLineColor == null) ? 0 : axisLineColor.hashCode());
-		result = prime * result + ((categoryAxis == null) ? 0 : categoryAxis.hashCode());
-		result = prime * result + ((chartTypes == null) ? 0 : chartTypes.hashCode());
-		result = prime * result + ((crossBetween == null) ? 0 : crossBetween.hashCode());
-		result = prime * result + ((crosses == null) ? 0 : crosses.hashCode());
 		result = prime * result + Arrays.hashCode(excelChartCategories);
-		result = prime * result + ((excelChartDataLabel == null) ? 0 : excelChartDataLabel.hashCode());
-		result = prime * result + ((gridLineColor == null) ? 0 : gridLineColor.hashCode());
-		result = prime * result + (group ? 1231 : 1237);
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((legendPosition == null) ? 0 : legendPosition.hashCode());
 		result = prime * result + Arrays.hashCode(lineColor);
-		result = prime * result + (showLeaderLines ? 1231 : 1237);
-		result = prime * result + sizeColumn;
-		result = prime * result + sizeRow;
-		result = prime * result + (smooth ? 1231 : 1237);
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + ((valueAxis == null) ? 0 : valueAxis.hashCode());
-		result = prime * result + ((xAxis == null) ? 0 : xAxis.hashCode());
+		result = prime * result
+				+ Objects.hash(axisLineColor, categoryAxis, chartTypes, crossBetween, crosses, excelChartDataLabel, gridLineColor, group, id, legendPosition, showLeaderLines, sizeColumn, sizeRow, smooth, spreadsheetVersion, title, valueAxis, xAxis);
 		return result;
 	}
 
-
-
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -459,59 +546,13 @@ public class ExcelChartImpl extends ExcelAnnotationImpl<ExcelChart> {
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelChartImpl other = (ExcelChartImpl) obj;
-		if (axisLineColor != other.axisLineColor)
-			return false;
-		if (categoryAxis != other.categoryAxis)
-			return false;
-		if (chartTypes != other.chartTypes)
-			return false;
-		if (crossBetween != other.crossBetween)
-			return false;
-		if (crosses != other.crosses)
-			return false;
-		if (!Arrays.equals(excelChartCategories, other.excelChartCategories))
-			return false;
-		if (excelChartDataLabel == null) {
-			if (other.excelChartDataLabel != null)
-				return false;
-		} else if (!excelChartDataLabel.equals(other.excelChartDataLabel))
-			return false;
-		if (gridLineColor != other.gridLineColor)
-			return false;
-		if (group != other.group)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (legendPosition != other.legendPosition)
-			return false;
-		if (!Arrays.equals(lineColor, other.lineColor))
-			return false;
-		if (showLeaderLines != other.showLeaderLines)
-			return false;
-		if (sizeColumn != other.sizeColumn)
-			return false;
-		if (sizeRow != other.sizeRow)
-			return false;
-		if (smooth != other.smooth)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (valueAxis != other.valueAxis)
-			return false;
-		if (xAxis == null) {
-			if (other.xAxis != null)
-				return false;
-		} else if (!xAxis.equals(other.xAxis))
-			return false;
-		return true;
+		return axisLineColor == other.axisLineColor && categoryAxis == other.categoryAxis && chartTypes == other.chartTypes && crossBetween == other.crossBetween && crosses == other.crosses
+				&& Arrays.equals(excelChartCategories, other.excelChartCategories) && Objects.equals(excelChartDataLabel, other.excelChartDataLabel) && gridLineColor == other.gridLineColor && group == other.group && Objects.equals(id, other.id)
+				&& legendPosition == other.legendPosition && Arrays.equals(lineColor, other.lineColor) && showLeaderLines == other.showLeaderLines && sizeColumn == other.sizeColumn && sizeRow == other.sizeRow && smooth == other.smooth
+				&& spreadsheetVersion == other.spreadsheetVersion && Objects.equals(title, other.title) && valueAxis == other.valueAxis && Objects.equals(xAxis, other.xAxis);
 	}
 
+	
 
 
 }

@@ -39,6 +39,11 @@ public class ReportExcel {
 	
 	
 
+	/**
+	 * Instantiates a new report excel.
+	 *
+	 * @param title the title
+	 */
 	public ReportExcel(String title) {
 		super();
 		this.title = title;

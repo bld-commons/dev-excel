@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.fathzer.soft.javaluator.StaticVariableSet;
 
+import bld.generator.report.excel.exception.ExcelGeneratorException;
+
 /**
  * The Class ExcelUtils.
  * 
@@ -53,6 +55,9 @@ public class ExcelUtils implements ApplicationContextAware {
 
 	/** The Constant AUTO_SIZE_HEIGHT. */
 	public final static short AUTO_SIZE_HEIGHT = -1;
+	
+	/** The Constant ENV_SHEET_NAME. */
+	public final static String ENV_SHEET_NAME="${sheetName}";
 
 	/**
 	 * Gets the annotation.
@@ -66,7 +71,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	public static <T extends Annotation> T getAnnotation(Class<?> classExcel, Class<T> classAnnotation)
 			throws Exception {
 		if (!classExcel.isAnnotationPresent(classAnnotation))
-			throw new Exception("Annotation " + classAnnotation.getSimpleName() + " is not presented on "
+			throw new ExcelGeneratorException("Annotation " + classAnnotation.getSimpleName() + " is not presented on "
 					+ classExcel.getSimpleName());
 		else
 			return classExcel.getAnnotation(classAnnotation);
@@ -83,7 +88,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 */
 	public static <T extends Annotation> T getAnnotation(Field field, Class<T> classAnnotation) throws Exception {
 		if (!field.isAnnotationPresent(classAnnotation))
-			throw new Exception(
+			throw new ExcelGeneratorException(
 					"Annotation " + classAnnotation.getSimpleName() + " is not presented on " + field.getName());
 		else
 			return field.getAnnotation(classAnnotation);
@@ -180,6 +185,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * Sets the application context.
 	 *
 	 * @param ac the new application context
+	 * @throws BeansException the beans exception
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext ac) throws BeansException {
@@ -231,6 +237,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 *
 	 * @param row    the row
 	 * @param column the column
+	 * @param dollar the dollar
 	 * @return the string
 	 */
 	public static String calcoloCoordinateFunction(int row, int column, boolean dollar) {
@@ -280,6 +287,12 @@ public class ExcelUtils implements ApplicationContextAware {
 		return listField;
 	}
 
+	/**
+	 * Gets the map field.
+	 *
+	 * @param classComponentExcel the class component excel
+	 * @return the map field
+	 */
 	public static Map<String, Field> getMapField(Class<?> classComponentExcel) {
 		Set<Field> listField = getListField(classComponentExcel);
 		Map<String, Field> mapField = new HashMap<>();
@@ -313,6 +326,8 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Gets the t class.
 	 *
+	 * @param <T> the generic type
+	 * @param entity the entity
 	 * @return the t class
 	 */
 	public static <T> Class<T> getTClass(Object entity) {
@@ -322,6 +337,9 @@ public class ExcelUtils implements ApplicationContextAware {
 	/**
 	 * Gets the t class.
 	 *
+	 * @param <T> the generic type
+	 * @param entity the entity
+	 * @param i the i
 	 * @return the t class
 	 */
 	public static <T> Class<T> getTClass(Object entity, int i) {
@@ -336,6 +354,14 @@ public class ExcelUtils implements ApplicationContextAware {
 	}
 	
 	
+	/**
+	 * Evaluate.
+	 *
+	 * @param exprenssionIndex the exprenssion index
+	 * @param param the param
+	 * @param value the value
+	 * @return the double
+	 */
 	public static Double evaluate(String exprenssionIndex,String param,Number value) {
 		Double evaluate=null;
 		try {

@@ -113,6 +113,7 @@ import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.excel.dropdown.DropDown;
+import bld.generator.report.excel.exception.ExcelGeneratorException;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
@@ -163,6 +164,8 @@ public class SuperGenerateExcelImpl {
 
 	/** The list drop down. */
 	protected List<DropDownCell> listDropDown = new ArrayList<>();
+	
+	
 
 	/** The value props. */
 	@Autowired
@@ -351,7 +354,7 @@ public class SuperGenerateExcelImpl {
 				}
 
 				if (field.isAnnotationPresent(ExcelDropDown.class) && field.getClass().isAssignableFrom(DropDown.class))
-					throw new Exception("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
+					throw new ExcelGeneratorException("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
 				if (field.isAnnotationPresent(ExcelDropDown.class))
 					sheetHeader.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 				listSheetHeader.add(sheetHeader);
@@ -610,6 +613,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean dollar) throws Exception {
+		function=function.replace(ExcelUtils.ENV_SHEET_NAME, "\""+sheet.getSheetName()+"\"");
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 
@@ -631,7 +635,7 @@ public class SuperGenerateExcelImpl {
 				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
 					row = infoColumn.getRowHeader();
 					if (row == null)
-						throw new Exception("The header not exist");
+						throw new ExcelGeneratorException("The header not exist");
 					if (StringUtils.isNotEmpty(exprenssionIndex)) {
 						evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
 						if (evalute != null)
@@ -696,7 +700,11 @@ public class SuperGenerateExcelImpl {
 				try {
 					if (keyParameter.contains(".")) {
 						String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-						function = function.replace(parameter, "'" + sheetName.replace("'", "''") + "'!" + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+						sheetName = "'" + sheetName.replace("'", "''") + "'!";
+						if (function.contains(sheetName))
+							function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+						else
+							function = function.replace(parameter,sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
 					} else
 						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
 				} catch (Exception e) {
@@ -831,9 +839,9 @@ public class SuperGenerateExcelImpl {
 			ExcelHyperlink excelHyperlink = (ExcelHyperlink) sheetHeader.getValue();
 			CreationHelper createHelper = workbook.getCreationHelper();
 			if (excelHyperlink.getHyperlinkType() == null)
-				throw new Exception("The field hyperlinkType is null");
+				throw new ExcelGeneratorException("The field hyperlinkType is null");
 			if (StringUtils.isEmpty(excelHyperlink.getAddress()))
-				throw new Exception("The field address is null or is empty");
+				throw new ExcelGeneratorException("The field address is null or is empty");
 			Hyperlink hyperlink = createHelper.createHyperlink(excelHyperlink.getHyperlinkType());
 			String address = excelHyperlink.getAddress();
 			if (HyperlinkType.DOCUMENT.equals(excelHyperlink.getHyperlinkType()))
@@ -973,10 +981,10 @@ public class SuperGenerateExcelImpl {
 				if (!extraColumnAnnotation.getExcelColumn().ignore()) {
 					SheetHeader sheetHeader = new SheetHeader();
 					if (extraColumnAnnotation.getExcelCellLayout() == null)
-						throw new Exception("Annotation " + ExcelCellLayout.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
+						throw new ExcelGeneratorException("Annotation " + ExcelCellLayout.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
 					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
 					if (extraColumnAnnotation.getExcelColumn() == null)
-						throw new Exception("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
+						throw new ExcelGeneratorException("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
 					PropertyUtils.copyProperties(sheetHeader, extraColumnAnnotation);
 					sheetHeader.setKeyMap(keyMap);
 					listSheetHeader.add(sheetHeader);
@@ -1096,7 +1104,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void setColumnWidth(Sheet sheet, Integer indexColumn, Integer width) throws Exception {
 		if (!this.mapWidthColumn.containsKey(indexColumn) || this.mapWidthColumn.get(indexColumn) < width) {
-			this.mapWidthColumn.put(new Integer(indexColumn), new Integer(width));
+			this.mapWidthColumn.put(Integer.valueOf(indexColumn), Integer.valueOf(width));
 			sheet.setColumnWidth(indexColumn, ExcelUtils.widthColumn(width));
 		}
 	}
@@ -1199,7 +1207,7 @@ public class SuperGenerateExcelImpl {
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())
-					throw new Exception("The formula '" + areaRange + "' is not valid");
+					throw new ExcelGeneratorException("The formula '" + areaRange + "' is not valid");
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
 				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDown().suppressDropDownArrow());
@@ -1290,9 +1298,9 @@ public class SuperGenerateExcelImpl {
 	 */
 	private byte[] manageExcelAttachment(Object value) throws Exception, FileNotFoundException, IOException {
 		byte[] file = null;
-		if(value!=null) {
+		if (value != null) {
 			if (!(value instanceof String || value instanceof byte[]))
-				throw new Exception("The annotation ExcelImage can to be used only with fields String or byte[] type");
+				throw new ExcelGeneratorException("The annotation ExcelImage can to be used only with fields String or byte[] type");
 			if (value instanceof String) {
 				InputStream inputStream = new FileInputStream((String) value);
 				file = IOUtils.toByteArray(inputStream);
@@ -1336,5 +1344,6 @@ public class SuperGenerateExcelImpl {
 		}
 
 	}
+	
 
 }
