@@ -33,13 +33,15 @@ import bld.generator.report.excel.constant.ExcelConstant;
 @Target(TYPE)
 @Documented
 public @interface ExcelSummary {
-
 	/**
 	 * Title.
 	 *
 	 * @return the string
 	 */
 	public String title();
+	
+	
+	public boolean titleCellFormulta() default false; 
 	
 	/**
 	 * Comment.

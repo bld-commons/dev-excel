@@ -30,7 +30,7 @@ import bld.generator.report.excel.annotation.ExcelSummary;
  * The Class CasaEditrice.
  */
 @ExcelSheetLayout(startRow = 1,startColumn = 1,landscape = false)
-@ExcelSummary(title = "Casa Editrice")
+@ExcelSummary(title = "${title.field-value}")
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 @ExcelFunctionRows(excelFunctions = {
@@ -38,7 +38,9 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 })
 public class CasaEditrice extends SheetSummary {
 
-
+	private String title;
+	
+	
 	/** The nome. */
 	@ExcelColumn(columnName = "Nome", indexColumn = 1, comment = "Test comment")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
@@ -189,6 +191,14 @@ public class CasaEditrice extends SheetSummary {
 
 	public void setDocument(ExcelAttachment<String> document) {
 		this.document = document;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	

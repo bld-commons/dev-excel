@@ -143,6 +143,7 @@ public class ReportTest {
 		excelAttachment.setAttachmentType(AttachmentType.PDF);
 		excelAttachment.setFileName("test");
 		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
+		casaEditrice.setTitle("Titolo di test");
 		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet = new DateSheet("Test Date");

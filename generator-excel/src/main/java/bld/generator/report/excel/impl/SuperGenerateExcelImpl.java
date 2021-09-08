@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.common.usermodel.HyperlinkType;
@@ -66,12 +68,16 @@ import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.DynamicColumn;
+import bld.generator.report.excel.DynamicRowSheet;
 import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.ExcelHyperlink;
+import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.SheetComponent;
 import bld.generator.report.excel.SheetData;
+import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -117,7 +123,6 @@ import bld.generator.report.excel.exception.ExcelGeneratorException;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SuperGenerateExcelImpl.
  */
@@ -164,8 +169,8 @@ public class SuperGenerateExcelImpl {
 
 	/** The list drop down. */
 	protected List<DropDownCell> listDropDown = new ArrayList<>();
-	
-	
+
+	protected Map<String, BaseSheet> mapSheet = new HashMap<>();
 
 	/** The value props. */
 	@Autowired
@@ -613,7 +618,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean dollar) throws Exception {
-		function=function.replace(ExcelUtils.ENV_SHEET_NAME, "\""+sheet.getSheetName()+"\"");
+		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
 		Pattern p = Pattern.compile(PATTERN);
 		Matcher m = p.matcher(function);
 
@@ -626,9 +631,15 @@ public class SuperGenerateExcelImpl {
 				keyParameter = keyParameter.substring(0, keyParameter.indexOf("["));
 
 			}
+			boolean fieldValue = keyParameter.contains(RowStartEndType.VALUE.getValue());
+			if (fieldValue) 
+				keyParameter = keyParameter.replace(RowStartEndType.VALUE.getValue(), "");
+			String sheetName = sheet.getSheetName();
+			Integer row =null;
+			InfoColumn infoColumn=null;
 			if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(sheet, keyParameter))) {
-				InfoColumn infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
-				Integer row = indexRow;
+				infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
+				row = indexRow;
 				Integer start = null;
 				Integer end = null;
 				Double evalute = null;
@@ -698,21 +709,72 @@ public class SuperGenerateExcelImpl {
 						continue;
 				}
 				try {
+					
+					
 					if (keyParameter.contains(".")) {
-						String sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-						sheetName = "'" + sheetName.replace("'", "''") + "'!";
-						if (function.contains(sheetName))
-							function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-						else
-							function = function.replace(parameter,sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-					} else
+
+						sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
+
+						if (!fieldValue) {
+							sheetName = "'" + sheetName.replace("'", "''") + "'!";
+							if (function.contains(sheetName))
+								function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+							else
+								function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+						}
+					} else if (!fieldValue)
 						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+
+					
 				} catch (Exception e) {
+					logger.error(ExceptionUtils.getStackTrace(e));
 				}
 			}
+			if (fieldValue) {
+				BaseSheet baseSheet = this.mapSheet.get(sheetName);
+				Object value = null;
+				if (baseSheet instanceof MergeSheet) {
+					MergeSheet mergeSheet = (MergeSheet) baseSheet;
+
+					for (SheetComponent bs : mergeSheet.getListSheet()) {
+						value = getStaticValue(keyParameter, row!=null && infoColumn!=null ?row-1-infoColumn.getRowHeader():null, bs);
+						if (value != null)
+							break;
+					}
+
+				} else
+					value = getStaticValue(keyParameter, row!=null && infoColumn!=null ?row-1-infoColumn.getRowHeader():null, (SheetComponent) baseSheet);
+				if (value != null)
+					function = function.replace(parameter, value.toString());
+			}
+
 
 		}
 		return function;
+	}
+
+	private Object getStaticValue(String keyParameter, Integer row, SheetComponent sheetComponent) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ExcelGeneratorException {
+		Object value = null;
+		if (sheetComponent instanceof SheetDynamicData) {
+			SheetDynamicData<?> sheetDynamicData = (SheetDynamicData<?>) sheetComponent;
+			DynamicRowSheet dynamicRowShet = sheetDynamicData.getListRowSheet().get(row);
+			if (sheetDynamicData.getMapExtraColumnAnnotation().containsKey(keyParameter))
+				value = dynamicRowShet.getMapValue().get(keyParameter);
+			else if (dynamicRowShet.getClass().getDeclaredField(keyParameter) != null)
+				value = PropertyUtils.getProperty(dynamicRowShet, keyParameter);
+
+		} else if (sheetComponent instanceof SheetData) {
+			SheetData<?> sheetData = (SheetData<?>) sheetComponent;
+			RowSheet rowSheet=sheetData.getListRowSheet().get(row);
+			if (rowSheet.getClass().getDeclaredField(keyParameter) != null)
+				value = PropertyUtils.getProperty(rowSheet, keyParameter);
+
+		}else if(sheetComponent instanceof SheetSummary) {
+			if (sheetComponent.getClass().getDeclaredField(keyParameter) != null)
+				value = PropertyUtils.getProperty(sheetComponent, keyParameter);
+		}
+		
+		return value;
 	}
 
 	/**
@@ -1344,6 +1406,5 @@ public class SuperGenerateExcelImpl {
 		}
 
 	}
-	
 
 }

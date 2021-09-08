@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.fathzer.soft.javaluator.StaticVariableSet;
 
+import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.exception.ExcelGeneratorException;
 
 /**
@@ -266,6 +267,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the key column
 	 */
 	public static String getKeyColumn(Sheet sheet, String key) {
+		key=key.replace(RowStartEndType.VALUE.getValue(), "");
 		if (!key.contains("."))
 			key = sheet.getSheetName() + "." + key;
 		return key;
