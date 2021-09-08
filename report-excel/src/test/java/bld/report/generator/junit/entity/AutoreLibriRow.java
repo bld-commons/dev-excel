@@ -44,7 +44,7 @@ excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayou
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",anotherTable = false,nameFunction = "prezzoTotalePerAutore"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0))),
 		@ExcelFunctionMergeRow( 
 		excelColumn = @ExcelColumn(indexColumn = 7.2, columnName = "Prezzo Totale per Autore con array"),
-		excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzo[start]}:${prezzo[end]})",anotherTable = false,nameFunction = "prezzoTotalePerAutore1"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))		
+		excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "${prezzo.field-value[start]}+sum(${prezzo[start]}:${prezzo[end]})",anotherTable = false,nameFunction = "prezzoTotalePerAutore1"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))		
 
 
 })

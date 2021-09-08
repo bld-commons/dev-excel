@@ -22,7 +22,12 @@ public enum RowStartEndType {
 	ROW_HEADER("RowHeader"),
 	
 	/** The row empty. */
-	ROW_EMPTY("");
+	ROW_EMPTY(""),
+	
+	VALUE(".field-value")
+	;
+	
+	
 	
 	
 	/** The value. */

@@ -336,7 +336,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Update cover.
 	 *
-	 * @param report the report
+	 * @param report   the report
 	 * @param workbook the workbook
 	 * @throws Exception the exception
 	 */
@@ -395,7 +395,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		this.mapFieldColumn = new HashMap<>();
 		this.listFunctionCell = new ArrayList<>();
 		this.listDropDown = new ArrayList<>();
-		
+		this.mapSheet = new HashMap<>();
 		for (BaseSheet baseSheet : listSheet) {
 			Date startSheet = new Date();
 			Sheet sheet = null;
@@ -409,8 +409,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				}
 
 			} else
-				sheet = workbook.createSheet("Undefined " + (indexSheetName++));
+				sheet = workbook.createSheet();
 			logger.info("Sheet name: " + sheet.getSheetName());
+			this.mapSheet.put(sheet.getSheetName(), baseSheet);
 			Footer footer = sheet.getFooter();
 			footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 			FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
@@ -474,14 +475,14 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * Generate sheet summary.
 	 *
 	 * @param workbook         the workbook
-	 * @param worksheet        the worksheet
+	 * @param sheet            the worksheet
 	 * @param sheetSummary     the sheet summary
 	 * @param indexRow         the index row
 	 * @param formulaEvaluator the formula evaluator
 	 * @return the integer
 	 * @throws Exception the exception
 	 */
-	private Integer generateSheetSummary(Workbook workbook, Sheet worksheet, SheetSummary sheetSummary, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
+	private Integer generateSheetSummary(Workbook workbook, Sheet sheet, SheetSummary sheetSummary, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		Class<? extends SheetSummary> classSheet = sheetSummary.getClass();
 		ExcelSummary excelSummary = classSheet.getAnnotation(ExcelSummary.class);
 		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSheetLayout.class);
@@ -489,25 +490,35 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (indexRow < 0)
 			throw new ExcelGeneratorException("The row number cannot be negative");
 		if (excelSheetLayout.showHeader() && excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
-			Row rowHeader = worksheet.createRow(indexRow);
-			CellStyle cellStyleHeader = getCellStyleHeader(workbook, worksheet, sheetSummary, rowHeader);
+			Row rowHeader = sheet.createRow(indexRow);
+			CellStyle cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader);
 			Cell cellHeader = rowHeader.createCell(excelSheetLayout.startColumn());
 			cellHeader.setCellStyle(cellStyleHeader);
-			cellHeader.setCellValue(excelSummary.title());
+			String title = buildFunction(sheet, indexRow, excelSummary.title(), RowStartEndType.ROW_START);
+			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_END);
+			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_EMPTY);
+			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_HEADER);
+			if (excelSummary.titleCellFormulta())
+				cellHeader.setCellFormula(title);
+			else {
+				title = title.replace("\"", "");
+				cellHeader.setCellValue(title);
+			}
+
 			if (StringUtils.isNotBlank(excelSummary.comment()))
-				addComment(workbook, worksheet, rowHeader, cellHeader, excelSummary.comment());
+				addComment(workbook, sheet, rowHeader, cellHeader, excelSummary.comment());
 			cellHeader = rowHeader.createCell(excelSheetLayout.startColumn() + 1);
 			cellHeader.setCellStyle(cellStyleHeader);
-			worksheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, excelSheetLayout.startColumn(), excelSheetLayout.startColumn() + 1));
-			setColumnWidth(worksheet, excelSheetLayout.startColumn(), excelSummary.widthColumn1());
-			setColumnWidth(worksheet, excelSheetLayout.startColumn() + 1, excelSummary.widthColumn2());
+			sheet.addMergedRegion(new CellRangeAddress(indexRow, indexRow, excelSheetLayout.startColumn(), excelSheetLayout.startColumn() + 1));
+			setColumnWidth(sheet, excelSheetLayout.startColumn(), excelSummary.widthColumn1());
+			setColumnWidth(sheet, excelSheetLayout.startColumn() + 1, excelSummary.widthColumn2());
 			indexRow++;
 		}
-		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary, worksheet);
+		List<SheetHeader> listSheetHeader = getListSheetHeader(classSheet, sheetSummary, sheet);
 		Row row = null;
 		for (SheetHeader sheetHeader : listSheetHeader) {
-			row = worksheet.createRow(indexRow);
-			setCellSummary(excelSheetLayout, workbook, worksheet, sheetSummary, sheetHeader, row, indexRow, formulaEvaluator);
+			row = sheet.createRow(indexRow);
+			setCellSummary(excelSheetLayout, workbook, sheet, sheetSummary, sheetHeader, row, indexRow, formulaEvaluator);
 			indexRow++;
 		}
 		return indexRow;
@@ -674,59 +685,54 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (sheetData.getClass().isAnnotationPresent(ExcelCharts.class) || (sheetData instanceof DynamicChart && CollectionUtils.isNotEmpty(((DynamicChart<? extends DynamicRowSheet>) sheetData).getListExcelChart()))) {
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
-					for(ExcelChartCategory excelChartCategory:excelChart.excelChartCategories()) {
+					for (ExcelChartCategory excelChartCategory : excelChart.excelChartCategories()) {
 						String functionChart = buildFunction(sheet, indexRow, excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true);
 						String title = "";
 						if (mapValue.containsKey(excelChartCategory.fieldName().replace("${", "").replace("}", ""))) {
 							title = mapValue.get(excelChartCategory.fieldName().replace("${", "").replace("}", "")).toString();
-							configMapChart( mapChart, excelChart, excelChartCategory, functionChart, title, indexRow.intValue(),indexRow);
+							configMapChart(mapChart, excelChart, excelChartCategory, functionChart, title, indexRow.intValue(), indexRow);
 
-						}
-						else {
-							Integer rowRegexIndex=null;
-							if(StringUtils.isNotEmpty(excelChartCategory.rowRegex())) {
-								int lastRow=sheet.getLastRowNum()+1;
-								sheet.createRow(lastRow).createCell(0,CellType.FORMULA);
-								Cell lastCell=sheet.getRow(lastRow).getCell(0);
+						} else {
+							Integer rowRegexIndex = null;
+							if (StringUtils.isNotEmpty(excelChartCategory.rowRegex())) {
+								int lastRow = sheet.getLastRowNum() + 1;
+								sheet.createRow(lastRow).createCell(0, CellType.FORMULA);
+								Cell lastCell = sheet.getRow(lastRow).getCell(0);
 								String rowRegex = buildFunction(sheet, indexRow, excelChartCategory.rowRegex(), RowStartEndType.ROW_EMPTY, true);
 								rowRegex = buildFunction(sheet, indexRow, rowRegex, RowStartEndType.ROW_HEADER, true);
 								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_START, true);
 								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_END, true);
 								lastCell.setCellFormula(rowRegex);
 								CellType cellType = formulaEvaluator.evaluateFormulaCell(lastCell);
-								if(!CellType.NUMERIC.equals(cellType))
-									throw new ExcelGeneratorException("Row Regex: \""+rowRegex+"\" need to return a numeric value");
-								rowRegexIndex=(int)lastCell.getNumericCellValue();
+								if (!CellType.NUMERIC.equals(cellType))
+									throw new ExcelGeneratorException("Row Regex: \"" + rowRegex + "\" need to return a numeric value");
+								rowRegexIndex = (int) lastCell.getNumericCellValue();
 								sheet.removeRow(sheet.getRow(lastRow));
 							}
 							String areaFieldName = buildFunction(sheet, indexRow, excelChartCategory.fieldName(), RowStartEndType.ROW_EMPTY, true);
 							areaFieldName = buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true);
 							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true);
 							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true);
-							AreaReference areaReference=new AreaReference(areaFieldName, excelChart.spreadsheetVersion());
-							for(CellReference cr:areaReference.getAllReferencedCells()) {
-								Sheet appSheet=StringUtils.isNotEmpty(cr.getSheetName())?workbook.getSheet(cr.getSheetName()):sheet;
+							AreaReference areaReference = new AreaReference(areaFieldName, excelChart.spreadsheetVersion());
+							for (CellReference cr : areaReference.getAllReferencedCells()) {
+								Sheet appSheet = StringUtils.isNotEmpty(cr.getSheetName()) ? workbook.getSheet(cr.getSheetName()) : sheet;
 								title = appSheet.getRow(cr.getRow()).getCell(cr.getCol()).getStringCellValue();
-								Integer firstRow=indexRow;
-								if(!sheet.getSheetName().equals(appSheet.getSheetName())) {
-									firstRow=cr.getRow();
-									functionChart=buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true);
-								} 
-									
-								if(rowRegexIndex==null)
-									configMapChart( mapChart, excelChart, excelChartCategory, functionChart, title,indexRow,indexRow);
-								else if(rowRegexIndex.intValue()==firstRow.intValue())
-									configMapChart( mapChart, excelChart, excelChartCategory, functionChart, title,indexRow,indexRow);
+								Integer firstRow = indexRow;
+								if (!sheet.getSheetName().equals(appSheet.getSheetName())) {
+									firstRow = cr.getRow();
+									functionChart = buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true);
+								}
+
+								if (rowRegexIndex == null)
+									configMapChart(mapChart, excelChart, excelChartCategory, functionChart, title, indexRow, indexRow);
+								else if (rowRegexIndex.intValue() == firstRow.intValue())
+									configMapChart(mapChart, excelChart, excelChartCategory, functionChart, title, indexRow, indexRow);
 							}
-							
+
 						}
 
 					}
-					
-					
 
-					
-					
 				}
 
 			}
@@ -735,16 +741,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			indexRow++;
 			// this.evaluateAllFormulaCells(workbook, sheet);
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		for (Integer numColumn : mapMergeRow.keySet())
 			super.mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn, formulaEvaluator);
 
@@ -839,11 +836,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						boolean isVertical = xAxis.contains(RowStartEndType.ROW_START.getValue()) || xAxis.replace(" ", "").contains(START) || xAxis.contains(RowStartEndType.ROW_END.getValue()) || xAxis.contains(END);
 						xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true);
 						xAxis = setInfoColumnByMapCharts(xAxis, sheet, null);
-						indexRow = generateChart((XSSFWorkbook)workbook,(XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart, isVertical && !excelSheetLayout.notMerge(), sheetData);
+						indexRow = generateChart((XSSFWorkbook) workbook, (XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart, isVertical && !excelSheetLayout.notMerge(), sheetData);
 					}
 				} else {
 					for (String keyChart : mapChart.get(excelChart.id()).keySet()) {
-						for(ExcelChartCategory excelChartCategory:excelChart.excelChartCategories()) {
+						for (ExcelChartCategory excelChartCategory : excelChart.excelChartCategories()) {
 							if (keyChart.endsWith(excelChartCategory.function())) {
 								InfoChart infoChart = mapChart.get(excelChart.id()).get(keyChart);
 								String seriesChart = "";
@@ -858,12 +855,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 //								seriesChart=buildFunction(sheet, null, seriesChart, RowStartEndType.ROW_START);
 //								seriesChart=buildFunction(sheet, null, seriesChart, RowStartEndType.ROW_END);
-								indexRow = generateChart((XSSFWorkbook)workbook,(XSSFSheet) sheet, infoChart.getTitle(), excelChart, indexRow, xAxis, seriesChart, sheetData);
+								indexRow = generateChart((XSSFWorkbook) workbook, (XSSFSheet) sheet, infoChart.getTitle(), excelChart, indexRow, xAxis, seriesChart, sheetData);
 							}
 
 						}
-												
-						
 
 					}
 
@@ -919,15 +914,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Config map chart.
 	 *
-	 * @param mapChart the map chart
-	 * @param excelChart the excel chart
+	 * @param mapChart           the map chart
+	 * @param excelChart         the excel chart
 	 * @param excelChartCategory the excel chart category
-	 * @param functionChart the function chart
-	 * @param title the title
-	 * @param firstRow the first row
-	 * @param lastRow the last row
+	 * @param functionChart      the function chart
+	 * @param title              the title
+	 * @param firstRow           the first row
+	 * @param lastRow            the last row
 	 */
-	private void configMapChart( Map<String, Map<String, InfoChart>> mapChart, ExcelChart excelChart, ExcelChartCategory excelChartCategory, String functionChart, String title, Integer firstRow,Integer lastRow) {
+	private void configMapChart(Map<String, Map<String, InfoChart>> mapChart, ExcelChart excelChart, ExcelChartCategory excelChartCategory, String functionChart, String title, Integer firstRow, Integer lastRow) {
 		String key = title + excelChartCategory.function();
 		// String title = mapValue.get(excelChart.fieldName()).toString();
 		if (!mapChart.containsKey(excelChart.id()))
@@ -942,8 +937,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Sets the info column by map charts.
 	 *
-	 * @param function the function
-	 * @param sheet the sheet
+	 * @param function  the function
+	 * @param sheet     the sheet
 	 * @param infoChart the info chart
 	 * @return the string
 	 * @throws Exception the exception
@@ -1038,24 +1033,25 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Generate chart.
 	 *
-	 * @param workbook the workbook
-	 * @param sheet      the sheet
-	 * @param excelChart the excel chart
-	 * @param indexRow   the index row
-	 * @param xAxis      the x axis
-	 * @param mapAllChart the map all chart
+	 * @param workbook           the workbook
+	 * @param sheet              the sheet
+	 * @param excelChart         the excel chart
+	 * @param indexRow           the index row
+	 * @param xAxis              the x axis
+	 * @param mapAllChart        the map all chart
 	 * @param isVerticalAndMerge the is vertical and merge
-	 * @param sheetData the sheet data
+	 * @param sheetData          the sheet data
 	 * @return the integer
 	 * @throws Exception the exception
 	 */
-	private Integer generateChart(XSSFWorkbook workbook,XSSFSheet sheet, ExcelChart excelChart, Integer indexRow, String xAxis, Map<String, Map<String, InfoChart>> mapAllChart, boolean isVerticalAndMerge, SheetData<? extends RowSheet> sheetData) throws Exception {
+	private Integer generateChart(XSSFWorkbook workbook, XSSFSheet sheet, ExcelChart excelChart, Integer indexRow, String xAxis, Map<String, Map<String, InfoChart>> mapAllChart, boolean isVerticalAndMerge, SheetData<? extends RowSheet> sheetData)
+			throws Exception {
 		XSSFDrawing drawing = sheet.createDrawingPatriarch();
 		Integer startChart = indexRow;
 		indexRow += excelChart.sizeRow();
 		logger.debug("Start Chart: " + startChart);
 		XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, startChart, excelChart.sizeColumn(), indexRow);
-		
+
 		XSSFChart chart = drawing.createChart(anchor);
 		chart.setTitleText(excelChart.title());
 		chart.setTitleOverlay(false);
@@ -1063,7 +1059,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		legend.setPosition(excelChart.legendPosition());
 		XDDFCategoryAxis categoryAxis = null;
 		XDDFValueAxis valueAxis = null;
-		AreaReference areaReference =null;
+		AreaReference areaReference = null;
 		if (!LIST_CHART_TYPES.contains(excelChart.chartTypes())) {
 			categoryAxis = chart.createCategoryAxis(excelChart.categoryAxis());
 			valueAxis = chart.createValueAxis(excelChart.valueAxis());
@@ -1124,11 +1120,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			// .fromStringCellRange(sheet, CellRangeAddress.valueOf(xAxis.substring(1)));
 
 		} else {
-			
-			areaReference = new AreaReference(xAxis,excelChart.spreadsheetVersion());
-			xs = XDDFDataSourcesFactory.fromStringCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName())?workbook.getSheet(areaReference.getFirstCell().getSheetName()):sheet, CellRangeAddress.valueOf(xAxis));
+
+			areaReference = new AreaReference(xAxis, excelChart.spreadsheetVersion());
+			xs = XDDFDataSourcesFactory.fromStringCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet, CellRangeAddress.valueOf(xAxis));
 		}
-			
 
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), categoryAxis, valueAxis);
 		XDDFChartData.Series series = null;
@@ -1147,13 +1142,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				seriesChart = infoChart.getFunction();
 			}
 
-			
-			areaReference = new AreaReference(seriesChart,excelChart.spreadsheetVersion());
-			XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName())?workbook.getSheet(areaReference.getFirstCell().getSheetName()):sheet, CellRangeAddress.valueOf(seriesChart));
+			areaReference = new AreaReference(seriesChart, excelChart.spreadsheetVersion());
+			XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory
+					.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet, CellRangeAddress.valueOf(seriesChart));
 			series = chartData.addSeries(xs, numericalDataSource);
 			series.setTitle(infoChart.getTitle(), null);
 			series.setShowLeaderLines(excelChart.showLeaderLines());
-			this.chartData(series,excelChart);
+			this.chartData(series, excelChart);
 			solidLineSeries(series, excelChart.lineColor(), i++);
 		}
 
@@ -1163,7 +1158,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		chart.plot(chartData);
 
-		barDirection(sheetData, chartData,excelChart);
+		barDirection(sheetData, chartData, excelChart);
 		return indexRow;
 
 	}
@@ -1171,17 +1166,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Generate chart.
 	 *
-	 * @param workbook the workbook
+	 * @param workbook    the workbook
 	 * @param sheet       the worksheet
 	 * @param title       the key chart
 	 * @param excelChart  the excel chart
 	 * @param indexRow    the index row
 	 * @param xAxis       the x axis
 	 * @param seriesChart the series chart
-	 * @param sheetData the sheet data
+	 * @param sheetData   the sheet data
 	 * @return the integer
 	 */
-	private Integer generateChart(XSSFWorkbook workbook,XSSFSheet sheet, String title, ExcelChart excelChart, Integer indexRow, String xAxis, String seriesChart, SheetData<? extends RowSheet> sheetData) {
+	private Integer generateChart(XSSFWorkbook workbook, XSSFSheet sheet, String title, ExcelChart excelChart, Integer indexRow, String xAxis, String seriesChart, SheetData<? extends RowSheet> sheetData) {
 		// ExcelChart
 		// excelChart=sheetData.getClass().getAnnotation(ExcelChart.class)
 		XSSFDrawing drawing = sheet.createDrawingPatriarch();
@@ -1207,26 +1202,29 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			valueAxis.setCrosses(excelChart.crosses());
 			valueAxis.setCrossBetween(excelChart.crossBetween());
 		}
-		//xAxis = "'" + sheet.getSheetName().replace("'", "''") + "'!" + xAxis;
+		// xAxis = "'" + sheet.getSheetName().replace("'", "''") + "'!" + xAxis;
 		logger.debug("-----------------xAxis: " + xAxis);
-		AreaReference areaReference = new AreaReference(xAxis,excelChart.spreadsheetVersion());
-		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName())?workbook.getSheet(areaReference.getFirstCell().getSheetName()):sheet, CellRangeAddress.valueOf(xAxis));
+		AreaReference areaReference = new AreaReference(xAxis, excelChart.spreadsheetVersion());
+		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet,
+				CellRangeAddress.valueOf(xAxis));
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), categoryAxis, valueAxis);
 		XDDFChartData.Series series = null;
-		//seriesChart = "'" + sheet.getSheetName().replace("'", "''") + "'!" + seriesChart;
+		// seriesChart = "'" + sheet.getSheetName().replace("'", "''") + "'!" +
+		// seriesChart;
 		logger.debug("------------seriesChart: " + seriesChart);
-		areaReference = new AreaReference(seriesChart,excelChart.spreadsheetVersion());
-		XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName())?workbook.getSheet(areaReference.getFirstCell().getSheetName()):sheet, CellRangeAddress.valueOf(seriesChart));
+		areaReference = new AreaReference(seriesChart, excelChart.spreadsheetVersion());
+		XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet,
+				CellRangeAddress.valueOf(seriesChart));
 		series = chartData.addSeries(xs, numericalDataSource);
 		series.setTitle(title, null);
 		series.setShowLeaderLines(excelChart.showLeaderLines());
-		this.chartData(series,excelChart);
+		this.chartData(series, excelChart);
 		solidLineSeries(series, excelChart.lineColor(), 0);
 		chartData.setVaryColors(true);
 		chartLabelData(chart, excelChart);
 		chart.plot(chartData);
 
-		barDirection(sheetData, chartData,excelChart);
+		barDirection(sheetData, chartData, excelChart);
 
 		return indexRow;
 
@@ -1235,49 +1233,47 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Bar direction.
 	 *
-	 * @param sheetData the sheet data
-	 * @param chartData the chart data
+	 * @param sheetData  the sheet data
+	 * @param chartData  the chart data
 	 * @param excelChart the excel chart
 	 */
-	private void barDirection(SheetData<? extends RowSheet> sheetData, XDDFChartData chartData,ExcelChart excelChart) {
+	private void barDirection(SheetData<? extends RowSheet> sheetData, XDDFChartData chartData, ExcelChart excelChart) {
 		if (sheetData.getClass().isAnnotationPresent(ExcelBarChartData.class)) {
 			ExcelBarChartData excelBarDirectionChart = sheetData.getClass().getAnnotation(ExcelBarChartData.class);
-			if(ChartTypes.BAR.equals(excelChart.chartTypes())) {
+			if (ChartTypes.BAR.equals(excelChart.chartTypes())) {
 				XDDFBarChartData bar = (XDDFBarChartData) chartData;
 				bar.setBarDirection(excelBarDirectionChart.value());
-			}else if(ChartTypes.BAR3D.equals(excelChart.chartTypes())) {
+			} else if (ChartTypes.BAR3D.equals(excelChart.chartTypes())) {
 				XDDFBar3DChartData bar3D = (XDDFBar3DChartData) chartData;
 				bar3D.setBarDirection(excelBarDirectionChart.value());
 			}
-			
+
 		}
 	}
-	
-	
+
 	/**
 	 * Chart data.
 	 *
-	 * @param series the series
+	 * @param series     the series
 	 * @param excelChart the excel chart
 	 */
-	private void chartData(XDDFChartData.Series series,ExcelChart excelChart) {
-		if(ChartTypes.LINE.equals(excelChart.chartTypes())) {
-			XDDFLineChartData.Series seriesLine = (XDDFLineChartData.Series)series;
+	private void chartData(XDDFChartData.Series series, ExcelChart excelChart) {
+		if (ChartTypes.LINE.equals(excelChart.chartTypes())) {
+			XDDFLineChartData.Series seriesLine = (XDDFLineChartData.Series) series;
 			seriesLine.setSmooth(excelChart.smooth());
-		}else if(ChartTypes.LINE3D.equals(excelChart.chartTypes())) {
-			XDDFLine3DChartData.Series seriesLine3D = (XDDFLine3DChartData.Series)series;
+		} else if (ChartTypes.LINE3D.equals(excelChart.chartTypes())) {
+			XDDFLine3DChartData.Series seriesLine3D = (XDDFLine3DChartData.Series) series;
 			seriesLine3D.setSmooth(excelChart.smooth());
-			
+
 		}
 	}
-	
 
 	/**
 	 * Solid line series.
 	 *
 	 * @param series the series
-	 * @param color the color
-	 * @param i the i
+	 * @param color  the color
+	 * @param i      the i
 	 */
 	private void solidLineSeries(XDDFChartData.Series series, PresetColor[] color, int i) {
 		int index = i % color.length;
@@ -1346,123 +1342,123 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Chart label data.
 	 *
-	 * @param chart the chart
+	 * @param chart      the chart
 	 * @param excelChart the excel chart
 	 */
-	private void chartLabelData(XSSFChart chart,ExcelChart excelChart) {
+	private void chartLabelData(XSSFChart chart, ExcelChart excelChart) {
 		ExcelChartDataLabel excelChartDataLabel = excelChart.excelChartDataLabel();
 		if (excelChartDataLabel.enable()) {
 			CTPlotArea plotArea = chart.getCTChart().getPlotArea();
 			switch (excelChart.chartTypes()) {
 			case AREA:
-				for(CTAreaChart area:plotArea.getAreaChartArray()) {
-					for(CTAreaSer ser:area.getSerArray()) {
+				for (CTAreaChart area : plotArea.getAreaChartArray()) {
+					for (CTAreaSer ser : area.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case AREA3D:
-				for(CTArea3DChart area3D:plotArea.getArea3DChartArray()) {
-					for(CTAreaSer ser:area3D.getSerArray()) {
+				for (CTArea3DChart area3D : plotArea.getArea3DChartArray()) {
+					for (CTAreaSer ser : area3D.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case BAR:
-				for(CTBarChart bar:plotArea.getBarChartArray()) {
-					for(CTBarSer ser:bar.getSerArray()) {
+				for (CTBarChart bar : plotArea.getBarChartArray()) {
+					for (CTBarSer ser : bar.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case BAR3D:
-				for(CTBar3DChart bar3D:plotArea.getBar3DChartArray()) {
-					for(CTBarSer ser:bar3D.getSerArray()) {
+				for (CTBar3DChart bar3D : plotArea.getBar3DChartArray()) {
+					for (CTBarSer ser : bar3D.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case DOUGHNUT:
 				break;
 			case LINE:
-				for(CTLineChart line:plotArea.getLineChartArray()) {
-					for(CTLineSer ser:line.getSerArray()) {
+				for (CTLineChart line : plotArea.getLineChartArray()) {
+					for (CTLineSer ser : line.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case LINE3D:
-				for(CTLine3DChart line3D:plotArea.getLine3DChartArray()) {
-					for(CTLineSer ser:line3D.getSerArray()) {
+				for (CTLine3DChart line3D : plotArea.getLine3DChartArray()) {
+					for (CTLineSer ser : line3D.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case PIE:
-				for(CTPieChart pie:plotArea.getPieChartArray()) {
-					for(CTPieSer ser:pie.getSerArray()) {
+				for (CTPieChart pie : plotArea.getPieChartArray()) {
+					for (CTPieSer ser : pie.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case PIE3D:
-				for(CTPie3DChart pie3D:plotArea.getPie3DChartArray()) {
-					for(CTPieSer ser:pie3D.getSerArray()) {
+				for (CTPie3DChart pie3D : plotArea.getPie3DChartArray()) {
+					for (CTPieSer ser : pie3D.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case RADAR:
-				for(CTRadarChart radar:plotArea.getRadarChartArray()) {
-					for(CTRadarSer ser:radar.getSerArray()) {
+				for (CTRadarChart radar : plotArea.getRadarChartArray()) {
+					for (CTRadarSer ser : radar.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
 			case SCATTER:
-				for(CTScatterChart scatter:plotArea.getScatterChartArray()) {
-					for(CTScatterSer ser:scatter.getSerArray()) {
+				for (CTScatterChart scatter : plotArea.getScatterChartArray()) {
+					for (CTScatterSer ser : scatter.getSerArray()) {
 						CTDLbls dLbls = ser.getDLbls();
-			            dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
-			            dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
-			            dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
-			            dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
+						dLbls.addNewShowVal().setVal(excelChartDataLabel.showVal());
+						dLbls.addNewShowLegendKey().setVal(excelChartDataLabel.showLegendKey());
+						dLbls.addNewShowCatName().setVal(excelChartDataLabel.showCatName());
+						dLbls.addNewShowSerName().setVal(excelChartDataLabel.showSerName());
 					}
 				}
 				break;
