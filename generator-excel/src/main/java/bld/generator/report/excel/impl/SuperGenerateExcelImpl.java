@@ -603,7 +603,8 @@ public class SuperGenerateExcelImpl {
 		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
 
 		logger.info("Function: " + function);
-		cell.setCellFormula(function);
+		if (StringUtils.isNotEmpty(function))
+			cell.setCellFormula(function);
 	}
 
 	/**
@@ -632,11 +633,11 @@ public class SuperGenerateExcelImpl {
 
 			}
 			boolean fieldValue = keyParameter.contains(RowStartEndType.VALUE.getValue());
-			if (fieldValue) 
+			if (fieldValue)
 				keyParameter = keyParameter.replace(RowStartEndType.VALUE.getValue(), "");
 			String sheetName = sheet.getSheetName();
-			Integer row =null;
-			InfoColumn infoColumn=null;
+			Integer row = null;
+			InfoColumn infoColumn = null;
 			if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(sheet, keyParameter))) {
 				infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
 				row = indexRow;
@@ -709,23 +710,23 @@ public class SuperGenerateExcelImpl {
 						continue;
 				}
 				try {
-					
-					
-					if (keyParameter.contains(".")) {
 
-						sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
+					if (row != null) {
+						if (keyParameter.contains(".")) {
 
-						if (!fieldValue) {
-							sheetName = "'" + sheetName.replace("'", "''") + "'!";
-							if (function.contains(sheetName))
-								function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-							else
-								function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-						}
-					} else if (!fieldValue)
-						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+							sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
 
-					
+							if (!fieldValue) {
+								sheetName = "'" + sheetName.replace("'", "''") + "'!";
+								if (function.contains(sheetName))
+									function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+								else
+									function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+							}
+						} else if (!fieldValue)
+							function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
+					}
+
 				} catch (Exception e) {
 					logger.error(ExceptionUtils.getStackTrace(e));
 				}
@@ -737,17 +738,16 @@ public class SuperGenerateExcelImpl {
 					MergeSheet mergeSheet = (MergeSheet) baseSheet;
 
 					for (SheetComponent bs : mergeSheet.getListSheet()) {
-						value = getStaticValue(keyParameter, row!=null && infoColumn!=null ?row-1-infoColumn.getRowHeader():null, bs);
+						value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, bs);
 						if (value != null)
 							break;
 					}
 
 				} else
-					value = getStaticValue(keyParameter, row!=null && infoColumn!=null ?row-1-infoColumn.getRowHeader():null, (SheetComponent) baseSheet);
+					value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, (SheetComponent) baseSheet);
 				if (value != null)
 					function = function.replace(parameter, value.toString());
 			}
-
 
 		}
 		return function;
@@ -765,15 +765,15 @@ public class SuperGenerateExcelImpl {
 
 		} else if (sheetComponent instanceof SheetData) {
 			SheetData<?> sheetData = (SheetData<?>) sheetComponent;
-			RowSheet rowSheet=sheetData.getListRowSheet().get(row);
+			RowSheet rowSheet = sheetData.getListRowSheet().get(row);
 			if (rowSheet.getClass().getDeclaredField(keyParameter) != null)
 				value = PropertyUtils.getProperty(rowSheet, keyParameter);
 
-		}else if(sheetComponent instanceof SheetSummary) {
+		} else if (sheetComponent instanceof SheetSummary) {
 			if (sheetComponent.getClass().getDeclaredField(keyParameter) != null)
 				value = PropertyUtils.getProperty(sheetComponent, keyParameter);
 		}
-		
+
 		return value;
 	}
 

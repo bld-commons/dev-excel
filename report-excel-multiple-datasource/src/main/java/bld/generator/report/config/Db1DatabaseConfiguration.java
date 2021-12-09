@@ -122,7 +122,7 @@ public class Db1DatabaseConfiguration extends MultipleDatabaseConfiguration {
 	}
 
 	@Override
-	protected String getPackageSup() {
+	protected String getEntityPackage() {
 		return PACKAGE_SUP;
 	}
 
