@@ -37,12 +37,13 @@ public abstract class MultipleDatabaseConfiguration {
 	 */
 	public abstract DataSource dataSource();
 
+	
 	/**
-	 * Gets the package sup.
+	 * Gets the entity package.
 	 *
-	 * @return the package sup
+	 * @return the entity package
 	 */
-	protected abstract String getPackageSup();
+	protected abstract String getEntityPackage();
 
 	/**
 	 * Gets the persistence unit.
@@ -103,7 +104,7 @@ public abstract class MultipleDatabaseConfiguration {
 	 * @return the entity manager factory
 	 */
 	protected LocalContainerEntityManagerFactoryBean getEntityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource, JpaVendorAdapter jpaVendorAdapter) {
-		LocalContainerEntityManagerFactoryBean em = builder.dataSource(dataSource).packages(getPackageSup()).persistenceUnit(getPersistenceUnit()).build();
+		LocalContainerEntityManagerFactoryBean em = builder.dataSource(dataSource).packages(getEntityPackage()).persistenceUnit(getPersistenceUnit()).build();
 		em.setJpaVendorAdapter(jpaVendorAdapter);
 		return em;
 	}
