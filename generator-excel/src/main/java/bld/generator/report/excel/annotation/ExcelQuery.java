@@ -50,12 +50,6 @@ public @interface ExcelQuery {
 	public String entityManager() default "";
 	
 	
-	/**
-	 * Named parameter jdbc template.
-	 *
-	 * @return the string
-	 */
-	public String namedParameterJdbcTemplate() default "namedParameterJdbcTemplate";	
 	
 	
 }
