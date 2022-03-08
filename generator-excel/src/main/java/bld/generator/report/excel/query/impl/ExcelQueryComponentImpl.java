@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.Tuple;
+import javax.persistence.TupleElement;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -24,7 +27,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +71,7 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	public <T extends RowSheet> void executeQuery(QuerySheetData<T> querySheetData) throws Exception {
 		if (CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
 			ExcelQuery excelQuery = ExcelUtils.getAnnotation(querySheetData.getClass(), ExcelQuery.class);
-			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? getResultListNativeQuery(querySheetData, excelQuery) : getResultListQuery(querySheetData, excelQuery));
+			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? nativeQuery(querySheetData, excelQuery) : jpaQuery(querySheetData, excelQuery));
 		}
 
 	}
@@ -83,19 +85,33 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 * @return the result list native query
 	 * @throws Exception the exception
 	 */
-	private <T extends RowSheet> List<T> getResultListNativeQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) throws Exception {
-		if (!this.multipleDatasource) {
-			EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.entityManager());
-			entityManager.flush();
-		}
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = this.excelDataSource.getNamedParameterJdbcTemplate(excelQuery.namedParameterJdbcTemplate());
-		List<Map<String, Object>> listResult = namedParameterJdbcTemplate.queryForList(excelQuery.select(), querySheetData.getMapParameters());
+	@SuppressWarnings("unchecked")
+	private <T extends RowSheet> List<T> nativeQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) throws Exception {
+		EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.entityManager());
+		Query query = entityManager.createNativeQuery(excelQuery.select(), Tuple.class);
+		this.setParameters(querySheetData, query);
+		
+		List<Tuple> results = query.getResultList();
 		List<T> listT = new ArrayList<T>();
-		for (Map<String, Object> mapResult : listResult) {
-			T t = querySheetData.getRowClass().getDeclaredConstructor().newInstance();
-			reflection(t, mapResult);
+		for (Tuple row : results) {
+			List<TupleElement<?>> elements = row.getElements();
+			T t = null;
+			try {
+				t = querySheetData.getRowClass().getDeclaredConstructor().newInstance();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			Map<String, Object> mapRow = new HashMap<>();
+			for (TupleElement<?> element : elements) {
+				Object value = row.get(element.getAlias());
+				if (value != null)
+					mapRow.put(element.getAlias(), value);
+			}
+			reflection(t, mapRow);
 			listT.add(t);
 		}
+		
+		
 		return listT;
 	}
 
@@ -129,15 +145,19 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 	 * @param excelQuery     the excel query
 	 * @return the result list query
 	 */
-	private <T extends RowSheet> List<T> getResultListQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) {
+	private <T extends RowSheet> List<T> jpaQuery(QuerySheetData<T> querySheetData, ExcelQuery excelQuery) {
 		EntityManager entityManager = this.excelDataSource.getEntityManager(excelQuery.entityManager());
 		TypedQuery<T> query = entityManager.createQuery(excelQuery.select(), querySheetData.getRowClass());
+		setParameters(querySheetData, query);
+		List<T> result = query.getResultList();
+		return result;
+	}
+
+	private <T extends RowSheet> void setParameters(QuerySheetData<T> querySheetData, Query query) {
 		if (querySheetData.getMapParameters() != null) {
 			for (String key : querySheetData.getMapParameters().keySet())
 				query.setParameter(key, querySheetData.getMapParameters().get(key));
 		}
-		List<T> result = query.getResultList();
-		return result;
 	}
 
 }

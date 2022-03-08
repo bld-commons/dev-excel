@@ -6,6 +6,7 @@
 package bld.generator.report.junit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -32,7 +33,6 @@ import bld.generator.report.junit.entity.SalarySheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
-import bld.generator.report.persistence.service.UtenteService;
 import bld.generator.report.utils.ExcelUtils;
 
 /**
@@ -52,8 +52,6 @@ public class ReportTestJpa {
 	@Autowired
 	private GenerateExcel generateExcel;
 	
-	@Autowired
-	private UtenteService utenteService;
 	
 //	/** The read excel. */
 //	@Autowired
@@ -83,7 +81,7 @@ public class ReportTestJpa {
 		
 		
 		UtenteSheet utenteSheet=new UtenteSheet("Utente");
-		utenteSheet.getMapParameters().put("cognome", "Rossi");
+		utenteSheet.getMapParameters().put("cognome", Arrays.asList("Rossi","Bianchi"));
 		listBaseSheet.add(utenteSheet);
 		
 		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
