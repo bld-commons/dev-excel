@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 
+import bld.generator.report.excel.annotation.ExcelBooleanText;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
@@ -76,6 +77,8 @@ public class SheetHeader implements Cloneable {
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
 
+	private ExcelBooleanText excelBooleanText;
+
 	/** The map layout cell. */
 	private Map<Integer, LayoutCell> mapLayoutCell;
 
@@ -114,6 +117,9 @@ public class SheetHeader implements Cloneable {
 			this.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 		if (field.isAnnotationPresent(ExcelSubtotal.class))
 			this.setExcelSubtotal(field.getAnnotation(ExcelSubtotal.class));
+		if (field.isAnnotationPresent(ExcelBooleanText.class))
+			this.setExcelBooleanText(field.getAnnotation(ExcelBooleanText.class));
+		
 		this.excelColumn = ExcelUtils.getAnnotation(this.field, ExcelColumn.class);
 		this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
@@ -154,6 +160,14 @@ public class SheetHeader implements Cloneable {
 		if (excelColumnWidth == null)
 			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getAnnotation();
 		return excelColumnWidth;
+	}
+
+	public ExcelBooleanText getExcelBooleanText() {
+		return excelBooleanText;
+	}
+
+	public void setExcelBooleanText(ExcelBooleanText excelBooleanText) {
+		this.excelBooleanText = excelBooleanText;
 	}
 
 	/**

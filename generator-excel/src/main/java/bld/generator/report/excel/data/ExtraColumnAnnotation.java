@@ -7,6 +7,7 @@ package bld.generator.report.excel.data;
 
 import javax.validation.constraints.NotNull;
 
+import bld.generator.report.excel.annotation.ExcelBooleanText;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
@@ -16,6 +17,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
+import bld.generator.report.excel.annotation.impl.ExcelBooleanTextImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
@@ -66,9 +68,12 @@ public class ExtraColumnAnnotation {
 
 	/** The excel drop down. */
 	private ExcelDropDown excelDropDown;
-	
+
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
+
+	/** The excel boolean text. */
+	private ExcelBooleanText excelBooleanText;
 
 	/**
 	 * Sets the excel cell layout.
@@ -78,6 +83,16 @@ public class ExtraColumnAnnotation {
 	public void setExcelCellLayout(ExcelCellLayoutImpl excelCellLayoutImpl) {
 		if (excelCellLayoutImpl != null)
 			this.excelCellLayout = excelCellLayoutImpl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel boolean text.
+	 *
+	 * @param excelBooleanTextImpl the new excel boolean text
+	 */
+	public void setExcelBooleanText(ExcelBooleanTextImpl excelBooleanTextImpl) {
+		if (excelBooleanTextImpl != null)
+			this.excelBooleanText = excelBooleanTextImpl.getAnnotation();
 	}
 
 	/**
@@ -140,7 +155,6 @@ public class ExtraColumnAnnotation {
 			this.excelColumnWidth = excelColumnWidthImpl.getAnnotation();
 	}
 
-	
 	/**
 	 * Sets the excel drop down.
 	 *
@@ -166,8 +180,8 @@ public class ExtraColumnAnnotation {
 	 * @param excelSubtotal the new excel subtotal
 	 */
 	public void setExcelSubtotal(ExcelSubtotalImpl excelSubtotal) {
-		if(excelSubtotal!=null)
-		this.excelSubtotal = excelSubtotal.getAnnotation();
+		if (excelSubtotal != null)
+			this.excelSubtotal = excelSubtotal.getAnnotation();
 	}
 
 	/**
@@ -240,6 +254,15 @@ public class ExtraColumnAnnotation {
 	 */
 	public ExcelDropDown getExcelDropDown() {
 		return excelDropDown;
+	}
+
+	/**
+	 * Gets the excel boolean text.
+	 *
+	 * @return the excel boolean text
+	 */
+	public ExcelBooleanText getExcelBooleanText() {
+		return excelBooleanText;
 	}
 
 	/**
@@ -326,5 +349,4 @@ public class ExtraColumnAnnotation {
 		return true;
 	}
 
-	
 }

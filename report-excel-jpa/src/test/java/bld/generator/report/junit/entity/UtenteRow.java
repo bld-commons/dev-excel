@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import bld.generator.report.excel.RowSheet;
+import bld.generator.report.excel.annotation.ExcelBooleanText;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
@@ -38,6 +39,12 @@ public class UtenteRow implements RowSheet {
 	private String path;	
 	
 
+	@ExcelColumn(columnName = "Abilitato", indexColumn = 6)
+	@ExcelBooleanText(ifTrue = "Enable",ifFalse = "Disable")
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	private Boolean abilitato;
+	
+	
 	public UtenteRow() {
 	}
 
@@ -110,4 +117,16 @@ public class UtenteRow implements RowSheet {
 		this.path = path;
 	}
 
+
+	public Boolean getAbilitato() {
+		return abilitato;
+	}
+
+
+	public void setAbilitato(Boolean abilitato) {
+		this.abilitato = abilitato;
+	}
+
+	
+	
 }

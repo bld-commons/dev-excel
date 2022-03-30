@@ -33,6 +33,11 @@ public class Utente {
     private byte[] image;
     @Column(name = "path")
     private String path;
+    
+    @Column(name = "abilitato")
+    private Boolean abilitato;
+    
+    
     public String getNome() {
         return nome;
     }
@@ -75,6 +80,12 @@ public class Utente {
 	}
 	public void setPath(String path) {
 		this.path = path;
+	}
+	public Boolean getAbilitato() {
+		return abilitato;
+	}
+	public void setAbilitato(Boolean abilitato) {
+		this.abilitato = abilitato;
 	}
 	
     

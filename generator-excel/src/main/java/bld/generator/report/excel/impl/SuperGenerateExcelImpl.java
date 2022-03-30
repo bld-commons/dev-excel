@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,8 +127,8 @@ import bld.generator.report.utils.ValueProps;
 /**
  * The Class SuperGenerateExcelImpl.
  */
-@SuppressWarnings({ "deprecation" })
 public class SuperGenerateExcelImpl {
+
 
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
@@ -625,7 +626,7 @@ public class SuperGenerateExcelImpl {
 
 		while (m.find()) {
 			String parameter = m.group();
-			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").trim();
+			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").replace("'", BaseSheet.APOS).trim();
 			String exprenssionIndex = "";
 			if (keyParameter.contains("[")) {
 				exprenssionIndex = keyParameter.substring(keyParameter.indexOf("[") + 1, keyParameter.length() - 1);
@@ -717,7 +718,8 @@ public class SuperGenerateExcelImpl {
 							sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
 
 							if (!fieldValue) {
-								sheetName = "'" + sheetName.replace("'", "''") + "'!";
+								sheetName = "'" + sheetName.replace("'", BaseSheet.APOS) + "'!";
+								
 								if (function.contains(sheetName))
 									function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
 								else
@@ -895,9 +897,14 @@ public class SuperGenerateExcelImpl {
 			cell.setCellValue(value);
 		} else if (sheetHeader.getValue() instanceof Number)
 			cell.setCellValue(((Number) sheetHeader.getValue()).doubleValue());
-		else if (sheetHeader.getValue() instanceof Boolean)
-			cell.setCellValue((Boolean) sheetHeader.getValue());
-		else if (sheetHeader.getValue() instanceof ExcelHyperlink) {
+		else if (sheetHeader.getValue() instanceof Boolean) {
+			boolean value = (Boolean) sheetHeader.getValue();
+			if (sheetHeader.getExcelBooleanText() == null)
+				cell.setCellValue(value);
+			else
+				cell.setCellValue(value ? sheetHeader.getExcelBooleanText().ifTrue() : sheetHeader.getExcelBooleanText().ifFalse());
+
+		} else if (sheetHeader.getValue() instanceof ExcelHyperlink) {
 			ExcelHyperlink excelHyperlink = (ExcelHyperlink) sheetHeader.getValue();
 			CreationHelper createHelper = workbook.getCreationHelper();
 			if (excelHyperlink.getHyperlinkType() == null)
@@ -1037,9 +1044,9 @@ public class SuperGenerateExcelImpl {
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null, sheet);
 		if (sheetData instanceof DynamicColumn) {
 			DynamicColumn sheetDynamicData = (DynamicColumn) sheetData;
-			for (String keyMap : sheetDynamicData.getMapExtraColumnAnnotation().keySet()) {
+			for (Entry<String, ExtraColumnAnnotation> entry : sheetDynamicData.getMapExtraColumnAnnotation().entrySet()) {
 
-				ExtraColumnAnnotation extraColumnAnnotation = sheetDynamicData.getMapExtraColumnAnnotation().get(keyMap);
+				ExtraColumnAnnotation extraColumnAnnotation = entry.getValue();
 				if (!extraColumnAnnotation.getExcelColumn().ignore()) {
 					SheetHeader sheetHeader = new SheetHeader();
 					if (extraColumnAnnotation.getExcelCellLayout() == null)
@@ -1048,7 +1055,7 @@ public class SuperGenerateExcelImpl {
 					if (extraColumnAnnotation.getExcelColumn() == null)
 						throw new ExcelGeneratorException("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
 					PropertyUtils.copyProperties(sheetHeader, extraColumnAnnotation);
-					sheetHeader.setKeyMap(keyMap);
+					sheetHeader.setKeyMap(entry.getKey());
 					listSheetHeader.add(sheetHeader);
 				}
 			}
