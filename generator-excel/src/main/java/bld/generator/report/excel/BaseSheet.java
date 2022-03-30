@@ -11,11 +11,14 @@ import javax.validation.constraints.Size;
 import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
- * The Class BaseSheet.
- * <br>
- * Each generated Sheet will be of BaseSheet type 
+ * The Class BaseSheet. <br>
+ * Each generated Sheet will be of BaseSheet type
  */
-public  abstract class BaseSheet{
+public abstract class BaseSheet {
+
+	//public static final String APOS = "\u0027";
+	
+	public static final String APOS = "&apos;";
 	
 	/** The name sheet. */
 	@Size(max = ExcelConstant.SHEET_NAME_SIZE)
@@ -28,7 +31,8 @@ public  abstract class BaseSheet{
 	 */
 	public BaseSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
 		super();
-		this.sheetName = sheetName;
+		if (sheetName != null)
+			this.sheetName = sheetName.replace("'", APOS);
 	}
 
 	/**
@@ -85,6 +89,4 @@ public  abstract class BaseSheet{
 		return true;
 	}
 
-	
-	
 }

@@ -18,7 +18,6 @@ import javax.persistence.Tuple;
 import javax.persistence.TupleElement;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.converters.CalendarConverter;
@@ -134,7 +133,8 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 		beanUtilsBean.getConvertUtils().register(converter, Date.class);
 		converter = new CalendarConverter(null);
 		beanUtilsBean.getConvertUtils().register(converter, Calendar.class);
-		BeanUtils.copyProperties(t, mapResultApp);
+		beanUtilsBean.copyProperties(t, mapResultApp);
+
 	}
 
 	/**

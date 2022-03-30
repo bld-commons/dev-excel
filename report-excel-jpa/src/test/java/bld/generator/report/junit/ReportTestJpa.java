@@ -86,13 +86,14 @@ public class ReportTestJpa {
 		
 		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
 		listBaseSheet.add(casaEditrice);
-		
+		//Libri d'autore
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
 		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 		listBaseSheet.add(autoreLibriSheet);
+		
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		listBaseSheet.add(genereSheet);
 		SalarySheet salarySheet=new SalarySheet("salary");

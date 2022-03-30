@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -438,6 +439,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 			// evaluateAllFormulaCells(workbook, sheet);
 		}
+		
+		for(int i=0;i<workbook.getNumberOfSheets();i++)
+			workbook.setSheetName(i, workbook.getSheetName(i).replace(BaseSheet.APOS, "'"));
+		
 		for (DropDownCell dropDownCell : this.listDropDown)
 			super.addDropDown(dropDownCell);
 
@@ -838,7 +843,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						xAxis = setInfoColumnByMapCharts(xAxis, sheet, null);
 						indexRow = generateChart((XSSFWorkbook) workbook, (XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart, isVertical && !excelSheetLayout.notMerge(), sheetData);
 					}
-				} else {
+				} else if (MapUtils.isNotEmpty(mapChart)) {
 					for (String keyChart : mapChart.get(excelChart.id()).keySet()) {
 						for (ExcelChartCategory excelChartCategory : excelChart.excelChartCategories()) {
 							if (keyChart.endsWith(excelChartCategory.function())) {
