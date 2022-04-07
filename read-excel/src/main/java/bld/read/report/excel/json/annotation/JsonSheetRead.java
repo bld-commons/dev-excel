@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.read.report.excel.json.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -13,12 +17,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import bld.read.report.excel.json.deserialier.ExcelSheetReadDeserialaizer;
 
+/**
+ * The Interface JsonSheetRead.
+ */
 @Retention(RUNTIME)
 @Target({METHOD,FIELD,PARAMETER})
 @JacksonAnnotationsInside
 @JsonDeserialize(using = ExcelSheetReadDeserialaizer.class)
 public @interface JsonSheetRead {
 
+	/**
+	 * Value.
+	 *
+	 * @return the string
+	 */
 	public String value();
 	
 	

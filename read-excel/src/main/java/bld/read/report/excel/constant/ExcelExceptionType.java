@@ -20,8 +20,10 @@ public enum ExcelExceptionType {
 	/** The max sheet name. */
 	MAX_SHEET_NAME("MSN","The sheet name has exceeded the maximum length of characters"),
 	
+	/** The multiple sheet name. */
 	MULTIPLE_SHEET_NAME("MLTSN","Multiple sheets with name \""+ExcelReaderConstant.PARAMETER+"\""),
 	
+	/** The character not valid. */
 	CHARACTER_NOT_VALID("CNv","The \""+ExcelReaderConstant.PARAMETER+"\" field is \"character\" type"),
 	
 	;

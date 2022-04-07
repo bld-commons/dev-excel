@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.read.report.excel.json.deserialier;
 
 import java.io.IOException;
@@ -20,20 +24,33 @@ import bld.read.report.excel.domain.RowSheetRead;
 import bld.read.report.excel.domain.SheetRead;
 import bld.read.report.excel.json.annotation.JsonSheetRead;
 
+/**
+ * The Class ExcelSheetReadDeserialaizer.
+ */
 @SuppressWarnings("serial")
 public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? extends RowSheetRead>>  implements ContextualDeserializer{
 
+	/** The json sheet read. */
 	private JsonSheetRead jsonSheetRead;
 	
+	/** The sheet read class. */
 	private Class<? extends SheetRead<? extends RowSheetRead>> sheetReadClass;
 	
 	
+	/**
+	 * Instantiates a new excel sheet read deserialaizer.
+	 */
 	public ExcelSheetReadDeserialaizer() {
 		super(SheetRead.class);
 	}	
 
 
 
+	/**
+	 * Instantiates a new excel sheet read deserialaizer.
+	 *
+	 * @param vc the vc
+	 */
 	protected ExcelSheetReadDeserialaizer(Class<SheetRead<? extends RowSheetRead>> vc) {
 		super(vc);
 		this.sheetReadClass=vc;
@@ -41,6 +58,12 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 
 	
 	
+	/**
+	 * Instantiates a new excel sheet read deserialaizer.
+	 *
+	 * @param vc    the vc
+	 * @param sheet the sheet
+	 */
 	public ExcelSheetReadDeserialaizer(Class<? extends SheetRead<? extends RowSheetRead>> vc, JsonSheetRead sheet) {
 		super(vc);
 		this.sheetReadClass=vc;
@@ -49,16 +72,26 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 
 
 
+	/** The Constant MIME_TYPE_XLS. */
 	private static final String MIME_TYPE_XLS = "application/vnd.ms-excel";
 
+	/** The Constant MIME_TYPE_XLSX. */
 	private static final String MIME_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+	/**
+	 * Deserialize.
+	 *
+	 * @param p    the p
+	 * @param ctxt the ctxt
+	 * @return the sheet read<? extends row sheet read>
+	 * @throws IOException      Signals that an I/O exception has occurred.
+	 * @throws JacksonException the jackson exception
+	 */
 	@Override
 	public SheetRead<? extends RowSheetRead> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
 		String file = p.getText();
 		String partSeparator = ",";
 		String[] propsFile = file.split(partSeparator);
-		boolean value=false;
 		ExcelType excelType=ExcelType.XLS;
 		if (!propsFile[0].contains(MIME_TYPE_XLS) && !propsFile[0].contains(MIME_TYPE_XLSX))
 			throw new IOException("The file type is not valid");
@@ -84,6 +117,14 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 		return excelRead.getSheet(this.sheetReadClass, this.jsonSheetRead.value());
 	}
 
+	/**
+	 * Creates the contextual.
+	 *
+	 * @param ctxt     the ctxt
+	 * @param property the property
+	 * @return the json deserializer
+	 * @throws JsonMappingException the json mapping exception
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {

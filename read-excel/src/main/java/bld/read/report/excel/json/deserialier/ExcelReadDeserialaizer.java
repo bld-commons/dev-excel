@@ -1,3 +1,7 @@
+/**
+ * @author Francesco Baldi
+ * @mail francesco.baldi1987@gmail.com
+ */
 package bld.read.report.excel.json.deserialier;
 
 import java.io.IOException;
@@ -18,19 +22,39 @@ import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.excel.json.annotation.JsonExcel;
 import bld.read.report.excel.json.annotation.JsonSheet;
 
+/**
+ * The Class ExcelReadDeserialaizer.
+ */
 @SuppressWarnings("serial")
 public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implements ContextualDeserializer{
 
+	/** The sheets. */
 	private JsonSheet[] sheets;
 	
+	/**
+	 * Instantiates a new excel read deserialaizer.
+	 *
+	 * @param vc the vc
+	 */
 	protected ExcelReadDeserialaizer(Class<?> vc) {
 		super(vc);
 	}
 
+	/** The Constant MIME_TYPE_XLS. */
 	private static final String MIME_TYPE_XLS = "application/vnd.ms-excel";
 
+	/** The Constant MIME_TYPE_XLSX. */
 	private static final String MIME_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+	/**
+	 * Deserialize.
+	 *
+	 * @param p    the p
+	 * @param ctxt the ctxt
+	 * @return the excel read
+	 * @throws IOException      Signals that an I/O exception has occurred.
+	 * @throws JacksonException the jackson exception
+	 */
 	@Override
 	public ExcelRead deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
 		String file = p.getText();
@@ -56,6 +80,14 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 		return excelRead;
 	}
 
+	/**
+	 * Creates the contextual.
+	 *
+	 * @param ctxt     the ctxt
+	 * @param property the property
+	 * @return the json deserializer
+	 * @throws JsonMappingException the json mapping exception
+	 */
 	@Override
 	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
 		JsonExcel jsonExcel = property.getAnnotation(JsonExcel.class);

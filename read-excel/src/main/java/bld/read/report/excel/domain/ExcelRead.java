@@ -36,6 +36,7 @@ public class ExcelRead {
 	private List<SheetRead<? extends RowSheetRead>> listSheetRead;
 	
 	
+	/** The map sheet. */
 	private Map<String,SheetRead<?>> mapSheet;
 	
 	
@@ -57,11 +58,13 @@ public class ExcelRead {
 
 	
 	
+
 	/**
 	 * Gets the sheet.
 	 *
-	 * @param <T>    the generic type
-	 * @param classe the classe
+	 * @param <T>            the generic type
+	 * @param classSheetRead the class sheet read
+	 * @param sheetName      the sheet name
 	 * @return the sheet
 	 */
 	@SuppressWarnings("unchecked")
@@ -102,6 +105,14 @@ public class ExcelRead {
 		return listSheetRead;
 	}
 
+	/**
+	 * Adds the sheet convertion.
+	 *
+	 * @param <T>            the generic type
+	 * @param classSheetRead the class sheet read
+	 * @param sheetName      the sheet name
+	 * @throws Exception the exception
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName) throws Exception {
 		Constructor<?> constructor = classSheetRead.getConstructor(String.class);
@@ -150,18 +161,33 @@ public class ExcelRead {
 
 
 
+	/**
+	 * Gets the map sheet.
+	 *
+	 * @return the map sheet
+	 */
 	public Map<String, SheetRead<?>> getMapSheet() {
 		return mapSheet;
 	}
 
 
 
+	/**
+	 * Sets the map sheet.
+	 *
+	 * @param mapSheetBySheetName the new map sheet
+	 */
 	public void setMapSheet(Map<String, SheetRead<?>> mapSheetBySheetName) {
 		this.mapSheet = mapSheetBySheetName;
 	}
 
 
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -175,6 +201,12 @@ public class ExcelRead {
 
 
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
