@@ -33,6 +33,12 @@ public class ExcelReaderException extends Exception {
 		this.parameter=parameter;
 	}
 
+	public ExcelReaderException(ExcelExceptionType excelExceptionType) {
+		super(excelExceptionType.getMessage());
+		this.code=excelExceptionType.getCode();
+	}
+
+
 
 	/**
 	 * Gets the code.

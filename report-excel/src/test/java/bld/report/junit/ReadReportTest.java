@@ -6,6 +6,7 @@
 package bld.report.junit;
 
 import java.io.FileInputStream;
+import java.util.Base64;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -17,8 +18,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.bld.commons.connection.client.RestClientConnection;
+import com.bld.commons.connection.config.annotation.EnableRestConnection;
+import com.bld.commons.connection.model.ObjectRequest;
 
 import bld.read.report.csv.ReadCsv;
 import bld.read.report.csv.domain.CsvRead;
@@ -26,8 +32,9 @@ import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.config.annotation.EnableExcelRead;
 import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
-import bld.report.read.junit.entity.ReadAutoreLibriRow;
-import bld.report.read.junit.entity.ReadAutoreLibriSheet;
+import bld.report.controller.entity.ReadAutoreLibriRow;
+import bld.report.controller.entity.ReadAutoreLibriSheet;
+import bld.report.controller.input.ExcelModel;
 import bld.report.read.junit.entity.ReadGenereRow;
 import bld.report.read.junit.entity.ReadGenereSheet;
 import bld.report.read.junit.entity.UserCsvRow;
@@ -41,6 +48,7 @@ import bld.report.read.junit.entity.UserCsvRow;
 //@EnableExcelGenerator
 @EnableExcelRead
 @EnableTransactionManagement
+@EnableRestConnection
 public class ReadReportTest {
 
 	private final static Log logger = LogFactory.getLog(ReadReportTest.class);
@@ -53,6 +61,9 @@ public class ReadReportTest {
 	/** The read excel. */
 	@Autowired
 	private ReadExcel readExcel;
+	
+	@Autowired
+	private RestClientConnection restClientConnection;
 
 	/**
 	 * Sets the up.
@@ -72,21 +83,21 @@ public class ReadReportTest {
 	 */
 	@Test
 	public void testRead() throws Exception {
-		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-Dynamic.xlsx");
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-JPA.xlsx");
 		byte[] report = IOUtils.toByteArray(inputStream);
 		ExcelRead excelRead = new ExcelRead();
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
-		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
-//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
+		String sheetName="Libri d'autore";
+		excelRead.addSheetConvertion(ReadAutoreLibriSheet.class, sheetName);
+		excelRead.addSheetConvertion(ReadGenereSheet.class,"Genere");
 		excelRead = this.readExcel.convertExcelToEntity(excelRead);
-		ReadAutoreLibriSheet sheet;
 		try {
-			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+			ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class,sheetName);
 			for (ReadAutoreLibriRow row : sheet.getListRowSheet())
 				System.out.println(row.toString());
 
-			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class,"Genere");
 			for (ReadGenereRow row : readGenereSheet.getListRowSheet())
 				System.out.println(row.toString());
 		} catch (Exception e) {
@@ -109,6 +120,20 @@ public class ReadReportTest {
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
+	}
+	
+	@Test
+	public void testJsonRead() throws Exception {
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-JPA.xlsx");
+		byte[] report = IOUtils.toByteArray(inputStream);
+		String file=Base64.getEncoder().encodeToString(report);
+		file="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"+file;
+		ObjectRequest<ExcelModel>objRequest=ObjectRequest.newInstancePost("http://localhost:8080/excel/read");
+		ExcelModel excelModel=new ExcelModel();
+		excelModel.setExcel(file);
+		objRequest.setData(excelModel);
+		objRequest.setContentType(MediaType.APPLICATION_JSON);
+		this.restClientConnection.entityRestTemplate(objRequest, Void.class);
 	}
 
 

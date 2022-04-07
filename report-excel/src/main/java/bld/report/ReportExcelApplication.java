@@ -11,13 +11,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import bld.generator.report.excel.config.annotation.EnableExcelGenerator;
+import bld.read.report.excel.config.annotation.EnableExcelRead;
 
 /**
  * The Class ReportExcelApplication.
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"bld.report","bld.read"})
-//@EnableExcelGenerator
+@EnableExcelGenerator
+@EnableExcelRead
 public class ReportExcelApplication {
 
 	

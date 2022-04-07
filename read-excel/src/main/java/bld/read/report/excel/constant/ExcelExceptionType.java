@@ -12,14 +12,20 @@ public enum ExcelExceptionType {
 	
 	
 	/** The sheet not found. */
-	SHEET_NOT_FOUND("SNF","The sheet \""+ExcelReaderConstant.PARAMETER+"\" not found"),
+	SHEET_NOT_FOUND("SNF","The \""+ExcelReaderConstant.PARAMETER+"\" sheet not found"),
 	
 	/** The column not found. */
-	COLUMN_NOT_FOUND("CNF","The column \""+ExcelReaderConstant.PARAMETER+"\" not found"),
+	COLUMN_NOT_FOUND("CNF","The \""+ExcelReaderConstant.PARAMETER+"\" column not found"),
 	
 	/** The max sheet name. */
 	MAX_SHEET_NAME("MSN","The sheet name has exceeded the maximum length of characters"),
+	
+	MULTIPLE_SHEET_NAME("MLTSN","Multiple sheets with name \""+ExcelReaderConstant.PARAMETER+"\""),
+	
+	CHARACTER_NOT_VALID("CNv","The \""+ExcelReaderConstant.PARAMETER+"\" field is \"character\" type"),
+	
 	;
+	
 	
 	/** The code. */
 	private String code;

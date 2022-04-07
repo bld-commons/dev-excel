@@ -104,14 +104,13 @@ public class ReadExcelImpl implements ReadExcel {
 		} else {
 			workbook = new XSSFWorkbook(inputStream);
 		}
-		for (SheetRead<? extends RowSheetRead> sheet : excelRead.getListSheetRead()) {
-			SheetRead<T> sheetType = (SheetRead<T>) sheet;
-			Class<? extends SheetRead<? extends RowSheetRead>> classSheet = (Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
-			excelRead.getMapSheet().put(classSheet, sheetType);
+		for (SheetRead<? extends RowSheetRead> sheet: excelRead.getListSheetRead()) {
+			SheetRead<T>sheetType=(SheetRead<T>) sheet;
+			Class<? extends SheetRead<? extends RowSheetRead>> classSheet=(Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
 			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
 			logger.debug("Sheet: " + sheetType.getSheetName());
-			if (sheetType.getSheetName().length() > ExcelConstant.SHEET_NAME_SIZE)
-				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
+			if(sheetType.getSheetName().length()>ExcelConstant.SHEET_NAME_SIZE)
+				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME);
 			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
 			if (worksheet == null)
 				throw new ExcelReaderException(ExcelExceptionType.SHEET_NOT_FOUND, sheetType.getSheetName());
@@ -153,14 +152,16 @@ public class ReadExcelImpl implements ReadExcel {
 								Object value = null;
 								if (Number.class.isAssignableFrom(classField)) {
 									Double numberValue = cell.getNumericCellValue();
-									if (Integer.class.isAssignableFrom(classField))
-										value = numberValue.intValue();
-									else if (BigDecimal.class.isAssignableFrom(classField))
-										value = BigDecimal.valueOf(numberValue);
-									else if (Float.class.isAssignableFrom(classField))
-										value = Float.valueOf(numberValue.floatValue());
-									else if (Long.class.isAssignableFrom(classField))
-										value = numberValue.longValue();
+									if(numberValue!=null) {
+										if (Integer.class.isAssignableFrom(classField))
+											value = numberValue.intValue();
+										else if (BigDecimal.class.isAssignableFrom(classField))
+											value = BigDecimal.valueOf(numberValue);
+										else if (Float.class.isAssignableFrom(classField))
+											value = Float.valueOf(numberValue.floatValue());
+										else if (Long.class.isAssignableFrom(classField))
+											value = numberValue.longValue();
+									}
 								} else if (String.class.isAssignableFrom(classField)) {
 									cell.setCellType(CellType.STRING);
 									String stringValue = cell.getStringCellValue().trim();
@@ -168,18 +169,24 @@ public class ReadExcelImpl implements ReadExcel {
 								} else if (Calendar.class.isAssignableFrom(classField)) {
 									Calendar calendar = Calendar.getInstance();
 									Date dateValue = cell.getDateCellValue();
-									calendar.setTime(dateValue);
-									value = calendar;
+									if(dateValue!=null) {
+										calendar.setTime(dateValue);
+										value=calendar;
+									}
 								} else if (Date.class.isAssignableFrom(classField)) {
 									value = cell.getDateCellValue();
 								} else if (Boolean.class.isAssignableFrom(classField)) {
 									value = cell.getBooleanCellValue();
-								} else if (Character.class.isAssignableFrom(classField)) {
-									cell.setCellType(CellType.STRING);
-									String stringValue = cell.getStringCellValue();
-									value = stringValue.length() > 0 ? stringValue.charAt(0) : null;
-								} else {
-									logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
+								}else if (Character.class.isAssignableFrom(classField)) {
+									String stringValue=cell.getStringCellValue();
+									if(StringUtils.isNotEmpty(stringValue)) {
+										stringValue=stringValue.trim();
+										if(stringValue.length()>1)
+											throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID,  field.getName());
+										value=stringValue.charAt(0);
+									}
+								}else {
+									logger.debug("The type \"" + field.getType().getSimpleName()+ "\" is not manage");
 								}
 								if (value != null) {
 									String nameColumn = ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
