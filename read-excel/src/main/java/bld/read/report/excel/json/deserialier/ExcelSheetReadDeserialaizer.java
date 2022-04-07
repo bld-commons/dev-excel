@@ -83,7 +83,7 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 	 *
 	 * @param p    the p
 	 * @param ctxt the ctxt
-	 * @return the sheet read<? extends row sheet read>
+	 * @return the sheet read
 	 * @throws IOException      Signals that an I/O exception has occurred.
 	 * @throws JacksonException the jackson exception
 	 */

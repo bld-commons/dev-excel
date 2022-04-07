@@ -6,6 +6,8 @@
 package bld.report.junit;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Base64;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -34,9 +36,9 @@ import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.report.controller.entity.ReadAutoreLibriRow;
 import bld.report.controller.entity.ReadAutoreLibriSheet;
+import bld.report.controller.entity.ReadGenereRow;
+import bld.report.controller.entity.ReadGenereSheet;
 import bld.report.controller.input.ExcelModel;
-import bld.report.read.junit.entity.ReadGenereRow;
-import bld.report.read.junit.entity.ReadGenereSheet;
 import bld.report.read.junit.entity.UserCsvRow;
 
 /**
@@ -123,12 +125,18 @@ public class ReadReportTest {
 	}
 	
 	@Test
-	public void testJsonRead() throws Exception {
+	public void testJsonReadSheet() throws Exception {
+		readExcelClient("http://localhost:8080/excel/sheet-read");
+	}
+
+
+
+	private void readExcelClient(String url) throws FileNotFoundException, IOException, Exception {
 		FileInputStream inputStream = new FileInputStream("/mnt/report/Mondadori-JPA.xlsx");
 		byte[] report = IOUtils.toByteArray(inputStream);
 		String file=Base64.getEncoder().encodeToString(report);
 		file="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"+file;
-		ObjectRequest<ExcelModel>objRequest=ObjectRequest.newInstancePost("http://localhost:8080/excel/read");
+		ObjectRequest<ExcelModel>objRequest=ObjectRequest.newInstancePost(url);
 		ExcelModel excelModel=new ExcelModel();
 		excelModel.setExcel(file);
 		objRequest.setData(excelModel);
@@ -137,4 +145,9 @@ public class ReadReportTest {
 	}
 
 
+	@Test
+	public void testJsonReadExcel() throws Exception {
+		readExcelClient("http://localhost:8080/excel/excel-read");
+	}
+	
 }

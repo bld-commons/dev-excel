@@ -27,7 +27,7 @@ public @interface JsonSheet {
 	/**
 	 * Sheet class.
 	 *
-	 * @return the class<? extends sheet read<? extends row sheet read>>
+	 * @return the class sheet read
 	 */
 	public Class<? extends SheetRead<? extends RowSheetRead>> sheetClass();
 	

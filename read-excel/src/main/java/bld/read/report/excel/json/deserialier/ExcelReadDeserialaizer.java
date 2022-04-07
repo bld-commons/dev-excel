@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import bld.generator.report.utils.ExcelUtils;
 import bld.read.report.excel.ReadExcel;
+import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
 import bld.read.report.excel.json.annotation.JsonExcel;
 import bld.read.report.excel.json.annotation.JsonSheet;
@@ -31,6 +33,12 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 	/** The sheets. */
 	private JsonSheet[] sheets;
 	
+	
+	
+	public ExcelReadDeserialaizer() {
+		super(ExcelRead.class);
+	}
+
 	/**
 	 * Instantiates a new excel read deserialaizer.
 	 *
@@ -60,15 +68,19 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 		String file = p.getText();
 		String partSeparator = ",";
 		String[] propsFile = file.split(partSeparator);
-		if (!propsFile[0].contains(MIME_TYPE_XLS) && propsFile[0].contains(MIME_TYPE_XLSX))
+		ExcelType excelType=ExcelType.XLS;
+		if (!propsFile[0].contains(MIME_TYPE_XLS) && !propsFile[0].contains(MIME_TYPE_XLSX))
 			throw new IOException("The file type is not valid");
-		file = propsFile[1];
+		if(propsFile[0].contains(MIME_TYPE_XLSX))
+			excelType=ExcelType.XLSX;
+		file = file.substring(file.indexOf(partSeparator)+1);
 		byte[] excelByteArray = Base64.getDecoder().decode(file);
 		ReadExcel readExcel=ExcelUtils.getApplicationContext().getBean(ReadExcel.class);
 		
 		ExcelRead excelRead=null;
 		try {
 			excelRead=new ExcelRead();
+			excelRead.setExcelType(excelType);
 			excelRead.setReportExcel(excelByteArray);
 			for(JsonSheet sheet:sheets)
 				excelRead.addSheetConvertion(sheet.sheetClass(), sheet.name());

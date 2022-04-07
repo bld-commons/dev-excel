@@ -3,7 +3,7 @@
 * @mail francesco.baldi1987@gmail.com
 * @class bld.read.report.junit.entity.ReadGenereSheet.java
 */
-package bld.report.read.junit.entity;
+package bld.report.controller.entity;
 
 import bld.read.report.excel.annotation.ExcelReadSheet;
 import bld.read.report.excel.domain.SheetRead;
