@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
@@ -33,10 +32,12 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 	/** The sheets. */
 	private JsonSheet[] sheets;
 	
+	private Class<? extends ExcelRead> excelReadClass;
 	
 	
 	public ExcelReadDeserialaizer() {
 		super(ExcelRead.class);
+		this.excelReadClass=ExcelRead.class;
 	}
 
 	/**
@@ -44,9 +45,20 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 	 *
 	 * @param vc the vc
 	 */
-	protected ExcelReadDeserialaizer(Class<?> vc) {
+	protected ExcelReadDeserialaizer(Class<? extends ExcelRead> vc) {
 		super(vc);
+		this.excelReadClass=vc;
 	}
+	
+	
+
+	public ExcelReadDeserialaizer(JsonSheet[] sheets, Class<? extends ExcelRead> excelReadClass) {
+		super(excelReadClass);
+		this.sheets = sheets;
+		this.excelReadClass = excelReadClass;
+	}
+
+
 
 	/** The Constant MIME_TYPE_XLS. */
 	private static final String MIME_TYPE_XLS = "application/vnd.ms-excel";
@@ -79,7 +91,7 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 		
 		ExcelRead excelRead=null;
 		try {
-			excelRead=new ExcelRead();
+			excelRead=this.excelReadClass.getDeclaredConstructor().newInstance();
 			excelRead.setExcelType(excelType);
 			excelRead.setReportExcel(excelByteArray);
 			for(JsonSheet sheet:sheets)
@@ -100,11 +112,15 @@ public class ExcelReadDeserialaizer extends StdDeserializer<ExcelRead>  implemen
 	 * @return the json deserializer
 	 * @throws JsonMappingException the json mapping exception
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
 		JsonExcel jsonExcel = property.getAnnotation(JsonExcel.class);
 		this.sheets=jsonExcel.value();
-		return this;
+		if (property.getType() != null && property.getType().getRawClass() != null)
+			return new ExcelReadDeserialaizer(this.sheets,(Class<? extends ExcelRead>) property.getType().getRawClass());
+		else
+			return this;
 	}
 	
 	

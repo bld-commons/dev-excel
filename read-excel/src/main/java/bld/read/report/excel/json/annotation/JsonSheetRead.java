@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import bld.read.report.excel.json.deserialier.ExcelSheetReadDeserialaizer;
+import bld.read.report.excel.json.deserialier.SheetReadDeserialaizer;
 
 /**
  * The Interface JsonSheetRead.
@@ -23,7 +23,7 @@ import bld.read.report.excel.json.deserialier.ExcelSheetReadDeserialaizer;
 @Retention(RUNTIME)
 @Target({METHOD,FIELD,PARAMETER})
 @JacksonAnnotationsInside
-@JsonDeserialize(using = ExcelSheetReadDeserialaizer.class)
+@JsonDeserialize(using = SheetReadDeserialaizer.class)
 public @interface JsonSheetRead {
 
 	/**

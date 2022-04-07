@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.constant.ExcelType;
@@ -30,9 +34,12 @@ import bld.read.report.excel.exception.ExcelReaderException;
 public class ExcelRead {
 
 	/** The report excel. */
+	@NotNull
 	private byte[] reportExcel;
 	
 	/** The list class sheet. */
+	@Valid
+	@NotEmpty
 	private List<SheetRead<? extends RowSheetRead>> listSheetRead;
 	
 	
@@ -42,6 +49,7 @@ public class ExcelRead {
 	
 	
 	/** The excel type. */
+	@NotNull
 	private ExcelType excelType;
 	
 	

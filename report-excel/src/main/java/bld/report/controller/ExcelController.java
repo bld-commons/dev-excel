@@ -1,5 +1,7 @@
 package bld.report.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,7 @@ import bld.report.controller.input.ReadSheetModel;
 public class ExcelController {
 
 	@PostMapping(path = "/sheet-read", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void readSheet(@RequestBody ReadSheetModel readSheetModel) {
+	public void readSheet(@RequestBody @Valid ReadSheetModel readSheetModel) {
 		if (readSheetModel.getReadAutoreLibriSheet() != null)
 			for (ReadAutoreLibriRow row : readSheetModel.getReadAutoreLibriSheet().getListRowSheet())
 				System.out.println(row);
@@ -25,7 +27,7 @@ public class ExcelController {
 	
 	
 	@PostMapping(path = "/excel-read", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void readExcel(@RequestBody ReadExcelModel readExcelModel) {
+	public void readExcel(@RequestBody @Valid ReadExcelModel readExcelModel) {
 		for(SheetRead<? extends RowSheetRead>sheet:readExcelModel.getExcelRead().getListSheetRead()) {
 			System.out.println("--------------------------"+sheet.getSheetName()+"--------------------------");
 			for(RowSheetRead row:sheet.getListRowSheet())

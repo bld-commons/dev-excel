@@ -506,7 +506,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (excelSummary.titleCellFormulta())
 				cellHeader.setCellFormula(title);
 			else {
-				title = title.replace("\"", "");
+				title = title.replace("\"", "").replace(BaseSheet.APOS, "'");
 				cellHeader.setCellValue(title);
 			}
 

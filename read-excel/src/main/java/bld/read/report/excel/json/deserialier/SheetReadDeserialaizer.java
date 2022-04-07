@@ -28,7 +28,7 @@ import bld.read.report.excel.json.annotation.JsonSheetRead;
  * The Class ExcelSheetReadDeserialaizer.
  */
 @SuppressWarnings("serial")
-public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? extends RowSheetRead>>  implements ContextualDeserializer{
+public class SheetReadDeserialaizer extends StdDeserializer<SheetRead<? extends RowSheetRead>>  implements ContextualDeserializer{
 
 	/** The json sheet read. */
 	private JsonSheetRead jsonSheetRead;
@@ -40,7 +40,7 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 	/**
 	 * Instantiates a new excel sheet read deserialaizer.
 	 */
-	public ExcelSheetReadDeserialaizer() {
+	public SheetReadDeserialaizer() {
 		super(SheetRead.class);
 	}	
 
@@ -51,7 +51,7 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 	 *
 	 * @param vc the vc
 	 */
-	protected ExcelSheetReadDeserialaizer(Class<SheetRead<? extends RowSheetRead>> vc) {
+	protected SheetReadDeserialaizer(Class<SheetRead<? extends RowSheetRead>> vc) {
 		super(vc);
 		this.sheetReadClass=vc;
 	}
@@ -64,7 +64,7 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 	 * @param vc    the vc
 	 * @param sheet the sheet
 	 */
-	public ExcelSheetReadDeserialaizer(Class<? extends SheetRead<? extends RowSheetRead>> vc, JsonSheetRead sheet) {
+	public SheetReadDeserialaizer(Class<? extends SheetRead<? extends RowSheetRead>> vc, JsonSheetRead sheet) {
 		super(vc);
 		this.sheetReadClass=vc;
 		this.jsonSheetRead = sheet;
@@ -130,7 +130,7 @@ public class ExcelSheetReadDeserialaizer extends StdDeserializer<SheetRead<? ext
 	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
 		this.jsonSheetRead = property.getAnnotation(JsonSheetRead.class);
 		if (property.getType() != null && property.getType().getRawClass() != null)
-			return new ExcelSheetReadDeserialaizer((Class<? extends SheetRead<? extends RowSheetRead>>) property.getType().getRawClass(), this.jsonSheetRead);
+			return new SheetReadDeserialaizer((Class<? extends SheetRead<? extends RowSheetRead>>) property.getType().getRawClass(), this.jsonSheetRead);
 		else
 			return this;
 	}
