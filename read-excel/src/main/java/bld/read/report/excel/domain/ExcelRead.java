@@ -4,13 +4,17 @@
  */
 package bld.read.report.excel.domain;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bld.generator.report.excel.constant.ExcelConstant;
+import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.constant.ExcelType;
+import bld.read.report.excel.exception.ExcelReaderException;
 
 /**
  * The Class ExcelRead.<br>
@@ -31,8 +35,11 @@ public class ExcelRead {
 	/** The list class sheet. */
 	private List<SheetRead<? extends RowSheetRead>> listSheetRead;
 	
+	
 	/** The map sheet. */
-	private Map<Class<? extends SheetRead<?>>,SheetRead<?>> mapSheet;
+	private Map<String,SheetRead<?>> mapSheet;
+	
+	
 	
 	/** The excel type. */
 	private ExcelType excelType;
@@ -47,21 +54,22 @@ public class ExcelRead {
 		this.excelType=ExcelType.XLS;
 		this.listSheetRead=new ArrayList<>();
 		this.mapSheet=new HashMap<>();
-		
 	}
 
 	
 	
+
 	/**
 	 * Gets the sheet.
 	 *
-	 * @param <T>    the generic type
-	 * @param classe the classe
+	 * @param <T>            the generic type
+	 * @param classSheetRead the class sheet read
+	 * @param sheetName      the sheet name
 	 * @return the sheet
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends SheetRead<?>> T getSheet(Class<T>classe) {
-		return (T)this.mapSheet.get(classe);
+	public <T extends SheetRead<?>> T getSheet(Class<T>classSheetRead,String sheetName) {
+		return (T)this.mapSheet.get(sheetName);
 	}
 
 
@@ -97,7 +105,27 @@ public class ExcelRead {
 		return listSheetRead;
 	}
 
+	/**
+	 * Adds the sheet convertion.
+	 *
+	 * @param <T>            the generic type
+	 * @param classSheetRead the class sheet read
+	 * @param sheetName      the sheet name
+	 * @throws Exception the exception
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName) throws Exception {
+		Constructor<?> constructor = classSheetRead.getConstructor(String.class);
+		T sheetRead= (T) constructor.newInstance(sheetName);
+		this.listSheetRead.add(sheetRead);
+		if(sheetName.length()>ExcelConstant.SHEET_NAME_SIZE)
+			throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
+		if(this.mapSheet.containsKey(sheetName))
+			throw new ExcelReaderException(ExcelExceptionType.MULTIPLE_SHEET_NAME,sheetName);
+		this.mapSheet.put(sheetName, sheetRead);
+	}
 
+	
 
 	/**
 	 * Sets the list class sheet.
@@ -110,14 +138,6 @@ public class ExcelRead {
 
 
 
-	/**
-	 * Gets the map sheet.
-	 *
-	 * @return the map sheet
-	 */
-	public Map<Class<? extends SheetRead<?>>, SheetRead<?>> getMapSheet() {
-		return mapSheet;
-	}
 
 	/**
 	 * Gets the excel type.
@@ -137,6 +157,28 @@ public class ExcelRead {
 	 */
 	public void setExcelType(ExcelType excelType) {
 		this.excelType = excelType;
+	}
+
+
+
+	/**
+	 * Gets the map sheet.
+	 *
+	 * @return the map sheet
+	 */
+	public Map<String, SheetRead<?>> getMapSheet() {
+		return mapSheet;
+	}
+
+
+
+	/**
+	 * Sets the map sheet.
+	 *
+	 * @param mapSheetBySheetName the new map sheet
+	 */
+	public void setMapSheet(Map<String, SheetRead<?>> mapSheetBySheetName) {
+		this.mapSheet = mapSheetBySheetName;
 	}
 
 
@@ -190,6 +232,11 @@ public class ExcelRead {
 			return false;
 		return true;
 	}
+
+
+
+	
+
 	
 
 

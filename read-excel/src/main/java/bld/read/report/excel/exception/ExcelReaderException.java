@@ -33,6 +33,17 @@ public class ExcelReaderException extends Exception {
 		this.parameter=parameter;
 	}
 
+	/**
+	 * Instantiates a new excel reader exception.
+	 *
+	 * @param excelExceptionType the excel exception type
+	 */
+	public ExcelReaderException(ExcelExceptionType excelExceptionType) {
+		super(excelExceptionType.getMessage());
+		this.code=excelExceptionType.getCode();
+	}
+
+
 
 	/**
 	 * Gets the code.

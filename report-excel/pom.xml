@@ -62,6 +62,10 @@
 			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.bld-commons</groupId>
+			<artifactId>common-rest-connection</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

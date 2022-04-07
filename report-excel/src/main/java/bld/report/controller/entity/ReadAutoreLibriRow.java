@@ -3,7 +3,7 @@
 * @mail francesco.baldi1987@gmail.com
 * @class bld.read.report.junit.entity.ReadAutoreLibriRow.java
 */
-package bld.report.read.junit.entity;
+package bld.report.controller.entity;
 
 import java.util.Calendar;
 
@@ -46,8 +46,8 @@ public class ReadAutoreLibriRow implements RowSheetRead {
 	private Double prezzo;
 	
 	/** The supplemento. */
-	@ExcelReadColumn(name = "Supplemento")
-	private Double supplemento;
+	@ExcelReadColumn(name = "Anno")
+	private Integer anno;
 
 	
 	
@@ -70,7 +70,7 @@ public class ReadAutoreLibriRow implements RowSheetRead {
 	 * @param prezzo        the prezzo
 	 * @param supplemento   the supplemento
 	 */
-	public ReadAutoreLibriRow(String nome, String cognome, Calendar dataDiNascita, String titolo, String genere, Integer matricola,Double prezzo,Double supplemento) {
+	public ReadAutoreLibriRow(String nome, String cognome, Calendar dataDiNascita, String titolo, String genere, Integer matricola,Double prezzo,Integer anno) {
 		super();
 		this.nome = nome;
 		this.cognome = cognome;
@@ -79,165 +79,80 @@ public class ReadAutoreLibriRow implements RowSheetRead {
 		this.genere = genere;
 		this.matricola = matricola;
 		this.prezzo=prezzo;
-		this.supplemento=supplemento;
+		this.anno=anno;
 	}
 
-	/**
-	 * Gets the supplemento.
-	 *
-	 * @return the supplemento
-	 */
-	public Double getSupplemento() {
-		return supplemento;
-	}
-
-	/**
-	 * Sets the supplemento.
-	 *
-	 * @param supplemento the new supplemento
-	 */
-	public void setSupplemento(Double supplemento) {
-		this.supplemento = supplemento;
-	}
-
-	/**
-	 * Gets the nome.
-	 *
-	 * @return the nome
-	 */
 	public String getNome() {
 		return nome;
 	}
 
-	/**
-	 * Sets the nome.
-	 *
-	 * @param nome the new nome
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * Gets the cognome.
-	 *
-	 * @return the cognome
-	 */
 	public String getCognome() {
 		return cognome;
 	}
 
-	/**
-	 * Sets the cognome.
-	 *
-	 * @param cognome the new cognome
-	 */
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
 
-	/**
-	 * Gets the data di nascita.
-	 *
-	 * @return the data di nascita
-	 */
 	public Calendar getDataDiNascita() {
 		return dataDiNascita;
 	}
 
-	/**
-	 * Sets the data di nascita.
-	 *
-	 * @param dataDiNascita the new data di nascita
-	 */
 	public void setDataDiNascita(Calendar dataDiNascita) {
 		this.dataDiNascita = dataDiNascita;
 	}
 
-	/**
-	 * Gets the titolo.
-	 *
-	 * @return the titolo
-	 */
 	public String getTitolo() {
 		return titolo;
 	}
 
-	/**
-	 * Sets the titolo.
-	 *
-	 * @param titolo the new titolo
-	 */
 	public void setTitolo(String titolo) {
 		this.titolo = titolo;
 	}
 
-	/**
-	 * Gets the genere.
-	 *
-	 * @return the genere
-	 */
 	public String getGenere() {
 		return genere;
 	}
 
-	/**
-	 * Sets the genere.
-	 *
-	 * @param genere the new genere
-	 */
 	public void setGenere(String genere) {
 		this.genere = genere;
 	}
 
-	/**
-	 * Gets the matricola.
-	 *
-	 * @return the matricola
-	 */
 	public Integer getMatricola() {
 		return matricola;
 	}
 
-	/**
-	 * Sets the matricola.
-	 *
-	 * @param matricola the new matricola
-	 */
 	public void setMatricola(Integer matricola) {
 		this.matricola = matricola;
 	}
 
-	/**
-	 * Gets the prezzo.
-	 *
-	 * @return the prezzo
-	 */
 	public Double getPrezzo() {
 		return prezzo;
 	}
 
-	/**
-	 * Sets the prezzo.
-	 *
-	 * @param prezzo the new prezzo
-	 */
 	public void setPrezzo(Double prezzo) {
 		this.prezzo = prezzo;
 	}
 
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
+	public Integer getAnno() {
+		return anno;
+	}
+
+	public void setAnno(Integer anno) {
+		this.anno = anno;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "ReadAutoreLibriRow [nome=" + nome + ", cognome=" + cognome + ", dataDiNascita=" + dataDiNascita
-				+ ", titolo=" + titolo + ", genere=" + genere + ", matricola=" + matricola + ", prezzo=" + prezzo
-				+ ", supplemento=" + supplemento + "]";
+		return "ReadAutoreLibriRow [nome=" + nome + ", cognome=" + cognome + ", dataDiNascita=" + dataDiNascita + ", titolo=" + titolo + ", genere=" + genere + ", matricola=" + matricola + ", prezzo=" + prezzo + ", anno=" + anno + "]";
 	}
-	
+
 	
 	
 	

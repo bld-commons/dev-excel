@@ -3,7 +3,7 @@
 * @mail francesco.baldi1987@gmail.com
 * @class bld.read.report.junit.entity.ReadGenereRow.java
 */
-package bld.report.read.junit.entity;
+package bld.report.controller.entity;
 
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.domain.RowSheetRead;
@@ -17,20 +17,15 @@ public class ReadGenereRow implements RowSheetRead {
 	@ExcelReadColumn(name = "Genere")
 	private String genere;
 	
-	/** The count libri. */
-	@ExcelReadColumn(name = "Totale Libri")
-	private Integer countLibri;
-	
 	/**
 	 * Instantiates a new read genere row.
 	 *
 	 * @param genere     the genere
 	 * @param countLibri the count libri
 	 */
-	public ReadGenereRow(String genere, int countLibri) {
+	public ReadGenereRow(String genere) {
 		super();
 		this.genere = genere;
-		this.countLibri = countLibri;
 	}
 	
 	/**
@@ -57,34 +52,38 @@ public class ReadGenereRow implements RowSheetRead {
 	public void setGenere(String genere) {
 		this.genere = genere;
 	}
-	
-	/**
-	 * Gets the count libri.
-	 *
-	 * @return the count libri
-	 */
-	public Integer getCountLibri() {
-		return countLibri;
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((genere == null) ? 0 : genere.hashCode());
+		return result;
 	}
-	
-	/**
-	 * Sets the count libri.
-	 *
-	 * @param countLibri the new count libri
-	 */
-	public void setCountLibri(Integer countLibri) {
-		this.countLibri = countLibri;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReadGenereRow other = (ReadGenereRow) obj;
+		if (genere == null) {
+			if (other.genere != null)
+				return false;
+		} else if (!genere.equals(other.genere))
+			return false;
+		return true;
 	}
-	
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
+
 	@Override
 	public String toString() {
-		return "ReadGenereRow [genere=" + genere + ", countLibri=" + countLibri + "]";
+		return "ReadGenereRow [genere=" + genere + "]";
 	}
+	
+
 	
 	
 }
