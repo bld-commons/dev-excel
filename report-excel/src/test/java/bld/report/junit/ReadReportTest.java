@@ -139,6 +139,7 @@ public class ReadReportTest {
 		ObjectRequest<ExcelModel>objRequest=ObjectRequest.newInstancePost(url);
 		ExcelModel excelModel=new ExcelModel();
 		excelModel.setExcel(file);
+		excelModel.setName("test excel");
 		objRequest.setData(excelModel);
 		objRequest.setContentType(MediaType.APPLICATION_JSON);
 		this.restClientConnection.entityRestTemplate(objRequest, Void.class);

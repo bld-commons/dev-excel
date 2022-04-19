@@ -117,4 +117,11 @@ public @interface ExcelSheetLayout {
 	 */
 	public short scale() default 100;
 	
+	/**
+	 * Locked.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean locked() default false;
+	
 }

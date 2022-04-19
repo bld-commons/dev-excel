@@ -4,14 +4,14 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import bld.read.report.excel.json.annotation.JsonSheetRead;
+import bld.read.report.excel.json.annotation.JsonSheet;
 import bld.report.controller.entity.ReadAutoreLibriSheet;
 
 public class ReadSheetModel {
 
-	@JsonProperty("excel")
-	@JsonSheetRead("Libri d'autore")
 	@Valid
+	@JsonProperty("excel")
+	@JsonSheet(fieldName = "readAutoreLibriSheet", name = "Libri d'autore")
 	private ReadAutoreLibriSheet readAutoreLibriSheet;
 
 	public ReadAutoreLibriSheet getReadAutoreLibriSheet() {
@@ -21,9 +21,5 @@ public class ReadSheetModel {
 	public void setReadAutoreLibriSheet(ReadAutoreLibriSheet readAutoreLibriSheet) {
 		this.readAutoreLibriSheet = readAutoreLibriSheet;
 	}
-	
-	
-	
-	
-	
+
 }

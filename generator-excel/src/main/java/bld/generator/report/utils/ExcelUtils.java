@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.text.WordUtils;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -31,6 +33,7 @@ import com.fathzer.soft.javaluator.StaticVariableSet;
 import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.exception.ExcelGeneratorException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelUtils.
  * 
@@ -209,7 +212,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @return the name parameter
 	 */
 	public static String getNameParameter(String parameter) {
-		parameter = WordUtils.capitalize(parameter.replace("_", " ")).replace(" ", "");
+		parameter = WordUtils.capitalize(parameter.replace("_", " ").toLowerCase()).replace(" ", "");
 		return (parameter.charAt(0) + "").toLowerCase() + parameter.substring(1);
 	}
 
@@ -223,7 +226,10 @@ public class ExcelUtils implements ApplicationContextAware {
 	 */
 	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] dati) {
 		FileOutputStream fos;
+		
 		try {
+			typeFile = startString(typeFile,".");
+			fileName=startString(fileName, "/");
 			fos = new FileOutputStream(pathFile + fileName + typeFile);
 			fos.write(dati);
 			fos.close();
@@ -234,31 +240,60 @@ public class ExcelUtils implements ApplicationContextAware {
 	}
 
 	/**
-	 * Calcolo coordinate function.
+	 * Start string.
 	 *
-	 * @param row    the row
-	 * @param column the column
-	 * @param dollar the dollar
+	 * @param text the text
+	 * @param start the start
 	 * @return the string
 	 */
-	public static String calcoloCoordinateFunction(int row, int column, boolean dollar) {
+	private static String startString(String text,String start) {
+		if(!text.startsWith(start))
+			text=start+text;
+		return text;
+	}
+
+
+
+	/**
+	 * Calcolo coordinate function.
+	 *
+	 * @param row the row
+	 * @param idColumn the id column
+	 * @param isBlockColumn the is block column
+	 * @param isBlockRow the is block row
+	 * @return the string
+	 */
+	public static String calcoloCoordinateFunction(int row, int idColumn, boolean isBlockColumn,boolean isBlockRow) {
 		int mod = 0;
-		int div = column;
-		String addDollar = "";
-		if (dollar)
-			addDollar = "$";
-		String coordinata = "";
+		int div = idColumn;
+		String blockColumn = blockCoordinate(isBlockColumn);
+		String blockRow = blockCoordinate(isBlockRow);
+		String column = "";
 		do {
 			mod = div % 26;
 			mod += 65;
 			div = (div / 26) - 1;
-			coordinata = Character.toString((char) mod) + coordinata;
+			column = Character.toString((char) mod) + column;
 		} while (div >= 0);
-		coordinata = addDollar + coordinata + addDollar + row;
+		column = blockColumn + column + blockRow + row;
 
-		return coordinata;
+		return column;
 	}
 
+	/**
+	 *  The block coordinate.
+	 *
+	 * @param isBlockCoordinate the is block coordinate
+	 * @return the string
+	 */
+	private static String blockCoordinate(boolean isBlockCoordinate) {
+		String blockCoordinate="";
+		if(isBlockCoordinate)
+			blockCoordinate="$";
+		return blockCoordinate;
+	}
+	
+	
 	/**
 	 * Gets the key column.
 	 *
@@ -377,4 +412,16 @@ public class ExcelUtils implements ApplicationContextAware {
 		return evaluate;
 	}
 
+	/**
+	 * Matcher.
+	 *
+	 * @param param the param
+	 * @param function the function
+	 * @return the matcher
+	 */
+	public static Matcher matcher(String param,String function) {
+		Pattern pattern = Pattern.compile(param);
+		return pattern.matcher(function);
+	}
+	
 }

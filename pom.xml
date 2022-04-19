@@ -83,12 +83,17 @@
 		<module>generator-excel</module>
 		<module>read-excel</module>
 		<!-- <module>report-excel</module> -->
-		<!-- <module>report-excel-jpa</module>  -->
+		<!-- <module>report-excel-jpa</module> -->
 		<!-- <module>report-excel-multiple-datasource</module> -->
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-lite</artifactId>
+				<version>${org.apache.poi-version}</version>
+			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>

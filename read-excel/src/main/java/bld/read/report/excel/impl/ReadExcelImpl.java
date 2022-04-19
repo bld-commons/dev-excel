@@ -201,7 +201,7 @@ public class ReadExcelImpl implements ReadExcel {
 					if (rowEmpty)
 						break;
 					else
-						sheetType.getListRowSheet().add(rowSheetRead);
+						sheetType.addRowSheet(rowSheetRead);
 				}
 
 			}

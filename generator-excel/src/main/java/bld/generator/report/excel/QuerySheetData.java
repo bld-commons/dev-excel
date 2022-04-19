@@ -58,6 +58,16 @@ public abstract class QuerySheetData<T extends RowSheet> extends SheetData<T>{
 		this.mapParameters = mapParameters;
 	}
 
+	/**
+	 * Adds the parameters.
+	 *
+	 * @param key the key
+	 * @param value the value
+	 */
+	public void addParameters(String key,Object value) {
+		this.mapParameters.put(key, value);
+	}
+	
 
 	/**
 	 * Hash code.

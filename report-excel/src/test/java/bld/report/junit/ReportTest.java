@@ -218,7 +218,7 @@ public class ReportTest {
 		listDate.add(new GregorianCalendar(1945, Calendar.JULY, 14));
 
 		List<AutoreLibriRowDynamic> list = new ArrayList<>();
-		AutoreLibriRowDynamic autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(null, listDate), "Profondo Rosso", "Thriller", 1, 25.5, 3.0);
+		AutoreLibriRowDynamic autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Profondo Rosso", "Thriller", 1, 25.5, 3.0);
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);

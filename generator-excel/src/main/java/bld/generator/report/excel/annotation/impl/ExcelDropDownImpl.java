@@ -5,7 +5,10 @@
  */
 package bld.generator.report.excel.annotation.impl;
 
+import java.util.Arrays;
+
 import bld.generator.report.excel.annotation.ExcelDropDown;
+import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 
 /**
  * The Class ExcelDropDownImpl.
@@ -17,6 +20,9 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 
 	/** The area range. */
 	private String areaRange;
+
+	/** The alias. */
+	private ExcelFormulaAlias[] alias;
 
 	/**
 	 * Instantiates a new excel drop down impl.
@@ -35,6 +41,20 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 		super();
 		this.suppressDropDownArrow = suppressDropDownArrow;
 		this.areaRange = areaRange;
+	}
+
+	/**
+	 * Instantiates a new excel drop down impl.
+	 *
+	 * @param suppressDropDownArrow the suppress drop down arrow
+	 * @param areaRange the area range
+	 * @param alias the alias
+	 */
+	public ExcelDropDownImpl(boolean suppressDropDownArrow, String areaRange, ExcelFormulaAlias[] alias) {
+		super();
+		this.suppressDropDownArrow = suppressDropDownArrow;
+		this.areaRange = areaRange;
+		this.alias = alias;
 	}
 
 	/**
@@ -74,6 +94,24 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 	}
 
 	/**
+	 * Gets the alias.
+	 *
+	 * @return the alias
+	 */
+	public ExcelFormulaAlias[] getAlias() {
+		return alias;
+	}
+
+	/**
+	 * Sets the alias.
+	 *
+	 * @param alias the new alias
+	 */
+	public void setAlias(ExcelFormulaAlias[] alias) {
+		this.alias = alias;
+	}
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -82,6 +120,7 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + Arrays.hashCode(alias);
 		result = prime * result + ((areaRange == null) ? 0 : areaRange.hashCode());
 		result = prime * result + (suppressDropDownArrow ? 1231 : 1237);
 		return result;
@@ -102,6 +141,8 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelDropDownImpl other = (ExcelDropDownImpl) obj;
+		if (!Arrays.equals(alias, other.alias))
+			return false;
 		if (areaRange == null) {
 			if (other.areaRange != null)
 				return false;

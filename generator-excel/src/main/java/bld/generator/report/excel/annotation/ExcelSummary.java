@@ -41,6 +41,11 @@ public @interface ExcelSummary {
 	public String title();
 	
 	
+	/**
+	 * Title cell formulta.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean titleCellFormulta() default false; 
 	
 	/**

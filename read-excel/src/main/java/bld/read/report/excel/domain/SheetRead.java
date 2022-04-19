@@ -7,6 +7,7 @@ package bld.read.report.excel.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import bld.generator.report.excel.constant.ExcelConstant;
@@ -27,6 +28,7 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	private List<T>listRowSheet;
 	
 	/** The sheet name. */
+	@NotNull
 	private String sheetName;
 	
 	
@@ -49,6 +51,16 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 */
 	public List<T> getListRowSheet() {
 		return listRowSheet;
+	}
+	
+	/**
+	 * Adds the row sheet.
+	 *
+	 * @param t the t
+	 * @throws Exception the exception
+	 */
+	public void addRowSheet(T t) throws Exception {
+		this.listRowSheet.add(t);
 	}
 
 

@@ -40,4 +40,12 @@ public @interface ExcelDropDown {
 	 */
 	public boolean suppressDropDownArrow() default true;
 	
+	
+	/**
+	 * Alias.
+	 *
+	 * @return the excel formula alias[]
+	 */
+	public ExcelFormulaAlias[] alias() default {};
+	
 }

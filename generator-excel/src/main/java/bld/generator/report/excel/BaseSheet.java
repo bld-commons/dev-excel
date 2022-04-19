@@ -18,6 +18,7 @@ public abstract class BaseSheet {
 
 	//public static final String APOS = "\u0027";
 	
+	/** The Constant APOS. */
 	public static final String APOS = "&apos;";
 	
 	/** The name sheet. */

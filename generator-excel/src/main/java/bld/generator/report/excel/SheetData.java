@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
 
@@ -83,6 +85,18 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 */
 	public List<T> getListRowSheet() {
 		return listRowSheet;
+	}
+	
+	/**
+	 * Adds the row sheets.
+	 *
+	 * @param rows the rows
+	 */
+	@SuppressWarnings("unchecked")
+	public void addRowSheets(T... rows) {
+		if(ArrayUtils.isNotEmpty(rows))
+			for(T row:rows)
+				this.listRowSheet.add(row);
 	}
 
 	/**

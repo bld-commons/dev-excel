@@ -146,6 +146,56 @@ public abstract class DropDown<T> {
 	public void setSuppressDropDownArrow(boolean suppressDropDownArrow) {
 		this.suppressDropDownArrow = suppressDropDownArrow;
 	}
+
+
+
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((list == null) ? 0 : list.hashCode());
+		result = prime * result + (suppressDropDownArrow ? 1231 : 1237);
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+
+
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DropDown<?> other = (DropDown<?>) obj;
+		if (list == null) {
+			if (other.list != null)
+				return false;
+		} else if (!list.equals(other.list))
+			return false;
+		if (suppressDropDownArrow != other.suppressDropDownArrow)
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+	
 	
 	
 }

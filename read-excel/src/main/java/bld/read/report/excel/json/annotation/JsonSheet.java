@@ -5,19 +5,25 @@
 package bld.read.report.excel.json.annotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import bld.read.report.excel.domain.RowSheetRead;
-import bld.read.report.excel.domain.SheetRead;
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import bld.read.report.excel.json.deserialier.SheetDeserialaizer;
 
 /**
  * The Interface JsonSheet.
  */
 @Retention(RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
+@Target({ANNOTATION_TYPE,FIELD,PARAMETER,METHOD})
+@JacksonAnnotationsInside
+@JsonDeserialize(using = SheetDeserialaizer.class)
 public @interface JsonSheet {
 
 	/**
@@ -28,10 +34,18 @@ public @interface JsonSheet {
 	public String name();
 	
 	/**
-	 * Sheet class.
+	 * Field name.
 	 *
-	 * @return the class sheet read
+	 * @return the string
 	 */
-	public Class<? extends SheetRead<? extends RowSheetRead>> sheetClass();
+	public String fieldName(); 
+	
+	
+	/**
+	 * Key field.
+	 *
+	 * @return the string
+	 */
+	public String keyField()default"";
 	
 }

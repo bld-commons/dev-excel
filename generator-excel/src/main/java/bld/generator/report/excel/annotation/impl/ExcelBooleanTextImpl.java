@@ -35,6 +35,9 @@ public class ExcelBooleanTextImpl extends ExcelAnnotationImpl<ExcelBooleanText>{
 
 	
 	
+	/**
+	 * Instantiates a new excel boolean text impl.
+	 */
 	public ExcelBooleanTextImpl() {
 		super();
 	}

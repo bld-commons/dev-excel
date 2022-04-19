@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
@@ -19,7 +21,8 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 /**
  * The Class ReportExcel. <br>
  * ReportExcel is the class that represents the excel object. <br>
- * Fields "title" and "date" can be shown on a cover sheet. The list base sheet represents a list of sheets. <br>
+ * Fields "title" and "date" can be shown on a cover sheet. The list base sheet
+ * represents a list of sheets. <br>
  * 
  */
 public class ReportExcel {
@@ -27,7 +30,7 @@ public class ReportExcel {
 	/** The title. */
 	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.title}")
 	private String title;
-	
+
 	/** The date. */
 	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.date}")
 	@ExcelDate(format = ColumnDateFormat.PARAMETER)
@@ -36,8 +39,8 @@ public class ReportExcel {
 	/** The list base sheet. */
 	private List<BaseSheet> listBaseSheet;
 
-	
-	
+	/** The ignore cover. */
+	private boolean ignoreCover;
 
 	/**
 	 * Instantiates a new report excel.
@@ -46,22 +49,44 @@ public class ReportExcel {
 	 */
 	public ReportExcel(String title) {
 		super();
+		init(title, false);
+	}
+
+	/**
+	 * Inits the.
+	 *
+	 * @param title the title
+	 * @param ignoreCover the ignore cover
+	 */
+	private void init(String title, boolean ignoreCover) {
 		this.title = title;
-		this.date=new Date();
-		this.listBaseSheet=new ArrayList<>();
+		this.date = new Date();
+		this.ignoreCover = ignoreCover;
+		this.listBaseSheet = new ArrayList<>();
 	}
 
 	/**
 	 * Instantiates a new report excel.
 	 *
 	 * @param title the title
+	 * @param ignoreCover the ignore cover
+	 */
+	public ReportExcel(String title, boolean ignoreCover) {
+		super();
+		init(title, ignoreCover);
+	}
+
+	/**
+	 * Instantiates a new report excel.
+	 *
+	 * @param title         the title
 	 * @param listBaseSheet the list base sheet
 	 */
 	public ReportExcel(String title, List<BaseSheet> listBaseSheet) {
 		super();
 		this.title = title;
 		this.listBaseSheet = listBaseSheet;
-		this.date=new Date();
+		this.date = new Date();
 	}
 
 	/**
@@ -69,10 +94,10 @@ public class ReportExcel {
 	 */
 	public ReportExcel() {
 		super();
-		this.date=new Date();
-		this.listBaseSheet=new ArrayList<>();
+		this.date = new Date();
+		this.listBaseSheet = new ArrayList<>();
 	}
-	
+
 	/**
 	 * Gets the title.
 	 *
@@ -81,7 +106,7 @@ public class ReportExcel {
 	public String getTitle() {
 		return title;
 	}
-	
+
 	/**
 	 * Sets the title.
 	 *
@@ -119,6 +144,17 @@ public class ReportExcel {
 	}
 
 	/**
+	 * Adds the base sheet.
+	 *
+	 * @param baseSheets the base sheets
+	 */
+	public void addBaseSheet(BaseSheet... baseSheets) {
+		if (ArrayUtils.isNotEmpty(baseSheets))
+			for (BaseSheet baseSheet : baseSheets)
+				this.listBaseSheet.add(baseSheet);
+	}
+
+	/**
 	 * Sets the list base sheet.
 	 *
 	 * @param listBaseSheet the new list base sheet
@@ -126,7 +162,7 @@ public class ReportExcel {
 	public void setListBaseSheet(List<BaseSheet> listBaseSheet) {
 		this.listBaseSheet = listBaseSheet;
 	}
-	
+
 	/**
 	 * Hash code.
 	 *
@@ -140,6 +176,24 @@ public class ReportExcel {
 		result = prime * result + ((listBaseSheet == null) ? 0 : listBaseSheet.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
+	}
+
+	/**
+	 * Checks if is ignore cover.
+	 *
+	 * @return true, if is ignore cover
+	 */
+	public boolean isIgnoreCover() {
+		return ignoreCover;
+	}
+
+	/**
+	 * Sets the ignore cover.
+	 *
+	 * @param ignoreCover the new ignore cover
+	 */
+	public void setIgnoreCover(boolean ignoreCover) {
+		this.ignoreCover = ignoreCover;
 	}
 
 	/**
@@ -175,5 +229,4 @@ public class ReportExcel {
 		return true;
 	}
 
-	
 }

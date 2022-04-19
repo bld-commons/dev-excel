@@ -172,7 +172,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 	/** The resource path copertina xls. */
 	@Value("${bld.commons.resource.path.xls:}")
-	private String resourcePathCopertinaXls;
+	private String resourcePathCoverXls;
 
 	/** The resource path copertina xlsx. */
 	@Value("${bld.commons.resource.path.xlsx:}")
@@ -200,11 +200,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		try {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			boolean isCover = true;
-			if (StringUtils.isNotBlank(this.pathCopertinaXls)) {
+			if (StringUtils.isNotBlank(this.pathCopertinaXls) && !report.isIgnoreCover()) {
 				InputStream inputstream = new FileInputStream(this.pathCopertinaXls);
 				workbook = new HSSFWorkbook(inputstream);
-			} else if (StringUtils.isNotBlank(this.resourcePathCopertinaXls)) {
-				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCopertinaXls);
+			} else if (StringUtils.isNotBlank(this.resourcePathCoverXls) && !report.isIgnoreCover()) {
+				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCoverXls);
 				workbook = new HSSFWorkbook(inputstream);
 			} else {
 				workbook = new HSSFWorkbook();
@@ -250,10 +250,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		try {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			boolean isCover = true;
-			if (StringUtils.isNotBlank(this.pathCoverXlsx)) {
+			if (StringUtils.isNotBlank(this.pathCoverXlsx) && !report.isIgnoreCover()) {
 				InputStream inputstream = new FileInputStream(this.pathCoverXlsx);
 				workbook = new XSSFWorkbook(inputstream);
-			} else if (StringUtils.isNotBlank(this.resourcePathCoverXlsx)) {
+			} else if (StringUtils.isNotBlank(this.resourcePathCoverXlsx) && !report.isIgnoreCover()) {
 				InputStream inputstream = getClass().getResourceAsStream(this.resourcePathCoverXlsx);
 				workbook = new XSSFWorkbook(inputstream);
 			} else {
@@ -424,6 +424,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			} else if (baseSheet instanceof SheetData) {
 				this.generateSheetData(workbook, sheet, (SheetData<? extends RowSheet>) baseSheet, 0, false, formulaEvaluator);
 			}
+
 			// formulaEvaluator.evaluateAll();
 			Date endSheet = new Date();
 			double time = (endSheet.getTime() - startSheet.getTime()) / 1000.0;
@@ -439,10 +440,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 			// evaluateAllFormulaCells(workbook, sheet);
 		}
-		
-		for(int i=0;i<workbook.getNumberOfSheets();i++)
+
+		for (int i = 0; i < workbook.getNumberOfSheets(); i++)
 			workbook.setSheetName(i, workbook.getSheetName(i).replace(BaseSheet.APOS, "'"));
-		
+
 		for (DropDownCell dropDownCell : this.listDropDown)
 			super.addDropDown(dropDownCell);
 
@@ -625,7 +626,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 						LayoutCell layoutCellTemp = sheetHeader.getLayoutCell(colorModul);
 						if (!this.mapCellStyle.containsKey(layoutCellTemp))
-							this.mapCellStyle.put(layoutCellTemp, createCellStyle(workbook, excelCellLayout, sheetHeader.getExcelDate(), colorModul));
+							this.mapCellStyle.put(layoutCellTemp, createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul));
 					}
 					cellStyle = this.mapCellStyle.get(layoutCell);
 					infoColumn.setFirstRow(indexRow);
@@ -676,9 +677,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							Object valueRefColumnBefore = PropertyUtils.getProperty(lastRowSheet, referenceField);
 							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
-							else {
+							else 
 								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
-							}
 						}
 
 					}
@@ -691,7 +691,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
 					for (ExcelChartCategory excelChartCategory : excelChart.excelChartCategories()) {
-						String functionChart = buildFunction(sheet, indexRow, excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true);
+						String functionChart = buildFunction(sheet, indexRow, excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true);
 						String title = "";
 						if (mapValue.containsKey(excelChartCategory.fieldName().replace("${", "").replace("}", ""))) {
 							title = mapValue.get(excelChartCategory.fieldName().replace("${", "").replace("}", "")).toString();
@@ -703,10 +703,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								int lastRow = sheet.getLastRowNum() + 1;
 								sheet.createRow(lastRow).createCell(0, CellType.FORMULA);
 								Cell lastCell = sheet.getRow(lastRow).getCell(0);
-								String rowRegex = buildFunction(sheet, indexRow, excelChartCategory.rowRegex(), RowStartEndType.ROW_EMPTY, true);
-								rowRegex = buildFunction(sheet, indexRow, rowRegex, RowStartEndType.ROW_HEADER, true);
-								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_START, true);
-								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_END, true);
+								String rowRegex = buildFunction(sheet, indexRow, excelChartCategory.rowRegex(), RowStartEndType.ROW_EMPTY, true, true);
+								rowRegex = buildFunction(sheet, indexRow, rowRegex, RowStartEndType.ROW_HEADER, true, true);
+								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_START, true, true);
+								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_END, true, true);
 								lastCell.setCellFormula(rowRegex);
 								CellType cellType = formulaEvaluator.evaluateFormulaCell(lastCell);
 								if (!CellType.NUMERIC.equals(cellType))
@@ -714,10 +714,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								rowRegexIndex = (int) lastCell.getNumericCellValue();
 								sheet.removeRow(sheet.getRow(lastRow));
 							}
-							String areaFieldName = buildFunction(sheet, indexRow, excelChartCategory.fieldName(), RowStartEndType.ROW_EMPTY, true);
-							areaFieldName = buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true);
-							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true);
-							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true);
+							String areaFieldName = buildFunction(sheet, indexRow, excelChartCategory.fieldName(), RowStartEndType.ROW_EMPTY, true, true);
+							areaFieldName = buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true, true);
+							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true, true);
+							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true, true);
 							AreaReference areaReference = new AreaReference(areaFieldName, excelChart.spreadsheetVersion());
 							for (CellReference cr : areaReference.getAllReferencedCells()) {
 								Sheet appSheet = StringUtils.isNotEmpty(cr.getSheetName()) ? workbook.getSheet(cr.getSheetName()) : sheet;
@@ -725,7 +725,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								Integer firstRow = indexRow;
 								if (!sheet.getSheetName().equals(appSheet.getSheetName())) {
 									firstRow = cr.getRow();
-									functionChart = buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true);
+									functionChart = buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true);
 								}
 
 								if (rowRegexIndex == null)
@@ -815,9 +815,19 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (excelSheetLayout.groupColumn())
 			sheet.groupColumn(excelSheetLayout.startColumn(), maxColumn - 1);
 
-		if (!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader())
+		String rangeAddress=null;	
+		boolean enableAutoFilter=!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader();
+		if (enableAutoFilter) {
+			rangeAddress=ExcelUtils.calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn(), false, false)+":"+ExcelUtils.calcoloCoordinateFunction(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn()-1, false, false);
+			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
-
+		}
+		if (excelSheetLayout.locked()) {
+			if (sheet instanceof XSSFSheet && enableAutoFilter)
+				((XSSFSheet)sheet).lockAutoFilter(false);
+			sheet.protectSheet("");
+		}
+		
 		if (sheetData instanceof FunctionsTotal) {
 			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal = (FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>) sheetData;
 			if (functionsTotal.getSheetFunctionsTotal() != null) {
@@ -833,13 +843,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 			Set<String> ids = new HashSet<>();
 			for (ExcelChart excelChart : listExcelChart) {
-				String xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_EMPTY, true);
+				String xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_EMPTY, true, true);
 				indexRow += 2;
 				if (excelChart.group()) {
 					if (!ids.contains(excelChart.id())) {
 						ids.add(excelChart.id());
 						boolean isVertical = xAxis.contains(RowStartEndType.ROW_START.getValue()) || xAxis.replace(" ", "").contains(START) || xAxis.contains(RowStartEndType.ROW_END.getValue()) || xAxis.contains(END);
-						xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true);
+						xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true);
 						xAxis = setInfoColumnByMapCharts(xAxis, sheet, null);
 						indexRow = generateChart((XSSFWorkbook) workbook, (XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart, isVertical && !excelSheetLayout.notMerge(), sheetData);
 					}
@@ -854,7 +864,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 									xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
 								} else {
-									xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true);
+									xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true);
 									seriesChart = infoChart.getFunction();
 								}
 
@@ -957,8 +967,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				mapFieldColumn.get(fieldName).setFirstRow(infoChart.getFirstRow());
 				mapFieldColumn.get(fieldName).setLastRow(infoChart.getLastRow());
 			}
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START, true);
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END, true);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START, true, true);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END, true, true);
 		}
 		logger.info("Function: " + function);
 		return function;
@@ -1098,7 +1108,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					case NUMERIC:
 						if (!values.contains("" + cell.getNumericCellValue())) {
 							values.add("" + cell.getNumericCellValue());
-							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false);
+							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false, false);
 							xAxis += "," + cellAddress;
 						}
 
@@ -1106,7 +1116,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					case STRING:
 						if (!values.contains(cell.getStringCellValue())) {
 							values.add(cell.getStringCellValue());
-							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false);
+							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false, false);
 							xAxis += "," + cellAddress;
 						}
 

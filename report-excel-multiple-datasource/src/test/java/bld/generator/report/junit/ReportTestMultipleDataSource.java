@@ -119,15 +119,15 @@ public class ReportTestMultipleDataSource {
 		excelRead.setReportExcel(report);
 		excelRead.setExcelType(ExcelType.XLSX);
 		excelRead.getListSheetRead().add(new ReadAutoreLibriSheet("Libri d'autore"));
-//		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
+		excelRead.getListSheetRead().add(new ReadGenereSheet("Genere"));
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
 		ReadAutoreLibriSheet sheet;
 		try {
-			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class);
+			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class,"Libri d'autore");
 			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
 				System.out.println(row.toString());
 			
-			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class);
+			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class,"Genere");
 			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
 				System.out.println(row.toString());
 		} catch (Exception e) {

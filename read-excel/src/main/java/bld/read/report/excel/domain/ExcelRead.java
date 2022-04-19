@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
+
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.constant.ExcelType;
@@ -119,12 +121,24 @@ public class ExcelRead {
 	 * @param <T>            the generic type
 	 * @param classSheetRead the class sheet read
 	 * @param sheetName      the sheet name
+	 * @param keyField       the key field
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName) throws Exception {
-		Constructor<?> constructor = classSheetRead.getConstructor(String.class);
-		T sheetRead= (T) constructor.newInstance(sheetName);
+	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName,String keyField) throws Exception {
+		Constructor<?> constructor = null;
+		T sheetRead=null;
+		if(MapSheetRead.class.isAssignableFrom(classSheetRead)) {
+			if(StringUtils.isEmpty(keyField))
+				throw new ExcelReaderException(ExcelExceptionType.KEY_FIELD_IS_NOT_NULL);
+			constructor = classSheetRead.getConstructor(String.class,String.class);
+			sheetRead= (T) constructor.newInstance(sheetName,keyField);
+		}else {
+			constructor = classSheetRead.getConstructor(String.class);
+			sheetRead= (T) constructor.newInstance(sheetName);
+		}
+			
+		
 		this.listSheetRead.add(sheetRead);
 		if(sheetName.length()>ExcelConstant.SHEET_NAME_SIZE)
 			throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
@@ -133,7 +147,17 @@ public class ExcelRead {
 		this.mapSheet.put(sheetName, sheetRead);
 	}
 
-	
+	/**
+	 * Adds the sheet convertion.
+	 *
+	 * @param <T>            the generic type
+	 * @param classSheetRead the class sheet read
+	 * @param sheetName      the sheet name
+	 * @throws Exception the exception
+	 */
+	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName) throws Exception {
+		this.addSheetConvertion(classSheetRead, sheetName,null);
+	}
 
 	/**
 	 * Sets the list class sheet.

@@ -24,8 +24,10 @@ public enum ExcelExceptionType {
 	MULTIPLE_SHEET_NAME("MLTSN","Multiple sheets with name \""+ExcelReaderConstant.PARAMETER+"\""),
 	
 	/** The character not valid. */
-	CHARACTER_NOT_VALID("CNv","The \""+ExcelReaderConstant.PARAMETER+"\" field is \"character\" type"),
+	CHARACTER_NOT_VALID("CNV","The \""+ExcelReaderConstant.PARAMETER+"\" field is \"character\" type"),
 	
+	/** The key field is not null. */
+	KEY_FIELD_IS_NOT_NULL("KF","The \"keyField\" field must be not null"),
 	;
 	
 	

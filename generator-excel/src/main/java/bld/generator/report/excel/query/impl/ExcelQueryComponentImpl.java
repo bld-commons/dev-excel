@@ -153,6 +153,13 @@ public class ExcelQueryComponentImpl implements ExcelQueryComponent {
 		return result;
 	}
 
+	/**
+	 * Sets the parameters.
+	 *
+	 * @param <T> the generic type
+	 * @param querySheetData the query sheet data
+	 * @param query the query
+	 */
 	private <T extends RowSheet> void setParameters(QuerySheetData<T> querySheetData, Query query) {
 		if (querySheetData.getMapParameters() != null) {
 			for (String key : querySheetData.getMapParameters().keySet())

@@ -1,35 +1,39 @@
 package bld.report.controller.input;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import bld.read.report.excel.domain.ExcelRead;
-import bld.read.report.excel.json.annotation.JsonExcel;
 import bld.read.report.excel.json.annotation.JsonSheet;
-import bld.report.controller.entity.ReadAutoreLibriSheet;
-import bld.report.controller.entity.ReadGenereSheet;
+import bld.read.report.excel.json.annotation.JsonSheets;
+
 
 public class ReadExcelModel {
 
+	
+	private String name;
+	
+	@JsonSheets({
+			@JsonSheet(name = "Libri d'autore", fieldName = "autoreLibri"),
+			@JsonSheet(name = "Genere", fieldName="genere")
+		})
 	@JsonProperty("excel")
-	@JsonExcel({
-		@JsonSheet(name = "Libri d'autore", sheetClass = ReadAutoreLibriSheet.class),
-		@JsonSheet(name = "Genere", sheetClass = ReadGenereSheet.class)
-	})
-	@Valid
-	private ExcelRead excelRead;
+	private ReadSheetsModel readSheetsModel;
 
-	public ExcelRead getExcelRead() {
-		return excelRead;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setExcelRead(ExcelRead excelRead) {
-		this.excelRead = excelRead;
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	public ReadSheetsModel getReadSheetsModel() {
+		return readSheetsModel;
+	}
+
+	public void setReadSheetsModel(ReadSheetsModel readSheetsModel) {
+		this.readSheetsModel = readSheetsModel;
+	}
 	
 	
 	

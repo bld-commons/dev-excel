@@ -77,6 +77,7 @@ public class SheetHeader implements Cloneable {
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
 
+	/** The excel boolean text. */
 	private ExcelBooleanText excelBooleanText;
 
 	/** The map layout cell. */
@@ -162,10 +163,20 @@ public class SheetHeader implements Cloneable {
 		return excelColumnWidth;
 	}
 
+	/**
+	 * Gets the excel boolean text.
+	 *
+	 * @return the excel boolean text
+	 */
 	public ExcelBooleanText getExcelBooleanText() {
 		return excelBooleanText;
 	}
 
+	/**
+	 * Sets the excel boolean text.
+	 *
+	 * @param excelBooleanText the new excel boolean text
+	 */
 	public void setExcelBooleanText(ExcelBooleanText excelBooleanText) {
 		this.excelBooleanText = excelBooleanText;
 	}

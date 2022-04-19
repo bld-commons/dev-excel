@@ -47,6 +47,7 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
@@ -86,6 +87,7 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFont;
+import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
@@ -129,7 +131,6 @@ import bld.generator.report.utils.ValueProps;
  */
 public class SuperGenerateExcelImpl {
 
-
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
 
@@ -171,6 +172,7 @@ public class SuperGenerateExcelImpl {
 	/** The list drop down. */
 	protected List<DropDownCell> listDropDown = new ArrayList<>();
 
+	/** The map sheet. */
 	protected Map<String, BaseSheet> mapSheet = new HashMap<>();
 
 	/** The value props. */
@@ -217,7 +219,9 @@ public class SuperGenerateExcelImpl {
 		cellStyleHeader.setAlignment(layout.horizontalAlignment());
 		cellStyleHeader.setVerticalAlignment(layout.verticalAlignment());
 		cellStyleHeader.setWrapText(layout.wrap());
+		cellStyleHeader.setLocked(layout.locked());
 		cellStyleHeader = getBorder(cellStyleHeader, layout.border());
+
 		return cellStyleHeader;
 	}
 
@@ -239,12 +243,15 @@ public class SuperGenerateExcelImpl {
 	 *
 	 * @param workbook  the workbook
 	 * @param layout    the layout
-	 * @param excelDate the excel date
+	 * @param sheetHeader the sheet header
 	 * @param indexRow  the index row
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, ExcelDate excelDate, Integer indexRow) throws Exception {
+	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow) throws Exception {
+		ExcelDate excelDate = null;
+		if (sheetHeader != null)
+			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyle = workbook.createCellStyle();
 		int indexFont = indexRow % layout.rgbFont().length;
 		int indexForeground = indexRow % layout.rgbForeground().length;
@@ -281,7 +288,11 @@ public class SuperGenerateExcelImpl {
 			for (int i = 0; i < layout.precision(); i++)
 				format += "0";
 			cellStyle = dateCellStyle(workbook, cellStyle, format);
+		} else if (sheetHeader!=null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
+			DataFormat fmt = workbook.createDataFormat();
+			cellStyle.setDataFormat(fmt.getFormat("text"));
 		}
+
 		return cellStyle;
 	}
 
@@ -347,9 +358,6 @@ public class SuperGenerateExcelImpl {
 		for (Field field : listField) {
 			ExcelColumn column = field.getAnnotation(ExcelColumn.class);
 			if (column != null && !column.ignore()) {
-				ExcelCellLayout excelCellLayout = ExcelUtils.getAnnotation(field, ExcelCellLayout.class);
-				if (excelCellLayout.locked())
-					sheet.protectSheet("");
 				Object value = null;
 				if (entity != null)
 					value = PropertyUtils.getProperty(entity, field.getName());
@@ -522,10 +530,10 @@ public class SuperGenerateExcelImpl {
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
-		ExcelDate excelDate = null;
-		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
-			excelDate = sheetHeader.getExcelDate();
-		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, excelDate, indexRow);
+//		ExcelDate excelDate = null;
+//		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
+//			excelDate = sheetHeader.getExcelDate();
+		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
 		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column);
@@ -594,18 +602,201 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY, excelFunction.alias());
 		if (excelFunction.anotherTable()) {
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START);
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START, excelFunction.alias());
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END, excelFunction.alias());
 		}
-		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_START);
-		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_END);
-		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER);
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_START, excelFunction.alias());
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_END, excelFunction.alias());
+		function = buildFunction(sheet, indexRow, function, RowStartEndType.ROW_HEADER, excelFunction.alias());
 
-		logger.info("Function: " + function);
+		logger.debug("Function: " + function);
 		if (StringUtils.isNotEmpty(function))
 			cell.setCellFormula(function);
+	}
+
+	/**
+	 * Builds the function.
+	 *
+	 * @param sheet the sheet
+	 * @param indexRow the index row
+	 * @param function the function
+	 * @param rowStartEndType the row start end type
+	 * @param alias the alias
+	 * @return the string
+	 * @throws Exception the exception
+	 */
+	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, ExcelFormulaAlias[] alias) throws Exception {
+		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
+		Matcher matcher = ExcelUtils.matcher(PATTERN, function);
+		Map<String, ExcelFormulaAlias> mapExcelFormulaAlias = new HashMap<>();
+		for (ExcelFormulaAlias formulaAlias : alias)
+			mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
+
+		while (matcher.find()) {
+			String parameter = matcher.group();
+			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").replace("'", BaseSheet.APOS).trim();
+			boolean blockColumn = false;
+			boolean blockRow = false;
+			String sheetName = sheet.getSheetName();
+			if (mapExcelFormulaAlias.containsKey(keyParameter)) {
+				ExcelFormulaAlias excelFormulaAlias = mapExcelFormulaAlias.get(keyParameter);
+				String sheetPoint = "";
+				if (StringUtils.isNotEmpty(excelFormulaAlias.sheet()))
+					sheetPoint = excelFormulaAlias.sheet() + ".";
+				keyParameter = sheetPoint + mapExcelFormulaAlias.get(keyParameter).coordinate();
+				blockColumn = excelFormulaAlias.blockColumn();
+				blockRow = excelFormulaAlias.blockRow();
+				// parameter=parameter.replace(excelFormulaAlias.alias(),keyParameter);
+			}
+
+			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow);
+			if (StringUtils.isNotEmpty(appFunction))
+				function = appFunction;
+
+		}
+		return function;
+	}
+
+	/**
+	 * Builds the function.
+	 *
+	 * @param sheet the sheet
+	 * @param keyParameter the key parameter
+	 * @param indexRow the index row
+	 * @param rowStartEndType the row start end type
+	 * @param sheetName the sheet name
+	 * @param function the function
+	 * @param parameter the parameter
+	 * @param blockColumn the block column
+	 * @param blockRow the block row
+	 * @return the string
+	 * @throws Exception the exception
+	 */
+	private String buildFunction(Sheet sheet, String keyParameter, Integer indexRow, RowStartEndType rowStartEndType, String sheetName, String function, String parameter, boolean blockColumn, boolean blockRow) throws Exception {
+		String exprenssionIndex = "";
+		if (keyParameter.contains("[")) {
+			exprenssionIndex = keyParameter.substring(keyParameter.indexOf("[") + 1, keyParameter.length() - 1);
+			keyParameter = keyParameter.substring(0, keyParameter.indexOf("["));
+		}
+		boolean fieldValue = keyParameter.contains(RowStartEndType.VALUE.getValue());
+		if (fieldValue)
+			keyParameter = keyParameter.replace(RowStartEndType.VALUE.getValue(), "");
+		Integer row = null;
+		InfoColumn infoColumn = null;
+		if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(sheet, keyParameter))) {
+			infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
+			row = indexRow;
+			Integer start = null;
+			Integer end = null;
+			Double evalute = null;
+			if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
+				row = infoColumn.getRowHeader();
+				if (row == null)
+					throw new ExcelGeneratorException("The header not exist");
+				if (StringUtils.isNotEmpty(exprenssionIndex)) {
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
+					if (evalute != null)
+						row = evalute.intValue();
+					else
+						return null;
+				}
+			} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty() && infoColumn.getMapRowMergeRow().containsKey(indexRow)) {
+				row = infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
+				if (StringUtils.isNotEmpty(exprenssionIndex)) {
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
+					if (evalute != null)
+						row = evalute.intValue();
+					else
+						return null;
+				}
+			} else if (row == null && RowStartEndType.ROW_START.equals(rowStartEndType)) {
+				if (StringUtils.isNotEmpty(exprenssionIndex)) {
+					start = infoColumn.getFirstRow();
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "start", start);
+					if (evalute != null)
+						row = evalute.intValue();
+					else
+						return null;
+				} else
+					row = infoColumn.getFirstRow();
+
+			} else if (row == null && RowStartEndType.ROW_END.equals(rowStartEndType)) {
+				if (StringUtils.isNotEmpty(exprenssionIndex)) {
+					end = infoColumn.getLastRow();
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "end", end);
+					if (evalute != null)
+						row = evalute.intValue();
+					else
+						return null;
+				} else
+					row = infoColumn.getLastRow();
+			} else if (row != null && StringUtils.isNotEmpty(exprenssionIndex)) {
+				switch (rowStartEndType) {
+				case ROW_EMPTY:
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
+					break;
+				case ROW_END:
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "end", row);
+					break;
+				case ROW_HEADER:
+					row = infoColumn.getRowHeader();
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
+					break;
+				case ROW_START:
+					evalute = ExcelUtils.evaluate(exprenssionIndex, "start", row);
+					break;
+				default:
+					break;
+
+				}
+				if (evalute != null)
+					row = evalute.intValue();
+				else
+					return null;
+			}
+			try {
+
+				if (row != null) {
+					if (keyParameter.contains(".")) {
+
+						sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
+
+						if (!fieldValue) {
+							sheetName = "'" + sheetName.replace("'", BaseSheet.APOS) + "'!";
+
+							if (function.contains(sheetName))
+								function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+							else
+								function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+						}
+					} else if (!fieldValue)
+						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+				}
+
+			} catch (Exception e) {
+				logger.error(ExceptionUtils.getStackTrace(e));
+			}
+		}
+		if (fieldValue) {
+			BaseSheet baseSheet = this.mapSheet.get(sheetName);
+			Object value = null;
+			if (baseSheet instanceof MergeSheet) {
+				MergeSheet mergeSheet = (MergeSheet) baseSheet;
+
+				for (SheetComponent bs : mergeSheet.getListSheet()) {
+					value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, bs);
+					if (value != null)
+						break;
+				}
+
+			} else
+				value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, (SheetComponent) baseSheet);
+			if (value != null)
+				function = function.replace(parameter, value.toString());
+		}
+		return function;
 	}
 
 	/**
@@ -615,146 +806,40 @@ public class SuperGenerateExcelImpl {
 	 * @param indexRow        the index row
 	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param dollar          the dollar
+	 * @param blockColumn     the dollar
+	 * @param blockRow the block row
 	 * @return the string
 	 * @throws Exception the exception
 	 */
-	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean dollar) throws Exception {
+	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, boolean blockColumn, boolean blockRow) throws Exception {
 		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
-		Pattern p = Pattern.compile(PATTERN);
-		Matcher m = p.matcher(function);
+		Matcher matcher = ExcelUtils.matcher(PATTERN, function);
 
-		while (m.find()) {
-			String parameter = m.group();
-			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").replace("'", BaseSheet.APOS).trim();
-			String exprenssionIndex = "";
-			if (keyParameter.contains("[")) {
-				exprenssionIndex = keyParameter.substring(keyParameter.indexOf("[") + 1, keyParameter.length() - 1);
-				keyParameter = keyParameter.substring(0, keyParameter.indexOf("["));
-
-			}
-			boolean fieldValue = keyParameter.contains(RowStartEndType.VALUE.getValue());
-			if (fieldValue)
-				keyParameter = keyParameter.replace(RowStartEndType.VALUE.getValue(), "");
+		while (matcher.find()) {
 			String sheetName = sheet.getSheetName();
-			Integer row = null;
-			InfoColumn infoColumn = null;
-			if (mapFieldColumn.containsKey(ExcelUtils.getKeyColumn(sheet, keyParameter))) {
-				infoColumn = (InfoColumn) mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, keyParameter));
-				row = indexRow;
-				Integer start = null;
-				Integer end = null;
-				Double evalute = null;
-				if (RowStartEndType.ROW_HEADER.equals(rowStartEndType)) {
-					row = infoColumn.getRowHeader();
-					if (row == null)
-						throw new ExcelGeneratorException("The header not exist");
-					if (StringUtils.isNotEmpty(exprenssionIndex)) {
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
-						if (evalute != null)
-							row = evalute.intValue();
-						else
-							continue;
-					}
-				} else if (RowStartEndType.ROW_EMPTY.equals(rowStartEndType) && !infoColumn.getMapRowMergeRow().isEmpty() && infoColumn.getMapRowMergeRow().containsKey(indexRow)) {
-					row = infoColumn.getMapRowMergeRow().get(indexRow).getRowStart();
-					if (StringUtils.isNotEmpty(exprenssionIndex)) {
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
-						if (evalute != null)
-							row = evalute.intValue();
-						else
-							continue;
-					}
-				} else if (row == null && RowStartEndType.ROW_START.equals(rowStartEndType)) {
-					if (StringUtils.isNotEmpty(exprenssionIndex)) {
-						start = infoColumn.getFirstRow();
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "start", start);
-						if (evalute != null)
-							row = evalute.intValue();
-						else
-							continue;
-					} else
-						row = infoColumn.getFirstRow();
-
-				} else if (row == null && RowStartEndType.ROW_END.equals(rowStartEndType)) {
-					if (StringUtils.isNotEmpty(exprenssionIndex)) {
-						end = infoColumn.getLastRow();
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "end", end);
-						if (evalute != null)
-							row = evalute.intValue();
-						else
-							continue;
-					} else
-						row = infoColumn.getLastRow();
-				} else if (row != null && StringUtils.isNotEmpty(exprenssionIndex)) {
-					switch (rowStartEndType) {
-					case ROW_EMPTY:
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "row", row);
-						break;
-					case ROW_END:
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "end", row);
-						break;
-					case ROW_HEADER:
-						row = infoColumn.getRowHeader();
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "header", row);
-						break;
-					case ROW_START:
-						evalute = ExcelUtils.evaluate(exprenssionIndex, "start", row);
-						break;
-					default:
-						break;
-
-					}
-					if (evalute != null)
-						row = evalute.intValue();
-					else
-						continue;
-				}
-				try {
-
-					if (row != null) {
-						if (keyParameter.contains(".")) {
-
-							sheetName = keyParameter.substring(0, keyParameter.lastIndexOf("."));
-
-							if (!fieldValue) {
-								sheetName = "'" + sheetName.replace("'", BaseSheet.APOS) + "'!";
-								
-								if (function.contains(sheetName))
-									function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-								else
-									function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-							}
-						} else if (!fieldValue)
-							function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), dollar));
-					}
-
-				} catch (Exception e) {
-					logger.error(ExceptionUtils.getStackTrace(e));
-				}
-			}
-			if (fieldValue) {
-				BaseSheet baseSheet = this.mapSheet.get(sheetName);
-				Object value = null;
-				if (baseSheet instanceof MergeSheet) {
-					MergeSheet mergeSheet = (MergeSheet) baseSheet;
-
-					for (SheetComponent bs : mergeSheet.getListSheet()) {
-						value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, bs);
-						if (value != null)
-							break;
-					}
-
-				} else
-					value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, (SheetComponent) baseSheet);
-				if (value != null)
-					function = function.replace(parameter, value.toString());
-			}
+			String parameter = matcher.group();
+			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").replace("'", BaseSheet.APOS).trim();
+			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow);
+			if (StringUtils.isNotEmpty(appFunction))
+				function = appFunction;
 
 		}
 		return function;
 	}
 
+	/**
+	 * Gets the static value.
+	 *
+	 * @param keyParameter the key parameter
+	 * @param row the row
+	 * @param sheetComponent the sheet component
+	 * @return the static value
+	 * @throws NoSuchFieldException the no such field exception
+	 * @throws IllegalAccessException the illegal access exception
+	 * @throws InvocationTargetException the invocation target exception
+	 * @throws NoSuchMethodException the no such method exception
+	 * @throws ExcelGeneratorException the excel generator exception
+	 */
 	private Object getStaticValue(String keyParameter, Integer row, SheetComponent sheetComponent) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ExcelGeneratorException {
 		Object value = null;
 		if (sheetComponent instanceof SheetDynamicData) {
@@ -790,7 +875,7 @@ public class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType) throws Exception {
-		return buildFunction(sheet, indexRow, function, rowStartEndType, false);
+		return buildFunction(sheet, indexRow, function, rowStartEndType, false, false);
 	}
 
 	/**
@@ -848,19 +933,29 @@ public class SuperGenerateExcelImpl {
 		setCellStyleExcel(cellStyle, cell, layoutCell);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY);
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY, excelFunction.alias());
 		if (excelFunction.anotherTable()) {
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START);
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END);
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START, excelFunction.alias());
+			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END, excelFunction.alias());
 		}
 
-		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START);
-		function = buildFunction(sheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END);
-		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER);
-		logger.info("Function: " + function);
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_START, excelFunction.alias());
+		function = buildFunction(sheet, mergeRow.getRowEnd(), function, RowStartEndType.ROW_END, excelFunction.alias());
+		function = buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_HEADER, excelFunction.alias());
+		logger.debug("Function: " + function);
 		cell.setCellFormula(function);
 		return cell;
 	}
+
+//	private void formatCell(SheetHeader sheetHeader,Cell cell) {
+//		if(sheetHeader.getValue()==null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
+//			DataFormatter formatter=new DataFormatter();
+//			//formatter.formatCellValue(cell);
+//			formatter.getDefaultFormat(cell);
+//			cell.setCellType(CellType.STRING);
+//		}
+//		
+//	}
 
 	/**
 	 * Sets the cell value excel.
@@ -884,6 +979,7 @@ public class SuperGenerateExcelImpl {
 		if (cellStyle == null)
 			cellStyle = this.mapCellStyle.get(layoutCell);
 		setCellStyleExcel(cellStyle, cell, layoutCell);
+
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Calendar)
@@ -981,8 +1077,7 @@ public class SuperGenerateExcelImpl {
 		if (layoutSheet.landscape())
 			sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
 		rowHeader.setHeight(ExcelUtils.rowHeight(layoutHeader.rowHeight()));
-		if (layoutHeader.excelHeaderCellLayout().locked())
-			sheet.protectSheet("");
+
 //		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
 //		worksheet.setDefaultRowHeight((short)(layoutHeader.cmHeightCell() * 568));
 		if (layoutSheet.order() > -1)
@@ -1084,8 +1179,6 @@ public class SuperGenerateExcelImpl {
 						layoutHeader = sheetHeader.getExcelHeaderCellLayout();
 					else
 						layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
-					if (layoutHeader.locked())
-						sheet.protectSheet("");
 					CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
 					cellHeader.setCellStyle(differentCellStyleHeader);
 				} else
@@ -1192,8 +1285,8 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
 		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());
-		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn, false);
-		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn, false);
+		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn, true, true);
+		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn, true, true);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
 		indexRow += 3;
@@ -1270,9 +1363,10 @@ public class SuperGenerateExcelImpl {
 			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
 			CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
 			if (sheetHeader.getExcelDropDown() != null) {
-				String areaRange = sheetHeader.getExcelDropDown().areaRange();
-				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
-				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
+				ExcelDropDown excelDropDown = sheetHeader.getExcelDropDown();
+				String areaRange = excelDropDown.areaRange();
+				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, excelDropDown.alias());
+				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, excelDropDown.alias());
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())

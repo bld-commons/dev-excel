@@ -24,6 +24,7 @@ public enum RowStartEndType {
 	/** The row empty. */
 	ROW_EMPTY(""),
 	
+	/** The value. */
 	VALUE(".field-value")
 	;
 	
