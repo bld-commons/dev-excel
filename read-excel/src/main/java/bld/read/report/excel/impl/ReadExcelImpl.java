@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,7 +50,7 @@ import bld.read.report.excel.exception.ExcelReaderException;
  * SheetRead list.<br>
  * 
  */
-@SuppressWarnings({ "resource", "unchecked", "deprecation" })
+@SuppressWarnings({ "resource", "unchecked"})
 @Component
 public class ReadExcelImpl implements ReadExcel {
 
@@ -58,7 +59,7 @@ public class ReadExcelImpl implements ReadExcel {
 
 	/** The Constant log. */
 	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
-
+	
 	/**
 	 * Convert excel to entity.<br>
 	 * This function read excel file by byte array.<br>
@@ -163,7 +164,9 @@ public class ReadExcelImpl implements ReadExcel {
 											value = numberValue.longValue();
 									}
 								} else if (String.class.isAssignableFrom(classField)) {
-									cell.setCellType(CellType.STRING);
+									DataFormat fmt = workbook.createDataFormat();
+									cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
+									//cell.setCellType(CellType.STRING);
 									String stringValue = cell.getStringCellValue().trim();
 									value = stringValue.isEmpty() ? null : stringValue;
 								} else if (Calendar.class.isAssignableFrom(classField)) {
@@ -209,6 +212,7 @@ public class ReadExcelImpl implements ReadExcel {
 
 		return excelRead;
 	}
+
 
 	/**
 	 * Sets the map method.

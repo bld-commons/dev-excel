@@ -38,7 +38,7 @@ public @interface JsonSheet {
 	 *
 	 * @return the string
 	 */
-	public String fieldName(); 
+	public String fieldName() default ""; 
 	
 	
 	/**
