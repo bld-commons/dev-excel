@@ -151,4 +151,12 @@ public class ReadReportTest {
 		readExcelClient("http://localhost:8080/excel/excel-read");
 	}
 	
+	@Test
+	public void readFile() throws Exception{
+		FileInputStream inputStream = new FileInputStream("/mnt/report/Inserimento Massivo Sedi.xlsx");
+		byte[] report = IOUtils.toByteArray(inputStream);
+		String file=Base64.getEncoder().encodeToString(report);
+		file="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"+file;
+		System.out.println(file);
+	}
 }

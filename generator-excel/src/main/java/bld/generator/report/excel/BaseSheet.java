@@ -32,6 +32,10 @@ public abstract class BaseSheet {
 	 */
 	public BaseSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
 		super();
+		sheetNameApos(sheetName);
+	}
+
+	private void sheetNameApos(String sheetName) {
 		if (sheetName != null)
 			this.sheetName = sheetName.replace("'", APOS);
 	}
@@ -51,7 +55,7 @@ public abstract class BaseSheet {
 	 * @param sheetName the new name sheet
 	 */
 	public void setSheetName(String sheetName) {
-		this.sheetName = sheetName;
+		this.sheetNameApos(sheetName);;
 	}
 
 	/**

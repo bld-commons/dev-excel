@@ -33,7 +33,7 @@ import bld.read.report.excel.json.annotation.JsonSheets;
 /**
  * The Class ExcelReadDeserialaizer.
  */
-@SuppressWarnings({"serial","unchecked"})
+@SuppressWarnings({ "serial", "unchecked" })
 public class SheetDeserialaizer extends StdDeserializer<Object> implements ContextualDeserializer {
 
 	/** The sheets. */
@@ -117,7 +117,7 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 			if (this.fieldNotNull)
 				obj = getObject(excelRead);
 			else
-				obj=excelRead.getSheet((Class<? extends SheetRead<? extends RowSheetRead>>) this.objClass, sheets[0].name());
+				obj = excelRead.getSheet((Class<? extends SheetRead<? extends RowSheetRead>>) this.objClass, sheets[0].name());
 
 		} catch (Exception e) {
 			throw new IOException(e);
@@ -138,8 +138,7 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 	 * @throws NoSuchFieldException      the no such field exception
 	 */
 	private Object getObject(ExcelRead excelRead) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
-		Object obj;
-		obj = this.objClass.getDeclaredConstructor().newInstance();
+		Object obj = this.objClass.getDeclaredConstructor().newInstance();
 		for (JsonSheet sheet : sheets) {
 			Field field = this.objClass.getDeclaredField(sheet.fieldName());
 			SheetRead<? extends RowSheetRead> sheetRead = excelRead.getSheet((Class<? extends SheetRead<? extends RowSheetRead>>) field.getType(), sheet.name());
