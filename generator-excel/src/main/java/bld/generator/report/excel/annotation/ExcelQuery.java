@@ -12,6 +12,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelQuery. <br>
  * ExcelQuery is used to get the list of rows directly from the database; this functionality works if the project is configured with spring-data-jpa and if one of the following properties is set:

@@ -8,6 +8,7 @@ package bld.generator.report.excel.dropdown;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class DropDown.
  *
@@ -24,11 +25,16 @@ public abstract class DropDown<T> {
 	/** The suppress drop down arrow. */
 	private boolean suppressDropDownArrow;
 	
+	/** The box message. */
+	private BoxMessage boxMessage;
+	
+	
 	/**
 	 * Instantiates a new drop down.
 	 */
 	public DropDown() {
 		this.suppressDropDownArrow=true;
+		this.boxMessage=new BoxMessage();
 		this.list=new ArrayList<>();
 	}
 	
@@ -150,6 +156,28 @@ public abstract class DropDown<T> {
 
 
 	/**
+	 * Gets the box message.
+	 *
+	 * @return the box message
+	 */
+	public BoxMessage getBoxMessage() {
+		return boxMessage;
+	}
+
+
+
+	/**
+	 * Sets the box message.
+	 *
+	 * @param boxMessage the new box message
+	 */
+	public void setBoxMessage(BoxMessage boxMessage) {
+		this.boxMessage = boxMessage;
+	}
+
+
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -158,6 +186,7 @@ public abstract class DropDown<T> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((boxMessage == null) ? 0 : boxMessage.hashCode());
 		result = prime * result + ((list == null) ? 0 : list.hashCode());
 		result = prime * result + (suppressDropDownArrow ? 1231 : 1237);
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
@@ -181,6 +210,11 @@ public abstract class DropDown<T> {
 		if (getClass() != obj.getClass())
 			return false;
 		DropDown<?> other = (DropDown<?>) obj;
+		if (boxMessage == null) {
+			if (other.boxMessage != null)
+				return false;
+		} else if (!boxMessage.equals(other.boxMessage))
+			return false;
 		if (list == null) {
 			if (other.list != null)
 				return false;

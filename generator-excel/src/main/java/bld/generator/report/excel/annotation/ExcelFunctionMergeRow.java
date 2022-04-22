@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelFunctionMergeRow.<br>
  * ExcelFunctionMergeRow is used to configure the cell layout merged and define

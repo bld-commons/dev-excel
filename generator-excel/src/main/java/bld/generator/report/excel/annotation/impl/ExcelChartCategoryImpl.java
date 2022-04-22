@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import bld.generator.report.excel.annotation.ExcelChartCategory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelChartCategoryImpl.
  */

@@ -1,8 +1,9 @@
-/*
+/**
  * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
+ * @email francesco.baldi1987@gmail.com
  * @class bld.generator.report.excel.annotation.ExcelDropDown.java
  */
+
 package bld.generator.report.excel.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
@@ -12,6 +13,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import bld.generator.report.excel.constant.BoxStyle;
+
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelDropDown.<br>
  * Excel Drop Down is used to create a drop down list that references another table within the Excel file. <br>
@@ -47,5 +51,13 @@ public @interface ExcelDropDown {
 	 * @return the excel formula alias[]
 	 */
 	public ExcelFormulaAlias[] alias() default {};
+	
+	
+	/**
+	 * Error box.
+	 *
+	 * @return the excel box message
+	 */
+	public ExcelBoxMessage errorBox()default @ExcelBoxMessage(boxStyle = BoxStyle.STOP, message = "The value is not valid", title = "Error");
 	
 }

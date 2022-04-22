@@ -15,6 +15,7 @@ import java.lang.annotation.Target;
 import org.apache.poi.sl.usermodel.PictureData.PictureType;
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelImage.<br>
  * The ExcelImage is used to add image into cell, and it need to set the following properties.<br>
