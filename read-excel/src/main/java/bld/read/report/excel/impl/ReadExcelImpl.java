@@ -12,10 +12,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,6 +63,8 @@ public class ReadExcelImpl implements ReadExcel {
 
 	/** The Constant log. */
 	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
+	
+	private static final List<CellType> IGNORE_CELL_TYPE=Arrays.asList(CellType.BLANK,CellType.ERROR);
 
 	/**
 	 * Convert excel to entity.<br>
@@ -102,11 +106,10 @@ public class ReadExcelImpl implements ReadExcel {
 	 */
 	private <T extends RowSheetRead> ExcelRead convertExcelToEntity(ExcelRead excelRead, InputStream inputStream) throws Exception {
 		Workbook workbook = null;
-		if (ExcelType.XLS.equals(excelRead.getExcelType())) {
+		if (ExcelType.XLS.equals(excelRead.getExcelType())) 
 			workbook = new HSSFWorkbook(inputStream);
-		} else {
+		 else 
 			workbook = new XSSFWorkbook(inputStream);
-		}
 		for (SheetRead<? extends RowSheetRead> sheet : excelRead.getListSheetRead()) {
 			SheetRead<T> sheetType = (SheetRead<T>) sheet;
 			Class<? extends SheetRead<? extends RowSheetRead>> classSheet = (Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
@@ -126,7 +129,8 @@ public class ReadExcelImpl implements ReadExcel {
 			setMapMethod(mapMethod, genericClassType.getSuperclass().getMethods());
 			setMapMethod(mapMethod, genericClassType.getMethods());
 			logger.debug("Generic class type: " + genericClassType.getName());
-			for (int indexRow = startRow; indexRow <= worksheet.getPhysicalNumberOfRows(); indexRow++) {
+			int rowSize=worksheet.getPhysicalNumberOfRows();
+			for (int indexRow = startRow; indexRow <= rowSize; indexRow++) {
 				T rowSheetRead = genericClassType.getDeclaredConstructor().newInstance();
 				Row row = worksheet.getRow(indexRow);
 				if (row != null) {
@@ -147,24 +151,14 @@ public class ReadExcelImpl implements ReadExcel {
 								}
 
 							}
-							if (cell != null && cell.getCellType() != CellType.BLANK) {
+							if (cell != null && !IGNORE_CELL_TYPE.contains(cell.getCellType())) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
 								logger.debug("Set Function: " + nameMethod);
 								Class<?> classField = field.getType();
 								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName() + " type");
 								Object value = null;
 								if (Number.class.isAssignableFrom(classField)) {
-									Double numberValue = cell.getNumericCellValue();
-									if (numberValue != null) {
-										if (Integer.class.isAssignableFrom(classField))
-											value = numberValue.intValue();
-										else if (BigDecimal.class.isAssignableFrom(classField))
-											value = BigDecimal.valueOf(numberValue);
-										else if (Float.class.isAssignableFrom(classField))
-											value = Float.valueOf(numberValue.floatValue());
-										else if (Long.class.isAssignableFrom(classField))
-											value = numberValue.longValue();
-									}
+									value = getNumberValue(cell, classField);
 								} else if (String.class.isAssignableFrom(classField)) {
 									DataFormat fmt = workbook.createDataFormat();
 									cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
@@ -221,6 +215,29 @@ public class ReadExcelImpl implements ReadExcel {
 		}
 
 		return excelRead;
+	}
+
+	private Object getNumberValue(Cell cell, Class<?> classField) {
+		 Object value=null;
+		try {
+			Double numberValue = cell.getNumericCellValue();
+			if (numberValue != null) {
+				if (Integer.class.isAssignableFrom(classField))
+					value = numberValue.intValue();
+				else if (BigDecimal.class.isAssignableFrom(classField))
+					value = BigDecimal.valueOf(numberValue);
+				else if (Float.class.isAssignableFrom(classField))
+					value = Float.valueOf(numberValue.floatValue());
+				else if (Long.class.isAssignableFrom(classField))
+					value = numberValue.longValue();
+			}
+		} catch (Exception e) {
+			if(!CellType.FORMULA.equals(cell.getCellType()))
+				throw e;
+			else
+				logger.warn("The formula cell returns a null value");
+		}
+		return value;
 	}
 
 	/**
