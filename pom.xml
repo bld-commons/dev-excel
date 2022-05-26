@@ -64,7 +64,7 @@
 		<java.version>1.8</java.version>
 		<org.mapstruct-version>1.3.0.Final</org.mapstruct-version>
 		<org.apache.maven.plugins-version>2.8.2</org.apache.maven.plugins-version>
-		<org.apache.maven.shared-version>3.2.1</org.apache.maven.shared-version>
+		<org.apache.maven.shared-version>3.3.3</org.apache.maven.shared-version>
 		<org.codehaus.plexus-version>3.0.5</org.codehaus.plexus-version>
 		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 
