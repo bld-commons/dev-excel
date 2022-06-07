@@ -63,8 +63,8 @@ public class ReadExcelImpl implements ReadExcel {
 
 	/** The Constant log. */
 	private static final Log logger = LogFactory.getLog(ReadExcelImpl.class);
-	
-	private static final List<CellType> IGNORE_CELL_TYPE=Arrays.asList(CellType.BLANK,CellType.ERROR);
+
+	private static final List<CellType> IGNORE_CELL_TYPE = Arrays.asList(CellType.BLANK, CellType.ERROR);
 
 	/**
 	 * Convert excel to entity.<br>
@@ -106,9 +106,9 @@ public class ReadExcelImpl implements ReadExcel {
 	 */
 	private <T extends RowSheetRead> ExcelRead convertExcelToEntity(ExcelRead excelRead, InputStream inputStream) throws Exception {
 		Workbook workbook = null;
-		if (ExcelType.XLS.equals(excelRead.getExcelType())) 
+		if (ExcelType.XLS.equals(excelRead.getExcelType()))
 			workbook = new HSSFWorkbook(inputStream);
-		 else 
+		else
 			workbook = new XSSFWorkbook(inputStream);
 		for (SheetRead<? extends RowSheetRead> sheet : excelRead.getListSheetRead()) {
 			SheetRead<T> sheetType = (SheetRead<T>) sheet;
@@ -129,7 +129,7 @@ public class ReadExcelImpl implements ReadExcel {
 			setMapMethod(mapMethod, genericClassType.getSuperclass().getMethods());
 			setMapMethod(mapMethod, genericClassType.getMethods());
 			logger.debug("Generic class type: " + genericClassType.getName());
-			int rowSize=worksheet.getPhysicalNumberOfRows();
+			int rowSize = worksheet.getPhysicalNumberOfRows();
 			for (int indexRow = startRow; indexRow <= rowSize; indexRow++) {
 				T rowSheetRead = genericClassType.getDeclaredConstructor().newInstance();
 				Row row = worksheet.getRow(indexRow);
@@ -151,50 +151,59 @@ public class ReadExcelImpl implements ReadExcel {
 								}
 
 							}
+							logger.info("Cell Type: " + cell.getCellType());
 							if (cell != null && !IGNORE_CELL_TYPE.contains(cell.getCellType())) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
 								logger.debug("Set Function: " + nameMethod);
 								Class<?> classField = field.getType();
 								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName() + " type");
 								Object value = null;
-								if (Number.class.isAssignableFrom(classField)) {
-									value = getNumberValue(cell, classField);
-								} else if (String.class.isAssignableFrom(classField)) {
-									DataFormat fmt = workbook.createDataFormat();
-									cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
-									// cell.setCellType(CellType.STRING);
-									String stringValue = cell.getStringCellValue().trim();
-									value = stringValue.isEmpty() ? null : stringValue;
-								} else if (Calendar.class.isAssignableFrom(classField)) {
-									Date dateValue = null;
-									if (CellType.STRING.equals(cell.getCellType()))
-										dateValue = convertStringToDate(cell, field);
-									else
-										dateValue = cell.getDateCellValue();
-									Calendar calendar = Calendar.getInstance();
-									if (dateValue != null) {
-										calendar.setTime(dateValue);
-										value = calendar;
-									}
-								} else if (Date.class.isAssignableFrom(classField)) {
-									if (CellType.STRING.equals(cell.getCellType()))
-										value = convertStringToDate(cell, field);
-									else
-										value = cell.getDateCellValue();
+								try {
+									if (Number.class.isAssignableFrom(classField)) {
+										value = getNumberValue(cell, classField);
+									} else if (String.class.isAssignableFrom(classField)) {
+										DataFormat fmt = workbook.createDataFormat();
+										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
+										// cell.setCellType(CellType.STRING);
+										String stringValue = cell.getStringCellValue().trim();
+										value = stringValue.isEmpty() ? null : stringValue;
+									} else if (Calendar.class.isAssignableFrom(classField)) {
+										Date dateValue = null;
+										if (CellType.STRING.equals(cell.getCellType()))
+											dateValue = convertStringToDate(cell, field);
+										else
+											dateValue = cell.getDateCellValue();
+										Calendar calendar = Calendar.getInstance();
+										if (dateValue != null) {
+											calendar.setTime(dateValue);
+											value = calendar;
+										}
+									} else if (Date.class.isAssignableFrom(classField)) {
+										if (CellType.STRING.equals(cell.getCellType()))
+											value = convertStringToDate(cell, field);
+										else
+											value = cell.getDateCellValue();
 
-								} else if (Boolean.class.isAssignableFrom(classField)) {
-									value = cell.getBooleanCellValue();
-								} else if (Character.class.isAssignableFrom(classField)) {
-									String stringValue = cell.getStringCellValue();
-									if (StringUtils.isNotEmpty(stringValue)) {
-										stringValue = stringValue.trim();
-										if (stringValue.length() > 1)
-											throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID, field.getName());
-										value = stringValue.charAt(0);
+									} else if (Boolean.class.isAssignableFrom(classField)) {
+										value = cell.getBooleanCellValue();
+									} else if (Character.class.isAssignableFrom(classField)) {
+										String stringValue = cell.getStringCellValue();
+										if (StringUtils.isNotEmpty(stringValue)) {
+											stringValue = stringValue.trim();
+											if (stringValue.length() > 1)
+												throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID, field.getName());
+											value = stringValue.charAt(0);
+										}
+									} else {
+										logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
 									}
-								} else {
-									logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
+								} catch (Exception e) {
+									if (!CellType.FORMULA.equals(cell.getCellType()))
+										throw e;
+									else
+										logger.warn("The formula cell returns a null value");
 								}
+
 								if (value != null) {
 									String nameColumn = ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
 									logger.debug(nameColumn + ": " + value);
@@ -218,24 +227,17 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	private Object getNumberValue(Cell cell, Class<?> classField) {
-		 Object value=null;
-		try {
-			Double numberValue = cell.getNumericCellValue();
-			if (numberValue != null) {
-				if (Integer.class.isAssignableFrom(classField))
-					value = numberValue.intValue();
-				else if (BigDecimal.class.isAssignableFrom(classField))
-					value = BigDecimal.valueOf(numberValue);
-				else if (Float.class.isAssignableFrom(classField))
-					value = Float.valueOf(numberValue.floatValue());
-				else if (Long.class.isAssignableFrom(classField))
-					value = numberValue.longValue();
-			}
-		} catch (Exception e) {
-			if(!CellType.FORMULA.equals(cell.getCellType()))
-				throw e;
-			else
-				logger.warn("The formula cell returns a null value");
+		Object value = null;
+		Double numberValue = cell.getNumericCellValue();
+		if (numberValue != null) {
+			if (Integer.class.isAssignableFrom(classField))
+				value = numberValue.intValue();
+			else if (BigDecimal.class.isAssignableFrom(classField))
+				value = BigDecimal.valueOf(numberValue);
+			else if (Float.class.isAssignableFrom(classField))
+				value = Float.valueOf(numberValue.floatValue());
+			else if (Long.class.isAssignableFrom(classField))
+				value = numberValue.longValue();
 		}
 		return value;
 	}
