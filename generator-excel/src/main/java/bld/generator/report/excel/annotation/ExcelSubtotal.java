@@ -15,6 +15,7 @@ import java.lang.annotation.Target;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelSubtotal.<br>
  * ExcelSubtotal and {@link bld.generator.report.excel.annotation.ExcelSubtotals} are used To calculate the subtotals grouped by the value of the first column, the function type is defined by the "dataConsolidateFunction" property.<br>

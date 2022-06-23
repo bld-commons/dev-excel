@@ -1,15 +1,18 @@
-/*
+/**
  * @author Francesco Baldi
- * @mail francesco.baldi1987@gmail.com
+ * @email francesco.baldi1987@gmail.com
  * @class bld.generator.report.excel.annotation.impl.ExcelDropDownImpl.java
  */
+
 package bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
 
+import bld.generator.report.excel.annotation.ExcelBoxMessage;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelDropDownImpl.
  */
@@ -24,6 +27,9 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 	/** The alias. */
 	private ExcelFormulaAlias[] alias;
 
+	/** The error box. */
+	private ExcelBoxMessage errorBox;
+	
 	/**
 	 * Instantiates a new excel drop down impl.
 	 */
@@ -43,6 +49,23 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 		this.areaRange = areaRange;
 	}
 
+	/**
+	 * Instantiates a new excel drop down impl.
+	 *
+	 * @param suppressDropDownArrow the suppress drop down arrow
+	 * @param areaRange the area range
+	 * @param alias the alias
+	 * @param errorBox the error box
+	 */
+	public ExcelDropDownImpl(boolean suppressDropDownArrow, String areaRange, ExcelFormulaAlias[] alias, ExcelBoxMessage errorBox) {
+		super();
+		this.suppressDropDownArrow = suppressDropDownArrow;
+		this.areaRange = areaRange;
+		this.alias = alias;
+		this.errorBox = errorBox;
+	}
+
+	
 	/**
 	 * Instantiates a new excel drop down impl.
 	 *
@@ -110,6 +133,26 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 	public void setAlias(ExcelFormulaAlias[] alias) {
 		this.alias = alias;
 	}
+	
+	
+
+	/**
+	 * Gets the error box.
+	 *
+	 * @return the error box
+	 */
+	public ExcelBoxMessage getErrorBox() {
+		return errorBox;
+	}
+
+	/**
+	 * Sets the error box.
+	 *
+	 * @param errorBox the new error box
+	 */
+	public void setErrorBox(ExcelBoxMessage errorBox) {
+		this.errorBox = errorBox;
+	}
 
 	/**
 	 * Hash code.
@@ -122,6 +165,7 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(alias);
 		result = prime * result + ((areaRange == null) ? 0 : areaRange.hashCode());
+		result = prime * result + ((errorBox == null) ? 0 : errorBox.hashCode());
 		result = prime * result + (suppressDropDownArrow ? 1231 : 1237);
 		return result;
 	}
@@ -147,6 +191,11 @@ public class ExcelDropDownImpl extends ExcelAnnotationImpl<ExcelDropDown> {
 			if (other.areaRange != null)
 				return false;
 		} else if (!areaRange.equals(other.areaRange))
+			return false;
+		if (errorBox == null) {
+			if (other.errorBox != null)
+				return false;
+		} else if (!errorBox.equals(other.errorBox))
 			return false;
 		if (suppressDropDownArrow != other.suppressDropDownArrow)
 			return false;

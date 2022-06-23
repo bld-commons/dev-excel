@@ -1144,29 +1144,32 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		XDDFChartData.Series series = null;
 		int i = 0;
 		Map<String, InfoChart> mapChart = mapAllChart.get(excelChart.id());
-		for (String keyChart : mapChart.keySet()) {
-			InfoChart infoChart = mapChart.get(keyChart);
-			String seriesChart = "";
-			if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue()) || infoChart.getFunction().replace(" ", "").contains(START)) {
-				seriesChart = setInfoColumnByMapCharts(infoChart.getFunction(), sheet, infoChart);
-				// xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
+		if(MapUtils.isNotEmpty(mapChart)) {
+			for (String keyChart : mapChart.keySet()) {
+				InfoChart infoChart = mapChart.get(keyChart);
+				String seriesChart = "";
+				if (infoChart.getFunction().contains(RowStartEndType.ROW_START.getValue()) || infoChart.getFunction().replace(" ", "").contains(START)) {
+					seriesChart = setInfoColumnByMapCharts(infoChart.getFunction(), sheet, infoChart);
+					// xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
-			} else {
-				// xAxis = buildFunction(sheet, null, excelChart.xAxis(),
-				// RowStartEndType.ROW_HEADER);
-				seriesChart = infoChart.getFunction();
+				} else {
+					// xAxis = buildFunction(sheet, null, excelChart.xAxis(),
+					// RowStartEndType.ROW_HEADER);
+					seriesChart = infoChart.getFunction();
+				}
+
+				areaReference = new AreaReference(seriesChart, excelChart.spreadsheetVersion());
+				XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory
+						.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet, CellRangeAddress.valueOf(seriesChart));
+				series = chartData.addSeries(xs, numericalDataSource);
+				series.setTitle(infoChart.getTitle(), null);
+				series.setShowLeaderLines(excelChart.showLeaderLines());
+				this.chartData(series, excelChart);
+				solidLineSeries(series, excelChart.lineColor(), i++);
 			}
 
-			areaReference = new AreaReference(seriesChart, excelChart.spreadsheetVersion());
-			XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory
-					.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet, CellRangeAddress.valueOf(seriesChart));
-			series = chartData.addSeries(xs, numericalDataSource);
-			series.setTitle(infoChart.getTitle(), null);
-			series.setShowLeaderLines(excelChart.showLeaderLines());
-			this.chartData(series, excelChart);
-			solidLineSeries(series, excelChart.lineColor(), i++);
 		}
-
+		
 		chartData.setVaryColors(true);
 
 		chartLabelData(chart, excelChart);

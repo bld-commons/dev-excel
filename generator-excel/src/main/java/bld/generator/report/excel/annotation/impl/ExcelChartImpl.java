@@ -20,6 +20,7 @@ import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.ExcelChartDataLabel;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelChartImpl.
  */

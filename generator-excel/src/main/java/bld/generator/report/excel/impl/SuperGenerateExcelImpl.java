@@ -121,6 +121,7 @@ import bld.generator.report.excel.data.InfoColumn;
 import bld.generator.report.excel.data.LayoutCell;
 import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.SheetHeader;
+import bld.generator.report.excel.dropdown.BoxMessage;
 import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.excel.exception.ExcelGeneratorException;
 import bld.generator.report.utils.ExcelUtils;
@@ -241,10 +242,10 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Creates the cell style.
 	 *
-	 * @param workbook  the workbook
-	 * @param layout    the layout
+	 * @param workbook    the workbook
+	 * @param layout      the layout
 	 * @param sheetHeader the sheet header
-	 * @param indexRow  the index row
+	 * @param indexRow    the index row
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
@@ -288,7 +289,7 @@ public class SuperGenerateExcelImpl {
 			for (int i = 0; i < layout.precision(); i++)
 				format += "0";
 			cellStyle = dateCellStyle(workbook, cellStyle, format);
-		} else if (sheetHeader!=null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
+		} else if (sheetHeader != null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
 			DataFormat fmt = workbook.createDataFormat();
 			cellStyle.setDataFormat(fmt.getFormat("text"));
 		}
@@ -619,11 +620,11 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param alias the alias
+	 * @param alias           the alias
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -662,15 +663,15 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param keyParameter the key parameter
-	 * @param indexRow the index row
+	 * @param sheet           the sheet
+	 * @param keyParameter    the key parameter
+	 * @param indexRow        the index row
 	 * @param rowStartEndType the row start end type
-	 * @param sheetName the sheet name
-	 * @param function the function
-	 * @param parameter the parameter
-	 * @param blockColumn the block column
-	 * @param blockRow the block row
+	 * @param sheetName       the sheet name
+	 * @param function        the function
+	 * @param parameter       the parameter
+	 * @param blockColumn     the block column
+	 * @param blockRow        the block row
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -807,7 +808,7 @@ public class SuperGenerateExcelImpl {
 	 * @param function        the function
 	 * @param rowStartEndType the row start end type
 	 * @param blockColumn     the dollar
-	 * @param blockRow the block row
+	 * @param blockRow        the block row
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -830,15 +831,15 @@ public class SuperGenerateExcelImpl {
 	/**
 	 * Gets the static value.
 	 *
-	 * @param keyParameter the key parameter
-	 * @param row the row
+	 * @param keyParameter   the key parameter
+	 * @param row            the row
 	 * @param sheetComponent the sheet component
 	 * @return the static value
-	 * @throws NoSuchFieldException the no such field exception
-	 * @throws IllegalAccessException the illegal access exception
+	 * @throws NoSuchFieldException      the no such field exception
+	 * @throws IllegalAccessException    the illegal access exception
 	 * @throws InvocationTargetException the invocation target exception
-	 * @throws NoSuchMethodException the no such method exception
-	 * @throws ExcelGeneratorException the excel generator exception
+	 * @throws NoSuchMethodException     the no such method exception
+	 * @throws ExcelGeneratorException   the excel generator exception
 	 */
 	private Object getStaticValue(String keyParameter, Integer row, SheetComponent sheetComponent) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ExcelGeneratorException {
 		Object value = null;
@@ -1074,8 +1075,7 @@ public class SuperGenerateExcelImpl {
 		sheet.setMargin(Sheet.BottomMargin, excelMarginSheet.bottom());
 		if (layoutSheet.scale() != (short) 100)
 			sheet.getPrintSetup().setScale(layoutSheet.scale());
-		if (layoutSheet.landscape())
-			sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
+		sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
 		rowHeader.setHeight(ExcelUtils.rowHeight(layoutHeader.rowHeight()));
 
 //		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
@@ -1373,7 +1373,13 @@ public class SuperGenerateExcelImpl {
 					throw new ExcelGeneratorException("The formula '" + areaRange + "' is not valid");
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
-				dataValidation.setSuppressDropDownArrow(sheetHeader.getExcelDropDown().suppressDropDownArrow());
+				dataValidation.setSuppressDropDownArrow(excelDropDown.suppressDropDownArrow());
+				if(excelDropDown.errorBox().show()) {
+					dataValidation.setShowErrorBox(excelDropDown.errorBox().show());
+					dataValidation.createErrorBox(excelDropDown.errorBox().title(), excelDropDown.errorBox().message());
+					dataValidation.setErrorStyle(excelDropDown.errorBox().boxStyle().getValue());
+				}
+				
 			} else {
 				DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
@@ -1396,6 +1402,13 @@ public class SuperGenerateExcelImpl {
 					constraint = validationHelper.createExplicitListConstraint(list);
 					dataValidation = validationHelper.createValidation(constraint, addressList);
 					dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
+					if(dropDown.getBoxMessage()!=null) {
+						BoxMessage boxMessage=dropDown.getBoxMessage();
+						dataValidation.setShowErrorBox(boxMessage.isShow());
+						dataValidation.createErrorBox(boxMessage.getTitle(), boxMessage.getMessage());
+						dataValidation.setErrorStyle(boxMessage.getBoxStyle().getValue());
+					}
+					
 				}
 
 			}

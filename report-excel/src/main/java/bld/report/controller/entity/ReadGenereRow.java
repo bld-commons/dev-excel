@@ -17,11 +17,11 @@ public class ReadGenereRow implements RowSheetRead {
 	@ExcelReadColumn(name = "Genere")
 	private String genere;
 	
+
 	/**
 	 * Instantiates a new read genere row.
 	 *
-	 * @param genere     the genere
-	 * @param countLibri the count libri
+	 * @param genere the genere
 	 */
 	public ReadGenereRow(String genere) {
 		super();
@@ -53,6 +53,11 @@ public class ReadGenereRow implements RowSheetRead {
 		this.genere = genere;
 	}
 
+	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,6 +66,12 @@ public class ReadGenereRow implements RowSheetRead {
 		return result;
 	}
 
+	/**
+	 * Equals.
+	 *
+	 * @param obj the obj
+	 * @return true, if successful
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -78,6 +89,11 @@ public class ReadGenereRow implements RowSheetRead {
 		return true;
 	}
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		return "ReadGenereRow [genere=" + genere + "]";

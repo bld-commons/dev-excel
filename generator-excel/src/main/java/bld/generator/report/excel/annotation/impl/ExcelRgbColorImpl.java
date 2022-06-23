@@ -7,6 +7,7 @@ package bld.generator.report.excel.annotation.impl;
 
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelRgbColorImpl.
  */
