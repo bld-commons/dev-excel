@@ -151,7 +151,6 @@ public class ReadExcelImpl implements ReadExcel {
 								}
 
 							}
-							logger.info("Cell Type: " + cell.getCellType());
 							if (cell != null && !IGNORE_CELL_TYPE.contains(cell.getCellType())) {
 								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
 								logger.debug("Set Function: " + nameMethod);
