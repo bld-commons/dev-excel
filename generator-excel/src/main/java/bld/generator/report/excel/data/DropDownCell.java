@@ -30,19 +30,12 @@ public class DropDownCell {
 	/** The last col. */
 	private int lastCol;
 	
+	private Integer indexRow;
 	
 	
-	/**
-	 * Instantiates a new drop down cell.
-	 *
-	 * @param sheet       the sheet
-	 * @param sheetHeader the sheet header
-	 * @param firstRow    the first row
-	 * @param lastRow     the last row
-	 * @param firstCol    the first col
-	 * @param lastCol     the last col
-	 */
-	public DropDownCell(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) {
+
+
+	public DropDownCell(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol, Integer indexRow) {
 		super();
 		this.sheet = sheet;
 		this.sheetHeader = sheetHeader;
@@ -50,6 +43,7 @@ public class DropDownCell {
 		this.lastRow = lastRow;
 		this.firstCol = firstCol;
 		this.lastCol = lastCol;
+		this.indexRow = indexRow;
 	}
 
 	/**
@@ -164,6 +158,14 @@ public class DropDownCell {
 	 */
 	public void setLastCol(int lastCol) {
 		this.lastCol = lastCol;
+	}
+
+	public Integer getIndexRow() {
+		return indexRow;
+	}
+
+	public void setIndexRow(Integer indexRow) {
+		this.indexRow = indexRow;
 	}
 
 	

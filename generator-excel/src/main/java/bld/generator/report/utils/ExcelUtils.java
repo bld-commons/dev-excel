@@ -263,7 +263,7 @@ public class ExcelUtils implements ApplicationContextAware {
 	 * @param isBlockRow the is block row
 	 * @return the string
 	 */
-	public static String calcoloCoordinateFunction(int row, int idColumn, boolean isBlockColumn,boolean isBlockRow) {
+	public static String coordinateCalculation(int row, int idColumn, boolean isBlockColumn,boolean isBlockRow) {
 		int mod = 0;
 		int div = idColumn;
 		String blockColumn = blockCoordinate(isBlockColumn);

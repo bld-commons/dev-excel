@@ -136,6 +136,8 @@ import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.excel.data.SubtotalRow;
 import bld.generator.report.excel.exception.ExcelGeneratorException;
 import bld.generator.report.excel.query.ExcelQueryComponent;
+import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
+import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
@@ -388,6 +390,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private Workbook createSheets(ReportExcel report, Workbook workbook) throws Exception {
+		if(report.isEnableSheetMapping()) {
+			this.sheetMapping=new SheetMappingSheet();
+			report.addBaseSheet(this.sheetMapping);
+		}
+			
 		List<BaseSheet> listSheet = report.getListBaseSheet();
 		int indexSheetName = 0;
 
@@ -551,8 +558,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
 		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
 		indexRow += excelSheetLayout.startRow();
+		SheetMappingRow sheetMappingRow=null;
 		if (indexRow < 0)
 			throw new ExcelGeneratorException("The row number cannot be negative");
+		
 		indexRow = writeLabel(workbook, sheet, sheetData, indexRow, formulaEvaluator);
 		indexRow = indexRow + getSizeSuperHeader(sheetData);
 		int startRowSheet = indexRow + 1;
@@ -582,7 +591,15 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			ExcelRowHeight excelRowHeight = sheetData.getRowClass().getAnnotation(ExcelRowHeight.class);
 			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
-
+		if(this.sheetMapping!=null && sheetData.isEnableInfoSheet()) {
+			sheetMappingRow=new SheetMappingRow();
+			sheetMappingRow.setSheet(sheet.getSheetName());
+			sheetMappingRow.setFirstRow(indexRow);
+			sheetMappingRow.setFirstColumn(excelSheetLayout.startColumn());
+			sheetMappingRow.setLastColumn(maxColumn);
+			sheetMappingRow.setRowsNumber(sheetData.getListRowSheet().size());
+			this.sheetMapping.addRowSheets(sheetMappingRow);
+		}
 		List<SubtotalRow> emptyRows = new ArrayList<>();
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			int splitRow = 0;
@@ -653,7 +670,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 							mapMergeRow.put(numColumn, mergeRow);
 						} else {
-							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
+							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex(),indexRow);
 							super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
 						}
 
@@ -750,6 +767,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (Integer numColumn : mapMergeRow.keySet())
 			super.mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn, formulaEvaluator);
 
+		if(sheetMappingRow!=null) 
+			sheetMappingRow.setLastRow(indexRow);
+		
 		if (sheetData.getRowClass().isAnnotationPresent(ExcelSubtotals.class)) {
 			ExcelSubtotals excelSubtotals = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
 			if (excelSubtotals.sumForGroup())
@@ -818,7 +838,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		String rangeAddress=null;	
 		boolean enableAutoFilter=!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader();
 		if (enableAutoFilter) {
-			rangeAddress=ExcelUtils.calcoloCoordinateFunction(startRowSheet, excelSheetLayout.startColumn(), false, false)+":"+ExcelUtils.calcoloCoordinateFunction(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn()-1, false, false);
+			rangeAddress=ExcelUtils.coordinateCalculation(startRowSheet, excelSheetLayout.startColumn(), false, false)+":"+ExcelUtils.coordinateCalculation(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn()-1, false, false);
 			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 		}
@@ -1108,7 +1128,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					case NUMERIC:
 						if (!values.contains("" + cell.getNumericCellValue())) {
 							values.add("" + cell.getNumericCellValue());
-							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false, false);
+							String cellAddress = ExcelUtils.coordinateCalculation(idxRow + 1, idxColumn, false, false);
 							xAxis += "," + cellAddress;
 						}
 
@@ -1116,7 +1136,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					case STRING:
 						if (!values.contains(cell.getStringCellValue())) {
 							values.add(cell.getStringCellValue());
-							String cellAddress = ExcelUtils.calcoloCoordinateFunction(idxRow + 1, idxColumn, false, false);
+							String cellAddress = ExcelUtils.coordinateCalculation(idxRow + 1, idxColumn, false, false);
 							xAxis += "," + cellAddress;
 						}
 

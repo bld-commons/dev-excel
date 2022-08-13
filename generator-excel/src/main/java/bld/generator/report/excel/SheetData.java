@@ -67,6 +67,8 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	/** The row class. */
 	private Class<T> rowClass;
 	
+	private boolean enableInfoSheet;
+	
 	/**
 	 * Instantiates a new sheet data.
 	 *
@@ -76,6 +78,7 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 		super(sheetName);
 		listRowSheet = new ArrayList<T>();
 		this.rowClass=ExcelUtils.getTClass(this);
+		this.enableInfoSheet=true;
 	}
 
 	/**
@@ -115,6 +118,16 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 */
 	public Class<T> getRowClass() {
 		return rowClass;
+	}
+	
+	
+
+	public boolean isEnableInfoSheet() {
+		return enableInfoSheet;
+	}
+
+	public void setEnableInfoSheet(boolean enableInfoSheet) {
+		this.enableInfoSheet = enableInfoSheet;
 	}
 
 	/**
