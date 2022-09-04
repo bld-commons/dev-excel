@@ -5,12 +5,14 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.utils.ExcelUtils;
 
 public class SheetMappingRow implements RowSheet {
 
 	@ExcelColumn(columnName = "Sheet name", indexColumn = 1)
 	@ExcelCellLayout(locked = true)
+	@ExcelColumnWidth(width = 8)
 	private String sheet;
 	
 	@ExcelColumn(columnName = "Rows number", indexColumn = 2)
@@ -175,7 +177,7 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getFirstLockedRowFirstColumn() {
 		if (this.firstLockedRowFirstColumn == null && this.firstRow != null && firstColumn != null)
-			this.firstLockedRowFirstColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.firstColumn, true, false);
+			this.firstLockedRowFirstColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.firstColumn, false, true);
 		return firstLockedRowFirstColumn;
 	}
 
@@ -187,13 +189,13 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getFirstRowFirstLockedColumn() {
 		if (this.firstRowFirstLockedColumn == null && this.firstRow != null && firstColumn != null)
-			this.firstRowFirstLockedColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.firstColumn, false, true);
+			this.firstRowFirstLockedColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.firstColumn, true, false);
 		return firstRowFirstLockedColumn;
 	}
 
 	public String getFirstLockedRowLastColumn() {
 		if (this.firstLockedRowLastColumn == null && this.firstRow != null && lastColumn != null)
-			this.firstLockedRowLastColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.lastColumn, true, false);
+			this.firstLockedRowLastColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.lastColumn, false, true);
 		return firstLockedRowLastColumn;
 	}
 
@@ -205,7 +207,7 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getFirstRowLastLockedColumn() {
 		if (this.firstRowLastLockedColumn == null && this.firstRow != null && lastColumn != null)
-			this.firstRowLastLockedColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.lastColumn, false, true);
+			this.firstRowLastLockedColumn = ExcelUtils.coordinateCalculation(this.firstRow, this.lastColumn, true, false);
 		return firstRowLastLockedColumn;
 	}
 
@@ -217,7 +219,7 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getLastLockedRowFirstLockedColumn() {
 		if (this.lastLockedRowFirstLockedColumn == null && this.lastRow != null && this.firstColumn != null)
-			this.lastLockedRowFirstLockedColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.firstColumn, true, false);
+			this.lastLockedRowFirstLockedColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.firstColumn, false, true);
 		return lastLockedRowFirstLockedColumn;
 	}
 
@@ -229,7 +231,7 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getLastLockedRowLastColumn() {
 		if (this.lastLockedRowLastColumn == null && this.lastRow != null && this.lastColumn != null)
-			this.lastLockedRowLastColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.lastColumn, true, false);
+			this.lastLockedRowLastColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.lastColumn, false, true);
 		return lastLockedRowLastColumn;
 	}
 
@@ -241,7 +243,7 @@ public class SheetMappingRow implements RowSheet {
 
 	public String getLastRowLastLockedColumn() {
 		if (this.lastRowLastLockedColumn == null && this.lastRow != null && this.lastColumn != null)
-			this.lastRowLastLockedColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.lastColumn, false, true);
+			this.lastRowLastLockedColumn = ExcelUtils.coordinateCalculation(this.lastRow, this.lastColumn, true, false);
 		return lastRowLastLockedColumn;
 	}
 
