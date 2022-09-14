@@ -29,6 +29,7 @@ public abstract class DropDown<T> {
 	private BoxMessage boxMessage;
 	
 	
+	
 	/**
 	 * Instantiates a new drop down.
 	 */

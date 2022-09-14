@@ -1391,9 +1391,10 @@ public abstract class SuperGenerateExcelImpl {
 				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
 					String[] list = new String[dropDown.getList().size()];
 					int i = 0;
-					SimpleDateFormat sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
+					SimpleDateFormat sdf =null;
+					if(sheetHeader.getExcelDate()!=null)
+						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
 					for (Object item : dropDown.getList()) {
-
 						if (item instanceof Date)
 							list[i] = sdf.format((Date) item);
 						else if (item instanceof Calendar)

@@ -5,6 +5,7 @@
 */
 package bld.report.generator.junit.entity;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -26,6 +27,8 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.constant.ColumnDateFormat;
+import bld.generator.report.excel.dropdown.CharacterDropDown;
+import bld.generator.report.excel.dropdown.IntegerDropDown;
 
 /**
  * The Class AutoreLibriRow.
@@ -101,6 +104,16 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double supplemento;
+	
+	
+	@ExcelColumn(columnName = "Opzione",indexColumn = 8)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	private IntegerDropDown option;
+	
+	
+	@ExcelColumn(columnName = "Opzione Char",indexColumn = 8)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+	private CharacterDropDown optionChar;
 
 	
 	
@@ -109,6 +122,8 @@ public class AutoreLibriRow implements RowSheet {
 	 */
 	public AutoreLibriRow() {
 		super();
+		this.option=new IntegerDropDown(null,Arrays.asList(0,1,2));
+		this.optionChar=new CharacterDropDown(null, Arrays.asList('A','B','C'));
 	}
 
 	/**
@@ -133,6 +148,8 @@ public class AutoreLibriRow implements RowSheet {
 		this.matricola = matricola;
 		this.prezzo=prezzo;
 		this.supplemento=supplemento;
+		this.option=new IntegerDropDown(null,Arrays.asList(0,1,2));
+		this.optionChar=new CharacterDropDown(null, Arrays.asList('A','B','C'));
 	}
 
 	/**
@@ -277,6 +294,22 @@ public class AutoreLibriRow implements RowSheet {
 	 */
 	public void setPrezzo(Double prezzo) {
 		this.prezzo = prezzo;
+	}
+
+	public IntegerDropDown getOption() {
+		return option;
+	}
+
+	public void setOption(IntegerDropDown option) {
+		this.option = option;
+	}
+
+	public CharacterDropDown getOptionChar() {
+		return optionChar;
+	}
+
+	public void setOptionChar(CharacterDropDown optionChar) {
+		this.optionChar = optionChar;
 	}
 	
 	
