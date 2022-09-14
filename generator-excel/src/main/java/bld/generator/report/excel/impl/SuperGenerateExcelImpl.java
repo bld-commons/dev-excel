@@ -124,13 +124,14 @@ import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.excel.dropdown.BoxMessage;
 import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.excel.exception.ExcelGeneratorException;
+import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 import bld.generator.report.utils.ExcelUtils;
 import bld.generator.report.utils.ValueProps;
 
 /**
  * The Class SuperGenerateExcelImpl.
  */
-public class SuperGenerateExcelImpl {
+public abstract class SuperGenerateExcelImpl {
 
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
@@ -175,6 +176,8 @@ public class SuperGenerateExcelImpl {
 
 	/** The map sheet. */
 	protected Map<String, BaseSheet> mapSheet = new HashMap<>();
+	
+	protected SheetMappingSheet sheetMapping;
 
 	/** The value props. */
 	@Autowired
@@ -458,7 +461,7 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn, FormulaEvaluator formulaEvaluator) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
-		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn);
+		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn,indexRow);
 		mergeRow.setRowEnd(indexRow - 1);
 		runMergeCell(workbook, sheet, mergeRow, formulaEvaluator);
 	}
@@ -537,7 +540,7 @@ public class SuperGenerateExcelImpl {
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
-		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column);
+		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column,indexRow);
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex(), formulaEvaluator);
 		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
 
@@ -768,12 +771,12 @@ public class SuperGenerateExcelImpl {
 							sheetName = "'" + sheetName.replace("'", BaseSheet.APOS) + "'!";
 
 							if (function.contains(sheetName))
-								function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+								function = function.replace(parameter, ExcelUtils.coordinateCalculation(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
 							else
-								function = function.replace(parameter, sheetName + ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+								function = function.replace(parameter, sheetName + ExcelUtils.coordinateCalculation(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
 						}
 					} else if (!fieldValue)
-						function = function.replace(parameter, ExcelUtils.calcoloCoordinateFunction(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
+						function = function.replace(parameter, ExcelUtils.coordinateCalculation(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
 				}
 
 			} catch (Exception e) {
@@ -1285,8 +1288,8 @@ public class SuperGenerateExcelImpl {
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
 		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());
-		String startCell = ExcelUtils.calcoloCoordinateFunction(firstRow, firstColumn, true, true);
-		String endCell = ExcelUtils.calcoloCoordinateFunction(lastRow, lastColumn, true, true);
+		String startCell = ExcelUtils.coordinateCalculation(firstRow, firstColumn, true, true);
+		String endCell = ExcelUtils.coordinateCalculation(lastRow, lastColumn, true, true);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
 		indexRow += 3;
@@ -1338,9 +1341,9 @@ public class SuperGenerateExcelImpl {
 	 * @param firstCol    the first col
 	 * @param lastCol     the last col
 	 */
-	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol) {
+	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol,Integer indexRow) {
 		DropDownCell dropDownCell = null;
-		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol);
+		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol,indexRow);
 		try {
 			this.addDropDown(dropDownCell);
 		} catch (Exception e) {
@@ -1365,8 +1368,11 @@ public class SuperGenerateExcelImpl {
 			if (sheetHeader.getExcelDropDown() != null) {
 				ExcelDropDown excelDropDown = sheetHeader.getExcelDropDown();
 				String areaRange = excelDropDown.areaRange();
+				areaRange = buildFunction(sheet, dropDownCell.getIndexRow(), areaRange, RowStartEndType.ROW_EMPTY, excelDropDown.alias());
 				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, excelDropDown.alias());
 				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, excelDropDown.alias());
+				
+				
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())
@@ -1385,9 +1391,10 @@ public class SuperGenerateExcelImpl {
 				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
 					String[] list = new String[dropDown.getList().size()];
 					int i = 0;
-					SimpleDateFormat sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
+					SimpleDateFormat sdf =null;
+					if(sheetHeader.getExcelDate()!=null)
+						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
 					for (Object item : dropDown.getList()) {
-
 						if (item instanceof Date)
 							list[i] = sdf.format((Date) item);
 						else if (item instanceof Calendar)

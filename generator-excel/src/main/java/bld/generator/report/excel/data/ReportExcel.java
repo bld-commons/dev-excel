@@ -42,6 +42,9 @@ public class ReportExcel {
 	/** The ignore cover. */
 	private boolean ignoreCover;
 
+	/** The enable sheet mapping. */
+	private boolean enableSheetMapping;
+
 	/**
 	 * Instantiates a new report excel.
 	 *
@@ -49,20 +52,33 @@ public class ReportExcel {
 	 */
 	public ReportExcel(String title) {
 		super();
-		init(title, false);
+		init(title, false, false);
 	}
 
 	/**
 	 * Inits the.
 	 *
-	 * @param title the title
+	 * @param title       the title
 	 * @param ignoreCover the ignore cover
+	 * @param enableSheetMapping the enable sheet mapping
 	 */
-	private void init(String title, boolean ignoreCover) {
+	private void init(String title, boolean ignoreCover, boolean enableSheetMapping) {
 		this.title = title;
 		this.date = new Date();
 		this.ignoreCover = ignoreCover;
 		this.listBaseSheet = new ArrayList<>();
+		this.enableSheetMapping = enableSheetMapping;
+	}
+
+	/**
+	 * Instantiates a new report excel.
+	 *
+	 * @param title       the title
+	 * @param ignoreCover the ignore cover
+	 */
+	public ReportExcel(String title, boolean ignoreCover) {
+		super();
+		init(title, ignoreCover, false);
 	}
 
 	/**
@@ -70,10 +86,11 @@ public class ReportExcel {
 	 *
 	 * @param title the title
 	 * @param ignoreCover the ignore cover
+	 * @param enableSheetMapping the enable sheet mapping
 	 */
-	public ReportExcel(String title, boolean ignoreCover) {
+	public ReportExcel(String title, boolean ignoreCover, boolean enableSheetMapping) {
 		super();
-		init(title, ignoreCover);
+		init(title, ignoreCover, enableSheetMapping);
 	}
 
 	/**
@@ -164,18 +181,21 @@ public class ReportExcel {
 	}
 
 	/**
-	 * Hash code.
+	 * Checks if is enable sheet mapping.
 	 *
-	 * @return the int
+	 * @return true, if is enable sheet mapping
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + ((listBaseSheet == null) ? 0 : listBaseSheet.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
+	public boolean isEnableSheetMapping() {
+		return enableSheetMapping;
+	}
+
+	/**
+	 * Sets the enable sheet mapping.
+	 *
+	 * @param enableSheetMapping the new enable sheet mapping
+	 */
+	public void setEnableSheetMapping(boolean enableSheetMapping) {
+		this.enableSheetMapping = enableSheetMapping;
 	}
 
 	/**
@@ -197,6 +217,23 @@ public class ReportExcel {
 	}
 
 	/**
+	 * Hash code.
+	 *
+	 * @return the int
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + (enableSheetMapping ? 1231 : 1237);
+		result = prime * result + (ignoreCover ? 1231 : 1237);
+		result = prime * result + ((listBaseSheet == null) ? 0 : listBaseSheet.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	/**
 	 * Equals.
 	 *
 	 * @param obj the obj
@@ -215,6 +252,10 @@ public class ReportExcel {
 			if (other.date != null)
 				return false;
 		} else if (!date.equals(other.date))
+			return false;
+		if (enableSheetMapping != other.enableSheetMapping)
+			return false;
+		if (ignoreCover != other.ignoreCover)
 			return false;
 		if (listBaseSheet == null) {
 			if (other.listBaseSheet != null)
