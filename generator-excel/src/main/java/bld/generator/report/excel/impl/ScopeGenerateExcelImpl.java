@@ -942,8 +942,16 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		}
 
+		this.setAutoSizeColumn(listSheetHeader,sheet);
+		
 		return indexRow;
 
+	}
+
+	private void setAutoSizeColumn(List<SheetHeader> listSheetHeader,Sheet sheet) {
+		for(SheetHeader sheetHeader:listSheetHeader)
+			if(sheetHeader.getExcelCellLayout().autoSizeColumn())
+				sheet.autoSizeColumn(sheetHeader.getNumColumn());
 	}
 
 	/**

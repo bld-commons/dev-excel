@@ -35,6 +35,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import bld.generator.report.excel.annotation.ExcelBooleanText;
 import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.utils.ExcelUtils;
@@ -157,8 +158,20 @@ public class ReadExcelImpl implements ReadExcel {
 								Class<?> classField = field.getType();
 								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName() + " type");
 								Object value = null;
+								ExcelBooleanText excelBooleanText=null;
+								if(field.isAnnotationPresent(ExcelBooleanText.class))
+									excelBooleanText=field.getAnnotation(ExcelBooleanText.class);
+								if(excelBooleanText!=null && !Boolean.class.isAssignableFrom(classField))
+									throw new ExcelReaderException("The \"ExcelBooleanText\" annotation can only be assigned to boolean fields");
 								try {
-									if (Number.class.isAssignableFrom(classField)) {
+									if(excelBooleanText!=null) {
+										String stringValue = cell.getStringCellValue();
+										if(excelBooleanText.ifTrue().equalsIgnoreCase(stringValue))
+											value=true;
+										else if(excelBooleanText.ifFalse().equalsIgnoreCase(stringValue))
+											value=false;
+									}
+									else if (Number.class.isAssignableFrom(classField)) {
 										value = getNumberValue(cell, classField);
 									} else if (String.class.isAssignableFrom(classField)) {
 										DataFormat fmt = workbook.createDataFormat();
@@ -197,6 +210,7 @@ public class ReadExcelImpl implements ReadExcel {
 										logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
 									}
 								} catch (Exception e) {
+									logger.error("The \""+field.getName()+"\" field throw exception");
 									if (!CellType.FORMULA.equals(cell.getCellType()))
 										throw e;
 									else

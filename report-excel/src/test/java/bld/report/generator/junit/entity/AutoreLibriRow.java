@@ -76,7 +76,8 @@ public class AutoreLibriRow implements RowSheet {
 	
 	/** The titolo. */
 	@ExcelColumn(columnName = "Titolo",indexColumn = 6)
-	@ExcelCellLayout
+	@ExcelHeaderCellLayout(wrap = false)
+	@ExcelCellLayout(autoSizeColumn = true)
 	private String titolo;
 	
 	/** The genere. */

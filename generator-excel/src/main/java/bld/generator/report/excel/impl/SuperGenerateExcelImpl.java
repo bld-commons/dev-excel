@@ -176,7 +176,7 @@ public abstract class SuperGenerateExcelImpl {
 
 	/** The map sheet. */
 	protected Map<String, BaseSheet> mapSheet = new HashMap<>();
-	
+
 	protected SheetMappingSheet sheetMapping;
 
 	/** The value props. */
@@ -461,7 +461,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn, FormulaEvaluator formulaEvaluator) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
-		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn,indexRow);
+		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn, indexRow);
 		mergeRow.setRowEnd(indexRow - 1);
 		runMergeCell(workbook, sheet, mergeRow, formulaEvaluator);
 	}
@@ -540,7 +540,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
-		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column,indexRow);
+		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column, indexRow);
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex(), formulaEvaluator);
 		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
 
@@ -1168,7 +1168,6 @@ public abstract class SuperGenerateExcelImpl {
 
 		}
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
-
 		for (int columnNum = excelSheetLayout.startColumn(); columnNum < maxColumn; columnNum++) {
 			int indexHeader = columnNum - excelSheetLayout.startColumn();
 			SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
@@ -1341,9 +1340,9 @@ public abstract class SuperGenerateExcelImpl {
 	 * @param firstCol    the first col
 	 * @param lastCol     the last col
 	 */
-	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol,Integer indexRow) {
+	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol, Integer indexRow) {
 		DropDownCell dropDownCell = null;
-		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol,indexRow);
+		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow);
 		try {
 			this.addDropDown(dropDownCell);
 		} catch (Exception e) {
@@ -1371,8 +1370,7 @@ public abstract class SuperGenerateExcelImpl {
 				areaRange = buildFunction(sheet, dropDownCell.getIndexRow(), areaRange, RowStartEndType.ROW_EMPTY, excelDropDown.alias());
 				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, excelDropDown.alias());
 				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, excelDropDown.alias());
-				
-				
+
 				Pattern p = Pattern.compile(PATTERN);
 				Matcher m = p.matcher(areaRange);
 				if (m.find())
@@ -1380,19 +1378,19 @@ public abstract class SuperGenerateExcelImpl {
 				constraint = validationHelper.createFormulaListConstraint(areaRange);
 				dataValidation = validationHelper.createValidation(constraint, addressList);
 				dataValidation.setSuppressDropDownArrow(excelDropDown.suppressDropDownArrow());
-				if(excelDropDown.errorBox().show()) {
+				if (excelDropDown.errorBox().show()) {
 					dataValidation.setShowErrorBox(excelDropDown.errorBox().show());
 					dataValidation.createErrorBox(excelDropDown.errorBox().title(), excelDropDown.errorBox().message());
 					dataValidation.setErrorStyle(excelDropDown.errorBox().boxStyle().getValue());
 				}
-				
+
 			} else {
 				DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
 					String[] list = new String[dropDown.getList().size()];
 					int i = 0;
-					SimpleDateFormat sdf =null;
-					if(sheetHeader.getExcelDate()!=null)
+					SimpleDateFormat sdf = null;
+					if (sheetHeader.getExcelDate() != null)
 						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
 					for (Object item : dropDown.getList()) {
 						if (item instanceof Date)
@@ -1409,13 +1407,13 @@ public abstract class SuperGenerateExcelImpl {
 					constraint = validationHelper.createExplicitListConstraint(list);
 					dataValidation = validationHelper.createValidation(constraint, addressList);
 					dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
-					if(dropDown.getBoxMessage()!=null) {
-						BoxMessage boxMessage=dropDown.getBoxMessage();
+					if (dropDown.getBoxMessage() != null) {
+						BoxMessage boxMessage = dropDown.getBoxMessage();
 						dataValidation.setShowErrorBox(boxMessage.isShow());
 						dataValidation.createErrorBox(boxMessage.getTitle(), boxMessage.getMessage());
 						dataValidation.setErrorStyle(boxMessage.getBoxStyle().getValue());
 					}
-					
+
 				}
 
 			}

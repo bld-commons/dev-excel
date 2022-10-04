@@ -134,5 +134,13 @@ public @interface ExcelCellLayout {
 	 * @return true, if successful
 	 */
 	public boolean locked() default false;
+	
+	
+	/**
+	 * Auto size column.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean autoSizeColumn() default false;
 
 }
