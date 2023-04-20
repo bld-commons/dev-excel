@@ -3,7 +3,7 @@
  * @mail francesco.baldi1987@gmail.com
  * @class bld.generator.report.excel.comparator.PivotColumnComparator.java
  */
-package bld.generator.report.excel.comparator;
+package bld.generator.report.comparator;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;

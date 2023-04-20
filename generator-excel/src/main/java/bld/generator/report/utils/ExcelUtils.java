@@ -31,7 +31,7 @@ import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.fathzer.soft.javaluator.StaticVariableSet;
 
 import bld.generator.report.excel.constant.RowStartEndType;
-import bld.generator.report.excel.exception.ExcelGeneratorException;
+import bld.generator.report.exception.ExcelGeneratorException;
 
 // TODO: Auto-generated Javadoc
 /**

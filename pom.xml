@@ -46,7 +46,7 @@
 	</parent>
 
 	<properties>
-		<org.apache.poi-version>5.2.2</org.apache.poi-version>
+		<org.apache.poi-version>5.2.3</org.apache.poi-version>
 		<commons-compress.version>1.21</commons-compress.version>
 		<org.apache.commons-version>4.4</org.apache.commons-version>
 		<javax.validation-version>2.0.1.Final</javax.validation-version>
@@ -56,7 +56,7 @@
 		<io.leangen.geantyref-version>1.3.13</io.leangen.geantyref-version>
 		<org.reflections-version>0.10.2</org.reflections-version>
 		<com.fathzer-version>3.0.3</com.fathzer-version>
-		<commons-csv.version>1.8</commons-csv.version>
+		<commons-csv.version>1.10.0</commons-csv.version>
 		<junit.version>4.13.2</junit.version>
 		<common-rest-connection-version>1.0.2</common-rest-connection-version>
 		<!-- PLUGIN INIZIO -->
