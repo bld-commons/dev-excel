@@ -134,10 +134,10 @@ import bld.generator.report.excel.data.MergeCell;
 import bld.generator.report.excel.data.ReportExcel;
 import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.excel.data.SubtotalRow;
-import bld.generator.report.excel.exception.ExcelGeneratorException;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
+import bld.generator.report.exception.ExcelGeneratorException;
 import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc

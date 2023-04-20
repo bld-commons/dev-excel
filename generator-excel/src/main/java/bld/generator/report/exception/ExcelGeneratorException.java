@@ -4,13 +4,13 @@
  * @class bld.generator.report.excel.exception.ExceptionExcelGenerator.java
  * 
  */
-package bld.generator.report.excel.exception;
+package bld.generator.report.exception;
 
 /**
  * The Class ExceptionExcelGenerator.
  */
 @SuppressWarnings("serial")
-public class ExcelGeneratorException extends Exception {
+public class ExcelGeneratorException extends RuntimeException {
 
 	/**
 	 * Instantiates a new exception excel generator.

@@ -91,7 +91,8 @@ public class ReadCsvImpl implements ReadCsv {
 		Reader csvReader = new InputStreamReader(inputStream);
 		Map<String, Field> mapField = new HashMap<>();
 		CsvSettings csvSettings = ExcelUtils.getAnnotation(classT, CsvSettings.class);
-		CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(csvSettings.delimiter()).withQuote(csvSettings.quoteChar()).withFirstRecordAsHeader().withIgnoreEmptyLines(csvSettings.ignoreEmptyLines()).withTrim(csvSettings.trim());
+		CSVFormat csvFormat = CSVFormat.DEFAULT;
+		csvFormat.builder().setDelimiter(csvSettings.delimiter()).setQuote(csvSettings.quoteChar()).setIgnoreEmptyLines(csvSettings.ignoreEmptyLines()).setTrim(csvSettings.trim()).setHeader().setSkipHeaderRecord(true);
 
 		Set<Field> listField = ExcelUtils.getListField(classT);
 		for (Field field : listField) {
