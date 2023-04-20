@@ -10,7 +10,7 @@ import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.ExcelSubtotals;
 
-@ExcelSubtotals(labelTotalGroup = "Total",endLabel = "total")
+@ExcelSubtotals(labelTotalGroup = "Totale dipendenti",endLabel = "total")
 public class SalaryRow implements RowSheet {
 
 	@ExcelColumn(columnName = "Name", indexColumn = 0)

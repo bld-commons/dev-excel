@@ -30,7 +30,6 @@ import bld.report.generator.junit.entity.SalarySheet;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
 @EnableTransactionManagement
 public class SalaryTest {
