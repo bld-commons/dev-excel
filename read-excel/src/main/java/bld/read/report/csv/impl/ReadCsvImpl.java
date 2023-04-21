@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import bld.common.spreadsheet.csv.annotation.CsvDateFormat;
+import bld.common.spreadsheet.csv.annotation.CsvDate;
 import bld.common.spreadsheet.csv.annotation.CsvSettings;
 import bld.common.spreadsheet.utils.CsvUtils;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
@@ -92,7 +92,7 @@ public class ReadCsvImpl implements ReadCsv {
 		Reader csvReader = new InputStreamReader(inputStream);
 		Map<String, Field> mapField = new HashMap<>();
 		CsvSettings csvSettings = SpreadsheetUtils.getAnnotation(classT, CsvSettings.class);
-		CSVFormat csvFormat=CsvUtils.getCsvFormat(csvSettings,null);
+		CSVFormat csvFormat=CsvUtils.getCsvFormat(csvSettings);
 
 		Set<Field> listField = SpreadsheetUtils.getListField(classT);
 		for (Field field : listField) {
@@ -155,8 +155,8 @@ public class ReadCsvImpl implements ReadCsv {
 	 * @throws Exception the exception
 	 */
 	private Date getDate(String date, Field field) throws Exception {
-		CsvDateFormat csvDateFormat = SpreadsheetUtils.getAnnotation(field, CsvDateFormat.class);
-		String format = csvDateFormat.value().getValue().replace("/", csvDateFormat.separator());
+		CsvDate csvDate = SpreadsheetUtils.getAnnotation(field, CsvDate.class);
+		String format = csvDate.value().getValue().replace("/", csvDate.separator());
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.parse(date);
 	}

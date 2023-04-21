@@ -2,13 +2,13 @@ package bld.report.read.junit.entity;
 
 import java.util.Date;
 
-import bld.common.spreadsheet.csv.annotation.CsvDateFormat;
+import bld.common.spreadsheet.csv.annotation.CsvDate;
 import bld.common.spreadsheet.csv.annotation.CsvSettings;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.domain.RowSheetRead;
 
 
-@CsvSettings(delimiter = ';')
+@CsvSettings(delimiter = ';',skipHeaderRecord = true)
 public class UserCsvRow implements RowSheetRead {
 
 	@ExcelReadColumn(name="name")
@@ -24,7 +24,7 @@ public class UserCsvRow implements RowSheetRead {
 	private String country;	
 	
 	@ExcelReadColumn(name="birth date")
-	@CsvDateFormat(separator = "-")
+	@CsvDate(separator = "-")
 	private Date date;
 	
 	@ExcelReadColumn(name="id")

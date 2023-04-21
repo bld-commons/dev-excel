@@ -16,7 +16,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelSheetLayout(notMerge = false)
 @ExcelHeaderLayout
 @ExcelMarginSheet(top=1.5,bottom = 1.5,right = 1.5,left = 1.5)
-@ExcelQuery(select = "select n.des_nazione,c.anno,c.num_nascite,c.num_decessi \n"
+@ExcelQuery("select n.des_nazione,c.anno,c.num_nascite,c.num_decessi \n"
 		+ "from nazione n inner join censimento c  on n.id_nazione = c.id_nazione\n"
 		+ "order by n.des_nazione,c.anno")
 
