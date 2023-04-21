@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
@@ -33,7 +34,6 @@ import bld.generator.report.junit.entity.SalarySheet;
 import bld.generator.report.junit.entity.TotaleAutoreLibriRow;
 import bld.generator.report.junit.entity.TotaleAutoreLibriSheet;
 import bld.generator.report.junit.entity.UtenteSheet;
-import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class ReportTest.

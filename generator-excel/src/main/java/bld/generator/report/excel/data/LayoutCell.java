@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
-import bld.generator.report.excel.constant.ColumnDateFormat;
+import bld.common.spreadsheet.constant.ColumnDateFormat;
 
 /**
  * The Class LayoutCell.

@@ -92,6 +92,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import bld.common.spreadsheet.constant.RowStartEndType;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.exception.ExcelGeneratorException;
+import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.DynamicChart;
 import bld.generator.report.excel.DynamicRowSheet;
@@ -111,7 +116,6 @@ import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.ExcelChartDataLabel;
 import bld.generator.report.excel.annotation.ExcelCharts;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelPivot;
@@ -123,8 +127,6 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import bld.generator.report.excel.constant.BorderType;
-import bld.generator.report.excel.constant.ExcelConstant;
-import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.DropDownCell;
 import bld.generator.report.excel.data.FunctionCell;
 import bld.generator.report.excel.data.InfoChart;
@@ -137,8 +139,6 @@ import bld.generator.report.excel.data.SubtotalRow;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
-import bld.generator.report.exception.ExcelGeneratorException;
-import bld.generator.report.utils.ExcelUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -344,7 +344,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private void updateCover(ReportExcel report, Workbook workbook) throws Exception {
-		Set<Field> listField = ExcelUtils.getListField(report.getClass());
+		Set<Field> listField = SpreadsheetUtils.getListField(report.getClass());
 		Sheet sheet = workbook.getSheetAt(0);
 		for (Field field : listField) {
 			if (field.isAnnotationPresent(ExcelSelectCell.class)) {
@@ -356,8 +356,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Object value = PropertyUtils.getProperty(report, field.getName());
 				ExcelDate excelDate = null;
 				if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())) {
-					excelDate = ExcelUtils.getAnnotation(field, ExcelDate.class);
-					cellStyle = dateCellStyle(workbook, cellStyle, excelDate.format().getValue());
+					excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
+					cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
 					cell.setCellStyle(cellStyle);
 				}
 				if (value != null) {
@@ -409,10 +409,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			Sheet sheet = null;
 			this.mapWidthColumn = new HashMap<>();
 			if (baseSheet.getSheetName() != null) {
-				if (workbook.getSheet(baseSheet.getSheetName()) == null && baseSheet.getSheetName().length() <= ExcelConstant.SHEET_NAME_SIZE)
+				if (workbook.getSheet(baseSheet.getSheetName()) == null && baseSheet.getSheetName().length() <= SpreadsheetUtils.SHEET_NAME_SIZE)
 					sheet = workbook.createSheet(baseSheet.getSheetName().replace("/", ""));
 				else {
-					logger.warn("Sheet name exceeded the maximum limit " + ExcelConstant.SHEET_NAME_SIZE + " characters");
+					logger.warn("Sheet name exceeded the maximum limit " + SpreadsheetUtils.SHEET_NAME_SIZE + " characters");
 					sheet = workbook.createSheet((indexSheetName++) + "-" + baseSheet.getSheetName().replace("/", ""));
 				}
 
@@ -498,7 +498,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private Integer generateSheetSummary(Workbook workbook, Sheet sheet, SheetSummary sheetSummary, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		Class<? extends SheetSummary> classSheet = sheetSummary.getClass();
 		ExcelSummary excelSummary = classSheet.getAnnotation(ExcelSummary.class);
-		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSheetLayout.class);
+		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetSummary.getClass(), ExcelSheetLayout.class);
 		indexRow += excelSheetLayout.startRow();
 		if (indexRow < 0)
 			throw new ExcelGeneratorException("The row number cannot be negative");
@@ -556,7 +556,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (this.excelQueryComponent != null && sheetData instanceof QuerySheetData)
 			this.excelQueryComponent.executeQuery((QuerySheetData<? extends RowSheet>) sheetData);
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
-		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
+		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
 		indexRow += excelSheetLayout.startRow();
 		SheetMappingRow sheetMappingRow=null;
 		if (indexRow < 0)
@@ -1017,7 +1017,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private CellStyle getCellStyleSubtotal(Workbook workbook, Integer indexRow, ExcelSubtotals excelLabelSubtotal, SubtotalRow emptyRow, SheetHeader sheetHeader, ExcelCellLayout excelCellLayout) throws Exception {
 		CellStyle cellStyle = null;
 		sheetHeader.setExcelCellLayout(excelCellLayout);
-		LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), sheetHeader.getExcelCellLayout());
+		LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), sheetHeader.getExcelCellLayout());
 		layoutCell.setColor(indexRow);
 		if (!this.mapCellStyle.containsKey(layoutCell))
 			this.mapCellStyle.put(layoutCell, createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow()));
@@ -1347,7 +1347,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 */
 	private Integer writeLabel(Workbook workbook, Sheet sheet, BaseSheet baseSheet, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
 		Class<? extends BaseSheet> classSheet = baseSheet.getClass();
-		Set<Field> listField = ExcelUtils.getListField(classSheet);
+		Set<Field> listField = SpreadsheetUtils.getListField(classSheet);
 		for (Field field : listField) {
 			if (field.isAnnotationPresent(ExcelLabel.class)) {
 				Row row = sheet.createRow(indexRow);

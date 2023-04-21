@@ -27,10 +27,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import bld.generator.report.utils.ExcelUtils;
+import bld.common.spreadsheet.csv.annotation.CsvDateFormat;
+import bld.common.spreadsheet.csv.annotation.CsvSettings;
+import bld.common.spreadsheet.utils.CsvUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.read.report.csv.ReadCsv;
-import bld.read.report.csv.annotation.CsvDateFormat;
-import bld.read.report.csv.annotation.CsvSettings;
 import bld.read.report.csv.domain.CsvRead;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.domain.RowSheetRead;
@@ -90,11 +91,10 @@ public class ReadCsvImpl implements ReadCsv {
 
 		Reader csvReader = new InputStreamReader(inputStream);
 		Map<String, Field> mapField = new HashMap<>();
-		CsvSettings csvSettings = ExcelUtils.getAnnotation(classT, CsvSettings.class);
-		CSVFormat csvFormat = CSVFormat.DEFAULT;
-		csvFormat.builder().setDelimiter(csvSettings.delimiter()).setQuote(csvSettings.quoteChar()).setIgnoreEmptyLines(csvSettings.ignoreEmptyLines()).setTrim(csvSettings.trim()).setHeader().setSkipHeaderRecord(true);
+		CsvSettings csvSettings = SpreadsheetUtils.getAnnotation(classT, CsvSettings.class);
+		CSVFormat csvFormat=CsvUtils.getCsvFormat(csvSettings,null);
 
-		Set<Field> listField = ExcelUtils.getListField(classT);
+		Set<Field> listField = SpreadsheetUtils.getListField(classT);
 		for (Field field : listField) {
 			if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 				ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
@@ -155,7 +155,7 @@ public class ReadCsvImpl implements ReadCsv {
 	 * @throws Exception the exception
 	 */
 	private Date getDate(String date, Field field) throws Exception {
-		CsvDateFormat csvDateFormat = ExcelUtils.getAnnotation(field, CsvDateFormat.class);
+		CsvDateFormat csvDateFormat = SpreadsheetUtils.getAnnotation(field, CsvDateFormat.class);
 		String format = csvDateFormat.value().getValue().replace("/", csvDateFormat.separator());
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.parse(date);

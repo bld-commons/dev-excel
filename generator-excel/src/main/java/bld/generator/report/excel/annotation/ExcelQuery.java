@@ -29,11 +29,11 @@ import java.lang.annotation.Target;
 public @interface ExcelQuery {
 
 	/**
-	 * Select.
+	 * Value.
 	 *
 	 * @return the string
 	 */
-	public String select();
+	public String value();
 	
 	/**
 	 * Native query.

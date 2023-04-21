@@ -11,11 +11,12 @@ import java.util.Calendar;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.constant.ColumnDateFormat;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -26,7 +27,6 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.ExcelSubtotals;
-import bld.generator.report.excel.constant.ColumnDateFormat;
 import bld.generator.report.excel.dropdown.CharacterDropDown;
 import bld.generator.report.excel.dropdown.IntegerDropDown;
 
@@ -69,7 +69,7 @@ public class AutoreLibriRow implements RowSheet {
 	
 	/** The data di nascita. */
 	@ExcelColumn(columnName = "Data di Nascita",indexColumn = 4)
-	@ExcelDate(format = ColumnDateFormat.YYYY_MM_DD)
+	@ExcelDate(value = ColumnDateFormat.YYYY_MM_DD)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
 	private Calendar dataDiNascita;

@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.constant.ExcelConstant;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 
 /**
@@ -73,7 +73,7 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public SheetDynamicData(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+	public SheetDynamicData(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 		this.mapExtraColumnAnnotation=new HashMap<>();
 	}

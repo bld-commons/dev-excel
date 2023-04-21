@@ -7,11 +7,11 @@ package bld.generator.report.excel.data;
 
 import javax.validation.constraints.NotNull;
 
-import bld.generator.report.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;

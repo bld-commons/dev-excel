@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
+import bld.common.spreadsheet.constant.ColumnDateFormat;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
@@ -22,9 +23,6 @@ import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
  * The Class ExcelConstant.
  */
 public class ExcelConstant {
-	
-	/** The Constant SHEET_NAME_SIZE. */
-	public final static int SHEET_NAME_SIZE=31;
 	
 	/** The Constant RGB_FOREGROUND. */
 	public final static ExcelRgbColorImpl RGB_FOREGROUND=new ExcelRgbColorImpl((byte)255, (byte)255, (byte)255); 

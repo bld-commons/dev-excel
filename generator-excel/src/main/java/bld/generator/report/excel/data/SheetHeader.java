@@ -13,11 +13,12 @@ import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 
-import bld.generator.report.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
@@ -28,7 +29,6 @@ import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
 import bld.generator.report.excel.dropdown.DateDropDown;
 import bld.generator.report.excel.dropdown.TimestampDropDown;
-import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class SheetHeader.
@@ -121,11 +121,11 @@ public class SheetHeader implements Cloneable {
 		if (field.isAnnotationPresent(ExcelBooleanText.class))
 			this.setExcelBooleanText(field.getAnnotation(ExcelBooleanText.class));
 		
-		this.excelColumn = ExcelUtils.getAnnotation(this.field, ExcelColumn.class);
-		this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
+		this.excelColumn = SpreadsheetUtils.getAnnotation(this.field, ExcelColumn.class);
+		this.excelCellLayout = SpreadsheetUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
 				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType()))
-			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
+			excelDate = SpreadsheetUtils.getAnnotation(this.field, ExcelDate.class);
 		manageMapLayoutCell();
 
 		this.getExcelColumn();
@@ -139,9 +139,9 @@ public class SheetHeader implements Cloneable {
 	private void manageMapLayoutCell() throws Exception {
 		this.mapLayoutCell = new HashedMap<>();
 		if (this.excelCellLayout != null) {
-			LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
+			LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
 			if (this.excelDate != null)
-				layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
+				layoutCell = SpreadsheetUtils.reflectionAnnotation(layoutCell, excelDate);
 			this.colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
 			for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 				LayoutCell layoutCellTemp = (LayoutCell) layoutCell.clone();

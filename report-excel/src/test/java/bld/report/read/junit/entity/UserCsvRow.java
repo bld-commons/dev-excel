@@ -2,8 +2,8 @@ package bld.report.read.junit.entity;
 
 import java.util.Date;
 
-import bld.read.report.csv.annotation.CsvDateFormat;
-import bld.read.report.csv.annotation.CsvSettings;
+import bld.common.spreadsheet.csv.annotation.CsvDateFormat;
+import bld.common.spreadsheet.csv.annotation.CsvSettings;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.domain.RowSheetRead;
 

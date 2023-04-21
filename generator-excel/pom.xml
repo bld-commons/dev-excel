@@ -14,6 +14,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.github.bld-commons</groupId>
+			<artifactId>common-spreadsheet</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>
 		</dependency>

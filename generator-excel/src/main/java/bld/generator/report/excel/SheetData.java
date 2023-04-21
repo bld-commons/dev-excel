@@ -12,8 +12,8 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import bld.generator.report.excel.constant.ExcelConstant;
-import bld.generator.report.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 
 
 /**
@@ -74,7 +74,7 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public SheetData(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+	public SheetData(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 		listRowSheet = new ArrayList<T>();
 		this.rowClass=ExcelUtils.getTClass(this);

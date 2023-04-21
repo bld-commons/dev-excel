@@ -59,6 +59,7 @@
 		<commons-csv.version>1.10.0</commons-csv.version>
 		<junit.version>4.13.2</junit.version>
 		<common-rest-connection-version>1.0.3</common-rest-connection-version>
+		<common-spreadsheet.version>0.0.1-SNAPSHOT</common-spreadsheet.version>
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<java.version>1.8</java.version>
@@ -82,6 +83,7 @@
 	<modules>
 		<module>generator-excel</module>
 		<module>read-excel</module>
+		<module>common-spreadsheet</module>
 		<module>report-excel</module>
 		<module>report-excel-jpa</module>
 		<module>report-excel-multiple-datasource</module>
@@ -89,6 +91,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.github.bld-commons</groupId>
+				<artifactId>common-spreadsheet</artifactId>
+				<version>${common-spreadsheet.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml-lite</artifactId>

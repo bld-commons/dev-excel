@@ -18,10 +18,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
-import bld.generator.report.utils.ExcelUtils;
 import bld.report.generator.junit.entity.SalaryRow;
 import bld.report.generator.junit.entity.SalarySheet;
 

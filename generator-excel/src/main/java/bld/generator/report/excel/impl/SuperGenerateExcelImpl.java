@@ -55,6 +55,7 @@ import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Hyperlink;
+import org.apache.poi.ss.usermodel.PageMargin;
 import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -70,6 +71,13 @@ import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import bld.common.spreadsheet.constant.ColumnDateFormat;
+import bld.common.spreadsheet.constant.RowStartEndType;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.exception.ExcelGeneratorException;
+import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
+import bld.common.spreadsheet.utils.ValueProps;
 import bld.generator.report.comparator.PivotColumnComparator;
 import bld.generator.report.comparator.PivotColumnFunctionComparator;
 import bld.generator.report.comparator.PivotRowComparator;
@@ -88,7 +96,6 @@ import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelBorder;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
@@ -112,8 +119,6 @@ import bld.generator.report.excel.annotation.ExcelSummary;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
 import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
-import bld.generator.report.excel.constant.ColumnDateFormat;
-import bld.generator.report.excel.constant.RowStartEndType;
 import bld.generator.report.excel.data.DropDownCell;
 import bld.generator.report.excel.data.ExtraColumnAnnotation;
 import bld.generator.report.excel.data.FunctionCell;
@@ -124,9 +129,6 @@ import bld.generator.report.excel.data.SheetHeader;
 import bld.generator.report.excel.dropdown.BoxMessage;
 import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
-import bld.generator.report.exception.ExcelGeneratorException;
-import bld.generator.report.utils.ExcelUtils;
-import bld.generator.report.utils.ValueProps;
 
 /**
  * The Class SuperGenerateExcelImpl.
@@ -286,7 +288,7 @@ public abstract class SuperGenerateExcelImpl {
 		cellStyle.setLocked(layout.locked());
 
 		if (excelDate != null)
-			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.format().getValue());
+			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
 		else if (layout.precision() > -1) {
 			String format = "0.";
 			for (int i = 0; i < layout.precision(); i++)
@@ -358,7 +360,7 @@ public abstract class SuperGenerateExcelImpl {
 		logger.debug("Row: " + classRow.getSimpleName());
 		Set<String> listTitle = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
-		Set<Field> listField = ExcelUtils.getListField(classRow);
+		Set<Field> listField = SpreadsheetUtils.getListField(classRow);
 		for (Field field : listField) {
 			ExcelColumn column = field.getAnnotation(ExcelColumn.class);
 			if (column != null && !column.ignore()) {
@@ -519,8 +521,8 @@ public abstract class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setCellSummary(ExcelSheetLayout excelSheetLayout, Workbook workbook, Sheet sheet, SheetSummary sheetSummary, SheetHeader sheetHeader, Row row, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
-		ExcelSummary excelSummary = ExcelUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
-		LayoutCell layoutCellSummary = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
+		ExcelSummary excelSummary = SpreadsheetUtils.getAnnotation(sheetSummary.getClass(), ExcelSummary.class);
+		LayoutCell layoutCellSummary = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelSummary.layout());
 		short heightRow = ExcelUtils.AUTO_SIZE_HEIGHT;
 		if (sheetHeader.getField() != null && sheetHeader.getField().isAnnotationPresent(ExcelRowHeight.class)) {
 			ExcelRowHeight excelRowHeight = sheetHeader.getField().getAnnotation(ExcelRowHeight.class);
@@ -1002,7 +1004,7 @@ public abstract class SuperGenerateExcelImpl {
 			if (sheetHeader.getExcelBooleanText() == null)
 				cell.setCellValue(value);
 			else
-				cell.setCellValue(value ? sheetHeader.getExcelBooleanText().ifTrue() : sheetHeader.getExcelBooleanText().ifFalse());
+				cell.setCellValue(value ? sheetHeader.getExcelBooleanText().enable() : sheetHeader.getExcelBooleanText().disable());
 
 		} else if (sheetHeader.getValue() instanceof ExcelHyperlink) {
 			ExcelHyperlink excelHyperlink = (ExcelHyperlink) sheetHeader.getValue();
@@ -1069,13 +1071,13 @@ public abstract class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	public CellStyle getCellStyleHeader(Workbook workbook, Sheet sheet, SheetComponent sheetComponent, Row rowHeader) throws Exception {
-		ExcelHeaderLayout layoutHeader = ExcelUtils.getAnnotation(sheetComponent.getClass(), ExcelHeaderLayout.class);
-		ExcelMarginSheet excelMarginSheet = ExcelUtils.getAnnotation(sheetComponent.getClass(), ExcelMarginSheet.class);
-		ExcelSheetLayout layoutSheet = ExcelUtils.getAnnotation(sheetComponent.getClass(), ExcelSheetLayout.class);
-		sheet.setMargin(Sheet.LeftMargin, excelMarginSheet.left());
-		sheet.setMargin(Sheet.RightMargin, excelMarginSheet.right());
-		sheet.setMargin(Sheet.TopMargin, excelMarginSheet.top());
-		sheet.setMargin(Sheet.BottomMargin, excelMarginSheet.bottom());
+		ExcelHeaderLayout layoutHeader = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelHeaderLayout.class);
+		ExcelMarginSheet excelMarginSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelMarginSheet.class);
+		ExcelSheetLayout layoutSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelSheetLayout.class);
+		sheet.setMargin(PageMargin.LEFT, excelMarginSheet.left());
+		sheet.setMargin(PageMargin.RIGHT, excelMarginSheet.right());
+		sheet.setMargin(PageMargin.TOP, excelMarginSheet.top());
+		sheet.setMargin(PageMargin.BOTTOM, excelMarginSheet.bottom());
 		if (layoutSheet.scale() != (short) 100)
 			sheet.getPrintSetup().setScale(layoutSheet.scale());
 		sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
@@ -1107,7 +1109,7 @@ public abstract class SuperGenerateExcelImpl {
 	 * @return the cell style
 	 */
 	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderCellLayout excelHeaderCellLayout) {
-		LayoutCell layoutCellHeader = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelHeaderCellLayout);
+		LayoutCell layoutCellHeader = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelHeaderCellLayout);
 		if (!this.mapCellHeaderStyle.containsKey(layoutCellHeader))
 			this.mapCellHeaderStyle.put(layoutCellHeader, createCellStyle(workbook, excelHeaderCellLayout));
 		CellStyle cellStyleHeader = this.mapCellHeaderStyle.get(layoutCellHeader);
@@ -1138,7 +1140,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected <T extends RowSheet> List<SheetHeader> generateHeaderSheetData(Workbook workbook, Sheet sheet, SheetData<T> sheetData, Integer indexRow) throws Exception {
 
-		ExcelSheetLayout excelSheetLayout = ExcelUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
+		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
 		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null, sheet);
 		if (sheetData instanceof DynamicColumn) {
 			DynamicColumn sheetDynamicData = (DynamicColumn) sheetData;
@@ -1180,7 +1182,7 @@ public abstract class SuperGenerateExcelImpl {
 					if (sheetHeader.getExcelHeaderCellLayout() != null)
 						layoutHeader = sheetHeader.getExcelHeaderCellLayout();
 					else
-						layoutHeader = ExcelUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
+						layoutHeader = SpreadsheetUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
 					CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
 					cellHeader.setCellStyle(differentCellStyleHeader);
 				} else
@@ -1286,7 +1288,7 @@ public abstract class SuperGenerateExcelImpl {
 	 * @return the integer
 	 */
 	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
-		Set<Field> listField = ExcelUtils.getListField(sheetData.getRowClass());
+		Set<Field> listField = SpreadsheetUtils.getListField(sheetData.getRowClass());
 		String startCell = ExcelUtils.coordinateCalculation(firstRow, firstColumn, true, true);
 		String endCell = ExcelUtils.coordinateCalculation(lastRow, lastColumn, true, true);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
@@ -1391,7 +1393,7 @@ public abstract class SuperGenerateExcelImpl {
 					int i = 0;
 					SimpleDateFormat sdf = null;
 					if (sheetHeader.getExcelDate() != null)
-						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().format().getValue());
+						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().value().getValue());
 					for (Object item : dropDown.getList()) {
 						if (item instanceof Date)
 							list[i] = sdf.format((Date) item);

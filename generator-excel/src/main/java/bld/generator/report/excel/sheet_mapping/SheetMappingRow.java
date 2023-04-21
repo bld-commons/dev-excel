@@ -2,11 +2,11 @@ package bld.generator.report.excel.sheet_mapping;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.utils.ExcelUtils;
 
 public class SheetMappingRow implements RowSheet {
 

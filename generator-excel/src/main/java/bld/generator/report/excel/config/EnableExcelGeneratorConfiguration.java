@@ -22,15 +22,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.impl.ExcelAnnotationImpl;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
-import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class EnableExcelGeneratorConfiguration.
  */
 @Configuration
-@ComponentScan("bld.generator")
+@ComponentScan({"bld.generator","bld.common.spreadsheet"})
 public class EnableExcelGeneratorConfiguration {
 	
 	/** The Constant BLD_COMMONS_CHECK_ANNOTATION. */
@@ -61,7 +61,7 @@ public class EnableExcelGeneratorConfiguration {
 				ExcelAnnotationImpl<?> excelAnnotationImpl = classExcelAnnotationImpl.getDeclaredConstructor().newInstance();
 				Class<? extends Annotation> classAnnotation = excelAnnotationImpl.getClassAnnotation();
 				List<Method> listMethod = Arrays.asList(classAnnotation.getDeclaredMethods());
-				Map<String, Field> mapField = ExcelUtils.getMapField(classExcelAnnotationImpl);
+				Map<String, Field> mapField = SpreadsheetUtils.getMapField(classExcelAnnotationImpl);
 				for (Method method : listMethod) {
 					if (!mapField.containsKey(method.getName()))
 						throw new Exception("The \"" + method.getName() + "\" field is not present within " + classExcelAnnotationImpl.getSimpleName() + " class");

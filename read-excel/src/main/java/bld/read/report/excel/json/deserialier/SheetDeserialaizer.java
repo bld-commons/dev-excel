@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import bld.generator.report.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.domain.ExcelRead;
@@ -94,7 +94,7 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 			excelType = ExcelType.XLSX;
 		file = file.substring(file.indexOf(partSeparator) + 1);
 		byte[] excelByteArray = Base64.getDecoder().decode(file);
-		ReadExcel readExcel = ExcelUtils.getApplicationContext().getBean(ReadExcel.class);
+		ReadExcel readExcel = SpreadsheetUtils.getApplicationContext().getBean(ReadExcel.class);
 
 		ExcelRead excelRead = null;
 		try {
