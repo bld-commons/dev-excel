@@ -5,7 +5,6 @@
 */
 package bld.common.spreadsheet.utils;
 
-import java.io.FileOutputStream;
 import java.lang.reflect.ParameterizedType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,41 +55,6 @@ public class ExcelUtils {
 		return (parameter.charAt(0) + "").toLowerCase() + parameter.substring(1);
 	}
 
-	/**
-	 * Write to file.
-	 *
-	 * @param pathFile the path file
-	 * @param fileName the file name
-	 * @param typeFile the type file
-	 * @param dati     the dati
-	 */
-	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] dati) {
-		FileOutputStream fos;
-		
-		try {
-			typeFile = startString(typeFile,".");
-			fileName=startString(fileName, "/");
-			fos = new FileOutputStream(pathFile + fileName + typeFile);
-			fos.write(dati);
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Start string.
-	 *
-	 * @param text the text
-	 * @param start the start
-	 * @return the string
-	 */
-	private static String startString(String text,String start) {
-		if(!text.startsWith(start))
-			text=start+text;
-		return text;
-	}
 
 
 

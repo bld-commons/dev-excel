@@ -1,5 +1,6 @@
 package bld.common.spreadsheet.utils;
 
+import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -177,5 +178,44 @@ public class SpreadsheetUtils implements ApplicationContextAware {
 	 */
 	public static ApplicationContext getApplicationContext() {
 		return applicationContext;
+	}
+	
+	
+	/**
+	 * Write to file.
+	 *
+	 * @param pathFile the path file
+	 * @param fileName the file name
+	 * @param typeFile the type file
+	 * @param data     the dati
+	 */
+	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] data) {
+		FileOutputStream fos;
+		
+		try {
+			typeFile = startString(typeFile,".");
+			fileName=startString(fileName, "/");
+			fos = new FileOutputStream(pathFile + fileName + typeFile);
+			fos.write(data);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+
+	/**
+	 * Start string.
+	 *
+	 * @param text the text
+	 * @param start the start
+	 * @return the string
+	 */
+	private static String startString(String text,String start) {
+		if(!text.startsWith(start))
+			text=start+text;
+		return text;
 	}
 }

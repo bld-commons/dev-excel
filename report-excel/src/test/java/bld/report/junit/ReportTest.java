@@ -57,6 +57,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.common.spreadsheet.constant.RowStartEndType;
 import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelAttachment;
 import bld.generator.report.excel.ExcelHyperlink;
@@ -185,7 +186,7 @@ public class ReportTest {
 
 			byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
+			SpreadsheetUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
 
 //			byte[] byteReportPdf = this.generateExcel.exportToPdf(byteReport);
 //			
@@ -349,7 +350,7 @@ public class ReportTest {
 
 		byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
-		ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
+		SpreadsheetUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
 
 	}
 
@@ -425,7 +426,7 @@ public class ReportTest {
 			chart.getCTChart().getAutoTitleDeleted().setVal(false);
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			wb.write(byteArrayOutputStream);
-			ExcelUtils.writeToFile(PATH_FILE, "Radar", ".xlsx", byteArrayOutputStream.toByteArray());
+			SpreadsheetUtils.writeToFile(PATH_FILE, "Radar", ".xlsx", byteArrayOutputStream.toByteArray());
 			try (FileOutputStream fileOut = new FileOutputStream("ooxml-radar-chart.xlsx")) {
 				wb.write(fileOut);
 			}
