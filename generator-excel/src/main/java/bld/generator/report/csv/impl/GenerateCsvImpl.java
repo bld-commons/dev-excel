@@ -35,13 +35,13 @@ import bld.generator.report.csv.query.CsvQueryComponent;
 @Component
 public class GenerateCsvImpl implements GenerateCsv {
 
-	@Autowired
+	@Autowired(required = false)
 	private CsvQueryComponent csvQueryComponent;
 	
 	@Override
 	public <T extends CsvRow> byte[] generateCsv(CsvData<T> csvData) throws Exception {
 		byte[] csv = null;
-		if(csvData instanceof QueryCsvData)
+		if(this.csvQueryComponent!=null && csvData instanceof QueryCsvData)
 			this.csvQueryComponent.executeQuery((QueryCsvData<T>)csvData);
 		if (CollectionUtils.isNotEmpty(csvData.getRows())) {
 			CsvSettings csvSettings = SpreadsheetUtils.getAnnotation(csvData.getClass(), CsvSettings.class);

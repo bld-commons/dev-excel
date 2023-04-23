@@ -18,7 +18,6 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
 import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
-import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class AutoreLibriSheet.

@@ -13,14 +13,14 @@ import bld.generator.report.excel.annotation.ExcelColumn;
  */
 public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 
-	/** The column name. */
-	private String columnName;
+	/** The name. */
+	private String name;
 
 	/** The comment. */
 	private String comment;
 
-	/** The index column. */
-	private double indexColumn;
+	/** The index. */
+	private double index;
 
 	/** The ignore. */
 	private boolean ignore;
@@ -39,13 +39,13 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 	/**
 	 * Instantiates a new excel column impl.
 	 *
-	 * @param columnName the column name
-	 * @param indexColumn the index column
+	 * @param name the name
+	 * @param index the index
 	 */
-	public ExcelColumnImpl(String columnName, double indexColumn) {
+	public ExcelColumnImpl(String name, double index) {
 		super();
-		this.columnName = columnName;
-		this.indexColumn = indexColumn;
+		this.name = name;
+		this.index = index;
 	}
 
 
@@ -53,35 +53,37 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 	/**
 	 * Instantiates a new excel column impl.
 	 *
-	 * @param columnName  the name column
+	 * @param name  the name
 	 * @param comment     the comment
-	 * @param indexColumn the index column
+	 * @param index the index
 	 * @param ignore      the ignore
 	 */
-	public ExcelColumnImpl(String columnName, String comment, double indexColumn, boolean ignore) {
+	public ExcelColumnImpl(String name, String comment, double index, boolean ignore) {
 		super();
-		this.columnName = columnName;
+		this.name = name;
 		this.comment = comment;
-		this.indexColumn = indexColumn;
+		this.index = index;
 		this.ignore = ignore;
 	}
 
-	/**
-	 * Gets the column name.
-	 *
-	 * @return the column name
-	 */
-	public String getColumnName() {
-		return columnName;
-	}
 
 	/**
-	 * Sets the column name.
+	 * Gets the name.
 	 *
-	 * @param columnName the new column name
+	 * @return the name
 	 */
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public String getName() {
+		return name;
+	}
+
+
+	/**
+	 * Sets the name.
+	 *
+	 * @param name the new name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -102,22 +104,24 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 		this.comment = comment;
 	}
 
-	/**
-	 * Gets the index column.
-	 *
-	 * @return the index column
-	 */
-	public double getIndexColumn() {
-		return indexColumn;
-	}
 
 	/**
-	 * Sets the index column.
+	 * Gets the index.
 	 *
-	 * @param indexColumn the new index column
+	 * @return the index
 	 */
-	public void setIndexColumn(double indexColumn) {
-		this.indexColumn = indexColumn;
+	public double getIndex() {
+		return index;
+	}
+
+
+	/**
+	 * Sets the index.
+	 *
+	 * @param index the new index
+	 */
+	public void setIndex(double index) {
+		this.index = index;
 	}
 
 	/**
@@ -147,11 +151,11 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + (ignore ? 1231 : 1237);
 		long temp;
-		temp = Double.doubleToLongBits(indexColumn);
+		temp = Double.doubleToLongBits(index);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
@@ -171,10 +175,10 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelColumnImpl other = (ExcelColumnImpl) obj;
-		if (columnName == null) {
-			if (other.columnName != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!columnName.equals(other.columnName))
+		} else if (!name.equals(other.name))
 			return false;
 		if (comment == null) {
 			if (other.comment != null)
@@ -183,7 +187,7 @@ public class ExcelColumnImpl extends ExcelAnnotationImpl<ExcelColumn> {
 			return false;
 		if (ignore != other.ignore)
 			return false;
-		if (Double.doubleToLongBits(indexColumn) != Double.doubleToLongBits(other.indexColumn))
+		if (Double.doubleToLongBits(index) != Double.doubleToLongBits(other.index))
 			return false;
 		return true;
 	}

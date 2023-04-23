@@ -617,9 +617,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			for (int numColumn = excelSheetLayout.startColumn(); numColumn < maxColumn; numColumn++) {
 				int indexHeader = numColumn - excelSheetLayout.startColumn();
 				SheetHeader sheetHeader = listSheetHeader.get(indexHeader);
-				CellType cellType = CellType.BLANK;
-				if (sheetHeader.getExcelFunction() != null)
-					cellType = CellType.FORMULA;
+				CellType cellType = sheetHeader.getCellType();
 				Cell cell = row.createCell(numColumn, cellType);
 				InfoColumn infoColumn = (InfoColumn) mapFieldColumn.get(sheetHeader.getKey());
 
@@ -1370,8 +1368,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						mergeColumn.setRowEnd(indexRow);
 						mergeColumn.setColumnFrom(0);
 						mergeColumn.setColumnTo(excelLabel.columnMerge() - 1);
-						for (int indexColumn = 1; indexColumn < excelLabel.columnMerge(); indexColumn++) {
-							Cell cell = row.createCell(indexColumn);
+						for (int index = 1; index < excelLabel.columnMerge(); index++) {
+							Cell cell = row.createCell(index);
 							cell.setCellStyle(cellStype);
 						}
 						runMergeCell(workbook, sheet, mergeColumn, formulaEvaluator);

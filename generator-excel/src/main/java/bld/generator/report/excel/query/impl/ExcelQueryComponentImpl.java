@@ -5,31 +5,20 @@
  */
 package bld.generator.report.excel.query.impl;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
-import javax.persistence.TupleElement;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.converters.CalendarConverter;
-import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.QuerySheetData;
 import bld.generator.report.excel.RowSheet;
@@ -53,6 +42,7 @@ import bld.generator.report.query.impl.SpreadsheetQueryComponentImpl;
 @ConditionalOnExpression(value = "${"+SpreadsheetDataSource.MULTIPLE_DATASOURCE+":false} or !T(org.springframework.util.StringUtils).isEmpty('${"+EnableExcelGeneratorConfiguration.SPRING_DATASOURCE_URL+":}')")
 public class ExcelQueryComponentImpl extends SpreadsheetQueryComponentImpl implements ExcelQueryComponent {
 
+	private final static Logger logger=LoggerFactory.getLogger(ExcelQueryComponentImpl.class);
 
 	/** The multiple datasource. */
 	@Value("${" + SpreadsheetDataSource.MULTIPLE_DATASOURCE + ":false}")
@@ -68,8 +58,11 @@ public class ExcelQueryComponentImpl extends SpreadsheetQueryComponentImpl imple
 	@Override
 	public <T extends RowSheet> void executeQuery(QuerySheetData<T> querySheetData) throws Exception {
 		if (CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
+			Date start=new Date();
 			ExcelQuery excelQuery = SpreadsheetUtils.getAnnotation(querySheetData.getClass(), ExcelQuery.class);
 			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? nativeQuery(querySheetData, excelQuery) : jpaQuery(querySheetData, excelQuery));
+			Date end=new Date();
+			logger.info("Time query: "+(((double)(end.getTime()-start.getTime()))/1000)+"s");
 		}
 
 	}

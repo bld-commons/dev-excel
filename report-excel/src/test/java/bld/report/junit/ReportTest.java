@@ -51,7 +51,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -104,7 +103,6 @@ import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ConfigurationProperties
 @EnableExcelGenerator
 @EnableTransactionManagement
 public class ReportTest {

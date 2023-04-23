@@ -13,11 +13,20 @@ import org.apache.commons.collections4.MapUtils;
 
 import bld.generator.report.QuerySpreadsheetData;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class QueryCsvData.
+ *
+ * @param <T> the generic type
+ */
 public abstract class QueryCsvData<T extends CsvRow> extends CsvData<T> implements QuerySpreadsheetData<T> {
 
 	/** The map parameters. */
 	private Map<String, Object> mapParameters;
 
+	/**
+	 * Instantiates a new query csv data.
+	 */
 	public QueryCsvData() {
 		super();
 		this.mapParameters = new HashMap<>();
@@ -44,11 +53,19 @@ public abstract class QueryCsvData<T extends CsvRow> extends CsvData<T> implemen
 		this.mapParameters.put(key, value);
 	}
 	
+	/**
+	 * Reset parameters.
+	 */
 	@Override
 	public void resetParameters() {
 		this.mapParameters = new HashMap<>();
 	}
 
+	/**
+	 * Adds the parameters.
+	 *
+	 * @param parameters the parameters
+	 */
 	@Override
 	public void addParameters(Map<String, Object> parameters) {
 		if (MapUtils.isNotEmpty(parameters))

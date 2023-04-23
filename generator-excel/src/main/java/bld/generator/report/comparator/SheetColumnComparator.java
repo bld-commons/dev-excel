@@ -28,11 +28,11 @@ public class SheetColumnComparator implements Comparator<SheetHeader> {
 	@Override
 	public int compare(SheetHeader sheetHeader1, SheetHeader sheetHeader2) {
 		int compare = 0;
-		if (sheetHeader1.excelColumn().indexColumn() == sheetHeader2.excelColumn().indexColumn()) {
+		if (sheetHeader1.excelColumn().index() == sheetHeader2.excelColumn().index()) {
 			ValueProps valueProps=(ValueProps) SpreadsheetUtils.getApplicationContext().getBean("valuePropsImpl");
-			compare = valueProps.valueProps(sheetHeader1.excelColumn().columnName()).compareTo(valueProps.valueProps(sheetHeader2.excelColumn().columnName()));
+			compare = valueProps.valueProps(sheetHeader1.excelColumn().name()).compareTo(valueProps.valueProps(sheetHeader2.excelColumn().name()));
 		}
-		else if (sheetHeader1.excelColumn().indexColumn() > sheetHeader2.excelColumn().indexColumn())
+		else if (sheetHeader1.excelColumn().index() > sheetHeader2.excelColumn().index())
 			compare = 1;
 		else
 			compare = -1;

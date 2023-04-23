@@ -13,26 +13,26 @@ import bld.generator.report.excel.annotation.ExcelRowHeight;
 @ExcelRowHeight(height = 3)
 public class UtenteRow implements RowSheet {
 	
-	@ExcelColumn(columnName = "Id", indexColumn = 0)
+	@ExcelColumn(name = "Id", index = 0)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer idUtente; 
-	@ExcelColumn(columnName = "Nome", indexColumn = 2)
+	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
 	private String nome; 
-	@ExcelColumn(columnName = "Cognome", indexColumn = 1)
+	@ExcelColumn(name = "Cognome", index = 1)
 	@ExcelCellLayout
 	private String cognome;
-	@ExcelColumn(columnName = "Data di nascita", indexColumn = 3)
+	@ExcelColumn(name = "Data di nascita", index = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelDate
 	private Date dataNascita;
 	
-	@ExcelColumn(columnName = "Immagine", indexColumn = 4)
+	@ExcelColumn(name = "Immagine", index = 4)
 	@ExcelCellLayout
 	@ExcelImage(resizeHeight = 0.7, resizeWidth = 0.6)
 	private byte[] image;	
 	
-	@ExcelColumn(columnName = "Path", indexColumn = 5)
+	@ExcelColumn(name = "Path", index = 5)
 	@ExcelCellLayout
 	@ExcelImage(resizeHeight = 0.97, resizeWidth = 0.97)
 	private String path;	

@@ -378,9 +378,9 @@ public abstract class SuperGenerateExcelImpl {
 				if (field.isAnnotationPresent(ExcelDropDown.class))
 					sheetHeader.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
 				listSheetHeader.add(sheetHeader);
-				if (listTitle.contains(column.columnName()))
-					logger.warn("Exist another equal column with columnName= \"" + column.columnName() + "\" for the same sheet!!!");
-				listTitle.add(column.columnName());
+				if (listTitle.contains(column.name()))
+					logger.warn("Exist another equal column with columnName= \"" + column.name() + "\" for the same sheet!!!");
+				listTitle.add(column.name());
 			}
 		}
 		if (classRow.isAnnotationPresent(ExcelFunctionRows.class)) {
@@ -532,7 +532,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout(), indexRow);
 		Cell cellColumn0 = row.createCell(excelSheetLayout.startColumn());
 		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary);
-		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().columnName()));
+		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().name()));
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
@@ -1191,7 +1191,7 @@ public abstract class SuperGenerateExcelImpl {
 				ExcelColumn excelColumn = listSheetHeader.get(indexHeader).getExcelColumn();
 				setColumnWidth(sheet, columnNum, sheetHeader.getExcelColumnWidth().width());
 				listSheetHeader.get(indexHeader).setNumColumn(columnNum);
-				cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.columnName()));
+				cellHeader.setCellValue(this.valueProps.valueProps(excelColumn.name()));
 				if (StringUtils.isNoneBlank(excelColumn.comment()))
 					addComment(workbook, sheet, rowHeader, cellHeader, excelColumn.comment());
 			}
@@ -1264,14 +1264,14 @@ public abstract class SuperGenerateExcelImpl {
 	 * Sets the column width.
 	 *
 	 * @param sheet       the sheet
-	 * @param indexColumn the index column
+	 * @param index the index column
 	 * @param width       the width
 	 * @throws Exception the exception
 	 */
-	protected void setColumnWidth(Sheet sheet, Integer indexColumn, Integer width) throws Exception {
-		if (!this.mapWidthColumn.containsKey(indexColumn) || this.mapWidthColumn.get(indexColumn) < width) {
-			this.mapWidthColumn.put(Integer.valueOf(indexColumn), Integer.valueOf(width));
-			sheet.setColumnWidth(indexColumn, ExcelUtils.widthColumn(width));
+	protected void setColumnWidth(Sheet sheet, Integer index, Integer width) throws Exception {
+		if (!this.mapWidthColumn.containsKey(index) || this.mapWidthColumn.get(index) < width) {
+			this.mapWidthColumn.put(Integer.valueOf(index), Integer.valueOf(width));
+			sheet.setColumnWidth(index, ExcelUtils.widthColumn(width));
 		}
 	}
 
@@ -1343,12 +1343,14 @@ public abstract class SuperGenerateExcelImpl {
 	 * @param lastCol     the last col
 	 */
 	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol, Integer indexRow) {
-		DropDownCell dropDownCell = null;
-		dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow);
-		try {
-			this.addDropDown(dropDownCell);
-		} catch (Exception e) {
-			this.listDropDown.add(dropDownCell);
+		if(sheetHeader.isDropDown()) {
+			DropDownCell dropDownCell = null;
+			dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow);
+			try {
+				this.addDropDown(dropDownCell);
+			} catch (Exception e) {
+				this.listDropDown.add(dropDownCell);
+			}
 		}
 	}
 
@@ -1361,7 +1363,6 @@ public abstract class SuperGenerateExcelImpl {
 	protected void addDropDown(DropDownCell dropDownCell) throws Exception {
 		SheetHeader sheetHeader = dropDownCell.getSheetHeader();
 		Sheet sheet = dropDownCell.getSheet();
-		if (sheetHeader.getExcelDropDown() != null || (sheetHeader.getField() != null && sheetHeader.getValue() != null && DropDown.class.isAssignableFrom(sheetHeader.getField().getType()))) {
 			DataValidationConstraint constraint = null;
 			DataValidation dataValidation = null;
 			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
@@ -1422,7 +1423,6 @@ public abstract class SuperGenerateExcelImpl {
 
 			sheet.addValidationData(dataValidation);
 
-		}
 	}
 
 	/**

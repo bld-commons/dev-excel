@@ -9,20 +9,20 @@ import bld.generator.report.excel.annotation.ExcelMergeRow;
 
 public class CensimentoRow implements RowSheet {
 
-	@ExcelColumn(columnName = "Nazione", indexColumn = 0)
+	@ExcelColumn(name = "Nazione", index = 0)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "")
 	private String desNazione;
 	
-	@ExcelColumn(columnName = "Anno", indexColumn = 1)
+	@ExcelColumn(name = "Anno", index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	private Integer anno;
 	
-	@ExcelColumn(columnName = "Nascite", indexColumn = 2)
+	@ExcelColumn(name = "Nascite", index = 2)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer numNascite;
 	
-	@ExcelColumn(columnName = "Decessi", indexColumn = 3)
+	@ExcelColumn(name = "Decessi", index = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer numDecessi;
 
