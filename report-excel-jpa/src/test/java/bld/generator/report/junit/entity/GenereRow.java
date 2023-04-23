@@ -15,7 +15,7 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 public class GenereRow implements RowSheet {
 
 	/** The genere. */
-	@ExcelColumn(indexColumn = 0, columnName = "Genere")
+	@ExcelColumn(index = 0, name = "Genere")
 	@ExcelCellLayout
 	private String genere;
 

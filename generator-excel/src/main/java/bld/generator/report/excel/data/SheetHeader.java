@@ -10,14 +10,17 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.apache.poi.ss.usermodel.CellType;
 
-import bld.generator.report.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
@@ -27,8 +30,8 @@ import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
 import bld.generator.report.excel.dropdown.DateDropDown;
+import bld.generator.report.excel.dropdown.DropDown;
 import bld.generator.report.excel.dropdown.TimestampDropDown;
-import bld.generator.report.utils.ExcelUtils;
 
 /**
  * The Class SheetHeader.
@@ -88,6 +91,8 @@ public class SheetHeader implements Cloneable {
 
 	/** The color size. */
 	private int colorSize;
+	
+	private CellType cellType;
 
 	/**
 	 * Instantiates a new sheet header.
@@ -95,6 +100,7 @@ public class SheetHeader implements Cloneable {
 	public SheetHeader() {
 		super();
 		this.mapLayoutCell = new HashedMap<>();
+		this.cellType=CellType.BLANK;
 	}
 
 	/**
@@ -108,6 +114,7 @@ public class SheetHeader implements Cloneable {
 		super();
 		this.field = field;
 		this.value = value;
+		this.cellType=CellType.BLANK;
 		if (field.isAnnotationPresent(ExcelMergeRow.class))
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		if (field.isAnnotationPresent(ExcelColumnWidth.class))
@@ -121,11 +128,11 @@ public class SheetHeader implements Cloneable {
 		if (field.isAnnotationPresent(ExcelBooleanText.class))
 			this.setExcelBooleanText(field.getAnnotation(ExcelBooleanText.class));
 		
-		this.excelColumn = ExcelUtils.getAnnotation(this.field, ExcelColumn.class);
-		this.excelCellLayout = ExcelUtils.getAnnotation(this.field, ExcelCellLayout.class);
+		this.excelColumn = SpreadsheetUtils.getAnnotation(this.field, ExcelColumn.class);
+		this.excelCellLayout = SpreadsheetUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
 				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType()))
-			excelDate = ExcelUtils.getAnnotation(this.field, ExcelDate.class);
+			excelDate = SpreadsheetUtils.getAnnotation(this.field, ExcelDate.class);
 		manageMapLayoutCell();
 
 		this.getExcelColumn();
@@ -139,9 +146,9 @@ public class SheetHeader implements Cloneable {
 	private void manageMapLayoutCell() throws Exception {
 		this.mapLayoutCell = new HashedMap<>();
 		if (this.excelCellLayout != null) {
-			LayoutCell layoutCell = ExcelUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
+			LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
 			if (this.excelDate != null)
-				layoutCell = ExcelUtils.reflectionAnnotation(layoutCell, excelDate);
+				layoutCell = SpreadsheetUtils.reflectionAnnotation(layoutCell, excelDate);
 			this.colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
 			for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 				LayoutCell layoutCellTemp = (LayoutCell) layoutCell.clone();
@@ -353,6 +360,9 @@ public class SheetHeader implements Cloneable {
 	 * @param excelFunction the new excel function
 	 */
 	public void setExcelFunction(ExcelFunction excelFunction) {
+		this.cellType=CellType.BLANK;
+		if(excelFunction!=null)
+			this.cellType = CellType.FORMULA;
 		this.excelFunction = excelFunction;
 	}
 
@@ -485,40 +495,24 @@ public class SheetHeader implements Cloneable {
 	public void setExcelSubtotal(ExcelSubtotal excelSubTotal) {
 		this.excelSubtotal = excelSubTotal;
 	}
+	
+	
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((excelCellLayout == null) ? 0 : excelCellLayout.hashCode());
-		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
-		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
-		result = prime * result + ((excelDate == null) ? 0 : excelDate.hashCode());
-		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
-		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
-		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
-		result = prime * result + ((excelImage == null) ? 0 : excelImage.hashCode());
-		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
-		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
-		result = prime * result + ((field == null) ? 0 : field.hashCode());
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result + ((keyMap == null) ? 0 : keyMap.hashCode());
-		result = prime * result + numColumn;
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
-		return result;
+	public CellType getCellType() {
+		return cellType;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
+	public boolean isDropDown() {
+		return this.getExcelDropDown() != null || (this.getField() != null && this.getValue() != null && DropDown.class.isAssignableFrom(this.getField().getType()));
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(cellType, colorSize, excelBooleanText, excelCellLayout, excelColumn, excelColumnWidth, excelDate, excelDropDown, excelFunction, excelHeaderCellLayout, excelImage, excelMergeRow, excelSubtotal, field, key, keyMap,
+				mapLayoutCell, numColumn, value);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -528,79 +522,11 @@ public class SheetHeader implements Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		SheetHeader other = (SheetHeader) obj;
-		if (excelCellLayout == null) {
-			if (other.excelCellLayout != null)
-				return false;
-		} else if (!excelCellLayout.equals(other.excelCellLayout))
-			return false;
-		if (excelColumn == null) {
-			if (other.excelColumn != null)
-				return false;
-		} else if (!excelColumn.equals(other.excelColumn))
-			return false;
-		if (excelColumnWidth == null) {
-			if (other.excelColumnWidth != null)
-				return false;
-		} else if (!excelColumnWidth.equals(other.excelColumnWidth))
-			return false;
-		if (excelDate == null) {
-			if (other.excelDate != null)
-				return false;
-		} else if (!excelDate.equals(other.excelDate))
-			return false;
-		if (excelDropDown == null) {
-			if (other.excelDropDown != null)
-				return false;
-		} else if (!excelDropDown.equals(other.excelDropDown))
-			return false;
-		if (excelFunction == null) {
-			if (other.excelFunction != null)
-				return false;
-		} else if (!excelFunction.equals(other.excelFunction))
-			return false;
-		if (excelHeaderCellLayout == null) {
-			if (other.excelHeaderCellLayout != null)
-				return false;
-		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
-			return false;
-		if (excelImage == null) {
-			if (other.excelImage != null)
-				return false;
-		} else if (!excelImage.equals(other.excelImage))
-			return false;
-		if (excelMergeRow == null) {
-			if (other.excelMergeRow != null)
-				return false;
-		} else if (!excelMergeRow.equals(other.excelMergeRow))
-			return false;
-		if (excelSubtotal == null) {
-			if (other.excelSubtotal != null)
-				return false;
-		} else if (!excelSubtotal.equals(other.excelSubtotal))
-			return false;
-		if (field == null) {
-			if (other.field != null)
-				return false;
-		} else if (!field.equals(other.field))
-			return false;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
-			return false;
-		if (keyMap == null) {
-			if (other.keyMap != null)
-				return false;
-		} else if (!keyMap.equals(other.keyMap))
-			return false;
-		if (numColumn != other.numColumn)
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		return true;
+		return cellType == other.cellType && colorSize == other.colorSize && Objects.equals(excelBooleanText, other.excelBooleanText) && Objects.equals(excelCellLayout, other.excelCellLayout) && Objects.equals(excelColumn, other.excelColumn)
+				&& Objects.equals(excelColumnWidth, other.excelColumnWidth) && Objects.equals(excelDate, other.excelDate) && Objects.equals(excelDropDown, other.excelDropDown) && Objects.equals(excelFunction, other.excelFunction)
+				&& Objects.equals(excelHeaderCellLayout, other.excelHeaderCellLayout) && Objects.equals(excelImage, other.excelImage) && Objects.equals(excelMergeRow, other.excelMergeRow) && Objects.equals(excelSubtotal, other.excelSubtotal)
+				&& Objects.equals(field, other.field) && Objects.equals(key, other.key) && Objects.equals(keyMap, other.keyMap) && Objects.equals(mapLayoutCell, other.mapLayoutCell) && numColumn == other.numColumn
+				&& Objects.equals(value, other.value);
 	}
 
 }

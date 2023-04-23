@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 
-import bld.generator.report.excel.constant.ExcelConstant;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.read.report.excel.constant.ExcelExceptionType;
 import bld.read.report.excel.constant.ExcelType;
 import bld.read.report.excel.exception.ExcelReaderException;
@@ -140,7 +140,7 @@ public class ExcelRead {
 			
 		
 		this.listSheetRead.add(sheetRead);
-		if(sheetName.length()>ExcelConstant.SHEET_NAME_SIZE)
+		if(sheetName.length()>SpreadsheetUtils.SHEET_NAME_SIZE)
 			throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
 		if(this.mapSheet.containsKey(sheetName))
 			throw new ExcelReaderException(ExcelExceptionType.MULTIPLE_SHEET_NAME,sheetName);

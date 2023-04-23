@@ -35,9 +35,10 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
-import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.constant.ExcelConstant;
-import bld.generator.report.utils.ExcelUtils;
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
 import bld.read.report.excel.annotation.ExcelReadSheet;
@@ -113,9 +114,9 @@ public class ReadExcelImpl implements ReadExcel {
 		for (SheetRead<? extends RowSheetRead> sheet : excelRead.getListSheetRead()) {
 			SheetRead<T> sheetType = (SheetRead<T>) sheet;
 			Class<? extends SheetRead<? extends RowSheetRead>> classSheet = (Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
-			ExcelReadSheet excelReadSheet = ExcelUtils.getAnnotation(classSheet, ExcelReadSheet.class);
+			ExcelReadSheet excelReadSheet = SpreadsheetUtils.getAnnotation(classSheet, ExcelReadSheet.class);
 			logger.debug("Sheet: " + sheetType.getSheetName());
-			if (sheetType.getSheetName().length() > ExcelConstant.SHEET_NAME_SIZE)
+			if (sheetType.getSheetName().length() > SpreadsheetUtils.SHEET_NAME_SIZE)
 				throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME);
 			Sheet worksheet = workbook.getSheet(sheetType.getSheetName());
 			if (worksheet == null)
@@ -134,7 +135,7 @@ public class ReadExcelImpl implements ReadExcel {
 				T rowSheetRead = genericClassType.getDeclaredConstructor().newInstance();
 				Row row = worksheet.getRow(indexRow);
 				if (row != null) {
-					Set<Field> listField = ExcelUtils.getListField(rowSheetRead.getClass());
+					Set<Field> listField = SpreadsheetUtils.getListField(rowSheetRead.getClass());
 					boolean rowEmpty = true;
 					for (Field field : listField) {
 						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
@@ -157,8 +158,20 @@ public class ReadExcelImpl implements ReadExcel {
 								Class<?> classField = field.getType();
 								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName() + " type");
 								Object value = null;
+								ExcelBooleanText excelBooleanText=null;
+								if(field.isAnnotationPresent(ExcelBooleanText.class))
+									excelBooleanText=field.getAnnotation(ExcelBooleanText.class);
+								if(excelBooleanText!=null && !Boolean.class.isAssignableFrom(classField))
+									throw new ExcelReaderException("The \"ExcelBooleanText\" annotation can only be assigned to boolean fields");
 								try {
-									if (Number.class.isAssignableFrom(classField)) {
+									if(excelBooleanText!=null) {
+										String stringValue = cell.getStringCellValue();
+										if(excelBooleanText.enable().equalsIgnoreCase(stringValue))
+											value=true;
+										else if(excelBooleanText.disable().equalsIgnoreCase(stringValue))
+											value=false;
+									}
+									else if (Number.class.isAssignableFrom(classField)) {
 										value = getNumberValue(cell, classField);
 									} else if (String.class.isAssignableFrom(classField)) {
 										DataFormat fmt = workbook.createDataFormat();
@@ -197,6 +210,7 @@ public class ReadExcelImpl implements ReadExcel {
 										logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
 									}
 								} catch (Exception e) {
+									logger.error("The \""+field.getName()+"\" field throw exception");
 									if (!CellType.FORMULA.equals(cell.getCellType()))
 										throw e;
 									else
@@ -284,9 +298,9 @@ public class ReadExcelImpl implements ReadExcel {
 	 * @throws Exception the exception
 	 */
 	private Date convertStringToDate(Cell cell, Field field) throws Exception {
-		ExcelDate excelDate = ExcelUtils.getAnnotation(field, ExcelDate.class);
+		ExcelDate excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
 		String date = cell.getStringCellValue().replace(".", "/").replace("-", "/");
-		SimpleDateFormat sdf = new SimpleDateFormat(excelDate.format().getValue());
+		SimpleDateFormat sdf = new SimpleDateFormat(excelDate.value().getValue());
 		return sdf.parse(date);
 	}
 

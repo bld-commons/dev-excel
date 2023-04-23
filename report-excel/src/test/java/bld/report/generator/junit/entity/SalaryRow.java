@@ -10,13 +10,13 @@ import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.ExcelSubtotals;
 
-@ExcelSubtotals(labelTotalGroup = "Total",endLabel = "total")
+@ExcelSubtotals(labelTotalGroup = "Totale dipendenti",endLabel = "total")
 public class SalaryRow implements RowSheet {
 
-	@ExcelColumn(columnName = "Name", indexColumn = 0)
+	@ExcelColumn(name = "Name", index = 0)
 	@ExcelCellLayout
 	private String name;
-	@ExcelColumn(columnName = "Amount", indexColumn = 1)
+	@ExcelColumn(name = "Amount", index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,font=@ExcelFont(bold = true)))
 	private Double amount;

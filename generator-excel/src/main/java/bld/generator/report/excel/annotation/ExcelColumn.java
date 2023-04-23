@@ -12,16 +12,15 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelColumn.
  * <br>
  * ExcelColumn is used to define the header column
  * It is set on fields of {@link bld.generator.report.excel.RowSheet} classes and is composed by:
  * <ul>
- * <li>ColumnName - to set column name on header or property name in the sheet summary</li>
+ * <li>Name - to set column name on header or property name in the sheet summary</li>
  * <li>Comment - to add a comment on header</li>
- * <li>IndexColumn - to set the insertion order of the columns</li>
+ * <li>Index - to set the insertion order of the columns</li>
  * <li>Ignore - to show or hide the column</li>
  * </ul> 
  */
@@ -30,12 +29,8 @@ import java.lang.annotation.Target;
 @Target({FIELD})
 public @interface ExcelColumn {
 
-	/**
-	 * Column name.
-	 *
-	 * @return the string
-	 */
-	public String columnName();
+	
+	public String name();
 	
 	/**
 	 * Comment.
@@ -44,12 +39,8 @@ public @interface ExcelColumn {
 	 */
 	public String comment() default "";
 	
-	/**
-	 * Index column.
-	 *
-	 * @return the double
-	 */
-	public double indexColumn();
+
+	public double index();
 	
 	/**
 	 * Ignore.

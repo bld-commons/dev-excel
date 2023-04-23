@@ -4,38 +4,38 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 
-@ExcelFunctionRows(excelFunctions = @ExcelFunctionRow(excelColumn = @ExcelColumn(columnName = "Sum", indexColumn = 6),
+@ExcelFunctionRows(excelFunctions = @ExcelFunctionRow(excelColumn = @ExcelColumn(name = "Sum", index = 6),
 //excelSubtotal = @ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM), 
 excelFunction = @ExcelFunction(function = "sum(${valueA}:${valueB})+${idUtente}", nameFunction = "total")))
 //@ExcelSubtotals(labelTotalGroup = "Totale",sumForGroup=false)
 public class BigDataUtenteRow implements RowSheet {
 
-	@ExcelColumn(columnName = "Id", indexColumn = 0)
+	@ExcelColumn(name = "Id", index = 0)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer idUtente;
-	@ExcelColumn(columnName = "Nome", indexColumn = 2)
+	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
 	private String nome;
-	@ExcelColumn(columnName = "Cognome", indexColumn = 1)
+	@ExcelColumn(name = "Cognome", index = 1)
 	@ExcelCellLayout
 	private String cognome;
-	@ExcelColumn(columnName = "Data di nascita", indexColumn = 3)
+	@ExcelColumn(name = "Data di nascita", index = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelDate
 	private Date dataNascita;
-	@ExcelColumn(columnName = "Value A", indexColumn = 4)
+	@ExcelColumn(name = "Value A", index = 4)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Double valueA;
 
-	@ExcelColumn(columnName = "Value B", indexColumn = 5)
+	@ExcelColumn(name = "Value B", index = 5)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Double valueB;
 

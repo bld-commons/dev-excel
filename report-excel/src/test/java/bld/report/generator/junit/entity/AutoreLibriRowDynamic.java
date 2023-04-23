@@ -8,10 +8,10 @@ package bld.report.generator.junit.entity;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.DynamicRowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
@@ -28,17 +28,17 @@ import bld.generator.report.excel.dropdown.CalendarDropDown;
 @ExcelFunctionRows(
 		excelFunctions = {
 				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-						excelColumn = @ExcelColumn(indexColumn = 9, columnName = "Prezzo Totale"), 
+						excelColumn = @ExcelColumn(index = 9, name = "Prezzo Totale"), 
 						excelFunction = @ExcelFunction(function = "sum(${prezzo},${supplemento})",anotherTable = false, nameFunction = "prezzoTotale")),
 				@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-				excelColumn = @ExcelColumn(indexColumn = 10, columnName = "Test Sum on Merged Cell"), 
+				excelColumn = @ExcelColumn(index = 10, name = "Test Sum on Merged Cell"), 
 				excelSubtotal = @ExcelSubtotal(enable = true, excelCellLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,font=@ExcelFont(bold=true)), dataConsolidateFunction = DataConsolidateFunction.SUM),
 				excelFunction = @ExcelFunction(function = "sum(${prezzoTotalePerAutore},${prezzoTotale})",anotherTable = false, nameFunction = "testSumMergedCell"))
 				
 				}, 
 		excelFunctionMerges = {
 				@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-						excelColumn = @ExcelColumn(indexColumn = 7.1, columnName = "Prezzo Totale per Autore"), 
+						excelColumn = @ExcelColumn(index = 7.1, name = "Prezzo Totale per Autore"), 
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "prezzoTotalePerAutore",anotherTable = false)) 
 				}
 		)
@@ -46,49 +46,49 @@ import bld.generator.report.excel.dropdown.CalendarDropDown;
 public class AutoreLibriRowDynamic extends DynamicRowSheet {
 
 	/** The nome. */
-	@ExcelColumn(columnName = "Nome", indexColumn = 2)
+	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "matricola")
 	private String nome;
 
 	/** The cognome. */
-	@ExcelColumn(columnName = "Cognome", indexColumn = 3)
+	@ExcelColumn(name = "Cognome", index = 3)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "matricola")
 	private String cognome;
 
 	/** The data di nascita. */
-	@ExcelColumn(columnName = "Data di Nascita", indexColumn = 4)
+	@ExcelColumn(name = "Data di Nascita", index = 4)
 	@ExcelDate
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
 	private CalendarDropDown dataDiNascita;
 
 	/** The titolo. */
-	@ExcelColumn(columnName = "Titolo", indexColumn = 6)
+	@ExcelColumn(name = "Titolo", index = 6)
 	@ExcelCellLayout
 	private String titolo;
 
 	/** The genere. */
-	@ExcelColumn(columnName = "Genere", indexColumn = 5)
+	@ExcelColumn(name = "Genere", index = 5)
 	@ExcelCellLayout
 	@ExcelMergeRow(referenceField = "cognome")
 	private String genere;
 
 	/** The matricola. */
-	@ExcelColumn(columnName = "Matricola", indexColumn = 1)
+	@ExcelColumn(name = "Matricola", index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	@ExcelMergeRow(referenceField = "")
 	private Integer matricola;
 
 	/** The prezzo. */
-	@ExcelColumn(columnName = "Prezzo", indexColumn = 7)
+	@ExcelColumn(name = "Prezzo", index = 7)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2)
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double prezzo;
 
 	/** The supplemento. */
-	@ExcelColumn(columnName = "Supplemento", indexColumn = 8)
+	@ExcelColumn(name = "Supplemento", index = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2)
 	private Double supplemento;
 

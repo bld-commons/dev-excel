@@ -8,16 +8,16 @@ import bld.generator.report.excel.annotation.ExcelColumn;
 
 public class UtenteEntityRow implements RowSheet {
 	
-	@ExcelColumn(columnName = "Id", indexColumn = 0)
+	@ExcelColumn(name = "Id", index = 0)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private String id; 
-	@ExcelColumn(columnName = "Nome", indexColumn = 2)
+	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
 	private String firstName; 
-	@ExcelColumn(columnName = "Cognome", indexColumn = 1)
+	@ExcelColumn(name = "Cognome", index = 1)
 	@ExcelCellLayout
 	private String lastName;
-	@ExcelColumn(columnName = "email", indexColumn = 3)
+	@ExcelColumn(name = "email", index = 3)
 	@ExcelCellLayout
 	private String email;
 

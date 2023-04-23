@@ -16,8 +16,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import bld.common.spreadsheet.utils.ExcelUtils;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
-import bld.generator.report.utils.ExcelUtils;
 import io.leangen.geantyref.TypeFactory;
 
 // TODO: Auto-generated Javadoc
@@ -67,7 +68,7 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 	public T getAnnotation(){
 		T annotation=null;
 		try {
-			Set<Field> listField = ExcelUtils.getListField(this.getClass());
+			Set<Field> listField = SpreadsheetUtils.getListField(this.getClass());
 			Map<String,Object>mapParameters=new HashMap<>();
 			for(Field field:listField) {
 				if(!field.isAnnotationPresent(IgnoreCheck.class)) {

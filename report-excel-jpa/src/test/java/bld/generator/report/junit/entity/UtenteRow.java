@@ -4,43 +4,43 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelBooleanText;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 
 @ExcelRowHeight(height = 3)
 public class UtenteRow implements RowSheet {
 	
-	@ExcelColumn(columnName = "Id", indexColumn = 0)
+	@ExcelColumn(name = "Id", index = 0)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer idUtente; 
-	@ExcelColumn(columnName = "Nome", indexColumn = 2)
+	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
 	private String nome; 
-	@ExcelColumn(columnName = "Cognome", indexColumn = 1)
+	@ExcelColumn(name = "Cognome", index = 1)
 	@ExcelCellLayout
 	private String cognome;
-	@ExcelColumn(columnName = "Data di nascita", indexColumn = 3)
+	@ExcelColumn(name = "Data di nascita", index = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelDate
 	private Date dataNascita;
-	@ExcelColumn(columnName = "Immagine", indexColumn = 4)
+	@ExcelColumn(name = "Immagine", index = 4)
 	@ExcelCellLayout
 	@ExcelImage
 	private byte[] image;	
 	
-	@ExcelColumn(columnName = "Path", indexColumn = 5)
+	@ExcelColumn(name = "Path", index = 5)
 	@ExcelCellLayout
 	@ExcelImage(resizeHeight = 0.7, resizeWidth = 0.6)
 	private String path;	
 	
 
-	@ExcelColumn(columnName = "Abilitato", indexColumn = 6)
-	@ExcelBooleanText(ifTrue = "Enable",ifFalse = "Disable")
+	@ExcelColumn(name = "Abilitato", index = 6)
+	@ExcelBooleanText(enable = "Enable",disable = "Disable")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	private Boolean abilitato;
 	

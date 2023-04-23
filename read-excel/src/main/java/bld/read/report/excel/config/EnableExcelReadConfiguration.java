@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * This class is for configurations.
  */
 @Configuration
-@ComponentScan("bld.read")
+@ComponentScan({"bld.read","bld.common.spreadsheet"})
 public class EnableExcelReadConfiguration {
 	
 	

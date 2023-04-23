@@ -6,8 +6,8 @@
 
 package bld.generator.report.excel.annotation.impl;
 
-import bld.generator.report.excel.annotation.ExcelDate;
-import bld.generator.report.excel.constant.ColumnDateFormat;
+import bld.common.spreadsheet.constant.ColumnDateFormat;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,18 +16,20 @@ import bld.generator.report.excel.constant.ColumnDateFormat;
 public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 
 	
-	/** The format. */
-	private ColumnDateFormat format;
+	/** The value. */
+	private ColumnDateFormat value;
 	
+
 	/**
 	 * Instantiates a new excel date impl.
 	 *
-	 * @param format the format
+	 * @param value the value
 	 */
-	public ExcelDateImpl(ColumnDateFormat format){
+	public ExcelDateImpl(ColumnDateFormat value){
 		super();
-		this.format = format;
+		this.value = value;
 	}
+
 
 	/**
 	 * Instantiates a new excel date impl.
@@ -36,22 +38,24 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 		super();
 	}
 
-	/**
-	 * Gets the format.
-	 *
-	 * @return the format
-	 */
-	public ColumnDateFormat getFormat() {
-		return format;
-	}
 
 	/**
-	 * Sets the format.
+	 * Gets the value.
 	 *
-	 * @param format the new format
+	 * @return the value
 	 */
-	public void setFormat(ColumnDateFormat format) {
-		this.format = format;
+	public ColumnDateFormat getValue() {
+		return value;
+	}
+
+
+	/**
+	 * Sets the value.
+	 *
+	 * @param value the new value
+	 */
+	public void setValue(ColumnDateFormat value) {
+		this.value = value;
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((format == null) ? 0 : format.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
@@ -82,7 +86,7 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelDateImpl other = (ExcelDateImpl) obj;
-		if (format != other.format)
+		if (value != other.value)
 			return false;
 		return true;
 	}

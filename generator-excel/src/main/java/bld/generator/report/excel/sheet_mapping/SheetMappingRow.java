@@ -2,100 +2,100 @@ package bld.generator.report.excel.sheet_mapping;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
+import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
-import bld.generator.report.utils.ExcelUtils;
 
 public class SheetMappingRow implements RowSheet {
 
-	@ExcelColumn(columnName = "Sheet name", indexColumn = 1)
+	@ExcelColumn(name = "Sheet name", index = 1)
 	@ExcelCellLayout(locked = true)
 	@ExcelColumnWidth(width = 8)
 	private String sheet;
 	
-	@ExcelColumn(columnName = "Rows number", indexColumn = 2)
+	@ExcelColumn(name = "Rows number", index = 2)
 	@ExcelCellLayout(locked = true, horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer rowsNumber;
 
-	@ExcelColumn(columnName = "First row", indexColumn = 3)
+	@ExcelColumn(name = "First row", index = 3)
 	@ExcelCellLayout(locked = true, horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer firstRow;
 
-	@ExcelColumn(columnName = "Firt column", indexColumn = 4)
+	@ExcelColumn(name = "Firt column", index = 4)
 	@ExcelCellLayout(locked = true, horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer firstColumn;
 
-	@ExcelColumn(columnName = "Last row", indexColumn = 5)
+	@ExcelColumn(name = "Last row", index = 5)
 	@ExcelCellLayout(locked = true, horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer lastRow;
 
-	@ExcelColumn(columnName = "Last column", indexColumn = 6)
+	@ExcelColumn(name = "Last column", index = 6)
 	@ExcelCellLayout(locked = true, horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer lastColumn;
 
-	@ExcelColumn(columnName = "First row and column", indexColumn = 7)
+	@ExcelColumn(name = "First row and column", index = 7)
 	@ExcelCellLayout(locked = true)
 	private String firstRowFirstColumn;
 
-	@ExcelColumn(columnName = "First row and column with locked row", indexColumn = 8)
+	@ExcelColumn(name = "First row and column with locked row", index = 8)
 	@ExcelCellLayout(locked = true)
 	private String firstLockedRowFirstColumn;
 
-	@ExcelColumn(columnName = "First row and column with row and column locked", indexColumn = 9)
+	@ExcelColumn(name = "First row and column with row and column locked", index = 9)
 	@ExcelCellLayout(locked = true)
 	private String firstLockedRowFirstLockedColumn;
 
-	@ExcelColumn(columnName = "First row and column with locked column", indexColumn = 10)
+	@ExcelColumn(name = "First row and column with locked column", index = 10)
 	@ExcelCellLayout(locked = true)
 	private String firstRowFirstLockedColumn;
 
-	@ExcelColumn(columnName = "First row and last column", indexColumn = 11)
+	@ExcelColumn(name = "First row and last column", index = 11)
 	@ExcelCellLayout(locked = true)
 	private String firstRowLastColumn;
 
-	@ExcelColumn(columnName = "First row and last column with locked row", indexColumn = 12)
+	@ExcelColumn(name = "First row and last column with locked row", index = 12)
 	@ExcelCellLayout(locked = true)
 	private String firstLockedRowLastColumn;
 
-	@ExcelColumn(columnName = "First row and last column with row and column locked", indexColumn = 13)
+	@ExcelColumn(name = "First row and last column with row and column locked", index = 13)
 	@ExcelCellLayout(locked = true)
 	private String firstLockedRowLastLockedColumn;
 
-	@ExcelColumn(columnName = "First row and last column with locked column", indexColumn = 14)
+	@ExcelColumn(name = "First row and last column with locked column", index = 14)
 	@ExcelCellLayout(locked = true)
 	private String firstRowLastLockedColumn;
 
-	@ExcelColumn(columnName = "Last row and first column", indexColumn = 15)
+	@ExcelColumn(name = "Last row and first column", index = 15)
 	@ExcelCellLayout(locked = true)
 	private String lastRowFirstColumn;
 
-	@ExcelColumn(columnName = "Last row and first column with locked row", indexColumn = 16)
+	@ExcelColumn(name = "Last row and first column with locked row", index = 16)
 	@ExcelCellLayout(locked = true)
 	private String lastLockedRowFirstColumn;
 
-	@ExcelColumn(columnName = "Last row and first column with row and column locked", indexColumn = 17)
+	@ExcelColumn(name = "Last row and first column with row and column locked", index = 17)
 	@ExcelCellLayout(locked = true)
 	private String lastLockedRowFirstLockedColumn;
 
-	@ExcelColumn(columnName = "Last row and first column with locked column", indexColumn = 18)
+	@ExcelColumn(name = "Last row and first column with locked column", index = 18)
 	@ExcelCellLayout(locked = true)
 	private String lastRowFirstLockedColumn;
 
-	@ExcelColumn(columnName = "Last row and column", indexColumn = 19)
+	@ExcelColumn(name = "Last row and column", index = 19)
 	@ExcelCellLayout(locked = true)
 	private String lastRowLastColumn;
 
-	@ExcelColumn(columnName = "Last row and column with locked row", indexColumn = 20)
+	@ExcelColumn(name = "Last row and column with locked row", index = 20)
 	@ExcelCellLayout(locked = true)
 	private String lastLockedRowLastColumn;
 
-	@ExcelColumn(columnName = "Last row and column with row and column locked", indexColumn = 21)
+	@ExcelColumn(name = "Last row and column with row and column locked", index = 21)
 	@ExcelCellLayout(locked = true)
 	private String lastLockedRowLastLockedColumn;
 
-	@ExcelColumn(columnName = "Last row and column with locked column", indexColumn = 22)
+	@ExcelColumn(name = "Last row and column with locked column", index = 22)
 	@ExcelCellLayout(locked = true)
 	private String lastRowLastLockedColumn;
 

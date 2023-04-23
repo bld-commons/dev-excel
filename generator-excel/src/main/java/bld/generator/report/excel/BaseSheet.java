@@ -8,7 +8,7 @@ package bld.generator.report.excel;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.constant.ExcelConstant;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 
 /**
  * The Class BaseSheet. <br>
@@ -22,7 +22,7 @@ public abstract class BaseSheet {
 	public static final String APOS = "&apos;";
 	
 	/** The name sheet. */
-	@Size(max = ExcelConstant.SHEET_NAME_SIZE)
+	@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE)
 	private String sheetName;
 
 	/**
@@ -30,7 +30,7 @@ public abstract class BaseSheet {
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public BaseSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+	public BaseSheet(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super();
 		sheetNameApos(sheetName);
 	}

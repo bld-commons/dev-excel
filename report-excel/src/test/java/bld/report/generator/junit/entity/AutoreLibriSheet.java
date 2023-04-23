@@ -7,6 +7,7 @@ package bld.report.generator.junit.entity;
 
 import javax.validation.constraints.Size;
 
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
@@ -17,7 +18,6 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 import bld.generator.report.excel.annotation.ExcelSuperHeader;
 import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import bld.generator.report.excel.annotation.ExcelSuperHeaders;
-import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class AutoreLibriSheet.
@@ -42,7 +42,7 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 	 *
 	 * @param nameSheet the name sheet
 	 */
-	public AutoreLibriSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet) {
+	public AutoreLibriSheet(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String nameSheet) {
 		super(nameSheet);
 
 	}
@@ -53,7 +53,7 @@ public class AutoreLibriSheet extends SheetData<AutoreLibriRow> {
 	 * @param nameSheet the name sheet
 	 * @param label     the label
 	 */
-	public AutoreLibriSheet(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet, String label) {
+	public AutoreLibriSheet(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String nameSheet, String label) {
 		super(nameSheet);
 		this.label = label;
 	}

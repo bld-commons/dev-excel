@@ -12,10 +12,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import bld.common.spreadsheet.constant.ColumnDateFormat;
+import bld.common.spreadsheet.excel.annotation.ExcelDate;
 import bld.generator.report.excel.BaseSheet;
-import bld.generator.report.excel.annotation.ExcelDate;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
-import bld.generator.report.excel.constant.ColumnDateFormat;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -33,7 +33,7 @@ public class ReportExcel {
 
 	/** The date. */
 	@ExcelSelectCell(cellReference = "${bld.commons.report.excel.date}")
-	@ExcelDate(format = ColumnDateFormat.PARAMETER)
+	@ExcelDate(value = ColumnDateFormat.PARAMETER)
 	private Date date;
 
 	/** The list base sheet. */

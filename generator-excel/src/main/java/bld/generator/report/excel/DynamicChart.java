@@ -10,9 +10,9 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
-import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * 
@@ -37,7 +37,7 @@ public abstract class DynamicChart<T extends DynamicRowSheet> extends SheetDynam
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public DynamicChart(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+	public DynamicChart(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 		this.listExcelChart=new ArrayList<>();
 	}

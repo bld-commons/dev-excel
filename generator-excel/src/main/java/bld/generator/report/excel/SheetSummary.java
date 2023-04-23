@@ -8,7 +8,7 @@ package bld.generator.report.excel;
 
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.constant.ExcelConstant;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 
 /**  
  * The Class SheetSummary.
@@ -52,7 +52,7 @@ public abstract class SheetSummary extends BaseSheet implements SheetComponent{
 	 *
 	 * @param sheetName the name sheet
 	 */
-	public SheetSummary(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String sheetName) {
+	public SheetSummary(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
 	}
 

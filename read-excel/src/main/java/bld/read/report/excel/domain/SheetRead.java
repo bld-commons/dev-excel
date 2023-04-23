@@ -10,7 +10,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import bld.generator.report.excel.constant.ExcelConstant;
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 
 /**
  * The Class SheetRead.<br>
@@ -37,7 +37,7 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 *
 	 * @param sheetName the sheet name
 	 */
-	public SheetRead(@Size(max = ExcelConstant.SHEET_NAME_SIZE)String sheetName) {
+	public SheetRead(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE)String sheetName) {
 		super();
 		this.listRowSheet=new ArrayList<>();
 		this.sheetName=sheetName;

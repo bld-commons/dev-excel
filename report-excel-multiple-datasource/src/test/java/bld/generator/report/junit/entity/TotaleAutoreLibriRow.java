@@ -19,32 +19,32 @@ import bld.generator.report.excel.annotation.ExcelFunctionRows;
  */
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
-				excelColumn = @ExcelColumn(indexColumn = 8, columnName = "Totale Prezzo"), 
+				excelColumn = @ExcelColumn(index = 8, name = "Totale Prezzo"), 
 				excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePrezzo")) })
 public class TotaleAutoreLibriRow implements RowSheet {
 
-	@ExcelColumn(columnName = "Totale", indexColumn = 0)
+	@ExcelColumn(name = "Totale", index = 0)
 	@ExcelCellLayout 
 	private String totale;
-	@ExcelColumn(columnName = "", indexColumn = 7)
+	@ExcelColumn(name = "", index = 7)
 	@ExcelCellLayout
 	private Integer totAnno;	
-	@ExcelColumn(columnName = "", indexColumn = 6)
+	@ExcelColumn(name = "", index = 6)
 	@ExcelCellLayout
 	private String totTitolo;
-	@ExcelColumn(columnName = "", indexColumn = 1)
+	@ExcelColumn(name = "", index = 1)
 	@ExcelCellLayout
 	private String totNome;
-	@ExcelColumn(columnName = "", indexColumn = 2)
+	@ExcelColumn(name = "", index = 2)
 	@ExcelCellLayout
 	private String totCognome;
-	@ExcelColumn(columnName = "", indexColumn = 3)
+	@ExcelColumn(name = "", index = 3)
 	@ExcelCellLayout
 	private String totDataNascita;
-	@ExcelColumn(columnName = "", indexColumn = 4)
+	@ExcelColumn(name = "", index = 4)
 	@ExcelCellLayout
 	private Character totSesso;
-	@ExcelColumn(columnName = "", indexColumn = 5)
+	@ExcelColumn(name = "", index = 5)
 	@ExcelCellLayout
 	private String totDesGenere;
 	

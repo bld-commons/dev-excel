@@ -7,13 +7,13 @@ package bld.report.generator.junit.entity;
 
 import javax.validation.constraints.Size;
 
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.DynamicChart;
 import bld.generator.report.excel.FunctionsTotal;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
-import bld.generator.report.excel.constant.ExcelConstant;
 
 /**
  * The Class AutoreLibriSheetDynamic.
@@ -31,7 +31,7 @@ public class AutoreLibriSheetDynamic extends DynamicChart<AutoreLibriRowDynamic>
 	 *
 	 * @param nameSheet the name sheet
 	 */
-	public AutoreLibriSheetDynamic(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet) {
+	public AutoreLibriSheetDynamic(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String nameSheet) {
 		super(nameSheet);
 		
 	}
@@ -43,7 +43,7 @@ public class AutoreLibriSheetDynamic extends DynamicChart<AutoreLibriRowDynamic>
 	 * @param nameSheet the name sheet
 	 * @param etichetta the etichetta
 	 */
-	public AutoreLibriSheetDynamic(@Size(max = ExcelConstant.SHEET_NAME_SIZE) String nameSheet,String etichetta) {
+	public AutoreLibriSheetDynamic(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String nameSheet,String etichetta) {
 		super(nameSheet);
 		this.etichetta = etichetta;
 	}

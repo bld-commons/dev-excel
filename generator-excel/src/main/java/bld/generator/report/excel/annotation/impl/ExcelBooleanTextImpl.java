@@ -6,7 +6,7 @@
  */
 package bld.generator.report.excel.annotation.impl;
 
-import bld.generator.report.excel.annotation.ExcelBooleanText;
+import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,23 +15,24 @@ import bld.generator.report.excel.annotation.ExcelBooleanText;
 public class ExcelBooleanTextImpl extends ExcelAnnotationImpl<ExcelBooleanText>{
 
 	/** The if true. */
-	private String ifTrue;
+	private String enable;
 	
 	/** The if false. */
-	private String ifFalse;
+	private String disable;
 	
 	
+
 
 	/**
 	 * Instantiates a new excel boolean text impl.
 	 *
-	 * @param ifTrue the if true
-	 * @param ifFalse the if false
+	 * @param enable the enable
+	 * @param disable the disable
 	 */
-	public ExcelBooleanTextImpl(String ifTrue, String ifFalse) {
+	public ExcelBooleanTextImpl(String enable, String disable) {
 		super();
-		this.ifTrue = ifTrue;
-		this.ifFalse = ifFalse;
+		this.enable = enable;
+		this.disable = disable;
 	}
 
 	
@@ -46,39 +47,39 @@ public class ExcelBooleanTextImpl extends ExcelAnnotationImpl<ExcelBooleanText>{
 
 
 	/**
-	 * Gets the if true.
+	 * Gets the enable.
 	 *
-	 * @return the if true
+	 * @return the enable
 	 */
-	public String getIfTrue() {
-		return ifTrue;
+	public String getEnable() {
+		return enable;
 	}
 
 	/**
-	 * Sets the if true.
+	 * Sets the enable.
 	 *
-	 * @param ifTrue the new if true
+	 * @param ifTrue the new enable
 	 */
-	public void setIfTrue(String ifTrue) {
-		this.ifTrue = ifTrue;
+	public void setEnable(String ifTrue) {
+		this.enable = ifTrue;
 	}
 
 	/**
-	 * Gets the if false.
+	 * Gets the disable.
 	 *
-	 * @return the if false
+	 * @return the disable
 	 */
-	public String getIfFalse() {
-		return ifFalse;
+	public String getDisable() {
+		return disable;
 	}
 
 	/**
-	 * Sets the if false.
+	 * Sets the disable.
 	 *
-	 * @param ifFalse the new if false
+	 * @param ifFalse the new disable
 	 */
-	public void setIfFalse(String ifFalse) {
-		this.ifFalse = ifFalse;
+	public void setDisable(String ifFalse) {
+		this.disable = ifFalse;
 	}
 
 	/**
@@ -90,8 +91,8 @@ public class ExcelBooleanTextImpl extends ExcelAnnotationImpl<ExcelBooleanText>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((ifFalse == null) ? 0 : ifFalse.hashCode());
-		result = prime * result + ((ifTrue == null) ? 0 : ifTrue.hashCode());
+		result = prime * result + ((disable == null) ? 0 : disable.hashCode());
+		result = prime * result + ((enable == null) ? 0 : enable.hashCode());
 		return result;
 	}
 
@@ -110,15 +111,15 @@ public class ExcelBooleanTextImpl extends ExcelAnnotationImpl<ExcelBooleanText>{
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelBooleanTextImpl other = (ExcelBooleanTextImpl) obj;
-		if (ifFalse == null) {
-			if (other.ifFalse != null)
+		if (disable == null) {
+			if (other.disable != null)
 				return false;
-		} else if (!ifFalse.equals(other.ifFalse))
+		} else if (!disable.equals(other.disable))
 			return false;
-		if (ifTrue == null) {
-			if (other.ifTrue != null)
+		if (enable == null) {
+			if (other.enable != null)
 				return false;
-		} else if (!ifTrue.equals(other.ifTrue))
+		} else if (!enable.equals(other.enable))
 			return false;
 		return true;
 	}

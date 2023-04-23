@@ -20,7 +20,7 @@ import bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelHeaderLayout
 @ExcelSheetLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-@ExcelQuery(select = "select des_genere as genere from genere")
+@ExcelQuery("select des_genere as genere from genere")
 public class GenereSheet extends QuerySheetData<GenereRow>{
 	
 	

@@ -21,16 +21,16 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
  */
 @ExcelFunctionRows(excelFunctions = {
 		@ExcelFunctionRow( 
-				excelColumn = @ExcelColumn(indexColumn = 2, columnName = "Totale per matricola"), 
+				excelColumn = @ExcelColumn(index = 2, name = "Totale per matricola"), 
 				excelFunction = @ExcelFunction(function = "sumif(${matricolaRowStart}:${matricolaRowEnd},${totMatricola},${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "totalePerMatricola"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0))),
 		@ExcelFunctionRow( 
-				excelColumn = @ExcelColumn(indexColumn = 2.1, columnName = "Totale by array"), 
+				excelColumn = @ExcelColumn(index = 2.1, name = "Totale by array"), 
 				excelFunction = @ExcelFunction(function = "sum(${prezzo[start+1]}:${prezzo[end-1]})", nameFunction = "totalePerMatricolaByArray"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))
 })
 public class TotaleAutoreLibriRow implements RowSheet {
 
 	/** The tot matricola. */
-	@ExcelColumn(columnName = "Matricola", indexColumn = 1)
+	@ExcelColumn(name = "Matricola", index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private Integer totMatricola;
 

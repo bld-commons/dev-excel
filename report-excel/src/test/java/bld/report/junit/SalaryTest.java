@@ -12,16 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
 import bld.generator.report.excel.data.ReportExcel;
-import bld.generator.report.utils.ExcelUtils;
 import bld.report.generator.junit.entity.SalaryRow;
 import bld.report.generator.junit.entity.SalarySheet;
 
@@ -30,7 +29,6 @@ import bld.report.generator.junit.entity.SalarySheet;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ConfigurationProperties
 @ComponentScan(basePackages = {"bld.generator","bld.read"})
 @EnableTransactionManagement
 public class SalaryTest {
@@ -68,7 +66,7 @@ public class SalaryTest {
 		ReportExcel report=new ReportExcel("test", listBaseSheet);
 		
 		byte[] byteReport = this.generateExcel.createFileXlsx(report);
-		ExcelUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
+		SpreadsheetUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
 		
 	}
 	
