@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>4.0.10-SNAPSHOT</version>
+		<version>4.1.0</version>
 	</parent>
 
 
