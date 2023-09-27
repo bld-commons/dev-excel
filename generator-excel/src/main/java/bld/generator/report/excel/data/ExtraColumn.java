@@ -5,7 +5,7 @@
 */
 package bld.generator.report.excel.data;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExtraColumn.<br>
  */

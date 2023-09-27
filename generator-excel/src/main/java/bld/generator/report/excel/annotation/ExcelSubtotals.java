@@ -12,7 +12,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelSubtotals.<br>
  * ExcelSubtotals and {@link bld.generator.report.excel.annotation.ExcelSubtotal} are used To calculate the subtotals grouped by the value of the first column, 

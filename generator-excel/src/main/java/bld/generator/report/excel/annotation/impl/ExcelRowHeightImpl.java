@@ -7,7 +7,7 @@ package bld.generator.report.excel.annotation.impl;
 
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelRowHeightImpl.
  */

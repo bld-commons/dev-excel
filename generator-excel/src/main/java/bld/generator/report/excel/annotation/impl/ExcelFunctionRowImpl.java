@@ -13,7 +13,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelFunctionRowImpl.
  */

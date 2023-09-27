@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 import bld.generator.report.excel.constant.ExcelConstant;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelColumnWidth.
  * <br>

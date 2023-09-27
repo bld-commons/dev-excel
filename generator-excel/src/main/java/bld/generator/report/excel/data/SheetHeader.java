@@ -91,7 +91,7 @@ public class SheetHeader implements Cloneable {
 
 	/** The color size. */
 	private int colorSize;
-	
+
 	private CellType cellType;
 
 	/**
@@ -100,7 +100,7 @@ public class SheetHeader implements Cloneable {
 	public SheetHeader() {
 		super();
 		this.mapLayoutCell = new HashedMap<>();
-		this.cellType=CellType.BLANK;
+		this.cellType = CellType.BLANK;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class SheetHeader implements Cloneable {
 		super();
 		this.field = field;
 		this.value = value;
-		this.cellType=CellType.BLANK;
+		this.cellType = CellType.BLANK;
 		if (field.isAnnotationPresent(ExcelMergeRow.class))
 			this.setExcelMergeRow(field.getAnnotation(ExcelMergeRow.class));
 		if (field.isAnnotationPresent(ExcelColumnWidth.class))
@@ -127,7 +127,7 @@ public class SheetHeader implements Cloneable {
 			this.setExcelSubtotal(field.getAnnotation(ExcelSubtotal.class));
 		if (field.isAnnotationPresent(ExcelBooleanText.class))
 			this.setExcelBooleanText(field.getAnnotation(ExcelBooleanText.class));
-		
+
 		this.excelColumn = SpreadsheetUtils.getAnnotation(this.field, ExcelColumn.class);
 		this.excelCellLayout = SpreadsheetUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
@@ -148,7 +148,7 @@ public class SheetHeader implements Cloneable {
 		if (this.excelCellLayout != null) {
 			LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
 			if (this.excelDate != null)
-				layoutCell = SpreadsheetUtils.reflectionAnnotation(layoutCell, excelDate);
+				layoutCell.setFormat(this.excelDate.value());
 			this.colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
 			for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 				LayoutCell layoutCellTemp = (LayoutCell) layoutCell.clone();
@@ -360,8 +360,8 @@ public class SheetHeader implements Cloneable {
 	 * @param excelFunction the new excel function
 	 */
 	public void setExcelFunction(ExcelFunction excelFunction) {
-		this.cellType=CellType.BLANK;
-		if(excelFunction!=null)
+		this.cellType = CellType.BLANK;
+		if (excelFunction != null)
 			this.cellType = CellType.FORMULA;
 		this.excelFunction = excelFunction;
 	}
@@ -495,8 +495,6 @@ public class SheetHeader implements Cloneable {
 	public void setExcelSubtotal(ExcelSubtotal excelSubTotal) {
 		this.excelSubtotal = excelSubTotal;
 	}
-	
-	
 
 	public CellType getCellType() {
 		return cellType;
@@ -505,8 +503,7 @@ public class SheetHeader implements Cloneable {
 	public boolean isDropDown() {
 		return this.getExcelDropDown() != null || (this.getField() != null && this.getValue() != null && DropDown.class.isAssignableFrom(this.getField().getType()));
 	}
-	
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(cellType, colorSize, excelBooleanText, excelCellLayout, excelColumn, excelColumnWidth, excelDate, excelDropDown, excelFunction, excelHeaderCellLayout, excelImage, excelMergeRow, excelSubtotal, field, key, keyMap,

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 import bld.generator.report.excel.constant.FontType;
 import bld.generator.report.excel.constant.UnderlineType;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelFont.<br>
  * ExcelFont defines the following properties:

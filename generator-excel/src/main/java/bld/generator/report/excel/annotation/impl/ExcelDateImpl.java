@@ -9,7 +9,7 @@ package bld.generator.report.excel.annotation.impl;
 import bld.common.spreadsheet.constant.ColumnDateFormat;
 import bld.common.spreadsheet.excel.annotation.ExcelDate;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelDateImpl.
  */

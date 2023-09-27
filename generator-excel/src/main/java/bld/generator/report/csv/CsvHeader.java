@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import bld.common.spreadsheet.csv.annotation.CsvDate;
 import bld.generator.report.csv.annotation.CsvColumn;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class CsvHeader.
  */

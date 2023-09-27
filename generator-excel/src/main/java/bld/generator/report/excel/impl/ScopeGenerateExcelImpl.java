@@ -140,7 +140,7 @@ import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ScopeGenerateExcelImpl.<br>
  * ScopeGenerateExcelImpl is the heart of the generation of the xls or xlsx
@@ -621,7 +621,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Cell cell = row.createCell(numColumn, cellType);
 				InfoColumn infoColumn = (InfoColumn) mapFieldColumn.get(sheetHeader.getKey());
 
-				Field field = listSheetHeader.get(indexHeader).getField();
+				Field field = sheetHeader.getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
 					value = PropertyUtils.getProperty(rowSheet, field.getName());

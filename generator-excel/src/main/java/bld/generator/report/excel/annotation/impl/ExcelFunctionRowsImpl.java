@@ -11,7 +11,7 @@ import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelFunctionRows;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelFunctionRowsImpl.
  */

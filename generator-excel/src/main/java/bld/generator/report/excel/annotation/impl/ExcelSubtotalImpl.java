@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelSubtotalImpl.
  */

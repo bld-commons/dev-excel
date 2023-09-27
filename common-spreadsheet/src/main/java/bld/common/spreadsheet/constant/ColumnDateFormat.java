@@ -24,6 +24,10 @@ public enum ColumnDateFormat {
 	/** The yyyy mm dd hh mm ss. */
 	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
 	
+	HH_MM_SS("HH:mm:ss"),
+	
+	HH_MM("HH:mm"),
+	
 	/** The parameter. <br>
 	 * This option is set on properties file
 	 * */
