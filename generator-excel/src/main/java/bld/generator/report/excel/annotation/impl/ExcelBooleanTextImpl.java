@@ -8,7 +8,7 @@ package bld.generator.report.excel.annotation.impl;
 
 import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelBooleanTextImpl.
  */

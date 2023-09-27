@@ -12,7 +12,7 @@ import bld.generator.report.excel.annotation.ExcelBoxMessage;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelDropDownImpl.
  */

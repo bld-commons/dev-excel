@@ -7,6 +7,7 @@ package bld.report.generator.junit.entity;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -120,7 +121,16 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(name = "Opzione Char",index = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	private CharacterDropDown optionChar;
+	
+	@ExcelColumn(name = "Create Date",index = 100)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	@ExcelDate(ColumnDateFormat.DD_MM_YYYY)
+	private Date createDate;
 
+	@ExcelColumn(name = "Create Time",index = 110)
+	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+	@ExcelDate(ColumnDateFormat.HH_MM_SS)
+	private Date createTime;
 	
 	
 	/**
@@ -130,6 +140,8 @@ public class AutoreLibriRow implements RowSheet {
 		super();
 		this.option=new IntegerDropDown(null,Arrays.asList(0,1,2));
 		this.optionChar=new CharacterDropDown(null, Arrays.asList('A','B','C'));
+		this.createDate=new Date();
+		this.createTime=new Date();
 	}
 
 	/**
@@ -156,6 +168,8 @@ public class AutoreLibriRow implements RowSheet {
 		this.supplemento=supplemento;
 		this.option=new IntegerDropDown(null,Arrays.asList(0,1,2));
 		this.optionChar=new CharacterDropDown(null, Arrays.asList('A','B','C'));
+		this.createDate=new Date();
+		this.createTime=new Date();
 	}
 
 	/**
@@ -316,6 +330,22 @@ public class AutoreLibriRow implements RowSheet {
 
 	public void setOptionChar(CharacterDropDown optionChar) {
 		this.optionChar = optionChar;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 	
 	

@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelHeaderCellLayoutImpl.
  */

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelPivotColumnFunction.<br>
  * ExcelPivotColumnFunction is used to add a column with specific function within pivot table.<br>

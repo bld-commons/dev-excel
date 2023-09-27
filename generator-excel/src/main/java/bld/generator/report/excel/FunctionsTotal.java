@@ -5,7 +5,7 @@
 */
 package bld.generator.report.excel;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface FunctionsTotal.
  * @param <T> the generic type

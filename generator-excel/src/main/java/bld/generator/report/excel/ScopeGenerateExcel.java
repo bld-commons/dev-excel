@@ -7,7 +7,7 @@ package bld.generator.report.excel;
 
 import bld.generator.report.excel.data.ReportExcel;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ScopeGenerateExcel.
  */

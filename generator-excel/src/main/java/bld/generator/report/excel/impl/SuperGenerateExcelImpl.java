@@ -135,6 +135,8 @@ import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
  */
 public abstract class SuperGenerateExcelImpl {
 
+	
+	
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
 
@@ -410,7 +412,7 @@ public abstract class SuperGenerateExcelImpl {
 			}
 		}
 
-		Collections.sort(listSheetHeader, new SheetColumnComparator());
+		Collections.sort(listSheetHeader, new SheetColumnComparator(this.valueProps));
 		return listSheetHeader;
 	}
 
@@ -976,12 +978,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected void setCellValueExcel(Workbook workbook, Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-//		if (cellStyle == null) {
-//			if (this.mapCellStyle.containsKey(layoutCell))
-//				cellStyle = this.mapCellStyle.get(layoutCell);
-//			else
-//				cellStyle = createCellStyle(workbook, sheetHeader.getExcelCellLayout(), sheetHeader.getExcelDate(), indexRow);
-//		}
+
 		if (cellStyle == null)
 			cellStyle = this.mapCellStyle.get(layoutCell);
 		setCellStyleExcel(cellStyle, cell, layoutCell);
@@ -1159,7 +1156,7 @@ public abstract class SuperGenerateExcelImpl {
 					listSheetHeader.add(sheetHeader);
 				}
 			}
-			Collections.sort(listSheetHeader, new SheetColumnComparator());
+			Collections.sort(listSheetHeader, new SheetColumnComparator(this.valueProps));
 		}
 		Integer indexStartSuperHeader = indexRow - getSizeSuperHeader(sheetData);
 		Row rowHeader = null;
@@ -1263,9 +1260,9 @@ public abstract class SuperGenerateExcelImpl {
 	/**
 	 * Sets the column width.
 	 *
-	 * @param sheet       the sheet
+	 * @param sheet the sheet
 	 * @param index the index column
-	 * @param width       the width
+	 * @param width the width
 	 * @throws Exception the exception
 	 */
 	protected void setColumnWidth(Sheet sheet, Integer index, Integer width) throws Exception {
@@ -1343,7 +1340,7 @@ public abstract class SuperGenerateExcelImpl {
 	 * @param lastCol     the last col
 	 */
 	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol, Integer indexRow) {
-		if(sheetHeader.isDropDown()) {
+		if (sheetHeader.isDropDown()) {
 			DropDownCell dropDownCell = null;
 			dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow);
 			try {
@@ -1363,65 +1360,65 @@ public abstract class SuperGenerateExcelImpl {
 	protected void addDropDown(DropDownCell dropDownCell) throws Exception {
 		SheetHeader sheetHeader = dropDownCell.getSheetHeader();
 		Sheet sheet = dropDownCell.getSheet();
-			DataValidationConstraint constraint = null;
-			DataValidation dataValidation = null;
-			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
-			CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
-			if (sheetHeader.getExcelDropDown() != null) {
-				ExcelDropDown excelDropDown = sheetHeader.getExcelDropDown();
-				String areaRange = excelDropDown.areaRange();
-				areaRange = buildFunction(sheet, dropDownCell.getIndexRow(), areaRange, RowStartEndType.ROW_EMPTY, excelDropDown.alias());
-				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, excelDropDown.alias());
-				areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, excelDropDown.alias());
+		DataValidationConstraint constraint = null;
+		DataValidation dataValidation = null;
+		DataValidationHelper validationHelper = sheet.getDataValidationHelper();
+		CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
+		if (sheetHeader.getExcelDropDown() != null) {
+			ExcelDropDown excelDropDown = sheetHeader.getExcelDropDown();
+			String areaRange = excelDropDown.areaRange();
+			areaRange = buildFunction(sheet, dropDownCell.getIndexRow(), areaRange, RowStartEndType.ROW_EMPTY, excelDropDown.alias());
+			areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, excelDropDown.alias());
+			areaRange = buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, excelDropDown.alias());
 
-				Pattern p = Pattern.compile(PATTERN);
-				Matcher m = p.matcher(areaRange);
-				if (m.find())
-					throw new ExcelGeneratorException("The formula '" + areaRange + "' is not valid");
-				constraint = validationHelper.createFormulaListConstraint(areaRange);
-				dataValidation = validationHelper.createValidation(constraint, addressList);
-				dataValidation.setSuppressDropDownArrow(excelDropDown.suppressDropDownArrow());
-				if (excelDropDown.errorBox().show()) {
-					dataValidation.setShowErrorBox(excelDropDown.errorBox().show());
-					dataValidation.createErrorBox(excelDropDown.errorBox().title(), excelDropDown.errorBox().message());
-					dataValidation.setErrorStyle(excelDropDown.errorBox().boxStyle().getValue());
+			Pattern p = Pattern.compile(PATTERN);
+			Matcher m = p.matcher(areaRange);
+			if (m.find())
+				throw new ExcelGeneratorException("The formula '" + areaRange + "' is not valid");
+			constraint = validationHelper.createFormulaListConstraint(areaRange);
+			dataValidation = validationHelper.createValidation(constraint, addressList);
+			dataValidation.setSuppressDropDownArrow(excelDropDown.suppressDropDownArrow());
+			if (excelDropDown.errorBox().show()) {
+				dataValidation.setShowErrorBox(excelDropDown.errorBox().show());
+				dataValidation.createErrorBox(excelDropDown.errorBox().title(), excelDropDown.errorBox().message());
+				dataValidation.setErrorStyle(excelDropDown.errorBox().boxStyle().getValue());
+			}
+
+		} else {
+			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
+			if (CollectionUtils.isNotEmpty(dropDown.getList())) {
+				String[] list = new String[dropDown.getList().size()];
+				int i = 0;
+				SimpleDateFormat sdf = null;
+				if (sheetHeader.getExcelDate() != null)
+					sdf = new SimpleDateFormat(sheetHeader.getExcelDate().value().getValue());
+				for (Object item : dropDown.getList()) {
+					if (item instanceof Date)
+						list[i] = sdf.format((Date) item);
+					else if (item instanceof Calendar)
+						list[i] = sdf.format(((Calendar) item).getTime());
+					else if (item instanceof Timestamp)
+						list[i] = sdf.format(new Date(((Timestamp) item).getTime()));
+					else
+						list[i] = item.toString();
+
+					i++;
 				}
-
-			} else {
-				DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
-				if (CollectionUtils.isNotEmpty(dropDown.getList())) {
-					String[] list = new String[dropDown.getList().size()];
-					int i = 0;
-					SimpleDateFormat sdf = null;
-					if (sheetHeader.getExcelDate() != null)
-						sdf = new SimpleDateFormat(sheetHeader.getExcelDate().value().getValue());
-					for (Object item : dropDown.getList()) {
-						if (item instanceof Date)
-							list[i] = sdf.format((Date) item);
-						else if (item instanceof Calendar)
-							list[i] = sdf.format(((Calendar) item).getTime());
-						else if (item instanceof Timestamp)
-							list[i] = sdf.format(new Date(((Timestamp) item).getTime()));
-						else
-							list[i] = item.toString();
-
-						i++;
-					}
-					constraint = validationHelper.createExplicitListConstraint(list);
-					dataValidation = validationHelper.createValidation(constraint, addressList);
-					dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
-					if (dropDown.getBoxMessage() != null) {
-						BoxMessage boxMessage = dropDown.getBoxMessage();
-						dataValidation.setShowErrorBox(boxMessage.isShow());
-						dataValidation.createErrorBox(boxMessage.getTitle(), boxMessage.getMessage());
-						dataValidation.setErrorStyle(boxMessage.getBoxStyle().getValue());
-					}
-
+				constraint = validationHelper.createExplicitListConstraint(list);
+				dataValidation = validationHelper.createValidation(constraint, addressList);
+				dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
+				if (dropDown.getBoxMessage() != null) {
+					BoxMessage boxMessage = dropDown.getBoxMessage();
+					dataValidation.setShowErrorBox(boxMessage.isShow());
+					dataValidation.createErrorBox(boxMessage.getTitle(), boxMessage.getMessage());
+					dataValidation.setErrorStyle(boxMessage.getBoxStyle().getValue());
 				}
 
 			}
 
-			sheet.addValidationData(dataValidation);
+		}
+
+		sheet.addValidationData(dataValidation);
 
 	}
 

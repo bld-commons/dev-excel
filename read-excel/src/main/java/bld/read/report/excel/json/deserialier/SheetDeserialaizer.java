@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -44,6 +45,9 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 
 	/** The field not null. */
 	private boolean fieldNotNull;
+	
+	@Autowired	
+	private ReadExcel readExcel;
 
 	/**
 	 * Instantiates a new sheet deserialaizer.
@@ -59,18 +63,19 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 	 * @param sheets       the sheets.
 	 * @param fieldNotNull the field not null
 	 */
-	protected SheetDeserialaizer(Class<?> objClass, JsonSheet[] sheets, boolean fieldNotNull) {
+	protected SheetDeserialaizer(Class<?> objClass, JsonSheet[] sheets, boolean fieldNotNull,ReadExcel readExcel) {
 		super(objClass);
 		this.objClass = objClass;
 		this.sheets = sheets;
 		this.fieldNotNull = fieldNotNull;
+		this.readExcel=readExcel;
 	}
 
 	/** The Constant MIME_TYPE_XLS. */
-	private static final String MIME_TYPE_XLS = "application/vnd.ms-excel";
+	private static final String MIME_TYPE_XLS = "vnd.ms-excel";
 
 	/** The Constant MIME_TYPE_XLSX. */
-	private static final String MIME_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	private static final String MIME_TYPE_XLSX = "vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 	/**
 	 * Deserialize.
@@ -94,8 +99,6 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 			excelType = ExcelType.XLSX;
 		file = file.substring(file.indexOf(partSeparator) + 1);
 		byte[] excelByteArray = Base64.getDecoder().decode(file);
-		ReadExcel readExcel = SpreadsheetUtils.getApplicationContext().getBean(ReadExcel.class);
-
 		ExcelRead excelRead = null;
 		try {
 
@@ -126,6 +129,9 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 
 	}
 
+	
+	
+	
 	/**
 	 * Gets the object.
 	 *
@@ -166,7 +172,7 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 			sheets = getJsonSheet(property.getAnnotation(JsonSheet.class));
 
 		JavaType type = ctxt.getContextualType();
-		return new SheetDeserialaizer(type.getRawClass(), sheets, fieldNotNull);
+		return new SheetDeserialaizer(type.getRawClass(), sheets, fieldNotNull,this.readExcel);
 	}
 
 	/**

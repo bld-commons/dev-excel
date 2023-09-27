@@ -8,11 +8,15 @@
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1</version>
 	</parent>
 
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.bld-commons</groupId>
+			<artifactId>common-annotations</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.github.bld-commons</groupId>
 			<artifactId>common-spreadsheet</artifactId>

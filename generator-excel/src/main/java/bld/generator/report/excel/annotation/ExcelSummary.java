@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 
 import bld.generator.report.excel.constant.ExcelConstant;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelSummary.<br>
  * ExcelSummary is used to define the following properties:

@@ -9,7 +9,7 @@
 		<version>4.1.0</version>
 	</parent>
 	<artifactId>common-spreadsheet</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>common-spreadsheet</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>

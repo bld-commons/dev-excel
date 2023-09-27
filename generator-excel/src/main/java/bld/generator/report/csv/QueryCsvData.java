@@ -13,7 +13,7 @@ import org.apache.commons.collections4.MapUtils;
 
 import bld.generator.report.QuerySpreadsheetData;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class QueryCsvData.
  *

@@ -7,6 +7,10 @@ package bld.generator.report.excel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.collections4.MapUtils;
+
 
 /**
  * The Class DynamicRowSheet.
@@ -78,14 +82,33 @@ public abstract class DynamicRowSheet implements RowSheet {
 	public Map<String, Object> getMapValue() {
 		return mapValue;
 	}
+	
+	/**
+	 * Adds the value.
+	 *
+	 * @param key the key
+	 * @param value the value
+	 */
+	public void addValue(String key,Object value) {
+		this.mapValue.put(key, value);
+	}
+	
+	/**
+	 * Adds the values.
+	 *
+	 * @param map the map
+	 */
+	public void addValues(Map<String, Object> map) {
+		if(MapUtils.isNotEmpty(map)) 
+			for(Entry<String,Object>entry:map.entrySet())
+				this.addValue(entry.getKey(), entry.getValue());
+	}
 
 	/**
-	 * Sets the map value.
-	 *
-	 * @param mapValue the new map value
+	 * Clear map.
 	 */
-	public void setMapValue(Map<String, Object> mapValue) {
-		this.mapValue = mapValue;
+	public void clearMap() {
+		this.mapValue = new HashMap<>();
 	}
 
 

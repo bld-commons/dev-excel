@@ -23,6 +23,7 @@ import bld.common.spreadsheet.csv.annotation.CsvSettings;
 import bld.common.spreadsheet.exception.CsvGeneratorException;
 import bld.common.spreadsheet.utils.CsvUtils;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
+import bld.common.spreadsheet.utils.ValueProps;
 import bld.generator.report.comparator.CsvColumnComparator;
 import bld.generator.report.csv.CsvData;
 import bld.generator.report.csv.CsvHeader;
@@ -37,6 +38,9 @@ public class GenerateCsvImpl implements GenerateCsv {
 
 	@Autowired(required = false)
 	private CsvQueryComponent csvQueryComponent;
+	
+	@Autowired
+	private ValueProps valueProps;
 	
 	@Override
 	public <T extends CsvRow> byte[] generateCsv(CsvData<T> csvData) throws Exception {
@@ -93,7 +97,7 @@ public class GenerateCsvImpl implements GenerateCsv {
 				headers.add(new CsvHeader(field));
 			}
 		}
-		Collections.sort(headers, new CsvColumnComparator());
+		Collections.sort(headers, new CsvColumnComparator(this.valueProps));
 		return headers;
 	}
 

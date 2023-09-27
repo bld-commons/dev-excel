@@ -11,7 +11,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelRgbColor.<br>
  * ExcelRgbColor is used to set the color by the RGB color model.

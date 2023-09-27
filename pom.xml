@@ -6,7 +6,7 @@
 	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
-	<version>4.1.0</version>
+	<version>4.1.1</version>
 	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
@@ -59,7 +59,7 @@
 		<commons-csv.version>1.10.0</commons-csv.version>
 		<junit.version>4.13.2</junit.version>
 		<common-rest-connection-version>1.0.3</common-rest-connection-version>
-		<common-spreadsheet.version>1.0.0</common-spreadsheet.version>
+		<common-spreadsheet.version>1.0.1</common-spreadsheet.version>
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<java.version>1.8</java.version>
@@ -68,6 +68,7 @@
 		<org.apache.maven.shared-version>3.2.1</org.apache.maven.shared-version>
 		<org.codehaus.plexus-version>3.0.5</org.codehaus.plexus-version>
 		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+		<common-annotations.version>1.0.0</common-annotations.version>
 
 		<!-- PLUGIN FINE -->
 
@@ -92,6 +93,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.github.bld-commons</groupId>
+				<artifactId>common-annotations</artifactId>
+				<version>${common-annotations.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.github.bld-commons</groupId>
 				<artifactId>common-spreadsheet</artifactId>

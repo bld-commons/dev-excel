@@ -5,7 +5,7 @@
 */
 package bld.generator.report.excel;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class SheetFunctionTotal.
  *  @param <T> the generic type

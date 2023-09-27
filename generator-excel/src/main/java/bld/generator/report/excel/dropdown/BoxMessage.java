@@ -5,7 +5,7 @@ package bld.generator.report.excel.dropdown;
 
 import bld.generator.report.excel.constant.BoxStyle;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class BoxMessage.
  */

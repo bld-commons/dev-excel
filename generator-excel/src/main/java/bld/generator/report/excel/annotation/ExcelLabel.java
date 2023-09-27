@@ -12,7 +12,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelLabel.<br>
  * ExcelLabel writes a label on the sheet and it must be added in the field within the {@link bld.generator.report.excel.SheetData} classes.<br>

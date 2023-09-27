@@ -12,16 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import bld.common.spreadsheet.exception.SpreadsheetException;
 
 @SuppressWarnings("unchecked")
 @Component
-public class SpreadsheetUtils implements ApplicationContextAware {
+public class SpreadsheetUtils {
 
 	/** The Constant SHEET_NAME_SIZE. */
 	public final static int SHEET_NAME_SIZE = 31;
@@ -31,8 +28,6 @@ public class SpreadsheetUtils implements ApplicationContextAware {
 
 	private static final List<String> CLASS_PACKAGES = Arrays.asList("bld.generator", "bld.common");
 
-	/** The application context. */
-	private static ApplicationContext applicationContext;
 
 	/**
 	 * Gets the annotation.
@@ -160,25 +155,7 @@ public class SpreadsheetUtils implements ApplicationContextAware {
 		return mapField;
 	}
 
-	/**
-	 * Sets the application context.
-	 *
-	 * @param ac the new application context
-	 * @throws BeansException the beans exception
-	 */
-	@Override
-	public void setApplicationContext(ApplicationContext ac) throws BeansException {
-		applicationContext = ac;
-	}
 
-	/**
-	 * Gets the application context.
-	 *
-	 * @return the application context
-	 */
-	public static ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
 	
 	
 	/**
@@ -190,7 +167,7 @@ public class SpreadsheetUtils implements ApplicationContextAware {
 	 * @param data     the dati
 	 */
 	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] data) {
-		FileOutputStream fos;
+		FileOutputStream fos=null;
 		
 		try {
 			typeFile = startString(typeFile,".");

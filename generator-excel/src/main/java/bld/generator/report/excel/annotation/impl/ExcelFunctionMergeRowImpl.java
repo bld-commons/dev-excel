@@ -14,7 +14,7 @@ import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelFunctionMergeRowImpl.
  */

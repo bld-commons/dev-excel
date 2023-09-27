@@ -1,6 +1,6 @@
 package bld.generator.report.csv;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface GenerateCsv.
  */

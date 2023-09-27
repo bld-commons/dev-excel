@@ -18,7 +18,7 @@ import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface ExcelChart.
  * 

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import bld.generator.report.excel.annotation.ExcelFunction;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelFunctionImpl.
  */

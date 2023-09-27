@@ -21,7 +21,7 @@ import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
 import io.leangen.geantyref.TypeFactory;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExcelAnnotationImpl.
  *
