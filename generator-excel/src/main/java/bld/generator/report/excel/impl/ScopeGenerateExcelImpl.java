@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -140,7 +142,6 @@ import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 
-
 /**
  * The Class ScopeGenerateExcelImpl.<br>
  * ScopeGenerateExcelImpl is the heart of the generation of the xls or xlsx
@@ -186,6 +187,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/** The excel query component. */
 	@Autowired(required = false)
 	private ExcelQueryComponent excelQueryComponent;
+	
+	private Map<String,Integer>mapSubTotals=new HashMap<>();
 
 	/**
 	 * Creates the file xls.
@@ -390,11 +393,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws Exception the exception
 	 */
 	private Workbook createSheets(ReportExcel report, Workbook workbook) throws Exception {
-		if(report.isEnableSheetMapping()) {
-			this.sheetMapping=new SheetMappingSheet();
+		if (report.isEnableSheetMapping()) {
+			this.sheetMapping = new SheetMappingSheet();
 			report.addBaseSheet(this.sheetMapping);
 		}
-			
+
 		List<BaseSheet> listSheet = report.getListBaseSheet();
 		int indexSheetName = 0;
 
@@ -558,10 +561,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
 		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
 		indexRow += excelSheetLayout.startRow();
-		SheetMappingRow sheetMappingRow=null;
+		SheetMappingRow sheetMappingRow = null;
 		if (indexRow < 0)
 			throw new ExcelGeneratorException("The row number cannot be negative");
-		
+
 		indexRow = writeLabel(workbook, sheet, sheetData, indexRow, formulaEvaluator);
 		indexRow = indexRow + getSizeSuperHeader(sheetData);
 		int startRowSheet = indexRow + 1;
@@ -591,8 +594,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			ExcelRowHeight excelRowHeight = sheetData.getRowClass().getAnnotation(ExcelRowHeight.class);
 			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
-		if(this.sheetMapping!=null && sheetData.isEnableInfoSheet()) {
-			sheetMappingRow=new SheetMappingRow();
+		if (this.sheetMapping != null && sheetData.isEnableInfoSheet()) {
+			sheetMappingRow = new SheetMappingRow();
 			sheetMappingRow.setSheet(sheet.getSheetName());
 			sheetMappingRow.setFirstRow(indexRow);
 			sheetMappingRow.setFirstColumn(excelSheetLayout.startColumn());
@@ -601,13 +604,37 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			this.sheetMapping.addRowSheets(sheetMappingRow);
 		}
 		List<SubtotalRow> emptyRows = new ArrayList<>();
+		ExcelSubtotals excelSubtotals = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
+		final boolean enableSumForGroup = ArrayUtils.isNotEmpty(excelSubtotals.sumForGroup());
+		List<String> sfg = Arrays.asList(excelSubtotals.sumForGroup());
+		List<String> sumForGroups = new ArrayList<>();
+		if (enableSumForGroup)
+			for (int i = listSheetHeader.size() - 1; i >= 0; i--) {
+				SheetHeader sheetHeader = listSheetHeader.get(i);
+				String fieldName =getFieldName(sheetHeader);
+				if (sfg.contains(fieldName))
+					sumForGroups.add(fieldName);
+			}
+
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			int splitRow = 0;
 			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class)) {
-				String nameField = listSheetHeader.get(0).getField().getName();
-				if (rowSheet.getClass().getAnnotation(ExcelSubtotals.class).sumForGroup() && lastRowSheet != null && !PropertyUtils.getProperty(lastRowSheet, nameField).equals(PropertyUtils.getProperty(rowSheet, nameField))) {
-					splitRow = 1;
-					emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, nameField)));
+				if (enableSumForGroup && lastRowSheet != null) {
+					for (String fieldName : sumForGroups) {
+						if (!PropertyUtils.getProperty(lastRowSheet, fieldName).equals(PropertyUtils.getProperty(rowSheet, fieldName))) {
+							splitRow++;
+							Integer firstRow=startRowSheet;
+							Integer lastRow=indexRow.intValue();
+							if(!mapSubTotals.containsKey(fieldName)) 
+								indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
+							else {
+								firstRow=mapSubTotals.get(fieldName);
+								indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
+							}
+								
+							
+						}
+					}
 				}
 			}
 			row = sheet.createRow(indexRow);
@@ -668,7 +695,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
 							mapMergeRow.put(numColumn, mergeRow);
 						} else {
-							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex(),indexRow);
+							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex(), indexRow);
 							super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
 						}
 
@@ -676,23 +703,20 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					} else {
 						int workRow = indexRow - splitRow;
 						infoColumn.getMapRowMergeRow().put(workRow, infoColumn.getMergeCell());
-						if (numColumn > excelSheetLayout.startColumn() && StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField()))
+						if (numColumn > excelSheetLayout.startColumn() && ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField()))
 							throw new ExcelGeneratorException("Only first column can have the propertie \"referenceColumn\" is blank!!!");
 						if (field != null)
 							valueBefore = PropertyUtils.getProperty(lastRowSheet, field.getName());
-						if (StringUtils.isBlank(sheetHeader.getExcelMergeRow().referenceField())) {
+						if (ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
 							else
 								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
 
-						} else if (StringUtils.isNotBlank(sheetHeader.getExcelMergeRow().referenceField())) {
-							String referenceField = sheetHeader.getExcelMergeRow().referenceField();
-							Object valueRefColumn = PropertyUtils.getProperty(rowSheet, referenceField);
-							Object valueRefColumnBefore = PropertyUtils.getProperty(lastRowSheet, referenceField);
-							if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
+						} else if (ArrayUtils.isNotEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
+							if (checkMergeColumn(sheetHeader, rowSheet, lastRowSheet, valueBefore))
 								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
-							else 
+							else
 								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
 						}
 
@@ -765,16 +789,22 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		for (Integer numColumn : mapMergeRow.keySet())
 			super.mergeRow(workbook, sheet, indexRow, mapMergeRow, numColumn, formulaEvaluator);
 
-		if(sheetMappingRow!=null) 
+		if (sheetMappingRow != null)
 			sheetMappingRow.setLastRow(indexRow);
-		
+
 		if (sheetData.getRowClass().isAnnotationPresent(ExcelSubtotals.class)) {
-			ExcelSubtotals excelSubtotals = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
-			if (excelSubtotals.sumForGroup())
-				emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, listSheetHeader.get(0).getField().getName())));
+			if (enableSumForGroup) {
+				for (String fieldName : sumForGroups) {
+					Integer firstRow=mapSubTotals.get(fieldName);
+					Integer lastRow=indexRow;
+					indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
+				}
+				
+			}
 			emptyRows.add(new SubtotalRow(indexRow++, excelSubtotals.labelTotalGroup()));
-			int lastRowSubtotal = startRowSheet;
+			List<Integer> indexEmptyRow=new ArrayList<>();
 			for (SubtotalRow emptyRow : emptyRows) {
+				indexEmptyRow.add(emptyRow.getEmptyRow());
 				row = sheet.createRow(emptyRow.getEmptyRow());
 				CellStyle cellStyle = null;
 				row.setHeight(heightRow);
@@ -782,13 +812,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					int indexHeader = numColumn - excelSheetLayout.startColumn();
 					Cell cell = row.createCell(numColumn);
 					SheetHeader sheetHeader = (SheetHeader) listSheetHeader.get(indexHeader).clone();
-					String nameField = null;
-					if (sheetHeader.getField() != null)
-						nameField = sheetHeader.getField().getName();
-					else if (sheetHeader.getKeyMap() != null)
-						nameField = sheetHeader.getKeyMap();
-					else if (sheetHeader.getExcelFunction() != null)
-						nameField = sheetHeader.getExcelFunction().nameFunction();
+					String nameField = getFieldName(sheetHeader);
 					ExcelCellLayout excelCellLayout = null;
 					if (indexHeader == 0) {
 
@@ -806,10 +830,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						excelCellLayout = sheetHeader.getExcelSubtotal().excelCellLayout();
 						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelSubtotals, emptyRow, sheetHeader, excelCellLayout);
 						String function = "subtotal(" + sheetHeader.getExcelSubtotal().dataConsolidateFunction().getValue() + "," + RowStartEndType.ROW_START.getParameter(nameField) + ":" + RowStartEndType.ROW_END.getParameter(nameField) + ")";
-						if (emptyRows.size() - 1 == emptyRows.indexOf(emptyRow))
-							lastRowSubtotal = startRowSheet;
-						function = buildFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_START);
-						function = buildFunction(sheet, emptyRow.getEmptyRow() - 1, function, RowStartEndType.ROW_END);
+						Integer firstRowSubtotal = emptyRow.getFirstRow();
+						Integer lastRowSubtotal = emptyRow.getLastRow();
+						if(indexEmptyRow.contains(firstRowSubtotal))
+							firstRowSubtotal++;
+						if (emptyRows.size() - 1 == emptyRows.indexOf(emptyRow)) {
+							firstRowSubtotal = startRowSheet;
+							lastRowSubtotal=emptyRow.getEmptyRow() - 1;
+						}
+							
+						function = buildFunction(sheet, firstRowSubtotal, function, RowStartEndType.ROW_START);
+						function = buildFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_END);
 						ExcelFunctionImpl excelFuctionImpl = null;
 						excelFuctionImpl = new ExcelFunctionImpl(function, nameField + "Function", false);
 						sheetHeader.setExcelFunction(excelFuctionImpl.getAnnotation());
@@ -822,7 +853,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
 
 				}
-				lastRowSubtotal = emptyRow.getEmptyRow() + 1;
+				;
 
 			}
 		}
@@ -833,19 +864,19 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (excelSheetLayout.groupColumn())
 			sheet.groupColumn(excelSheetLayout.startColumn(), maxColumn - 1);
 
-		String rangeAddress=null;	
-		boolean enableAutoFilter=!isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader();
+		String rangeAddress = null;
+		boolean enableAutoFilter = !isMergeSheet && excelSheetLayout.notMerge() && excelSheetLayout.sortAndFilter() && excelSheetLayout.showHeader();
 		if (enableAutoFilter) {
-			rangeAddress=ExcelUtils.coordinateCalculation(startRowSheet, excelSheetLayout.startColumn(), false, false)+":"+ExcelUtils.coordinateCalculation(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn()-1, false, false);
+			rangeAddress = ExcelUtils.coordinateCalculation(startRowSheet, excelSheetLayout.startColumn(), false, false) + ":" + ExcelUtils.coordinateCalculation(indexRow, listSheetHeader.size() + excelSheetLayout.startColumn() - 1, false, false);
 			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 		}
 		if (excelSheetLayout.locked()) {
 			if (sheet instanceof XSSFSheet && enableAutoFilter)
-				((XSSFSheet)sheet).lockAutoFilter(false);
+				((XSSFSheet) sheet).lockAutoFilter(false);
 			sheet.protectSheet("");
 		}
-		
+
 		if (sheetData instanceof FunctionsTotal) {
 			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal = (FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>) sheetData;
 			if (functionsTotal.getSheetFunctionsTotal() != null) {
@@ -940,16 +971,47 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		}
 
-		this.setAutoSizeColumn(listSheetHeader,sheet);
-		
+		this.setAutoSizeColumn(listSheetHeader, sheet);
+
 		return indexRow;
 
 	}
 
-	private void setAutoSizeColumn(List<SheetHeader> listSheetHeader,Sheet sheet) {
-		for(SheetHeader sheetHeader:listSheetHeader)
-			if(sheetHeader.getExcelCellLayout().autoSizeColumn())
+	private Integer mapRowSubTotals(Integer indexRow, RowSheet lastRowSheet, List<SubtotalRow> emptyRows, String fieldName, Integer firstRow, Integer lastRow) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, fieldName),fieldName,firstRow,lastRow));
+		firstRow=indexRow.intValue();
+		mapSubTotals.put(fieldName, firstRow);
+		return indexRow;
+	}
+
+	private String getFieldName(SheetHeader sheetHeader) {
+		String fieldName = null;
+		if (sheetHeader.getField() != null)
+			fieldName = sheetHeader.getField().getName();
+		else if (sheetHeader.getKeyMap() != null)
+			fieldName = sheetHeader.getKeyMap();
+		else if (sheetHeader.getExcelFunction() != null)
+			fieldName = sheetHeader.getExcelFunction().nameFunction();
+		return fieldName;
+	}
+
+	private void setAutoSizeColumn(List<SheetHeader> listSheetHeader, Sheet sheet) {
+		for (SheetHeader sheetHeader : listSheetHeader)
+			if (sheetHeader.getExcelCellLayout().autoSizeColumn())
 				sheet.autoSizeColumn(sheetHeader.getNumColumn());
+	}
+
+	private boolean checkMergeColumn(SheetHeader sheetHeader, RowSheet rowSheet, RowSheet lastRowSheet, Object valueBefore) throws Exception {
+		for (String referenceField : sheetHeader.getExcelMergeRow().referenceField()) {
+			if (StringUtils.isNotBlank(referenceField)) {
+				Object valueRefColumn = PropertyUtils.getProperty(rowSheet, referenceField);
+				Object valueRefColumnBefore = PropertyUtils.getProperty(lastRowSheet, referenceField);
+				if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
+					return true;
+			}
+		}
+		return false;
+
 	}
 
 	/**
@@ -1170,7 +1232,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		XDDFChartData.Series series = null;
 		int i = 0;
 		Map<String, InfoChart> mapChart = mapAllChart.get(excelChart.id());
-		if(MapUtils.isNotEmpty(mapChart)) {
+		if (MapUtils.isNotEmpty(mapChart)) {
 			for (String keyChart : mapChart.keySet()) {
 				InfoChart infoChart = mapChart.get(keyChart);
 				String seriesChart = "";
@@ -1195,7 +1257,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			}
 
 		}
-		
+
 		chartData.setVaryColors(true);
 
 		chartLabelData(chart, excelChart);

@@ -60,6 +60,6 @@ public @interface ExcelSubtotals {
 	 *
 	 * @return true, if successful
 	 */
-	public boolean sumForGroup() default true;
+	public String[] sumForGroup();
 	
 }

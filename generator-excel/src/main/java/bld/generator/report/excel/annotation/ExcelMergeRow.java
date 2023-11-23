@@ -13,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface ExcelMergeRow.<br>
  * ExcelMergeRow works as follows:<br>
@@ -29,10 +30,11 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ExcelMergeRow {
 
+
 	/**
 	 * Reference field.
 	 *
-	 * @return the string
+	 * @return the string[]
 	 */
-	public String referenceField();	
+	public String[] referenceField() default {};	
 }

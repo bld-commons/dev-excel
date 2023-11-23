@@ -29,7 +29,6 @@ import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
-import bld.generator.report.excel.annotation.ExcelSubtotals;
 import bld.generator.report.excel.dropdown.CharacterDropDown;
 import bld.generator.report.excel.dropdown.IntegerDropDown;
 
@@ -50,11 +49,20 @@ excelFunctionMerges = {@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayou
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",anotherTable = false,nameFunction = "prezzoTotalePerAutore"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0))),
 		@ExcelFunctionMergeRow( 
 		excelColumn = @ExcelColumn(index = 7.2, name = "Prezzo Totale per Autore con array"),
-		excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "${prezzo.field-value[start]}+sum(${prezzo[start]}:${prezzo[end]})",anotherTable = false,nameFunction = "prezzoTotalePerAutore1"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0)))		
+		excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction=@ExcelFunction(function = "${prezzo.field-value[start]}+sum(${prezzo[start]}:${prezzo[end]})",anotherTable = false,nameFunction = "prezzoTotalePerAutore1"),excelHeaderCellLayout = @ExcelHeaderCellLayout(rgbForeground = @ExcelRgbColor(blue=0,green=0))),
+		
+		
+		@ExcelFunctionMergeRow( 
+		excelColumn = @ExcelColumn(index = 7.3, name = "Prezzo Totale per Genere"),
+		excelMergeRow = @ExcelMergeRow(referenceField = {"genere","matricola"}), 
+		excelFunction=@ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})",
+		anotherTable = false,nameFunction = "prezzoTotalePerAutore1")		
+		)
+		
 
 
 })
-@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
+//@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
 public class AutoreLibriRow implements RowSheet {
 
 	
@@ -95,7 +103,7 @@ public class AutoreLibriRow implements RowSheet {
 	/** The matricola. */
 	@ExcelColumn(name = "${autore-libri-row.matricola.name-column}",index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,locked = false)
-	@ExcelMergeRow(referenceField = "")
+	@ExcelMergeRow
 	private Integer matricola;
 	
 	/** The prezzo. */
@@ -103,13 +111,13 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(name = "Prezzo",index = 7)
 	@ExcelColumnWidth(width=31)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
-	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
+//	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double prezzo;
 	
 	/** The supplemento. */
 	@ExcelColumn(name = "Supplemento",index = 8)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2)
-	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
+//	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM,excelCellLayout = @ExcelCellLayout(precision = 2,font = @ExcelFont(bold=true),horizontalAlignment = HorizontalAlignment.RIGHT))
 	private Double supplemento;
 	
 	

@@ -13,46 +13,54 @@ public class SubtotalRow {
 
 	
 	/** The empty row. */
-	private int emptyRow;
+	private Integer emptyRow;
 	
 	/** The label. */
 	private String label;
 	
-	/**
-	 * Instantiates a new subtotal row.
-	 */
-	public SubtotalRow() {
-	}
+	private String fieldName;
 	
+	private Integer firstRow;
+	
+	private Integer lastRow;
+
 	/**
 	 * Instantiates a new subtotal row.
 	 *
 	 * @param emptyRow the empty row
 	 */
-	public SubtotalRow(int emptyRow) {
+	public SubtotalRow(Integer emptyRow) {
 		super();
 		this.emptyRow = emptyRow;
 	}
 
 
-	/**
-	 * Instantiates a new subtotal row.
-	 *
-	 * @param emptyRow the empty row
-	 * @param label the label
-	 */
-	public SubtotalRow(int emptyRow, String label) {
+	public SubtotalRow(Integer emptyRow, String label) {
 		super();
 		this.emptyRow = emptyRow;
 		this.label = label;
+
 	}
+
+
+
+
+	public SubtotalRow(Integer emptyRow, String label, String fieldName, Integer firstRow, Integer lastRow) {
+		super();
+		this.emptyRow = emptyRow;
+		this.label = label;
+		this.fieldName = fieldName;
+		this.firstRow = firstRow;
+		this.lastRow = lastRow;
+	}
+
 
 	/**
 	 * Gets the empty row.
 	 *
 	 * @return the empty row
 	 */
-	public int getEmptyRow() {
+	public Integer getEmptyRow() {
 		return emptyRow;
 	}
 
@@ -70,7 +78,7 @@ public class SubtotalRow {
 	 *
 	 * @param emptyRow the new empty row
 	 */
-	public void setEmptyRow(int emptyRow) {
+	public void setEmptyRow(Integer emptyRow) {
 		this.emptyRow = emptyRow;
 	}
 
@@ -81,6 +89,34 @@ public class SubtotalRow {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+
+	public Integer getFirstRow() {
+		return firstRow;
+	}
+
+
+	public void setFirstRow(Integer firstRow) {
+		this.firstRow = firstRow;
+	}
+
+
+	public Integer getLastRow() {
+		return lastRow;
+	}
+
+
+	public void setLastRow(Integer lastRow) {
+		this.lastRow = lastRow;
 	}
 	
 	

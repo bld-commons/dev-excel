@@ -50,13 +50,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.common.spreadsheet.constant.RowStartEndType;
-import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelAttachment;
@@ -114,6 +115,8 @@ public class ReportTest {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcelImpl generateExcel;
+	
+	private final static Logger logger=LoggerFactory.getLogger(ReportTest.class);
 
 	/**
 	 * Sets the up.
@@ -132,18 +135,18 @@ public class ReportTest {
 	@Test
 	public void test() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
-		IndexSheet indexSheet = new IndexSheet("Indice");
-		List<IndexRow> listIndice = new ArrayList<>();
-		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"), "Casa Editrice"));
-		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
-		indexSheet.setListRowSheet(listIndice);
-		listBaseSheet.add(indexSheet);
-		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/contratto-rtg-adsl-voce.pdf");
-		excelAttachment.setAttachmentType(AttachmentType.PDF);
-		excelAttachment.setFileName("test");
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
-		casaEditrice.setTitle("Titolo di test");
-		listBaseSheet.add(casaEditrice);
+//		IndexSheet indexSheet = new IndexSheet("Indice");
+//		List<IndexRow> listIndice = new ArrayList<>();
+//		listIndice.add(new IndexRow(new ExcelHyperlink("ce", "Casa Editrice", HyperlinkType.DOCUMENT, 1, "A"), "Casa Editrice"));
+//		listIndice.add(new IndexRow(new ExcelHyperlink("al", "Libri d'autore", HyperlinkType.DOCUMENT, 1, "A"), "Libri d'autore"));
+//		indexSheet.setListRowSheet(listIndice);
+//		listBaseSheet.add(indexSheet);
+//		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/contratto-rtg-adsl-voce.pdf");
+//		excelAttachment.setAttachmentType(AttachmentType.PDF);
+//		excelAttachment.setFileName("test");
+//		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
+//		casaEditrice.setTitle("Titolo di test");
+//		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet = new DateSheet("Test Date");
 		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
@@ -165,14 +168,14 @@ public class ReportTest {
 
 		listBaseSheet.add(autoreLibriSheet);
 
-		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
-
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(autoreLibriSheet);
-		mergeSheet.getListSheet().add(dateSheet);
-
-		listBaseSheet.add(mergeSheet);
-
+//		MergeSheet mergeSheet = new MergeSheet("Merge Sheet");
+//
+//		mergeSheet.getListSheet().add(autoreLibriSheet);
+//		mergeSheet.getListSheet().add(autoreLibriSheet);
+//		mergeSheet.getListSheet().add(dateSheet);
+//
+//		listBaseSheet.add(mergeSheet);
+//
 		GenereSheet genereSheet = new GenereSheet("Genere");
 		List<GenereRow> listGenere = new ArrayList<>();
 		listGenere.add(new GenereRow("Giallo", "Test remove cell 1:1", 23, "Test Remove cell 1:2"));
@@ -320,18 +323,17 @@ public class ReportTest {
 
 		autoreLibriSheet.setListRowSheet(list);
 		ExcelChartDataLabelImpl excelChartDataLabel = new ExcelChartDataLabelImpl();
-		ExcelChartCategoryImpl excelChartCategoryImpl=new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("percAnno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
+		ExcelChartCategoryImpl excelChartCategoryImpl = new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("percAnno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
 		ExcelChartImpl excelChartImpl = null;
-		excelChartImpl = new ExcelChartImpl("percAnno",new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()},  ChartTypes.LINE, 15, 20, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
-				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), true, null,
-				new PresetColor[] { PresetColor.BLUE, PresetColor.RED, PresetColor.ORANGE }, PresetColor.BLACK, PresetColor.GRAY, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
+		excelChartImpl = new ExcelChartImpl("percAnno", new ExcelChartCategory[] { excelChartCategoryImpl.getAnnotation() }, ChartTypes.LINE, 15, 20, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT,
+				RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), true, null, new PresetColor[] { PresetColor.BLUE, PresetColor.RED, PresetColor.ORANGE }, PresetColor.BLACK, PresetColor.GRAY,
+				AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(), true, null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
-		
-		excelChartCategoryImpl=new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3"));
-		excelChartImpl = new ExcelChartImpl("prezzAnno", new ExcelChartCategory[] {excelChartCategoryImpl.getAnnotation()}, ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT
-				, RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), false, "Titoli",
-				new PresetColor[] { PresetColor.RED }, PresetColor.GREEN, PresetColor.BLUE, AxisCrosses.AUTO_ZERO, AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(),true,null);
+		excelChartCategoryImpl = new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3"));
+		excelChartImpl = new ExcelChartImpl("prezzAnno", new ExcelChartCategory[] { excelChartCategoryImpl.getAnnotation() }, ChartTypes.RADAR, 20, 5, LegendPosition.BOTTOM, AxisPosition.BOTTOM, AxisPosition.LEFT,
+				RowStartEndType.ROW_HEADER.getParameter("anno1") + ":" + RowStartEndType.ROW_HEADER.getParameter("anno3"), false, "Titoli", new PresetColor[] { PresetColor.RED }, PresetColor.GREEN, PresetColor.BLUE, AxisCrosses.AUTO_ZERO,
+				AxisCrossBetween.BETWEEN, true, excelChartDataLabel.getAnnotation(), true, null);
 		autoreLibriSheet.addExcelChart(excelChartImpl);
 
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet = new TotaleAutoreLibriSheet();
@@ -353,8 +355,6 @@ public class ReportTest {
 		SpreadsheetUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);
 
 	}
-
-
 
 	@Test
 	public void testRadar() throws Exception {
@@ -443,6 +443,73 @@ public class ReportTest {
 		}
 		properties.setLineProperties(line);
 		series.setShapeProperties(properties);
+	}
+
+	@Test
+	public void convertHtml() {
+//		try {
+//			InputStream inputStream = new FileInputStream("/mnt/report/MondadoriDynamic.xlsx");
+//			Workbook workbook = new Workbook();
+//			// Open an excel file
+//			workbook.open(inputStream);
+//			    
+//			// Save to an pdf file
+//			workbook.save("/mnt/report/ConvertExcelToPDF.pdf");
+//		} catch (Throwable e) {
+//			logger.error(ExceptionUtils.getStackTrace(e));
+//		}
+//		
+//		XSSFWorkbook workbook=new XSSFWorkbook(inputStream);
+//		
+//		SpreadsheetMLPackage excelMLPackage = SpreadsheetMLPackage.load(inputStream);
+//		//OutputStream outputStream=new FileOutputStream("/mnt/report/test.xml");
+//		//ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//		excelMLPackage.save(new File("/mnt/report/test.xml"));
+//		inputStream = new FileInputStream("/mnt/report/test.xml");
+//		//SpreadsheetUtils.writeToFile(PATH_FILE, "test", ".xml", outputStream.toByteArray());
+//		//inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+//		
+//		
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder = factory.newDocumentBuilder();
+//		Document document = builder.parse(inputStream);
+//		PDDocument pdfDocument = new PDDocument();
+//		PDPage page = new PDPage();
+//		pdfDocument.addPage(page);
+//		PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+//        NodeList rowNodes = document.getElementsByTagName("row");
+//        for (int i = 0; i < rowNodes.getLength(); i++) {
+//            Element rowElement = (Element) rowNodes.item(i);
+//            NodeList cellNodes = rowElement.getElementsByTagName("cell");
+//            for (int j = 0; j < cellNodes.getLength(); j++) {
+//                Element cellElement = (Element) cellNodes.item(j);
+//                String cellText = cellElement.getTextContent();
+//               // contentStream.setFont(PDType1Font.HELVETICA, 12);
+//                contentStream.newLineAtOffset(100, 700 - (i * 20)); // Adjust coordinates as needed
+//                contentStream.showText(cellText);
+//            }
+//        }
+//		contentStream.close();
+//
+//        pdfDocument.save("/mnt/report/output.pdf");
+//        pdfDocument.close();
+		
+		
+		
+		
+//		File xsltFile = new File("/mnt/report/test.xslt");
+//		StreamSource xmlSource = new StreamSource(inputStream);
+//		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+//		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
+//
+//		OutputStream out = new FileOutputStream("/mnt/report/output.pdf");
+//
+//		Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+//		TransformerFactory factory = TransformerFactory.newInstance();
+//		Transformer transformer = factory.newTransformer(new StreamSource(xsltFile));
+//		Result res = new SAXResult(fop.getDefaultHandler());
+//		transformer.transform(xmlSource, res);
+
 	}
 
 }

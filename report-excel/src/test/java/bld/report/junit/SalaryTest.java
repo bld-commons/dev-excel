@@ -53,14 +53,27 @@ public class SalaryTest {
 	public void testSalary() throws Exception {
 		List<BaseSheet> listBaseSheet = new ArrayList<>();
 		SalarySheet salarySheet=new SalarySheet("salary");
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Rome","A",32.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Rome","B",25.5));
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Rome","C",12.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Rome","D",25.0));
+		
+		
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Milan","A",21.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("Italy","Milan","B",12.0));
+		
+		
+		salarySheet.getListRowSheet().add(new SalaryRow("England","London","A",31.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","London","B",21.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","London","C",25.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","London","D",46.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","London","E",55.0));
+		
+		
+		
+		salarySheet.getListRowSheet().add(new SalaryRow("England","Manchester","A",8.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","Manchester","B",5.0));
+		salarySheet.getListRowSheet().add(new SalaryRow("England","Manchester","C",7.0));
 		listBaseSheet.add(salarySheet);
 		
 		ReportExcel report=new ReportExcel("test", listBaseSheet);

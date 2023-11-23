@@ -5,19 +5,18 @@
 */
 package bld.generator.report.excel.annotation.impl;
 
-import bld.generator.report.excel.annotation.ExcelMergeRow;
+import org.apache.commons.lang3.ArrayUtils;
 
+import bld.generator.report.excel.annotation.ExcelMergeRow;
 
 /**
  * The Class ExcelMergeRowImpl.
  */
-public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
+public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 
-	
 	/** The reference field. */
-	private String referenceField;
-	
-	
+	private String[] referenceField;
+
 	/**
 	 * Instantiates a new excel merge row impl.
 	 */
@@ -30,9 +29,9 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
 	 *
 	 * @param referenceField the reference field
 	 */
-	public ExcelMergeRowImpl(String referenceField) {
+	public ExcelMergeRowImpl(String... referenceField) {
 		super();
-		this.referenceField = referenceField;
+		this.setReferenceField(referenceField);
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
 	 *
 	 * @return the reference field
 	 */
-	public String getReferenceField() {
+	public String[] getReferenceField() {
 		return referenceField;
 	}
 
@@ -49,8 +48,9 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
 	 *
 	 * @param referenceField the new reference field
 	 */
-	public void setReferenceField(String referenceField) {
-		this.referenceField = referenceField;
+	public void setReferenceField(String... referenceField) {
+		if (ArrayUtils.isNotEmpty(referenceField))
+			this.referenceField = referenceField;
 	}
 
 	/**
@@ -88,8 +88,5 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow>{
 			return false;
 		return true;
 	}
-	
-	
 
-	
 }

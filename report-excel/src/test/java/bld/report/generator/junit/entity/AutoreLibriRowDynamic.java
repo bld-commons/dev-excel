@@ -42,7 +42,7 @@ import bld.generator.report.excel.dropdown.CalendarDropDown;
 						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "prezzoTotalePerAutore",anotherTable = false)) 
 				}
 		)
-@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale")
+@ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale", sumForGroup = { "matricola" })
 public class AutoreLibriRowDynamic extends DynamicRowSheet {
 
 	/** The nome. */
