@@ -187,8 +187,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/** The excel query component. */
 	@Autowired(required = false)
 	private ExcelQueryComponent excelQueryComponent;
-	
-	private Map<String,Integer>mapSubTotals=new HashMap<>();
+
+	private Map<String, Integer> mapSubTotals = new HashMap<>();
 
 	/**
 	 * Creates the file xls.
@@ -611,7 +611,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (enableSumForGroup)
 			for (int i = listSheetHeader.size() - 1; i >= 0; i--) {
 				SheetHeader sheetHeader = listSheetHeader.get(i);
-				String fieldName =getFieldName(sheetHeader);
+				String fieldName = getFieldName(sheetHeader);
 				if (sfg.contains(fieldName))
 					sumForGroups.add(fieldName);
 			}
@@ -620,20 +620,20 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			int splitRow = 0;
 			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class)) {
 				if (enableSumForGroup && lastRowSheet != null) {
-					for (String fieldName : sumForGroups) {
-						if (!PropertyUtils.getProperty(lastRowSheet, fieldName).equals(PropertyUtils.getProperty(rowSheet, fieldName))) {
-							splitRow++;
-							Integer firstRow=startRowSheet;
-							Integer lastRow=indexRow.intValue();
-							if(!mapSubTotals.containsKey(fieldName)) 
-								indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
-							else {
-								firstRow=mapSubTotals.get(fieldName);
-								indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
-							}
-								
-							
+					for (String fieldName : sumForGroups)
+						if (!PropertyUtils.getProperty(lastRowSheet, fieldName).equals(PropertyUtils.getProperty(rowSheet, fieldName)))
+							splitRow = sumForGroups.indexOf(fieldName) + 1;
+					for (int i = 0; i < splitRow; i++) {
+						String fieldName = sumForGroups.get(i);
+						Integer firstRow = startRowSheet;
+						Integer lastRow = indexRow.intValue();
+						if (!mapSubTotals.containsKey(fieldName))
+							indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
+						else {
+							firstRow = mapSubTotals.get(fieldName);
+							indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
 						}
+
 					}
 				}
 			}
@@ -795,14 +795,14 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		if (sheetData.getRowClass().isAnnotationPresent(ExcelSubtotals.class)) {
 			if (enableSumForGroup) {
 				for (String fieldName : sumForGroups) {
-					Integer firstRow=mapSubTotals.get(fieldName);
-					Integer lastRow=indexRow;
+					Integer firstRow = mapSubTotals.get(fieldName);
+					Integer lastRow = indexRow;
 					indexRow = mapRowSubTotals(indexRow, lastRowSheet, emptyRows, fieldName, firstRow, lastRow);
 				}
-				
+
 			}
 			emptyRows.add(new SubtotalRow(indexRow++, excelSubtotals.labelTotalGroup()));
-			List<Integer> indexEmptyRow=new ArrayList<>();
+			List<Integer> indexEmptyRow = new ArrayList<>();
 			for (SubtotalRow emptyRow : emptyRows) {
 				indexEmptyRow.add(emptyRow.getEmptyRow());
 				row = sheet.createRow(emptyRow.getEmptyRow());
@@ -832,13 +832,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						String function = "subtotal(" + sheetHeader.getExcelSubtotal().dataConsolidateFunction().getValue() + "," + RowStartEndType.ROW_START.getParameter(nameField) + ":" + RowStartEndType.ROW_END.getParameter(nameField) + ")";
 						Integer firstRowSubtotal = emptyRow.getFirstRow();
 						Integer lastRowSubtotal = emptyRow.getLastRow();
-						if(indexEmptyRow.contains(firstRowSubtotal))
+						if (indexEmptyRow.contains(firstRowSubtotal))
 							firstRowSubtotal++;
 						if (emptyRows.size() - 1 == emptyRows.indexOf(emptyRow)) {
 							firstRowSubtotal = startRowSheet;
-							lastRowSubtotal=emptyRow.getEmptyRow() - 1;
+							lastRowSubtotal = emptyRow.getEmptyRow() - 1;
 						}
-							
+
 						function = buildFunction(sheet, firstRowSubtotal, function, RowStartEndType.ROW_START);
 						function = buildFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_END);
 						ExcelFunctionImpl excelFuctionImpl = null;
@@ -978,8 +978,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	}
 
 	private Integer mapRowSubTotals(Integer indexRow, RowSheet lastRowSheet, List<SubtotalRow> emptyRows, String fieldName, Integer firstRow, Integer lastRow) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, fieldName),fieldName,firstRow,lastRow));
-		firstRow=indexRow.intValue();
+		emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, fieldName), fieldName, firstRow, lastRow));
+		firstRow = indexRow.intValue();
 		mapSubTotals.put(fieldName, firstRow);
 		return indexRow;
 	}

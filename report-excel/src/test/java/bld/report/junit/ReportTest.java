@@ -7,13 +7,13 @@ package bld.report.junit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -61,8 +61,6 @@ import bld.common.spreadsheet.constant.RowStartEndType;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.ExcelAttachment;
-import bld.generator.report.excel.ExcelHyperlink;
-import bld.generator.report.excel.MergeSheet;
 import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
@@ -95,8 +93,8 @@ import bld.report.generator.junit.entity.DateRow;
 import bld.report.generator.junit.entity.DateSheet;
 import bld.report.generator.junit.entity.GenereRow;
 import bld.report.generator.junit.entity.GenereSheet;
-import bld.report.generator.junit.entity.IndexRow;
-import bld.report.generator.junit.entity.IndexSheet;
+import bld.report.generator.junit.entity.SituazioneUfficiRow;
+import bld.report.generator.junit.entity.SituazioneUfficiSheet;
 import bld.report.generator.junit.entity.TotaleAutoreLibriRow;
 import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
 
@@ -510,6 +508,42 @@ public class ReportTest {
 //		Result res = new SAXResult(fop.getDefaultHandler());
 //		transformer.transform(xmlSource, res);
 
+	}
+	
+	
+	
+	@Test
+	public void situazioneUffici() throws Exception {
+		SituazioneUfficiSheet situazioneUfficiSheet = new SituazioneUfficiSheet("PROVA SOMME INTERMEDIE");
+		for (int i = 0; i < 10; i++) {
+			
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Comparto Dirigenti", "DIRIGENTI", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
+                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+        }
+        for (int i = 0; i < 10; i++) {
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA1", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
+                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+        }
+        for (int i = 0; i < 10; i++) {
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali",  "AREA2", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
+                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+        }
+        for (int i = 0; i < 10; i++) {
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA3", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
+                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+        }
+        for (int i = 0; i < 10; i++) {
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Determinato", "Funzioni Centrali", "TD", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
+                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+        }
+		
+	
+        List<BaseSheet> listBaseSheets = new ArrayList<>();
+        listBaseSheets.add(situazioneUfficiSheet);
+        ReportExcel reportExcel = new ReportExcel("situazione_uffici", listBaseSheets);
+        byte[] byteReport = this.generateExcel.createFileXlsx(reportExcel);
+
+		SpreadsheetUtils.writeToFile(PATH_FILE, reportExcel.getTitle(), ".xlsx", byteReport);
 	}
 
 }
