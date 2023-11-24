@@ -56,6 +56,11 @@ public @interface ExcelSubtotals {
 	
 	
 	
-	public String[] sumForGroup();
+	/**
+	 * Sum for group.
+	 *
+	 * @return the string[]
+	 */
+	public String[] sumForGroup() default {};
 	
 }
