@@ -127,6 +127,8 @@ public @interface ExcelCellLayout {
 	 */
 	public int precision() default -1;
 	
+	public boolean percent() default false;
+	
 	
 	/**
 	 * Locked.

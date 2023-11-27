@@ -8,9 +8,27 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelFont;
+import bld.generator.report.excel.annotation.ExcelFunction;
+import bld.generator.report.excel.annotation.ExcelFunctionRow;
+import bld.generator.report.excel.annotation.ExcelFunctionRows;
+import bld.generator.report.excel.annotation.ExcelFunctionSubTotal;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.annotation.ExcelSubtotals;
 
+@ExcelFunctionRows(
+		excelFunctions = @ExcelFunctionRow(
+		excelColumn = @ExcelColumn(index = 3, name = "% Scop. Giuridica"), 
+		excelFunction = @ExcelFunction(function = "${presenzaGiuridica}/${organico}", nameFunction = "scoperturaGiuridica",
+										onSubTotalRow = @ExcelFunctionSubTotal(value=true,
+												excelCellLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,font = @ExcelFont(bold = true))
+										
+										)
+		
+		),excelNumberFormat = @ExcelNumberFormat("0.00%")
+		
+				))
 @ExcelSubtotals(sumForGroup = { "tipoContratto", "comparto", "area" }, labelTotalGroup = "Totale Complessivo")
 public class SituazioneUfficiRow implements RowSheet {
 
@@ -40,11 +58,6 @@ public class SituazioneUfficiRow implements RowSheet {
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM)
 	private BigDecimal presenzaGiuridica;
 
-	@ExcelColumn(index = 3, name = "% Scop. Giuridica")
-	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
-	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM)
-	private BigDecimal scoperturaGiuridica;
-
 	@ExcelColumn(index = 4, name = "Distacchi/Comandi In")
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM)
@@ -65,7 +78,7 @@ public class SituazioneUfficiRow implements RowSheet {
 	@ExcelSubtotal(dataConsolidateFunction = DataConsolidateFunction.SUM)
 	private BigDecimal scoperturaEffettiva;
 
-	public SituazioneUfficiRow(String tipoContratto, String comparto, String area, String profiloProfessionale, BigDecimal organico, BigDecimal presenzaGiuridica, BigDecimal scoperturaGiuridica, BigDecimal distacchiComandiIn,
+	public SituazioneUfficiRow(String tipoContratto, String comparto, String area, String profiloProfessionale, BigDecimal organico, BigDecimal presenzaGiuridica, BigDecimal distacchiComandiIn,
 			BigDecimal distacchiComandiOut, BigDecimal presenzaEffettiva, BigDecimal scoperturaEffettiva) {
 		this.tipoContratto = tipoContratto;
 		this.comparto = comparto;
@@ -73,7 +86,6 @@ public class SituazioneUfficiRow implements RowSheet {
 		this.profiloProfessionale = profiloProfessionale;
 		this.organico = organico;
 		this.presenzaGiuridica = presenzaGiuridica;
-		this.scoperturaGiuridica = scoperturaGiuridica;
 		this.distacchiComandiIn = distacchiComandiIn;
 		this.distacchiComandiOut = distacchiComandiOut;
 		this.presenzaEffettiva = presenzaEffettiva;
@@ -107,13 +119,7 @@ public class SituazioneUfficiRow implements RowSheet {
 		this.presenzaGiuridica = presenzaGiuridica;
 	}
 
-	public BigDecimal getScoperturaGiuridica() {
-		return scoperturaGiuridica;
-	}
 
-	public void setScoperturaGiuridica(BigDecimal scoperturaGiuridica) {
-		this.scoperturaGiuridica = scoperturaGiuridica;
-	}
 
 	public BigDecimal getDistacchiComandiIn() {
 		return distacchiComandiIn;

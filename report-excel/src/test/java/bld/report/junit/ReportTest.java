@@ -517,24 +517,24 @@ public class ReportTest {
 		SituazioneUfficiSheet situazioneUfficiSheet = new SituazioneUfficiSheet("PROVA SOMME INTERMEDIE");
 		for (int i = 0; i < 10; i++) {
 			
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Comparto Dirigenti", "DIRIGENTI", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
-                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Comparto Dirigenti", "DIRIGENTI", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            		BigDecimal.valueOf(75), BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA1", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
-                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA1", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(65),
+            		BigDecimal.valueOf(14), BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali",  "AREA2", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
-                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali",  "AREA2", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            		BigDecimal.valueOf(33), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA3", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
-                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA3", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            		BigDecimal.valueOf(24), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Determinato", "Funzioni Centrali", "TD", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.ONE,
-                    BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
+            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Determinato", "Funzioni Centrali", "TD", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            		BigDecimal.valueOf(80), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
 		
 	

@@ -89,4 +89,7 @@ public @interface ExcelFunctionMergeRow {
 	 * @return the excel subtotal
 	 */
 	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
+	
+	public ExcelNumberFormat excelNumberFormat() default @ExcelNumberFormat;
+	
 }

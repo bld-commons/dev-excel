@@ -6,7 +6,6 @@
 package bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -56,6 +55,9 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 	/** The auto size column. */
 	protected boolean autoSizeColumn;
 	
+	/** The percent. */
+	private boolean percent;
+	
 	
 	/**
 	 * Instantiates a new excel cell layout impl.
@@ -84,6 +86,7 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		this.border = border;
 		this.locked=false;
 		this.autoSizeColumn = false;
+		this.percent=false;
 	}
 	
 	/**
@@ -114,6 +117,7 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		this.border = border;
 		this.locked = locked;
 		this.autoSizeColumn = false;
+		this.percent=false;
 	}
 	
 
@@ -147,6 +151,40 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		this.border = border;
 		this.locked = locked;
 		this.autoSizeColumn = autoSizeColumn;
+		this.percent=false;
+	}
+	
+	/**
+	 * Instantiates a new excel cell layout impl.
+	 *
+	 * @param wrap the wrap
+	 * @param verticalAlignment the vertical alignment
+	 * @param rgbForeground the rgb foreground
+	 * @param rgbFont the rgb font
+	 * @param precision the precision
+	 * @param horizontalAlignment the horizontal alignment
+	 * @param font the font
+	 * @param fillPatternType the fill pattern type
+	 * @param border the border
+	 * @param locked the locked
+	 * @param autoSizeColumn the auto size column
+	 * @param percent the percent
+	 */
+	public ExcelCellLayoutImpl(boolean wrap, VerticalAlignment verticalAlignment, ExcelRgbColor[] rgbForeground, ExcelRgbColor[] rgbFont, int precision, HorizontalAlignment horizontalAlignment, ExcelFont font, FillPatternType fillPatternType,
+			ExcelBorder border, boolean locked, boolean autoSizeColumn, boolean percent) {
+		super();
+		this.wrap = wrap;
+		this.verticalAlignment = verticalAlignment;
+		this.rgbForeground = rgbForeground;
+		this.rgbFont = rgbFont;
+		this.precision = precision;
+		this.horizontalAlignment = horizontalAlignment;
+		this.font = font;
+		this.fillPatternType = fillPatternType;
+		this.border = border;
+		this.locked = locked;
+		this.autoSizeColumn = autoSizeColumn;
+		this.percent = percent;
 	}
 
 	/**
@@ -355,6 +393,25 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		this.autoSizeColumn = autoSizeColumn;
 	}
 	
+
+	/**
+	 * Checks if is percent.
+	 *
+	 * @return true, if is percent
+	 */
+	public boolean isPercent() {
+		return percent;
+	}
+
+	/**
+	 * Sets the percent.
+	 *
+	 * @param percent the new percent
+	 */
+	public void setPercent(boolean percent) {
+		this.percent = percent;
+	}
+
 	
 	/**
 	 * Hash code.
@@ -365,10 +422,18 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (autoSizeColumn ? 1231 : 1237);
+		result = prime * result + ((border == null) ? 0 : border.hashCode());
+		result = prime * result + ((fillPatternType == null) ? 0 : fillPatternType.hashCode());
+		result = prime * result + ((font == null) ? 0 : font.hashCode());
+		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
+		result = prime * result + (locked ? 1231 : 1237);
+		result = prime * result + (percent ? 1231 : 1237);
+		result = prime * result + precision;
 		result = prime * result + Arrays.hashCode(rgbFont);
 		result = prime * result + Arrays.hashCode(rgbForeground);
-		result = prime * result + Objects.hash(autoSizeColumn, border, fillPatternType, font, horizontalAlignment,
-				locked, precision, verticalAlignment, wrap);
+		result = prime * result + ((verticalAlignment == null) ? 0 : verticalAlignment.hashCode());
+		result = prime * result + (wrap ? 1231 : 1237);
 		return result;
 	}
 
@@ -387,12 +452,37 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelCellLayoutImpl other = (ExcelCellLayoutImpl) obj;
-		return autoSizeColumn == other.autoSizeColumn && Objects.equals(border, other.border)
-				&& fillPatternType == other.fillPatternType && Objects.equals(font, other.font)
-				&& horizontalAlignment == other.horizontalAlignment && locked == other.locked
-				&& precision == other.precision && Arrays.equals(rgbFont, other.rgbFont)
-				&& Arrays.equals(rgbForeground, other.rgbForeground) && verticalAlignment == other.verticalAlignment
-				&& wrap == other.wrap;
+		if (autoSizeColumn != other.autoSizeColumn)
+			return false;
+		if (border == null) {
+			if (other.border != null)
+				return false;
+		} else if (!border.equals(other.border))
+			return false;
+		if (fillPatternType != other.fillPatternType)
+			return false;
+		if (font == null) {
+			if (other.font != null)
+				return false;
+		} else if (!font.equals(other.font))
+			return false;
+		if (horizontalAlignment != other.horizontalAlignment)
+			return false;
+		if (locked != other.locked)
+			return false;
+		if (percent != other.percent)
+			return false;
+		if (precision != other.precision)
+			return false;
+		if (!Arrays.equals(rgbFont, other.rgbFont))
+			return false;
+		if (!Arrays.equals(rgbForeground, other.rgbForeground))
+			return false;
+		if (verticalAlignment != other.verticalAlignment)
+			return false;
+		if (wrap != other.wrap)
+			return false;
+		return true;
 	}
 
 

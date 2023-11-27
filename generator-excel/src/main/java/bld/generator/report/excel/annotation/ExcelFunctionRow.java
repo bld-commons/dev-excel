@@ -79,5 +79,5 @@ public @interface ExcelFunctionRow {
 	 */
 	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
 	
-	
+	public ExcelNumberFormat excelNumberFormat() default @ExcelNumberFormat;
 }

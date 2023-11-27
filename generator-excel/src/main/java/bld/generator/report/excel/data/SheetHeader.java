@@ -13,10 +13,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellType;
 
 import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 import bld.common.spreadsheet.excel.annotation.ExcelDate;
+import bld.common.spreadsheet.exception.ExcelGeneratorException;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
@@ -26,6 +28,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.constant.ExcelConstant;
 import bld.generator.report.excel.dropdown.CalendarDropDown;
@@ -83,6 +86,8 @@ public class SheetHeader implements Cloneable {
 	/** The excel boolean text. */
 	private ExcelBooleanText excelBooleanText;
 
+	private ExcelNumberFormat excelNumberFormat;
+
 	/** The map layout cell. */
 	private Map<Integer, LayoutCell> mapLayoutCell;
 
@@ -133,6 +138,11 @@ public class SheetHeader implements Cloneable {
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
 				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType()))
 			excelDate = SpreadsheetUtils.getAnnotation(this.field, ExcelDate.class);
+		if (field.isAnnotationPresent(ExcelNumberFormat.class)) {
+			this.setExcelNumberFormat(field.getAnnotation(ExcelNumberFormat.class));
+			if (!Number.class.isAssignableFrom(this.field.getType()))
+				throw new ExcelGeneratorException("The field is not Number type");
+		}
 		manageMapLayoutCell();
 
 		this.getExcelColumn();
@@ -149,6 +159,8 @@ public class SheetHeader implements Cloneable {
 			LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelCellLayout);
 			if (this.excelDate != null)
 				layoutCell.setFormat(this.excelDate.value());
+			if(this.excelNumberFormat!=null && StringUtils.isNotBlank(this.excelNumberFormat.value()))
+				layoutCell.setNumberFormat(this.excelNumberFormat.value());
 			this.colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
 			for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 				LayoutCell layoutCellTemp = (LayoutCell) layoutCell.clone();
@@ -203,7 +215,6 @@ public class SheetHeader implements Cloneable {
 	 * @return the excel date
 	 */
 	public ExcelDate getExcelDate() {
-
 		return excelDate;
 	}
 
@@ -494,6 +505,14 @@ public class SheetHeader implements Cloneable {
 	 */
 	public void setExcelSubtotal(ExcelSubtotal excelSubTotal) {
 		this.excelSubtotal = excelSubTotal;
+	}
+
+	public ExcelNumberFormat getExcelNumberFormat() {
+		return excelNumberFormat;
+	}
+
+	public void setExcelNumberFormat(ExcelNumberFormat excelNumberFormat) {
+		this.excelNumberFormat = excelNumberFormat;
 	}
 
 	public CellType getCellType() {

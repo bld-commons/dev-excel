@@ -107,6 +107,7 @@ import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelImage;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelPivot;
 import bld.generator.report.excel.annotation.ExcelPivotColumn;
 import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
@@ -258,8 +259,12 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		ExcelDate excelDate = null;
-		if (sheetHeader != null)
+		ExcelNumberFormat excelNumberFormat=null;
+		if (sheetHeader != null) {
 			excelDate = sheetHeader.getExcelDate();
+			excelNumberFormat=sheetHeader.getExcelNumberFormat();
+		}
+			
 		CellStyle cellStyle = workbook.createCellStyle();
 		int indexFont = indexRow % layout.rgbFont().length;
 		int indexForeground = indexRow % layout.rgbForeground().length;
@@ -291,10 +296,16 @@ public abstract class SuperGenerateExcelImpl {
 
 		if (excelDate != null)
 			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
-		else if (layout.precision() > -1) {
-			String format = "0.";
+		else if(excelNumberFormat!=null && StringUtils.isNotBlank(excelNumberFormat.value()))
+			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value());
+		else if (layout.precision() > -1 || layout.percent()) {
+			String format = "0";
+			if(layout.precision() > -1)
+				format+=".";
 			for (int i = 0; i < layout.precision(); i++)
 				format += "0";
+			if(layout.percent())
+				format+="%";
 			cellStyle = dateCellStyle(workbook, cellStyle, format);
 		} else if (sheetHeader != null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
 			DataFormat fmt = workbook.createDataFormat();
@@ -395,6 +406,7 @@ public abstract class SuperGenerateExcelImpl {
 				sheetHeader.setExcelColumnWidth(excelFunction.excelColumnWidth());
 				sheetHeader.setExcelHeaderCellLayout(excelFunction.excelHeaderCellLayout());
 				sheetHeader.setExcelSubtotal(excelFunction.excelSubtotal());
+				sheetHeader.setExcelNumberFormat(excelFunction.excelNumberFormat());
 				listSheetHeader.add(sheetHeader);
 
 			}
@@ -407,6 +419,7 @@ public abstract class SuperGenerateExcelImpl {
 				sheetHeader.setExcelColumnWidth(excelFunctionMerge.excelColumnWidth());
 				sheetHeader.setExcelHeaderCellLayout(excelFunctionMerge.excelHeaderCellLayout());
 				sheetHeader.setExcelSubtotal(excelFunctionMerge.excelSubtotal());
+				sheetHeader.setExcelNumberFormat(excelFunctionMerge.excelNumberFormat());
 				listSheetHeader.add(sheetHeader);
 
 			}

@@ -12,6 +12,7 @@ import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelMergeRow;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 
 
@@ -40,6 +41,8 @@ public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunction
 
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
+	
+	private ExcelNumberFormat excelNumberFormat;
 
 	/**
 	 * Instantiates a new excel function merge row impl.
@@ -87,6 +90,19 @@ public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunction
 		this.excelColumnWidth = excelColumnWidth;
 		this.excelHeaderCellLayout = excelHeaderCellLayout;
 		this.excelSubtotal = excelSubtotal;
+	}
+
+	public ExcelFunctionMergeRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelMergeRow excelMergeRow, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout,
+			ExcelSubtotal excelSubtotal, ExcelNumberFormat excelNumberFormat) {
+		super();
+		this.excelCellsLayout = excelCellsLayout;
+		this.excelColumn = excelColumn;
+		this.excelMergeRow = excelMergeRow;
+		this.excelFunction = excelFunction;
+		this.excelColumnWidth = excelColumnWidth;
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
+		this.excelSubtotal = excelSubtotal;
+		this.excelNumberFormat = excelNumberFormat;
 	}
 
 	/**
@@ -215,11 +231,14 @@ public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunction
 		this.excelSubtotal = excelSubtotal;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
+	public ExcelNumberFormat getExcelNumberFormat() {
+		return excelNumberFormat;
+	}
+
+	public void setExcelNumberFormat(ExcelNumberFormat excelNumberFormat) {
+		this.excelNumberFormat = excelNumberFormat;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -230,16 +249,11 @@ public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunction
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((excelNumberFormat == null) ? 0 : excelNumberFormat.hashCode());
 		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -278,6 +292,11 @@ public class ExcelFunctionMergeRowImpl extends ExcelAnnotationImpl<ExcelFunction
 			if (other.excelMergeRow != null)
 				return false;
 		} else if (!excelMergeRow.equals(other.excelMergeRow))
+			return false;
+		if (excelNumberFormat == null) {
+			if (other.excelNumberFormat != null)
+				return false;
+		} else if (!excelNumberFormat.equals(other.excelNumberFormat))
 			return false;
 		if (excelSubtotal == null) {
 			if (other.excelSubtotal != null)

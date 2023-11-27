@@ -135,5 +135,8 @@ public @interface ExcelFunction {
 	 * @return the excel formula alias[]
 	 */
 	public ExcelFormulaAlias[] alias() default {};
+	
+	public ExcelFunctionSubTotal onSubTotalRow() default @ExcelFunctionSubTotal;
+	
 
 }

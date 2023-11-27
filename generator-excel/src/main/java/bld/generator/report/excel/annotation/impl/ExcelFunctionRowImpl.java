@@ -11,6 +11,7 @@ import bld.generator.report.excel.annotation.ExcelColumnWidth;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionRow;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 
 
@@ -36,6 +37,8 @@ public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 	
 	/** The excel subtotal. */
 	private ExcelSubtotal excelSubtotal;
+	
+	private ExcelNumberFormat excelNumberFormat;
 	
 	/**
 	 * Instantiates a new excel function row impl.
@@ -63,6 +66,18 @@ public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 	
 	
 
+
+	public ExcelFunctionRowImpl(ExcelCellLayout excelCellsLayout, ExcelColumn excelColumn, ExcelFunction excelFunction, ExcelColumnWidth excelColumnWidth, ExcelHeaderCellLayout excelHeaderCellLayout, ExcelSubtotal excelSubtotal,
+			ExcelNumberFormat excelNumberFormat) {
+		super();
+		this.excelCellsLayout = excelCellsLayout;
+		this.excelColumn = excelColumn;
+		this.excelFunction = excelFunction;
+		this.excelColumnWidth = excelColumnWidth;
+		this.excelHeaderCellLayout = excelHeaderCellLayout;
+		this.excelSubtotal = excelSubtotal;
+		this.excelNumberFormat = excelNumberFormat;
+	}
 
 	/**
 	 * Instantiates a new excel function row impl.
@@ -185,11 +200,18 @@ public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 		this.excelSubtotal = excelSubtotal;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
+	public ExcelNumberFormat getExcelNumberFormat() {
+		return excelNumberFormat;
+	}
+
+	public void setExcelNumberFormat(ExcelNumberFormat excelNumberFormat) {
+		this.excelNumberFormat = excelNumberFormat;
+	}
+
+	public ExcelFunction getExcelFunction() {
+		return excelFunction;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -199,16 +221,11 @@ public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelNumberFormat == null) ? 0 : excelNumberFormat.hashCode());
 		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -242,6 +259,11 @@ public class ExcelFunctionRowImpl extends ExcelAnnotationImpl<ExcelFunctionRow>{
 			if (other.excelHeaderCellLayout != null)
 				return false;
 		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
+			return false;
+		if (excelNumberFormat == null) {
+			if (other.excelNumberFormat != null)
+				return false;
+		} else if (!excelNumberFormat.equals(other.excelNumberFormat))
 			return false;
 		if (excelSubtotal == null) {
 			if (other.excelSubtotal != null)

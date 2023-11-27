@@ -50,6 +50,8 @@ public class LayoutCell implements Cloneable {
 
 	/** The format. */
 	private ColumnDateFormat format;
+	
+	private String numberFormat;
 
 	/** The locked. */
 	private boolean locked;
@@ -293,6 +295,16 @@ public class LayoutCell implements Cloneable {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+	
+	
+
+	public String getNumberFormat() {
+		return numberFormat;
+	}
+
+	public void setNumberFormat(String numberFormat) {
+		this.numberFormat = numberFormat;
+	}
 
 	/**
 	 * Sets the color.
@@ -310,11 +322,6 @@ public class LayoutCell implements Cloneable {
 		}
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -327,6 +334,7 @@ public class LayoutCell implements Cloneable {
 		result = prime * result + ((format == null) ? 0 : format.hashCode());
 		result = prime * result + ((horizontalAlignment == null) ? 0 : horizontalAlignment.hashCode());
 		result = prime * result + (locked ? 1231 : 1237);
+		result = prime * result + ((numberFormat == null) ? 0 : numberFormat.hashCode());
 		result = prime * result + ((precision == null) ? 0 : precision.hashCode());
 		result = prime * result + Arrays.hashCode(rgbFont);
 		result = prime * result + Arrays.hashCode(rgbForeground);
@@ -336,12 +344,6 @@ public class LayoutCell implements Cloneable {
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -378,6 +380,11 @@ public class LayoutCell implements Cloneable {
 		if (horizontalAlignment != other.horizontalAlignment)
 			return false;
 		if (locked != other.locked)
+			return false;
+		if (numberFormat == null) {
+			if (other.numberFormat != null)
+				return false;
+		} else if (!numberFormat.equals(other.numberFormat))
 			return false;
 		if (precision == null) {
 			if (other.precision != null)

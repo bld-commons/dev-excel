@@ -120,6 +120,7 @@ import bld.generator.report.excel.annotation.ExcelChartDataLabel;
 import bld.generator.report.excel.annotation.ExcelCharts;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelPivot;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
@@ -814,6 +815,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					SheetHeader sheetHeader = (SheetHeader) listSheetHeader.get(indexHeader).clone();
 					String nameField = getFieldName(sheetHeader);
 					ExcelCellLayout excelCellLayout = null;
+					Integer idEmptyRow = indexRow;
 					if (indexHeader == 0) {
 
 						if (emptyRows.size() - 1 > emptyRows.indexOf(emptyRow))
@@ -822,13 +824,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							sheetHeader.setValue(emptyRow.getLabel().trim());
 						excelCellLayout = excelSubtotals.excelCellLayout();
 
-						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelSubtotals, emptyRow, sheetHeader, excelCellLayout);
+						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), emptyRow, sheetHeader, excelCellLayout);
 						sheetHeader.setExcelCellLayout(excelSubtotals.excelCellLayout());
 
 					} else if (sheetHeader.getExcelSubtotal() != null && sheetHeader.getExcelSubtotal().enable()) {
 						sheetHeader.setValue(null);
 						excelCellLayout = sheetHeader.getExcelSubtotal().excelCellLayout();
-						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), excelSubtotals, emptyRow, sheetHeader, excelCellLayout);
+						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), emptyRow, sheetHeader, excelCellLayout);
 						String function = "subtotal(" + sheetHeader.getExcelSubtotal().dataConsolidateFunction().getValue() + "," + RowStartEndType.ROW_START.getParameter(nameField) + ":" + RowStartEndType.ROW_END.getParameter(nameField) + ")";
 						Integer firstRowSubtotal = emptyRow.getFirstRow();
 						Integer lastRowSubtotal = emptyRow.getLastRow();
@@ -844,13 +846,19 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						ExcelFunctionImpl excelFuctionImpl = null;
 						excelFuctionImpl = new ExcelFunctionImpl(function, nameField + "Function", false);
 						sheetHeader.setExcelFunction(excelFuctionImpl.getAnnotation());
+					} else if (sheetHeader.getExcelFunction() != null && sheetHeader.getExcelFunction().onSubTotalRow().value()) {
+						idEmptyRow = emptyRow.getEmptyRow();
+						excelCellLayout = sheetHeader.getExcelFunction().onSubTotalRow().excelCellLayout();
+						cellStyle = getCellStyleSubtotal(workbook, emptyRow.getEmptyRow(), emptyRow, sheetHeader, excelCellLayout);
 
+						// super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader,
+						// emptyRow.getEmptyRow(), formulaEvaluator);
 					} else {
 						sheetHeader.setValue(null);
 						sheetHeader.setExcelFunction(null);
-					}
 
-					super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
+					}
+					super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, idEmptyRow, formulaEvaluator);
 
 				}
 				;
@@ -1065,22 +1073,28 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Gets the cell style subtotal.
 	 *
-	 * @param workbook           the workbook
-	 * @param indexRow           the index row
-	 * @param excelLabelSubtotal the excel label subtotal
-	 * @param emptyRow           the empty row
-	 * @param sheetHeader        the sheet header
-	 * @param excelCellLayout    the excel cell layout
+	 * @param workbook        the workbook
+	 * @param indexRow        the index row
+	 * @param emptyRow        the empty row
+	 * @param sheetHeader     the sheet header
+	 * @param excelCellLayout the excel cell layout
 	 * @return the cell style subtotal
 	 * @throws Exception the exception
 	 */
-	private CellStyle getCellStyleSubtotal(Workbook workbook, Integer indexRow, ExcelSubtotals excelLabelSubtotal, SubtotalRow emptyRow, SheetHeader sheetHeader, ExcelCellLayout excelCellLayout) throws Exception {
+	private CellStyle getCellStyleSubtotal(Workbook workbook, Integer indexRow, SubtotalRow emptyRow, SheetHeader sheetHeader, ExcelCellLayout excelCellLayout) throws Exception {
 		CellStyle cellStyle = null;
 		sheetHeader.setExcelCellLayout(excelCellLayout);
 		LayoutCell layoutCell = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), sheetHeader.getExcelCellLayout());
+		if (sheetHeader.getExcelNumberFormat() != null && StringUtils.isNotBlank(sheetHeader.getExcelNumberFormat().value()))
+			layoutCell.setNumberFormat(sheetHeader.getExcelNumberFormat().value());
 		layoutCell.setColor(indexRow);
-		if (!this.mapCellStyle.containsKey(layoutCell))
-			this.mapCellStyle.put(layoutCell, createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow()));
+		if (!this.mapCellStyle.containsKey(layoutCell)) {
+			cellStyle = createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow());
+			if (sheetHeader.getExcelNumberFormat() != null && StringUtils.isNotBlank(sheetHeader.getExcelNumberFormat().value()))
+				cellStyle = dateCellStyle(workbook, cellStyle, sheetHeader.getExcelNumberFormat().value());
+			this.mapCellStyle.put(layoutCell, cellStyle);
+		}
+		
 		cellStyle = this.mapCellStyle.get(layoutCell);
 		return cellStyle;
 	}

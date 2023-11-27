@@ -9,7 +9,8 @@ import java.util.Arrays;
 
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import bld.generator.report.excel.annotation.ExcelFunction;
-
+import bld.generator.report.excel.annotation.ExcelFunctionSubTotal;
+import bld.generator.report.excel.annotation.ExcelNumberFormat;
 
 /**
  * The Class ExcelFunctionImpl.
@@ -24,9 +25,13 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 
 	/** The another table. */
 	private boolean anotherTable;
-	
+
 	/** The alias. */
 	private ExcelFormulaAlias[] alias;
+
+	private ExcelFunctionSubTotal onSubTotalRow;
+
+	
 
 	/**
 	 * Instantiates a new excel function impl.
@@ -38,8 +43,22 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 		super();
 		this.function = function;
 		this.nameFunction = nameFunction;
-		this.anotherTable=true;
+		this.anotherTable = true;
+
 	}
+
+	
+
+	public ExcelFunctionImpl(String function, String nameFunction, boolean anotherTable, ExcelFormulaAlias[] alias, ExcelFunctionSubTotal onSubTotalRow) {
+		super();
+		this.function = function;
+		this.nameFunction = nameFunction;
+		this.anotherTable = anotherTable;
+		this.alias = alias;
+		this.onSubTotalRow = onSubTotalRow;
+	}
+
+
 
 	/**
 	 * Instantiates a new excel function impl.
@@ -65,10 +84,10 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 	/**
 	 * Instantiates a new excel function impl.
 	 *
-	 * @param function the function
+	 * @param function     the function
 	 * @param nameFunction the name function
 	 * @param anotherTable the another table
-	 * @param alias the alias
+	 * @param alias        the alias
 	 */
 	public ExcelFunctionImpl(String function, String nameFunction, boolean anotherTable, ExcelFormulaAlias[] alias) {
 		super();
@@ -78,11 +97,6 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 		this.alias = alias;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -91,15 +105,10 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 		result = prime * result + (anotherTable ? 1231 : 1237);
 		result = prime * result + ((function == null) ? 0 : function.hashCode());
 		result = prime * result + ((nameFunction == null) ? 0 : nameFunction.hashCode());
+		result = prime * result + ((onSubTotalRow == null) ? 0 : onSubTotalRow.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -122,6 +131,11 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 			if (other.nameFunction != null)
 				return false;
 		} else if (!nameFunction.equals(other.nameFunction))
+			return false;
+		if (onSubTotalRow == null) {
+			if (other.onSubTotalRow != null)
+				return false;
+		} else if (!onSubTotalRow.equals(other.onSubTotalRow))
 			return false;
 		return true;
 	}
@@ -197,5 +211,19 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 	public void setAlias(ExcelFormulaAlias[] alias) {
 		this.alias = alias;
 	}
+
+	public ExcelFunctionSubTotal isOnSubTotalRow() {
+		return onSubTotalRow;
+	}
+
+	public void setOnSubTotalRow(ExcelFunctionSubTotal onSubTotalRow) {
+		this.onSubTotalRow = onSubTotalRow;
+	}
+
+	public ExcelFunctionSubTotal getOnSubTotalRow() {
+		return onSubTotalRow;
+	}
+
+
 
 }
