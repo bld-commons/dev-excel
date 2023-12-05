@@ -606,16 +606,18 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 		List<SubtotalRow> emptyRows = new ArrayList<>();
 		ExcelSubtotals excelSubtotals = sheetData.getRowClass().getAnnotation(ExcelSubtotals.class);
-		final boolean enableSumForGroup = ArrayUtils.isNotEmpty(excelSubtotals.sumForGroup());
-		List<String> sfg = Arrays.asList(excelSubtotals.sumForGroup());
+		final boolean enableSumForGroup = excelSubtotals!=null && ArrayUtils.isNotEmpty(excelSubtotals.sumForGroup());
 		List<String> sumForGroups = new ArrayList<>();
-		if (enableSumForGroup)
-			for (int i = listSheetHeader.size() - 1; i >= 0; i--) {
-				SheetHeader sheetHeader = listSheetHeader.get(i);
-				String fieldName = getFieldName(sheetHeader);
-				if (sfg.contains(fieldName))
-					sumForGroups.add(fieldName);
-			}
+		if (enableSumForGroup) {
+			List<String> sfg = Arrays.asList(excelSubtotals.sumForGroup());
+				for (int i = listSheetHeader.size() - 1; i >= 0; i--) {
+					SheetHeader sheetHeader = listSheetHeader.get(i);
+					String fieldName = getFieldName(sheetHeader);
+					if (sfg.contains(fieldName))
+						sumForGroups.add(fieldName);
+				}
+		}
+		
 
 		for (RowSheet rowSheet : sheetData.getListRowSheet()) {
 			int splitRow = 0;

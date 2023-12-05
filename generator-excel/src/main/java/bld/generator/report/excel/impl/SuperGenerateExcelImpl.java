@@ -300,7 +300,7 @@ public abstract class SuperGenerateExcelImpl {
 			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value());
 		else if (layout.precision() > -1 || layout.percent()) {
 			String format = "0";
-			if(layout.precision() > -1)
+			if(layout.precision() > 0)
 				format+=".";
 			for (int i = 0; i < layout.precision(); i++)
 				format += "0";
