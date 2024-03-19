@@ -124,4 +124,11 @@ public @interface ExcelSheetLayout {
 	 */
 	public boolean locked() default false;
 	
+	/**
+	 * Hide.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean hidden() default false;
+	
 }

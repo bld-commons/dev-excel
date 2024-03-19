@@ -8,7 +8,7 @@ import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
 
-@ExcelSheetLayout(locked = true)
+@ExcelSheetLayout(hidden = true,locked = true)
 @ExcelHeaderLayout(excelHeaderCellLayout = @ExcelHeaderCellLayout(locked = true,
 rgbFont = @ExcelRgbColor(red = (byte) 0, green = (byte) 0, blue = (byte) 0),rgbForeground = @ExcelRgbColor(red = (byte) 255, green = (byte) 255, blue = (byte) 255)))
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)

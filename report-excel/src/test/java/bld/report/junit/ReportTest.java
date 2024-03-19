@@ -184,7 +184,7 @@ public class ReportTest {
 
 		try {
 			ReportExcel excel = new ReportExcel("Mondadori", listBaseSheet);
-
+			excel.setEnableSheetMapping(true);
 			byte[] byteReport = this.generateExcel.createFileXlsx(excel);
 
 			SpreadsheetUtils.writeToFile(PATH_FILE, excel.getTitle(), ".xlsx", byteReport);

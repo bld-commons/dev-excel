@@ -23,7 +23,6 @@ import bld.generator.report.excel.annotation.ExcelSubtotals;
 		excelFunction = @ExcelFunction(function = "${presenzaGiuridica}/${organico}", nameFunction = "scoperturaGiuridica",
 										onSubTotalRow = @ExcelFunctionSubTotal(value=true,
 												excelCellLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,font = @ExcelFont(bold = true))
-										
 										)
 		
 		),excelNumberFormat = @ExcelNumberFormat("0.00%")
