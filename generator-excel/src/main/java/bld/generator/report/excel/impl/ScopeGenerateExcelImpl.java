@@ -561,6 +561,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			this.excelQueryComponent.executeQuery((QuerySheetData<? extends RowSheet>) sheetData);
 		// this.mapFieldColumn = sheetData.getMapFieldColumn();
 		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
+		
 		indexRow += excelSheetLayout.startRow();
 		SheetMappingRow sheetMappingRow = null;
 		if (indexRow < 0)
@@ -881,10 +882,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 		}
-		if (excelSheetLayout.locked()) {
+		if (excelSheetLayout.locked() || excelSheetLayout.hidden()) {
 			if (sheet instanceof XSSFSheet && enableAutoFilter)
 				((XSSFSheet) sheet).lockAutoFilter(false);
-			sheet.protectSheet("");
+			sheet.protectSheet("abc");
+			workbook.setSheetHidden(workbook.getSheetIndex(sheet), excelSheetLayout.hidden());
 		}
 
 		if (sheetData instanceof FunctionsTotal) {
