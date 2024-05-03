@@ -122,7 +122,7 @@ public @interface ExcelSheetLayout {
 	 *
 	 * @return true, if successful
 	 */
-	public boolean locked() default false;
+	public ExcelLocked locked() default @ExcelLocked(locked = false);
 	
 	/**
 	 * Hide.

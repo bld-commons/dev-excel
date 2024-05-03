@@ -120,7 +120,6 @@ import bld.generator.report.excel.annotation.ExcelChartDataLabel;
 import bld.generator.report.excel.annotation.ExcelCharts;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
-import bld.generator.report.excel.annotation.ExcelNumberFormat;
 import bld.generator.report.excel.annotation.ExcelPivot;
 import bld.generator.report.excel.annotation.ExcelRowHeight;
 import bld.generator.report.excel.annotation.ExcelSelectCell;
@@ -882,10 +881,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 		}
-		if (excelSheetLayout.locked() || excelSheetLayout.hidden()) {
+		if (excelSheetLayout.locked().locked() || excelSheetLayout.hidden()) {
 			if (sheet instanceof XSSFSheet && enableAutoFilter)
 				((XSSFSheet) sheet).lockAutoFilter(false);
-			sheet.protectSheet("abc");
+			sheet.protectSheet(this.valueProps.valueProps(excelSheetLayout.locked().value()));
 			workbook.setSheetHidden(workbook.getSheetIndex(sheet), excelSheetLayout.hidden());
 		}
 

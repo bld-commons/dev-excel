@@ -12,6 +12,7 @@ import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
 import bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import bld.generator.report.excel.annotation.ExcelLabel;
+import bld.generator.report.excel.annotation.ExcelLocked;
 import bld.generator.report.excel.annotation.ExcelMarginSheet;
 import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSheetLayout;
@@ -22,7 +23,7 @@ import bld.generator.report.excel.annotation.ExcelSuperHeaders;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false,scale=30)
+@ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false,scale=30,locked = @ExcelLocked)
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 //@ExcelFreezePane(rowFreez = 5, columnFreez = 1)

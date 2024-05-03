@@ -36,7 +36,7 @@ import bld.generator.report.excel.dropdown.IntegerDropDown;
  * The Class AutoreLibriRow.
  */
 @ExcelFunctionRows(excelFunctions = {
-		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2), 
+		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,locked = true), 
 					excelColumn = @ExcelColumn(index = 9, name = "Prezzo Totale"), 
 					excelFunction=@ExcelFunction(function = "sum(${prezzo},${supplemento})", nameFunction = "prezzoTotale"),excelColumnWidth = @ExcelColumnWidth(width = 7)),
 		@ExcelFunctionRow(excelCellsLayout=@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER), 
