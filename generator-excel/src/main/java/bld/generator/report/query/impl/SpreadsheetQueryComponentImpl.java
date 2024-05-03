@@ -7,11 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
-import javax.persistence.TupleElement;
-
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.converters.CalendarConverter;
@@ -21,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.generator.report.QuerySpreadsheetData;
 import bld.generator.report.query.SpreadsheetDataSource;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.Tuple;
+import jakarta.persistence.TupleElement;
 
 public abstract class SpreadsheetQueryComponentImpl {
 	
