@@ -1,7 +1,5 @@
 package bld.generator.report.config;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +20,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.generator.report.excel.config.MultipleDatabaseConfiguration;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = Db2DatabaseConfiguration.DB2_ENTITY_MANAGER_FACTORY, basePackages = { Db2DatabaseConfiguration.PACKAGE_SUP })

@@ -7,9 +7,6 @@ package bld.generator.report.csv.query.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -24,6 +21,8 @@ import bld.generator.report.csv.query.CsvQueryComponent;
 import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 import bld.generator.report.query.SpreadsheetDataSource;
 import bld.generator.report.query.impl.SpreadsheetQueryComponentImpl;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 
 @Transactional

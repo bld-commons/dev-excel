@@ -5,12 +5,11 @@
  */
 package bld.generator.report.query.impl;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import bld.generator.report.query.SpreadsheetDataSource;
+import jakarta.persistence.EntityManager;
 
 /**
  * The Class ExcelMultipleDataSource.<br>

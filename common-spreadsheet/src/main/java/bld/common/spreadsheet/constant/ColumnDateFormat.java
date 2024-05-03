@@ -7,7 +7,7 @@ package bld.common.spreadsheet.constant;
 
 /**
  * The Enum ColumnDateFormat.<br>
- * ColumnDateFormat is used to set the date format. It is used on the following annotation {@link bld.generator.report.excel.annotation.ExcelDate}.
+ * ColumnDateFormat is used to set the date format. It is used on the following annotation {@link bld.common.spreadsheet.excel.annotation.ExcelDate}.
  * 
  */
 public enum ColumnDateFormat {
@@ -24,8 +24,10 @@ public enum ColumnDateFormat {
 	/** The yyyy mm dd hh mm ss. */
 	YYYY_MM_DD_HH_MM_SS("yyyy/mm/dd HH:mm:ss"),
 	
+	/** The hh mm ss. */
 	HH_MM_SS("HH:mm:ss"),
 	
+	/** The hh mm. */
 	HH_MM("HH:mm"),
 	
 	/** The parameter. <br>

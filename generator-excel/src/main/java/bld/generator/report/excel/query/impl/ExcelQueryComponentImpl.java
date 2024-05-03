@@ -8,9 +8,6 @@ package bld.generator.report.excel.query.impl;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +24,8 @@ import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.query.SpreadsheetDataSource;
 import bld.generator.report.query.impl.SpreadsheetQueryComponentImpl;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 
 /**
  * The Class ExcelQueryComponentImpl.<br>

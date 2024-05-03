@@ -5,9 +5,9 @@
  */
 package bld.generator.report.query;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+import jakarta.persistence.EntityManager;
 
 /**
  * The Interface ExcelDataSource.

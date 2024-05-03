@@ -5,14 +5,13 @@
  */
 package bld.generator.report.query.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 import bld.generator.report.excel.config.EnableExcelGeneratorConfiguration;
 import bld.generator.report.query.SpreadsheetDataSource;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 /**
  * The Class ExcelSingleDataSource.<br>
