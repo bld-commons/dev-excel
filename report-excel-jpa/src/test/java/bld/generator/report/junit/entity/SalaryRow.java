@@ -3,12 +3,12 @@ package bld.generator.report.junit.entity;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelFont;
-import bld.generator.report.excel.annotation.ExcelSubtotal;
-import bld.generator.report.excel.annotation.ExcelSubtotals;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelFont;
+import com.bld.generator.report.excel.annotation.ExcelSubtotal;
+import com.bld.generator.report.excel.annotation.ExcelSubtotals;
 
 @ExcelSubtotals(labelTotalGroup = "Total",endLabel = "total", sumForGroup = { "name" })
 public class SalaryRow implements RowSheet {

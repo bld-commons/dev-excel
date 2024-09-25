@@ -1,17 +1,17 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.IndexRow.java
+* @class com.bld.generator.report.junit.entity.IndexRow.java
 */
 package bld.report.generator.junit.entity;
 
-import bld.generator.report.excel.ExcelHyperlink;
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelFont;
-import bld.generator.report.excel.annotation.ExcelRgbColor;
-import bld.generator.report.excel.constant.UnderlineType;
+import com.bld.generator.report.excel.ExcelHyperlink;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelFont;
+import com.bld.generator.report.excel.annotation.ExcelRgbColor;
+import com.bld.generator.report.excel.constant.UnderlineType;
 
 /**
  * The Class IndexRow.

@@ -19,7 +19,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import bld.generator.report.excel.config.MultipleDatabaseConfiguration;
+import com.bld.generator.report.excel.config.MultipleDatabaseConfiguration;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -27,7 +28,7 @@ import jakarta.persistence.PersistenceContext;
 @EnableJpaRepositories(entityManagerFactoryRef = Db2DatabaseConfiguration.DB2_ENTITY_MANAGER_FACTORY, basePackages = { Db2DatabaseConfiguration.PACKAGE_SUP })
 @EnableTransactionManagement
 @EntityScan(basePackages = { Db2DatabaseConfiguration.PACKAGE_SUP })
-@ConditionalOnProperty(name = "bld.commons.multiple.datasource", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "com.bld.commons.multiple.datasource", havingValue = "true", matchIfMissing = false)
 public class Db2DatabaseConfiguration extends MultipleDatabaseConfiguration {
 
 	/** The Constant PACKAGES_SUP. */

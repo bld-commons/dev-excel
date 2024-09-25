@@ -1,15 +1,15 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.GenereRow.java
+* @class com.bld.generator.report.junit.entity.GenereRow.java
 */
 package bld.report.generator.junit.entity;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
 
 /**
  * The Class GenereRow.

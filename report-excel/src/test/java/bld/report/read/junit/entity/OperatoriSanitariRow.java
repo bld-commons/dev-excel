@@ -1,7 +1,7 @@
 package bld.report.read.junit.entity;
 
-import bld.read.report.excel.annotation.ExcelReadColumn;
-import bld.read.report.excel.domain.RowSheetRead;
+import com.bld.read.report.excel.annotation.ExcelReadColumn;
+import com.bld.read.report.excel.domain.RowSheetRead;
 
 public class OperatoriSanitariRow implements RowSheetRead {
 

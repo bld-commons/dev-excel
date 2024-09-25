@@ -1,28 +1,28 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.CasaEditrice.java
+* @class com.bld.generator.report.junit.entity.CasaEditrice.java
 */
 package bld.generator.report.junit.entity;
 
 import java.util.Calendar;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.generator.report.excel.SheetSummary;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelFunctionRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelRowHeight;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
-import bld.generator.report.excel.annotation.ExcelSummary;
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
+import com.bld.generator.report.excel.SheetSummary;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelFunction;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRow;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRows;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelRowHeight;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.generator.report.excel.annotation.ExcelSummary;
 
 /**
  * The Class CasaEditrice.

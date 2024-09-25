@@ -1,26 +1,26 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriRowDynamic.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriRowDynamic.java
 */
 package bld.report.generator.junit.entity;
 
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.generator.report.excel.DynamicRowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelFont;
-import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelMergeRow;
-import bld.generator.report.excel.annotation.ExcelSubtotal;
-import bld.generator.report.excel.annotation.ExcelSubtotals;
-import bld.generator.report.excel.dropdown.CalendarDropDown;
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
+import com.bld.generator.report.excel.DynamicRowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelFont;
+import com.bld.generator.report.excel.annotation.ExcelFunction;
+import com.bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRow;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRows;
+import com.bld.generator.report.excel.annotation.ExcelMergeRow;
+import com.bld.generator.report.excel.annotation.ExcelSubtotal;
+import com.bld.generator.report.excel.annotation.ExcelSubtotals;
+import com.bld.generator.report.excel.dropdown.CalendarDropDown;
 
 /**
  * The Class AutoreLibriRowDynamic.

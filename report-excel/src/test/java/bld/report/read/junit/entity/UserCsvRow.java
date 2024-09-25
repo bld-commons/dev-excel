@@ -2,10 +2,10 @@ package bld.report.read.junit.entity;
 
 import java.util.Date;
 
-import bld.common.spreadsheet.csv.annotation.CsvDate;
-import bld.common.spreadsheet.csv.annotation.CsvSettings;
-import bld.read.report.excel.annotation.ExcelReadColumn;
-import bld.read.report.excel.domain.RowSheetRead;
+import com.bld.common.spreadsheet.csv.annotation.CsvDate;
+import com.bld.common.spreadsheet.csv.annotation.CsvSettings;
+import com.bld.read.report.excel.annotation.ExcelReadColumn;
+import com.bld.read.report.excel.domain.RowSheetRead;
 
 
 @CsvSettings(delimiter = ';',skipHeaderRecord = true)

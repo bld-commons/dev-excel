@@ -1,19 +1,19 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriSheetDynamic.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriSheetDynamic.java
 */
 package bld.report.generator.junit.entity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
-import bld.common.spreadsheet.utils.SpreadsheetUtils;
-import bld.generator.report.excel.DynamicChart;
-import bld.generator.report.excel.FunctionsTotal;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelLabel;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.excel.DynamicChart;
+import com.bld.generator.report.excel.FunctionsTotal;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelLabel;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 /**
  * The Class AutoreLibriSheetDynamic.

@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.DateRow.java
+* @class com.bld.generator.report.junit.entity.DateRow.java
 */
 package bld.generator.report.junit.entity;
 
@@ -9,11 +9,11 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelRowHeight;
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelRowHeight;
 
 /**
  * The Class DateRow.

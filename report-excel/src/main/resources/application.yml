@@ -1,17 +1,17 @@
-bld:
-  commons:
-    check:
-      annotation: true
-    resource:
-      path:
-        xls: /excel/Copertina.xls
-        xlsx: /excel/Copertina.xlsx
-    date:
-      format: dd/MM/yyyy
-    report:
-      excel:
-        title: A12
-        date: A18
+com:
+  bld:
+    commons:
+      check:
+        annotation: true
+      resource:
+        cover:
+          path: classpath:/excel/Copertina.xlsx
+      date:
+        format: dd/MM/yyyy
+      report:
+        excel:
+          title: A12
+          date: A18
 
 
 

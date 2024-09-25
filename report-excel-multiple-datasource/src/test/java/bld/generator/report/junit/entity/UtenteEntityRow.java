@@ -2,9 +2,9 @@ package bld.generator.report.junit.entity;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
 
 public class UtenteEntityRow implements RowSheet {
 	

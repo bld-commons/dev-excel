@@ -4,13 +4,13 @@ import java.util.Date;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
-import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelImage;
-import bld.generator.report.excel.annotation.ExcelRowHeight;
+import com.bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelImage;
+import com.bld.generator.report.excel.annotation.ExcelRowHeight;
 
 @ExcelRowHeight(height = 3)
 public class UtenteRow implements RowSheet {
