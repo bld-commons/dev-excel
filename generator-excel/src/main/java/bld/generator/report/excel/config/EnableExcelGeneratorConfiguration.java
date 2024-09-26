@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.impl.ExcelAnnotationImpl;
 import bld.generator.report.excel.config.annotation.IgnoreCheck;
+import jakarta.annotation.PostConstruct;
 
 /**
  * The Class EnableExcelGeneratorConfiguration.
@@ -49,9 +50,9 @@ public class EnableExcelGeneratorConfiguration {
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("rawtypes")
-	@Bean
+	@PostConstruct
 	@ConditionalOnProperty(name = BLD_COMMONS_CHECK_ANNOTATION, havingValue = "true", matchIfMissing = false)
-	public void checkEntityAnnotation() throws Exception {
+	void checkEntityAnnotation() throws Exception {
 		Reflections reflections = new Reflections("bld.generator.report.excel.annotation.impl");
 
 		Set<Class<? extends ExcelAnnotationImpl>> allClasses = reflections.getSubTypesOf(ExcelAnnotationImpl.class);
