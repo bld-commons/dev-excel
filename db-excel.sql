@@ -1,96 +1,142 @@
-create table utente(
-id_utente serial,
-nome varchar(255) not null,
-cognome varchar(255) not null,
-data_nascita date not null,
-primary key (id_utente)
+CREATE TABLE autore (
+	id_autore int4 NOT NULL,
+	nome varchar NOT NULL,
+	cognome varchar NOT NULL,
+	data_nascita date not null,
+	sesso varchar(1) not null,
+	CONSTRAINT autore_pk PRIMARY KEY (id_autore)
 );
 
 create table genere(
-id_genere serial,
-des_genere varchar(255) not null,
-primary key (id_genere)
+	id_genere int4 primary key,
+	des_genere varchar(100)not null
 );
 
-create table autore(
-id_autore serial,
-nome varchar(255) not null,
-cognome varchar(255) not null,
-data_nascita date not null,
-sesso varchar(1) not null,
-primary key (id_autore)
+CREATE TABLE libro (
+	id_libro int4 NOT NULL,
+	titolo varchar(100) NOT NULL,
+	id_autore int4 not null,
+	id_genere int4 not null,
+	CONSTRAINT libro_pk PRIMARY KEY (id_libro),
+	foreign key (id_autore) references autore(id_autore),
+	foreign key (id_genere) references genere(id_genere)
 );
 
-create table libro(
-id_libro serial,
-titolo varchar(255)not null,
-id_autore int not null,
-id_genere int not null,
-primary key(id_libro),
-foreign key(id_autore )references autore(id_autore),
-foreign key(id_genere )references genere(id_genere)
+create table storico_prezzo (
+  id_storico_prezzo serial,
+  anno int4 not null,
+  prezzo double precision not null,
+  id_libro int4 not null,
+  primary key(id_storico_prezzo),
+  foreign key (id_libro) references libro(id_libro)
 );
 
-create table storico_prezzo(
-anno int,
-id_libro int,
-prezzo double precision not null,
-primary key(anno,id_libro),
-foreign key(id_libro )references libro(id_libro )
+create table utente(
+  id_utente int4 not null, 
+  abilitato boolean not null default true, 
+  cognome varchar(100) not null, 
+  nome varchar(100) not null,
+  data_nascita date not null, 
+  image bytea,  
+  "path" varchar(1024),
+  primary key (id_utente)
+
 );
 
+INSERT INTO public.autore
+(id_autore, nome, cognome, data_nascita, sesso)
+VALUES(1, 'Mario', 'Rossi', '1962-01-04', 'm');
+INSERT INTO public.autore
+(id_autore, nome, cognome, data_nascita, sesso)
+VALUES(2, 'Maria', 'Bianchi', '1980-12-31', 'f');
+INSERT INTO public.autore
+(id_autore, nome, cognome, data_nascita, sesso)
+VALUES(3, 'Valerio', 'Torre', '1970-04-04', 'm');
+INSERT INTO public.autore
+(id_autore, nome, cognome, data_nascita, sesso)
+VALUES(4, 'Claudio', 'Ferrara', '1970-04-04', 'm');
+
+INSERT INTO public.genere
+(id_genere, des_genere)
+VALUES(1, 'romantico');
+INSERT INTO public.genere
+(id_genere, des_genere)
+VALUES(2, 'giallo');
+INSERT INTO public.genere
+(id_genere, des_genere)
+VALUES(3, 'thriller');
+INSERT INTO public.genere
+(id_genere, des_genere)
+VALUES(4, 'avventura');
+INSERT INTO public.genere
+(id_genere, des_genere)
+VALUES(5, 'biografia');
 
 
 INSERT INTO public.utente
-(id_utente, nome, cognome, data_nascita)
-VALUES(1, 'Mario', 'Rossi', '1955-04-25');
+(id_utente, abilitato, cognome, data_nascita, image, nome, "path")
+VALUES(1, true, 'Rossi', '1976-09-26', NULL, 'Francesco', NULL);
+INSERT INTO public.utente
+(id_utente, abilitato, cognome, data_nascita, image, nome, "path")
+VALUES(2, true, 'Bianchi', '1987-04-11', NULL, 'Marco', '/home/francesco/Downloads/DSC_0319.JPG');
 INSERT INTO public.utente
 (id_utente, nome, cognome, data_nascita)
-VALUES(2, 'Martina', 'Bianchi', '1970-12-12');
-INSERT INTO public.utente
-(id_utente, nome, cognome, data_nascita)
-VALUES(3, 'Marco', 'Bianchi', '1987-01-15');
+VALUES(3, 'Martina', 'Bianchi', '1987-01-15');
 INSERT INTO public.utente
 (id_utente, nome, cognome, data_nascita)
 VALUES(4, 'Federica', 'Verdi', '1987-11-27');
 
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(1, 'l''uomo dell''abirinto', 1, 3);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(2, 'salto nel buio', 3, 3);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(3, 'l''ultimo conclave', 1, 3);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(4, 'Tutto troppo complicato', 2, 1);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(5, 'La lettera di Natale', 2, 1);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(6, 'Una conquista fuori menù', 4, 1);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(7, 'I fantasmi dell’isola', 2, 4);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(8, 'Balla coi lupi', 4, 4);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(9, 'La stagione del coraggio', 3, 4);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(10, 'Trilogia dei Pirati', 1, 4);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(11, 'Un animale selvaggio', 1, 2);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(12, 'Discesa agli inferi', 2, 2);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(13, 'El Che', 3, 5);
+INSERT INTO public.libro
+(id_libro, titolo, id_autore, id_genere)
+VALUES(14, 'Cesare', 4, 5);
+
+INSERT INTO public.storico_prezzo
+(anno, prezzo, id_libro)
+select anno,random()*100+10,l.id_libro from
+unnest(ARRAY[2020,2021,2022,2023,2024]) anno, 
+libro l;
 
 
-INSERT INTO public.genere(des_genere)VALUES('Thriller');
-INSERT INTO public.genere(des_genere)VALUES('Commedia');
-INSERT INTO public.genere(des_genere)VALUES('Romantico');
-INSERT INTO public.genere(des_genere)VALUES('Comico');
-INSERT INTO public.genere(des_genere)VALUES('Drammatico');
-INSERT INTO public.genere(des_genere)VALUES('Sentimentale');
-INSERT INTO public.genere(des_genere)VALUES('Spionaggio');
 
 
 
-INSERT INTO public.autore(nome, cognome, data_nascita, sesso)VALUES('Mario', 'Rossi', '1960-07-12', 'M');
-INSERT INTO public.autore(nome, cognome, data_nascita, sesso)VALUES('Mario', 'Verdi', '1945-03-24', 'M');
-
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Profondo Rosso',         1, 7);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Complotto',              1, 7);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Sai chi te saluta',      1, 4);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Amore',                  1, 6);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Rosso',                  2, 6);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Arancio',                2, 6);
-INSERT INTO public.libro (titolo, id_autore, id_genere) VALUES('Blue',                   2, 5);
-
-
-
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2018, 1, 25  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2019, 1, 27.5);
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 1, 30  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2019, 2, 15  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 2, 20.3);
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2018, 3, 10  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2019, 3, 10  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 3, 12  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 4, 10  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2019, 5, 12  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 5, 12.5);
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2019, 6, 17  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 6, 17  );
-INSERT INTO public.storico_prezzo (anno, id_libro, prezzo) VALUES(2020, 7, 18  );
 

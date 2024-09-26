@@ -33,7 +33,7 @@ public enum ColumnDateFormat {
 	/** The parameter. <br>
 	 * This option is set on properties file
 	 * */
-	PARAMETER("${com.bld.commons.date.formatrmat}")
+	PARAMETER("${com.bld.commons.date.format}")
 	;
 	
 	/** The value. */

@@ -54,7 +54,6 @@ public class EnableExcelGeneratorConfiguration {
 	@ConditionalOnProperty(name = BLD_COMMONS_CHECK_ANNOTATION, havingValue = "true", matchIfMissing = false)
 	public void checkEntityAnnotation() throws Exception {
 		Reflections reflections = new Reflections("com.bld.generator.report.excel.annotation.impl");
-
 		Set<Class<? extends ExcelAnnotationImpl>> allClasses = reflections.getSubTypesOf(ExcelAnnotationImpl.class);
 		for (Class<? extends ExcelAnnotationImpl> classExcelAnnotationImpl : allClasses) {
 			if (!classExcelAnnotationImpl.isAnnotationPresent(IgnoreCheck.class)) {
