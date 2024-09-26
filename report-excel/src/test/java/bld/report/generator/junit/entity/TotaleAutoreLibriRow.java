@@ -1,20 +1,20 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.TotaleAutoreLibriRow.java
+* @class com.bld.generator.report.junit.entity.TotaleAutoreLibriRow.java
 */
 package bld.report.generator.junit.entity;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelFunction;
-import bld.generator.report.excel.annotation.ExcelFunctionRow;
-import bld.generator.report.excel.annotation.ExcelFunctionRows;
-import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelRgbColor;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelFunction;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRow;
+import com.bld.generator.report.excel.annotation.ExcelFunctionRows;
+import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 
 /**
  * The Class TotaleAutoreLibriRow.

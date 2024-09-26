@@ -18,7 +18,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import bld.generator.report.excel.config.MultipleDatabaseConfiguration;
+import com.bld.generator.report.excel.config.MultipleDatabaseConfiguration;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 

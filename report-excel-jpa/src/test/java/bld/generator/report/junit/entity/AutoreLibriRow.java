@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriRow.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriRow.java
 */
 package bld.generator.report.junit.entity;
 
@@ -10,18 +10,18 @@ import java.util.Date;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
-import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.generator.report.excel.RowSheet;
-import bld.generator.report.excel.annotation.ExcelCellLayout;
-import bld.generator.report.excel.annotation.ExcelColumn;
-import bld.generator.report.excel.annotation.ExcelDropDown;
-import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelMergeRow;
-import bld.generator.report.excel.annotation.ExcelPivotColumn;
-import bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
-import bld.generator.report.excel.annotation.ExcelPivotFilter;
-import bld.generator.report.excel.annotation.ExcelPivotRow;
-import bld.generator.report.excel.annotation.ExcelRgbColor;
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
+import com.bld.generator.report.excel.RowSheet;
+import com.bld.generator.report.excel.annotation.ExcelCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelDropDown;
+import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelMergeRow;
+import com.bld.generator.report.excel.annotation.ExcelPivotColumn;
+import com.bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
+import com.bld.generator.report.excel.annotation.ExcelPivotFilter;
+import com.bld.generator.report.excel.annotation.ExcelPivotRow;
+import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 
 /**
  * The Class AutoreLibriRow.

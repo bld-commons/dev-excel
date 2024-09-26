@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.report.junit;
 
@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -47,43 +48,42 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import bld.common.spreadsheet.constant.RowStartEndType;
-import bld.common.spreadsheet.utils.SpreadsheetUtils;
-import bld.generator.report.excel.BaseSheet;
-import bld.generator.report.excel.ExcelAttachment;
-import bld.generator.report.excel.annotation.ExcelChartCategory;
-import bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
-import bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
-import bld.generator.report.excel.annotation.impl.ExcelChartCategoryImpl;
-import bld.generator.report.excel.annotation.impl.ExcelChartDataLabelImpl;
-import bld.generator.report.excel.annotation.impl.ExcelChartImpl;
-import bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
-import bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFontImpl;
-import bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
-import bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
-import bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
-import bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
-import bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
-import bld.generator.report.excel.config.annotation.EnableExcelGenerator;
-import bld.generator.report.excel.constant.AttachmentType;
-import bld.generator.report.excel.constant.ExcelConstant;
-import bld.generator.report.excel.constant.FontType;
-import bld.generator.report.excel.constant.UnderlineType;
-import bld.generator.report.excel.data.ExtraColumnAnnotation;
-import bld.generator.report.excel.data.ReportExcel;
-import bld.generator.report.excel.dropdown.CalendarDropDown;
-import bld.generator.report.excel.impl.GenerateExcelImpl;
+import com.bld.common.spreadsheet.constant.RowStartEndType;
+import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.excel.BaseSheet;
+import com.bld.generator.report.excel.ExcelAttachment;
+import com.bld.generator.report.excel.annotation.ExcelChartCategory;
+import com.bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelChartCategoryImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelChartDataLabelImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelChartImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelFontImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
+import com.bld.generator.report.excel.config.annotation.EnableExcelGenerator;
+import com.bld.generator.report.excel.constant.AttachmentType;
+import com.bld.generator.report.excel.constant.ExcelConstant;
+import com.bld.generator.report.excel.constant.FontType;
+import com.bld.generator.report.excel.constant.UnderlineType;
+import com.bld.generator.report.excel.data.ExtraColumnAnnotation;
+import com.bld.generator.report.excel.data.ReportExcel;
+import com.bld.generator.report.excel.dropdown.CalendarDropDown;
+import com.bld.generator.report.excel.impl.GenerateExcelImpl;
+
 import bld.report.generator.junit.entity.AutoreLibriRow;
 import bld.report.generator.junit.entity.AutoreLibriRowDynamic;
 import bld.report.generator.junit.entity.AutoreLibriSheet;
@@ -101,7 +101,6 @@ import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableExcelGenerator
 @EnableTransactionManagement
@@ -121,7 +120,7 @@ public class ReportTest {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -194,7 +193,7 @@ public class ReportTest {
 //			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".pdf", byteReportPdf);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
 	}

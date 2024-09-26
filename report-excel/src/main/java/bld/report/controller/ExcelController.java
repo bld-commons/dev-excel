@@ -2,7 +2,7 @@ package bld.report.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import bld.read.report.excel.domain.RowSheetRead;
+import com.bld.read.report.excel.domain.RowSheetRead;
+
 import bld.report.controller.input.ReadExcelModel;
 import bld.report.controller.input.ReadSheetModel;
 

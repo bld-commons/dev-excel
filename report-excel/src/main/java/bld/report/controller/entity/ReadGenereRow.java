@@ -1,12 +1,12 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.read.report.junit.entity.ReadGenereRow.java
+* @class com.bld.read.report.junit.entity.ReadGenereRow.java
 */
 package bld.report.controller.entity;
 
-import bld.read.report.excel.annotation.ExcelReadColumn;
-import bld.read.report.excel.domain.RowSheetRead;
+import com.bld.read.report.excel.annotation.ExcelReadColumn;
+import com.bld.read.report.excel.domain.RowSheetRead;
 
 /**
  * The Class ReadGenereRow.

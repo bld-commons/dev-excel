@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.generator.report.junit;
 
@@ -11,20 +11,19 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import bld.common.spreadsheet.utils.SpreadsheetUtils;
-import bld.generator.report.excel.BaseSheet;
-import bld.generator.report.excel.GenerateExcel;
-import bld.generator.report.excel.data.ReportExcel;
+import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.excel.BaseSheet;
+import com.bld.generator.report.excel.GenerateExcel;
+import com.bld.generator.report.excel.data.ReportExcel;
+
 import bld.generator.report.junit.entity.AutoreLibriSheet;
 import bld.generator.report.junit.entity.CasaEditrice;
 import bld.generator.report.junit.entity.CensimentoSheet;
@@ -39,10 +38,9 @@ import bld.generator.report.junit.entity.UtenteSheet;
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ConfigurationProperties
-@ComponentScan(basePackages = {"bld.generator","bld.read"})
+@ComponentScan(basePackages = {"com.bld.generator","com.bld.read"})
 @EnableTransactionManagement
 public class ReportTestJpa {
 
@@ -67,7 +65,7 @@ public class ReportTestJpa {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 

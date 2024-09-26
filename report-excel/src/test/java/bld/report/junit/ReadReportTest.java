@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.report.junit;
 
@@ -14,26 +14,23 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.util.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bld.commons.connection.client.RestClientConnection;
 import com.bld.commons.connection.config.annotation.EnableRestConnection;
 import com.bld.commons.connection.model.ObjectRequest;
+import com.bld.read.report.csv.ReadCsv;
+import com.bld.read.report.csv.domain.CsvRead;
+import com.bld.read.report.excel.ReadExcel;
+import com.bld.read.report.excel.config.annotation.EnableExcelRead;
+import com.bld.read.report.excel.constant.ExcelType;
+import com.bld.read.report.excel.domain.ExcelRead;
 
-import bld.read.report.csv.ReadCsv;
-import bld.read.report.csv.domain.CsvRead;
-import bld.read.report.excel.ReadExcel;
-import bld.read.report.excel.config.annotation.EnableExcelRead;
-import bld.read.report.excel.constant.ExcelType;
-import bld.read.report.excel.domain.ExcelRead;
 import bld.report.controller.entity.ReadAutoreLibriRow;
 import bld.report.controller.entity.ReadAutoreLibriSheet;
 import bld.report.controller.entity.ReadGenereRow;
@@ -44,9 +41,9 @@ import bld.report.read.junit.entity.UserCsvRow;
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
-@ConfigurationProperties
+
 //@EnableExcelGenerator
 @EnableExcelRead
 @EnableTransactionManagement
@@ -72,7 +69,7 @@ public class ReadReportTest {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * The Class ReportExcelApplication.
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"bld.generator","bld.read"})
+@ComponentScan(basePackages = {"com.bld.generator","com.bld.read"})
 public class ReportExcelApplication {
 
 	

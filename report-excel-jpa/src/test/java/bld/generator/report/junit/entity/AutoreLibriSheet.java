@@ -1,28 +1,28 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriSheet.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriSheet.java
 */
 package bld.generator.report.junit.entity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 
-import bld.common.spreadsheet.utils.SpreadsheetUtils;
-import bld.generator.report.excel.FunctionsTotal;
-import bld.generator.report.excel.QuerySheetData;
-import bld.generator.report.excel.annotation.ExcelAreaBorder;
-import bld.generator.report.excel.annotation.ExcelBorder;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelLabel;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelPivot;
-import bld.generator.report.excel.annotation.ExcelQuery;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeader;
-import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
-import bld.generator.report.excel.annotation.ExcelSuperHeaders;
+import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.excel.FunctionsTotal;
+import com.bld.generator.report.excel.QuerySheetData;
+import com.bld.generator.report.excel.annotation.ExcelAreaBorder;
+import com.bld.generator.report.excel.annotation.ExcelBorder;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelLabel;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelPivot;
+import com.bld.generator.report.excel.annotation.ExcelQuery;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeader;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeaders;
 
 /**
  * The Class AutoreLibriSheet.

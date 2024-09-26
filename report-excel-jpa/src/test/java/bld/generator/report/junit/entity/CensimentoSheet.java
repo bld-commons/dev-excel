@@ -1,15 +1,15 @@
 package bld.generator.report.junit.entity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
-import bld.generator.report.excel.QuerySheetData;
-import bld.generator.report.excel.annotation.ExcelChart;
-import bld.generator.report.excel.annotation.ExcelChartCategory;
-import bld.generator.report.excel.annotation.ExcelCharts;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelQuery;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.generator.report.excel.QuerySheetData;
+import com.bld.generator.report.excel.annotation.ExcelChart;
+import com.bld.generator.report.excel.annotation.ExcelChartCategory;
+import com.bld.generator.report.excel.annotation.ExcelCharts;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelQuery;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 
 

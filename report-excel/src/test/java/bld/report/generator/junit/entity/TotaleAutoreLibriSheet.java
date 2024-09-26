@@ -1,14 +1,14 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.TotaleAutoreLibriSheet.java
+* @class com.bld.generator.report.junit.entity.TotaleAutoreLibriSheet.java
 */
 package bld.report.generator.junit.entity;
 
-import bld.generator.report.excel.SheetFunctionTotal;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.generator.report.excel.SheetFunctionTotal;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 
 /**
  * The Class TotaleAutoreLibriSheet.

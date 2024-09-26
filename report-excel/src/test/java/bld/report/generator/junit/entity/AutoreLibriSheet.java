@@ -1,24 +1,24 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriSheet.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriSheet.java
 */
 package bld.report.generator.junit.entity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
-import bld.common.spreadsheet.utils.SpreadsheetUtils;
-import bld.generator.report.excel.SheetData;
-import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import bld.generator.report.excel.annotation.ExcelHeaderLayout;
-import bld.generator.report.excel.annotation.ExcelLabel;
-import bld.generator.report.excel.annotation.ExcelLocked;
-import bld.generator.report.excel.annotation.ExcelMarginSheet;
-import bld.generator.report.excel.annotation.ExcelRgbColor;
-import bld.generator.report.excel.annotation.ExcelSheetLayout;
-import bld.generator.report.excel.annotation.ExcelSuperHeader;
-import bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
-import bld.generator.report.excel.annotation.ExcelSuperHeaders;
+import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.excel.SheetData;
+import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
+import com.bld.generator.report.excel.annotation.ExcelLabel;
+import com.bld.generator.report.excel.annotation.ExcelLocked;
+import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
+import com.bld.generator.report.excel.annotation.ExcelRgbColor;
+import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeader;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
+import com.bld.generator.report.excel.annotation.ExcelSuperHeaders;
 
 /**
  * The Class AutoreLibriSheet.

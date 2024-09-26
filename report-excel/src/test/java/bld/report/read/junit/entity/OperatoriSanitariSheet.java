@@ -1,9 +1,9 @@
 package bld.report.read.junit.entity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
-import bld.read.report.excel.annotation.ExcelReadSheet;
-import bld.read.report.excel.domain.SheetRead;
+import com.bld.read.report.excel.annotation.ExcelReadSheet;
+import com.bld.read.report.excel.domain.SheetRead;
 
 @ExcelReadSheet(startRow = 1)
 public class OperatoriSanitariSheet extends SheetRead<OperatoriSanitariRow> {
