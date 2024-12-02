@@ -5,13 +5,12 @@
 */
 package com.bld.generator.report.excel.data;
 
-import jakarta.validation.constraints.NotNull;
-
 import com.bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelColumn;
 import com.bld.generator.report.excel.annotation.ExcelColumnWidth;
+import com.bld.generator.report.excel.annotation.ExcelDataValidation;
 import com.bld.generator.report.excel.annotation.ExcelDropDown;
 import com.bld.generator.report.excel.annotation.ExcelFunction;
 import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
@@ -21,6 +20,7 @@ import com.bld.generator.report.excel.annotation.impl.ExcelBooleanTextImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelDataValidationImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelDropDownImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
@@ -28,6 +28,7 @@ import com.bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
 
+import jakarta.validation.constraints.NotNull;
 /**
  * The Class ExtraColumnAnnotation.<br>
  * ExtraColumnAnnotation is used to configure the dynamic cells type and the
@@ -53,6 +54,9 @@ public class ExtraColumnAnnotation {
 
 	/** The excel date. */
 	private ExcelDate excelDate;
+
+	/** The excel data validation. */
+	private ExcelDataValidation excelDataValidation;
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
@@ -166,6 +170,16 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
+	 * Sets the excel data validation.
+	 *
+	 * @param excelDataValidation the new excel data validation
+	 */
+	public void setExcelDataValidation(ExcelDataValidationImpl excelDataValidation) {
+		if (excelDataValidation != null)
+			this.excelDataValidation = excelDataValidation.getAnnotation();
+	}
+
+	/**
 	 * Gets the excel subtotal.
 	 *
 	 * @return the excel subtotal
@@ -263,6 +277,15 @@ public class ExtraColumnAnnotation {
 	 */
 	public ExcelBooleanText getExcelBooleanText() {
 		return excelBooleanText;
+	}
+
+	/**
+	 * Gets the excel data validation.
+	 *
+	 * @return the excelDataValidation
+	 */
+	public ExcelDataValidation getExcelDataValidation() {
+		return excelDataValidation;
 	}
 
 	/**

@@ -18,6 +18,7 @@ import com.bld.generator.report.excel.RowSheet;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelColumn;
 import com.bld.generator.report.excel.annotation.ExcelColumnWidth;
+import com.bld.generator.report.excel.annotation.ExcelDataValidation;
 import com.bld.generator.report.excel.annotation.ExcelDropDown;
 import com.bld.generator.report.excel.annotation.ExcelFont;
 import com.bld.generator.report.excel.annotation.ExcelFormulaAlias;
@@ -31,6 +32,7 @@ import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 import com.bld.generator.report.excel.annotation.ExcelSubtotal;
 import com.bld.generator.report.excel.dropdown.CharacterDropDown;
 import com.bld.generator.report.excel.dropdown.IntegerDropDown;
+
 
 /**
  * The Class AutoreLibriRow.
@@ -83,6 +85,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelDate(value = ColumnDateFormat.YYYY_MM_DD)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
+	@ExcelDataValidation("AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita}); MONTH(${dataDiNascita}); DAY(${dataDiNascita})))")
 	private Calendar dataDiNascita;
 	
 	/** The titolo. */

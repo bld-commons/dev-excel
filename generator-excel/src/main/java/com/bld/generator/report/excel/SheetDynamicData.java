@@ -8,6 +8,8 @@ package com.bld.generator.report.excel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
 import com.bld.generator.report.excel.data.ExtraColumnAnnotation;
 
@@ -59,15 +61,12 @@ import jakarta.validation.constraints.Size;
  *   <td style="width: 16%; border: 1px solid #666">value by field 3</td>
  *   <td style="width: 16%; border: 1px solid #666">value by field ...N</td>
  * </tr>
- * 
- *</table>
- */
-public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn{
-		
+**/
+public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetData<T> implements DynamicColumn {
+
 	/** The map extra column annotation. */
-	private Map<String,ExtraColumnAnnotation> mapExtraColumnAnnotation;
-	
-	
+	private Map<String, ExtraColumnAnnotation> mapExtraColumnAnnotation;
+
 	/**
 	 * Instantiates a new sheet dynamic data.
 	 *
@@ -75,9 +74,8 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	 */
 	public SheetDynamicData(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
-		this.mapExtraColumnAnnotation=new HashMap<>();
+		this.mapExtraColumnAnnotation = new HashMap<>();
 	}
-
 
 	/**
 	 * Gets the map extra column annotation.
@@ -88,7 +86,6 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 		return mapExtraColumnAnnotation;
 	}
 
-
 	/**
 	 * Sets the map extra column annotation.
 	 *
@@ -98,6 +95,10 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 		this.mapExtraColumnAnnotation = mapExtraColumnAnnotation;
 	}
 
+	public void addExtraColumn(String key, ExtraColumnAnnotation extraColumnAnnotation) {
+		if (StringUtils.isNotBlank(key) && extraColumnAnnotation != null)
+			this.mapExtraColumnAnnotation.put(key, extraColumnAnnotation);
+	}
 
 	/**
 	 * Hash code.
@@ -111,7 +112,6 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 		result = prime * result + ((mapExtraColumnAnnotation == null) ? 0 : mapExtraColumnAnnotation.hashCode());
 		return result;
 	}
-
 
 	/**
 	 * Equals.
@@ -136,7 +136,4 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 		return true;
 	}
 
-
-	
-	
 }

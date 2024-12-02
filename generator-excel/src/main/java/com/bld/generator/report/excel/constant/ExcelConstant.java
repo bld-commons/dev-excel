@@ -19,6 +19,7 @@ import com.bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelFontImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ExcelConstant.
  */
@@ -50,6 +51,9 @@ public class ExcelConstant {
 	
 	/** The Constant EXCEL_DATE_DD_MM_YYYY. */
 	public final static ExcelDateImpl EXCEL_DATE_DD_MM_YYYY=new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
+	
+	/** The Constant EXCEL_DATE_YYYY_MM_DD. */
+	public final static ExcelDateImpl EXCEL_DATE_YYYY_MM_DD=new ExcelDateImpl(ColumnDateFormat.YYYY_MM_DD);
 	
 	/** The Constant DEFAULT_WIDTH_COLUMN. */
 	public static final int DEFAULT_WIDTH_COLUMN=5;
