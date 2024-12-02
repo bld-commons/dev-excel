@@ -84,9 +84,9 @@
 		<module>generator-excel</module>
 		<module>read-excel</module>
 		<module>common-spreadsheet</module>
-		<module>report-excel</module>
+		<!--<module>report-excel</module>
 		<module>report-excel-jpa</module>
-		<module>report-excel-multiple-datasource</module>
+		<module>report-excel-multiple-datasource</module>-->
 	</modules>
 
 	<dependencyManagement>
