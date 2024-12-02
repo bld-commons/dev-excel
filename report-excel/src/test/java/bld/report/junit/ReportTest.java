@@ -68,6 +68,7 @@ import com.bld.generator.report.excel.annotation.impl.ExcelChartDataLabelImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelChartImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelDataValidationImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelFontImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
@@ -97,6 +98,8 @@ import bld.report.generator.junit.entity.SituazioneUfficiRow;
 import bld.report.generator.junit.entity.SituazioneUfficiSheet;
 import bld.report.generator.junit.entity.TotaleAutoreLibriRow;
 import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
+
+
 
 /**
  * The Class ReportTest.
@@ -209,7 +212,7 @@ public class ReportTest {
 		ExcelAttachment<String> excelAttachment = ExcelAttachment.newInstance("/mnt/report/test.docx");
 		excelAttachment.setAttachmentType(AttachmentType.DOCX);
 		excelAttachment.setFileName("test");
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice", "Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", System.getProperty("user.home")+"/Documents/git-project/dev-excel/linux.jpg", excelAttachment);
 		listBaseSheet.add(casaEditrice);
 
 		List<Calendar> listDate = new ArrayList<>();
@@ -218,6 +221,7 @@ public class ReportTest {
 
 		List<AutoreLibriRowDynamic> list = new ArrayList<>();
 		AutoreLibriRowDynamic autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Profondo Rosso", "Thriller", 1, 25.5, 3.0);
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 23.4);
 		autoreLibriRow.getMapValue().put("anno2", 30.12);
 		autoreLibriRow.getMapValue().put("anno3", 20.4);
@@ -225,7 +229,7 @@ public class ReportTest {
 		list.add(autoreLibriRow);
 
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Complotto", "Thriller", 1, 30.0, 2.2);
-
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 34);
 		autoreLibriRow.getMapValue().put("ignoreColumn", "Test");
 		autoreLibriRow.getMapValue().put("anno2", 37.12);
@@ -233,25 +237,28 @@ public class ReportTest {
 		list.add(autoreLibriRow);
 
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Sto Cazzo", "Comico", 1, 12.24, 1.2);
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 10.4);
 		autoreLibriRow.getMapValue().put("anno2", 15.12);
 		autoreLibriRow.getMapValue().put("anno3", 12.4);
 		list.add(autoreLibriRow);
 
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Rossi", new CalendarDropDown(new GregorianCalendar(1960, Calendar.JULY, 14), listDate), "Amore", "Sentimentale", 1, 35.455, 4.7);
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 30.4);
 		autoreLibriRow.getMapValue().put("anno2", 35.12);
 		autoreLibriRow.getMapValue().put("anno3", 32.4);
 		list.add(autoreLibriRow);
 
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi", new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Rosso", "Sentimentale", 2, 42.0, 6.94);
-
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 40.4);
 		autoreLibriRow.getMapValue().put("anno2", 45.12);
 		autoreLibriRow.getMapValue().put("anno3", 42.4);
 		list.add(autoreLibriRow);
 
 		autoreLibriRow = new AutoreLibriRowDynamic("Mario", "Verdi", new CalendarDropDown(new GregorianCalendar(1945, Calendar.JULY, 14), listDate), "Arancio", "Sentimentale", 2, 23.24, 3.0);
+		autoreLibriRow.addValue("data", new Date());
 		autoreLibriRow.getMapValue().put("anno1", 20.4);
 		autoreLibriRow.getMapValue().put("anno2", 25.12);
 		autoreLibriRow.getMapValue().put("anno3", 22.4);
@@ -262,6 +269,10 @@ public class ReportTest {
 
 		ExcelFontImpl fontSubtotal = new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true);
 		excelCellLayoutImplSubTotal.setFont(fontSubtotal.getAnnotation());
+		
+		
+		
+		
 		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21, false));
@@ -285,6 +296,14 @@ public class ReportTest {
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20, false));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
 
+		extraColumnAnnotation=new ExtraColumnAnnotation();
+		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DATE);
+		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Date", null, 30, false));
+		extraColumnAnnotation.setExcelDate(ExcelConstant.EXCEL_DATE_DD_MM_YYYY);
+		extraColumnAnnotation.setExcelDataValidation(new ExcelDataValidationImpl("AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita}); MONTH(${dataDiNascita}); DAY(${dataDiNascita})))"));
+		autoreLibriSheet.addExtraColumn("data", extraColumnAnnotation);
+		
+		
 		extraColumnAnnotation = new ExtraColumnAnnotation();
 		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_STRING);
 		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Ignore Column", null, 20.05, true));
