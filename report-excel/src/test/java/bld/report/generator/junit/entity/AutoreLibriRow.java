@@ -18,6 +18,7 @@ import bld.generator.report.excel.RowSheet;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
+import bld.generator.report.excel.annotation.ExcelDataValidation;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
@@ -83,6 +84,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelDate(value = ColumnDateFormat.YYYY_MM_DD)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
 	@ExcelMergeRow(referenceField = "matricola")
+	@ExcelDataValidation("AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita}); MONTH(${dataDiNascita}); DAY(${dataDiNascita})))")
 	private Calendar dataDiNascita;
 	
 	/** The titolo. */

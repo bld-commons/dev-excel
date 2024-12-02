@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +22,7 @@ import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
 import bld.generator.report.excel.annotation.ExcelColumnWidth;
+import bld.generator.report.excel.annotation.ExcelDataValidation;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
@@ -87,6 +87,8 @@ public class SheetHeader implements Cloneable {
 	private ExcelBooleanText excelBooleanText;
 
 	private ExcelNumberFormat excelNumberFormat;
+	
+	private ExcelDataValidation excelDataValidation;
 
 	/** The map layout cell. */
 	private Map<Integer, LayoutCell> mapLayoutCell;
@@ -132,6 +134,8 @@ public class SheetHeader implements Cloneable {
 			this.setExcelSubtotal(field.getAnnotation(ExcelSubtotal.class));
 		if (field.isAnnotationPresent(ExcelBooleanText.class))
 			this.setExcelBooleanText(field.getAnnotation(ExcelBooleanText.class));
+		if (field.isAnnotationPresent(ExcelDataValidation.class))
+			this.setExcelDataValidation(field.getAnnotation(ExcelDataValidation.class));
 
 		this.excelColumn = SpreadsheetUtils.getAnnotation(this.field, ExcelColumn.class);
 		this.excelCellLayout = SpreadsheetUtils.getAnnotation(this.field, ExcelCellLayout.class);
@@ -525,24 +529,187 @@ public class SheetHeader implements Cloneable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cellType, colorSize, excelBooleanText, excelCellLayout, excelColumn, excelColumnWidth, excelDate, excelDropDown, excelFunction, excelHeaderCellLayout, excelImage, excelMergeRow, excelSubtotal, field, key, keyMap,
-				mapLayoutCell, numColumn, value);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cellType == null) ? 0 : cellType.hashCode());
+		result = prime * result + colorSize;
+		result = prime * result + ((excelBooleanText == null) ? 0 : excelBooleanText.hashCode());
+		result = prime * result + ((excelCellLayout == null) ? 0 : excelCellLayout.hashCode());
+		result = prime * result + ((excelColumn == null) ? 0 : excelColumn.hashCode());
+		result = prime * result + ((excelColumnWidth == null) ? 0 : excelColumnWidth.hashCode());
+		result = prime * result + ((excelDataValidation == null) ? 0 : excelDataValidation.hashCode());
+		result = prime * result + ((excelDate == null) ? 0 : excelDate.hashCode());
+		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
+		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
+		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelImage == null) ? 0 : excelImage.hashCode());
+		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((excelNumberFormat == null) ? 0 : excelNumberFormat.hashCode());
+		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
+		result = prime * result + ((field == null) ? 0 : field.hashCode());
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((keyMap == null) ? 0 : keyMap.hashCode());
+		result = prime * result + ((mapLayoutCell == null) ? 0 : mapLayoutCell.hashCode());
+		result = prime * result + numColumn;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+	
+	
+
+	public ExcelDataValidation getExcelDataValidation() {
+		return excelDataValidation;
+	}
+
+	public void setExcelDataValidation(ExcelDataValidation excelDataValidation) {
+		this.excelDataValidation = excelDataValidation;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof SheetHeader)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		SheetHeader other = (SheetHeader) obj;
-		return cellType == other.cellType && colorSize == other.colorSize && Objects.equals(excelBooleanText, other.excelBooleanText) && Objects.equals(excelCellLayout, other.excelCellLayout) && Objects.equals(excelColumn, other.excelColumn)
-				&& Objects.equals(excelColumnWidth, other.excelColumnWidth) && Objects.equals(excelDate, other.excelDate) && Objects.equals(excelDropDown, other.excelDropDown) && Objects.equals(excelFunction, other.excelFunction)
-				&& Objects.equals(excelHeaderCellLayout, other.excelHeaderCellLayout) && Objects.equals(excelImage, other.excelImage) && Objects.equals(excelMergeRow, other.excelMergeRow) && Objects.equals(excelSubtotal, other.excelSubtotal)
-				&& Objects.equals(field, other.field) && Objects.equals(key, other.key) && Objects.equals(keyMap, other.keyMap) && Objects.equals(mapLayoutCell, other.mapLayoutCell) && numColumn == other.numColumn
-				&& Objects.equals(value, other.value);
+		if (cellType != other.cellType) {
+			return false;
+		}
+		if (colorSize != other.colorSize) {
+			return false;
+		}
+		if (excelBooleanText == null) {
+			if (other.excelBooleanText != null) {
+				return false;
+			}
+		} else if (!excelBooleanText.equals(other.excelBooleanText)) {
+			return false;
+		}
+		if (excelCellLayout == null) {
+			if (other.excelCellLayout != null) {
+				return false;
+			}
+		} else if (!excelCellLayout.equals(other.excelCellLayout)) {
+			return false;
+		}
+		if (excelColumn == null) {
+			if (other.excelColumn != null) {
+				return false;
+			}
+		} else if (!excelColumn.equals(other.excelColumn)) {
+			return false;
+		}
+		if (excelColumnWidth == null) {
+			if (other.excelColumnWidth != null) {
+				return false;
+			}
+		} else if (!excelColumnWidth.equals(other.excelColumnWidth)) {
+			return false;
+		}
+		if (excelDataValidation == null) {
+			if (other.excelDataValidation != null) {
+				return false;
+			}
+		} else if (!excelDataValidation.equals(other.excelDataValidation)) {
+			return false;
+		}
+		if (excelDate == null) {
+			if (other.excelDate != null) {
+				return false;
+			}
+		} else if (!excelDate.equals(other.excelDate)) {
+			return false;
+		}
+		if (excelDropDown == null) {
+			if (other.excelDropDown != null) {
+				return false;
+			}
+		} else if (!excelDropDown.equals(other.excelDropDown)) {
+			return false;
+		}
+		if (excelFunction == null) {
+			if (other.excelFunction != null) {
+				return false;
+			}
+		} else if (!excelFunction.equals(other.excelFunction)) {
+			return false;
+		}
+		if (excelHeaderCellLayout == null) {
+			if (other.excelHeaderCellLayout != null) {
+				return false;
+			}
+		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout)) {
+			return false;
+		}
+		if (excelImage == null) {
+			if (other.excelImage != null) {
+				return false;
+			}
+		} else if (!excelImage.equals(other.excelImage)) {
+			return false;
+		}
+		if (excelMergeRow == null) {
+			if (other.excelMergeRow != null) {
+				return false;
+			}
+		} else if (!excelMergeRow.equals(other.excelMergeRow)) {
+			return false;
+		}
+		if (excelNumberFormat == null) {
+			if (other.excelNumberFormat != null) {
+				return false;
+			}
+		} else if (!excelNumberFormat.equals(other.excelNumberFormat)) {
+			return false;
+		}
+		if (excelSubtotal == null) {
+			if (other.excelSubtotal != null) {
+				return false;
+			}
+		} else if (!excelSubtotal.equals(other.excelSubtotal)) {
+			return false;
+		}
+		if (field == null) {
+			if (other.field != null) {
+				return false;
+			}
+		} else if (!field.equals(other.field)) {
+			return false;
+		}
+		if (key == null) {
+			if (other.key != null) {
+				return false;
+			}
+		} else if (!key.equals(other.key)) {
+			return false;
+		}
+		if (keyMap == null) {
+			if (other.keyMap != null) {
+				return false;
+			}
+		} else if (!keyMap.equals(other.keyMap)) {
+			return false;
+		}
+		if (mapLayoutCell == null) {
+			if (other.mapLayoutCell != null) {
+				return false;
+			}
+		} else if (!mapLayoutCell.equals(other.mapLayoutCell)) {
+			return false;
+		}
+		if (numColumn != other.numColumn) {
+			return false;
+		}
+		if (value == null) {
+			if (other.value != null) {
+				return false;
+			}
+		} else if (!value.equals(other.value)) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -94,8 +95,10 @@ import bld.generator.report.excel.SheetData;
 import bld.generator.report.excel.SheetDynamicData;
 import bld.generator.report.excel.SheetSummary;
 import bld.generator.report.excel.annotation.ExcelBorder;
+import bld.generator.report.excel.annotation.ExcelBoxMessage;
 import bld.generator.report.excel.annotation.ExcelCellLayout;
 import bld.generator.report.excel.annotation.ExcelColumn;
+import bld.generator.report.excel.annotation.ExcelDataValidation;
 import bld.generator.report.excel.annotation.ExcelDropDown;
 import bld.generator.report.excel.annotation.ExcelFont;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
@@ -136,8 +139,6 @@ import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
  */
 public abstract class SuperGenerateExcelImpl {
 
-	
-	
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
 
@@ -259,12 +260,12 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		ExcelDate excelDate = null;
-		ExcelNumberFormat excelNumberFormat=null;
+		ExcelNumberFormat excelNumberFormat = null;
 		if (sheetHeader != null) {
 			excelDate = sheetHeader.getExcelDate();
-			excelNumberFormat=sheetHeader.getExcelNumberFormat();
+			excelNumberFormat = sheetHeader.getExcelNumberFormat();
 		}
-			
+
 		CellStyle cellStyle = workbook.createCellStyle();
 		int indexFont = indexRow % layout.rgbFont().length;
 		int indexForeground = indexRow % layout.rgbForeground().length;
@@ -296,16 +297,16 @@ public abstract class SuperGenerateExcelImpl {
 
 		if (excelDate != null)
 			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
-		else if(excelNumberFormat!=null && StringUtils.isNotBlank(excelNumberFormat.value()))
+		else if (excelNumberFormat != null && StringUtils.isNotBlank(excelNumberFormat.value()))
 			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value());
 		else if (layout.precision() > -1 || layout.percent()) {
 			String format = "0";
-			if(layout.precision() > 0)
-				format+=".";
+			if (layout.precision() > 0)
+				format += ".";
 			for (int i = 0; i < layout.precision(); i++)
 				format += "0";
-			if(layout.percent())
-				format+="%";
+			if (layout.percent())
+				format += "%";
 			cellStyle = dateCellStyle(workbook, cellStyle, format);
 		} else if (sheetHeader != null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
 			DataFormat fmt = workbook.createDataFormat();
@@ -652,8 +653,9 @@ public abstract class SuperGenerateExcelImpl {
 		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
 		Matcher matcher = ExcelUtils.matcher(PATTERN, function);
 		Map<String, ExcelFormulaAlias> mapExcelFormulaAlias = new HashMap<>();
-		for (ExcelFormulaAlias formulaAlias : alias)
-			mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
+		if (ArrayUtils.isNotEmpty(alias))
+			for (ExcelFormulaAlias formulaAlias : alias)
+				mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
 
 		while (matcher.find()) {
 			String parameter = matcher.group();
@@ -666,7 +668,7 @@ public abstract class SuperGenerateExcelImpl {
 				String sheetPoint = "";
 				if (StringUtils.isNotEmpty(excelFormulaAlias.sheet()))
 					sheetPoint = excelFormulaAlias.sheet() + ".";
-				keyParameter = sheetPoint + mapExcelFormulaAlias.get(keyParameter).coordinate();
+				keyParameter = sheetPoint + excelFormulaAlias.coordinate();
 				blockColumn = excelFormulaAlias.blockColumn();
 				blockRow = excelFormulaAlias.blockRow();
 				// parameter=parameter.replace(excelFormulaAlias.alias(),keyParameter);
@@ -978,6 +980,27 @@ public abstract class SuperGenerateExcelImpl {
 //		
 //	}
 
+	private void dataValidation(Sheet sheet, Cell cell, SheetHeader sheetHeader) throws Exception {
+		if (sheetHeader.getExcelDataValidation() != null) {
+			ExcelDataValidation excelDataValidation = sheetHeader.getExcelDataValidation();
+			ExcelBoxMessage errorBox = excelDataValidation.errorBox();
+			String formula=excelDataValidation.value();
+			formula = this.buildFunction(sheet, cell.getRowIndex(), formula, RowStartEndType.ROW_EMPTY, excelDataValidation.alias());
+			formula = this.buildFunction(sheet, null, formula, RowStartEndType.ROW_START, excelDataValidation.alias());
+			formula = this.buildFunction(sheet, null, formula, RowStartEndType.ROW_END, excelDataValidation.alias());
+			CellRangeAddressList addressList = new CellRangeAddressList(cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
+			DataValidationHelper validationHelper = sheet.getDataValidationHelper();
+			DataValidationConstraint customConstraint = validationHelper.createCustomConstraint(formula);
+			DataValidation dataValidation = validationHelper.createValidation(customConstraint, addressList);
+			if (errorBox.show()) {
+				dataValidation.setShowErrorBox(errorBox.show());
+				dataValidation.createErrorBox(errorBox.title(), errorBox.message());
+				dataValidation.setErrorStyle(errorBox.boxStyle().getValue());
+			}
+			sheet.addValidationData(dataValidation);
+		}
+	}
+
 	/**
 	 * Sets the cell value excel.
 	 *
@@ -1039,6 +1062,8 @@ public abstract class SuperGenerateExcelImpl {
 			sheetHeader.setValue(dropDown.getValue());
 			setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet);
 		}
+		
+		this.dataValidation(sheet, cell, sheetHeader);
 
 	}
 

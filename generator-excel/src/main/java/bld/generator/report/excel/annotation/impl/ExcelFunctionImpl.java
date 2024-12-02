@@ -10,7 +10,6 @@ import java.util.Arrays;
 import bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import bld.generator.report.excel.annotation.ExcelFunction;
 import bld.generator.report.excel.annotation.ExcelFunctionSubTotal;
-import bld.generator.report.excel.annotation.ExcelNumberFormat;
 
 /**
  * The Class ExcelFunctionImpl.

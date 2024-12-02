@@ -41,7 +41,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.7</version>
+		<version>2.7.18</version>
 		<relativePath />
 	</parent>
 
@@ -84,9 +84,9 @@
 		<module>generator-excel</module>
 		<module>read-excel</module>
 		<module>common-spreadsheet</module>
-		<!--<module>report-excel</module>
+		<module>report-excel</module>
 		<module>report-excel-jpa</module>
-		<module>report-excel-multiple-datasource</module>-->
+		<module>report-excel-multiple-datasource</module>
 	</modules>
 
 	<dependencyManagement>

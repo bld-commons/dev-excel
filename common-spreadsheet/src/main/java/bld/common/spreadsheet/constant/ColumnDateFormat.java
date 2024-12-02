@@ -1,13 +1,9 @@
-/**
-* @author Francesco Baldi
-* @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.excel.constant.ColumnDateFormat.java
-*/
+
 package bld.common.spreadsheet.constant;
 
 /**
  * The Enum ColumnDateFormat.<br>
- * ColumnDateFormat is used to set the date format. It is used on the following annotation {@link bld.generator.report.excel.annotation.ExcelDate}.
+ * ColumnDateFormat is used to set the date format. It is used on the following annotation {@link bld.common.spreadsheet.excel.annotation.ExcelDate}.
  * 
  */
 public enum ColumnDateFormat {
