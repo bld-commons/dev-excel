@@ -187,10 +187,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	@Override
 	public byte[] createFileXls(ReportExcel report) throws Exception {
 		this.mergeCalcoloCells = null;
+		ByteArrayOutputStream byteArrayOutputStream =null;
 		byte[] byteExcel = null;
 		HSSFWorkbook workbook = null;
 		try {
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			byteArrayOutputStream = new ByteArrayOutputStream();
 			boolean isCover = true;
 			if(!report.isIgnoreCover() && this.cover!=null) 
 				workbook=new HSSFWorkbook(this.cover.getInputStream());			
@@ -205,6 +206,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		} finally {
 			if (workbook != null)
 				workbook.close();
+			if(byteArrayOutputStream!=null)
+				byteArrayOutputStream.close();
 		}
 
 		return byteExcel;
@@ -233,10 +236,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	@Override
 	public byte[] createFileXlsx(ReportExcel report) throws Exception {
 		this.mergeCalcoloCells = null;
+		ByteArrayOutputStream byteArrayOutputStream =null;
 		byte[] byteExcel = null;
 		XSSFWorkbook workbook = null;
 		try {
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			byteArrayOutputStream = new ByteArrayOutputStream();
 			boolean isCover = true;
 			if(!report.isIgnoreCover() && this.cover!=null) 
 				workbook=new XSSFWorkbook(this.cover.getInputStream());			
@@ -253,6 +257,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		} finally {
 			if (workbook != null)
 				workbook.close();
+			if(byteArrayOutputStream!=null)
+				byteArrayOutputStream.close();
 		}
 		return byteExcel;
 	}
@@ -268,10 +274,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception {
 		this.mergeCalcoloCells = null;
 		byte[] byteExcel = null;
+		ByteArrayOutputStream byteArrayOutputStream =null;
 		SXSSFWorkbook workbook = null;
 		XSSFWorkbook coverWorkbook = null;
 		try {
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			byteArrayOutputStream = new ByteArrayOutputStream();
 			// boolean isCover = true;
 			if(!report.isIgnoreCover() && this.cover!=null) {
 				coverWorkbook=new XSSFWorkbook(this.cover.getInputStream());
@@ -288,6 +295,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		} finally {
 			if (workbook != null)
 				workbook.close();
+			if(byteArrayOutputStream!=null)
+				byteArrayOutputStream.close();
 		}
 		return byteExcel;
 	}

@@ -7,6 +7,8 @@ package com.bld.read.report.excel.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
 
 import jakarta.validation.constraints.NotNull;
@@ -20,29 +22,28 @@ import jakarta.validation.constraints.Size;
  * <li>ListRowSheet - to get the result of the RowSheetRead list</li>
  * <lI>SheetName - to get the excel sheet through the name</li>
  * </ul>
+ * 
  * @param <T> the generic type
  */
 public abstract class SheetRead<T extends RowSheetRead> {
 
 	/** The list row sheet. */
-	private List<T>listRowSheet;
-	
+	private List<T> listRowSheet;
+
 	/** The sheet name. */
 	@NotNull
 	private String sheetName;
-	
-	
+
 	/**
 	 * Instantiates a new sheet read.
 	 *
 	 * @param sheetName the sheet name
 	 */
-	public SheetRead(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE)String sheetName) {
+	public SheetRead(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super();
-		this.listRowSheet=new ArrayList<>();
-		this.sheetName=sheetName;
+		this.listRowSheet = new ArrayList<>();
+		this.sheetName = sheetName;
 	}
-
 
 	/**
 	 * Gets the list row sheet.
@@ -52,6 +53,12 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	public List<T> getListRowSheet() {
 		return listRowSheet;
 	}
+
+	public int size() {
+		if(CollectionUtils.isNotEmpty(this.listRowSheet))
+			return this.listRowSheet.size();
+		return 0;
+	}
 	
 	/**
 	 * Adds the row sheet.
@@ -60,9 +67,13 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 * @throws Exception the exception
 	 */
 	public void addRowSheet(T t) throws Exception {
-		this.listRowSheet.add(t);
+		if (this.filtered(t))
+			this.listRowSheet.add(t);
 	}
 
+	protected boolean filtered(T t) {
+		return true;
+	}
 
 	/**
 	 * Gets the sheet name.
@@ -73,7 +84,6 @@ public abstract class SheetRead<T extends RowSheetRead> {
 		return sheetName;
 	}
 
-
 	/**
 	 * Sets the sheet name.
 	 *
@@ -82,7 +92,6 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	public void setSheetName(String sheetName) {
 		this.sheetName = sheetName;
 	}
-
 
 	/**
 	 * Hash code.
@@ -97,7 +106,6 @@ public abstract class SheetRead<T extends RowSheetRead> {
 		result = prime * result + ((sheetName == null) ? 0 : sheetName.hashCode());
 		return result;
 	}
-
 
 	/**
 	 * Equals.
@@ -126,7 +134,5 @@ public abstract class SheetRead<T extends RowSheetRead> {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

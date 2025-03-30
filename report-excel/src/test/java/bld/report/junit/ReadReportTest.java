@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -36,7 +37,9 @@ import bld.report.controller.entity.ReadAutoreLibriSheet;
 import bld.report.controller.entity.ReadGenereRow;
 import bld.report.controller.entity.ReadGenereSheet;
 import bld.report.controller.input.ExcelModel;
-import bld.report.read.junit.entity.UserCsvRow;
+import bld.report.read.junit.entity.DataMeteoRow;
+import bld.report.read.junit.entity.DataMeteoSheet;
+import bld.report.read.junit.entity.RendicontazioneMassivaImportColumn;
 
 /**
  * The Class ReportTest.
@@ -105,16 +108,31 @@ public class ReadReportTest {
 
 	}
 
-	
+	@Test
+	public void testDataMeteo() throws Exception {
+		ExcelRead excelRead=new ExcelRead();
+		excelRead.setExcelType(ExcelType.XLSX);
+		excelRead.setReportExcel("/mnt/report/test_data_meteo.xlsx");
+		excelRead.addSheetConvertion(DataMeteoSheet.class, "sheet");
+		Date start=new Date();
+		excelRead=this.readExcel.convertExcelToEntity(excelRead);
+		Date end=new Date();
+		DataMeteoSheet sheet=excelRead.getSheet(DataMeteoSheet.class, "sheet");
+		for (DataMeteoRow row : sheet.getListRowSheet())
+			logger.info(row.toString());
+		logger.info("row size: "+sheet.size());
+		logger.info("Time conversion: "+(end.getTime()-start.getTime())+"ms");
+	}
 	
 	@Test
 	public void testReadCsv() throws Exception {
 		FileInputStream inputStream = new FileInputStream("/mnt/report/Test.csv");
 		byte[] report = IOUtils.toByteArray(inputStream);
-		CsvRead<UserCsvRow> userCsvRead=new CsvRead<>();
+		CsvRead<RendicontazioneMassivaImportColumn> userCsvRead=new CsvRead<>();
 		userCsvRead.setCsv(report);
 		try {
-			this.readCsv.convertCsvToEntity(userCsvRead,UserCsvRow.class);
+			this.readCsv.convertCsvToEntity(userCsvRead,RendicontazioneMassivaImportColumn.class);
+			logger.info("Size list: "+userCsvRead.getListRowSheet().size());
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}

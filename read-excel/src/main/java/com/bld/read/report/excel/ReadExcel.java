@@ -22,15 +22,6 @@ public interface ReadExcel {
 	 */
 	public abstract <T extends ExcelRead> T convertExcelToEntity(T entity) throws Exception;
 
-	/**
-	 * Convert excel to entity.
-	 *
-	 * @param <T>      the generic type
-	 * @param entity   the entity
-	 * @param pathFile the path file
-	 * @return the t
-	 * @throws Exception the exception
-	 */
-	public abstract <T extends ExcelRead> T convertExcelToEntity(T entity, String pathFile) throws Exception;
+
 
 }

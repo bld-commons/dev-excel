@@ -5,19 +5,19 @@ import com.bld.read.report.excel.domain.RowSheetRead;
 
 public class OperatoriSanitariRow implements RowSheetRead {
 
-	@ExcelReadColumn(name = "CodiceFiscale")
+	@ExcelReadColumn(value = "CodiceFiscale")
 	private String codFisc;
-	@ExcelReadColumn(name = "Nome")
+	@ExcelReadColumn(value = "Nome")
 	private String nome;
-	@ExcelReadColumn(name = "Cognome")
+	@ExcelReadColumn(value = "Cognome")
 	private String cognome;
-	@ExcelReadColumn(name = "Presidio/Distretto")
+	@ExcelReadColumn(value = "Presidio/Distretto")
 	private String presidioDistretto;
-	@ExcelReadColumn(name = "Struttura")
+	@ExcelReadColumn(value = "Struttura")
 	private String struttura;
-	@ExcelReadColumn(name = "NumeroMatricola")
+	@ExcelReadColumn(value = "NumeroMatricola")
 	private String matricola;
-	@ExcelReadColumn(name = "TipoSoggetto")
+	@ExcelReadColumn(value = "TipoSoggetto")
 	private String tipoSoggetto;
 
 	public String getCodFisc() {

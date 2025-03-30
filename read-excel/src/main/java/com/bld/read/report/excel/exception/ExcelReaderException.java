@@ -12,7 +12,7 @@ import com.bld.read.report.excel.constant.ExcelReaderConstant;
  * ExcelReaderException is used to manage the exceptions when reading the excel.
  */
 @SuppressWarnings("serial")
-public class ExcelReaderException extends Exception {
+public class ExcelReaderException extends RuntimeException {
 	
 	/** The code. */
 	private String code;
@@ -48,8 +48,9 @@ public class ExcelReaderException extends Exception {
 		
 	}
 
-	
-
+	public ExcelReaderException(Throwable cause) {
+		super(cause);
+	}
 
 	/**
 	 * Gets the code.
