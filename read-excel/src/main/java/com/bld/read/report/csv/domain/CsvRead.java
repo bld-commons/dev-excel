@@ -7,7 +7,6 @@ package com.bld.read.report.csv.domain;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,8 @@ public class CsvRead<T extends RowSheetRead> {
 
 	/** The list row sheet. */
 	private List<T> listRowSheet;
+	
+	private boolean close;
 
 	/**
 	 * Instantiates a new csv read.
@@ -38,6 +39,7 @@ public class CsvRead<T extends RowSheetRead> {
 	public CsvRead() {
 		super();
 		this.listRowSheet = new ArrayList<>();
+		this.close=false;
 	}
 
 	/**
@@ -82,17 +84,7 @@ public class CsvRead<T extends RowSheetRead> {
 			}
 	}
 
-	/**
-	 * Close.
-	 */
-	public void close() {
-		if (this.csv != null)
-			try {
-				this.csv.close();
-			} catch (IOException e) {
-				throw new ExcelReaderException(e);
-			}
-	}
+	
 
 	/**
 	 * Gets the list row sheet.
@@ -101,6 +93,20 @@ public class CsvRead<T extends RowSheetRead> {
 	 */
 	public List<T> getListRowSheet() {
 		return listRowSheet;
+	}
+
+	/**
+	 * @return the close
+	 */
+	public boolean isClose() {
+		return close;
+	}
+
+	/**
+	 * @param close the close to set
+	 */
+	public void setClose(boolean close) {
+		this.close = close;
 	}
 
 }

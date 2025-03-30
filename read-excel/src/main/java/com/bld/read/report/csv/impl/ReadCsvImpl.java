@@ -55,7 +55,8 @@ public class ReadCsvImpl implements ReadCsv {
 	@Override
 	public <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, Class<T> classT) throws Exception {
 		csvRead=this.extractEntities(csvRead, classT);
-		csvRead.close();
+		if(csvRead.isClose() && csvRead.getCsv()!=null)
+			csvRead.getCsv().close();
 		return csvRead;
 	}
 

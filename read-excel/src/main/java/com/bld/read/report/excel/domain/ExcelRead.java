@@ -7,7 +7,6 @@ package com.bld.read.report.excel.domain;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -56,6 +55,8 @@ public class ExcelRead {
 	/** The excel type. */
 	@NotNull
 	private ExcelType excelType;
+	
+	private boolean close;
 
 	/**
 	 * Instantiates a new excel read.
@@ -65,6 +66,7 @@ public class ExcelRead {
 		this.excelType = ExcelType.XLS;
 		this.listSheetRead = new ArrayList<>();
 		this.mapSheet = new HashMap<>();
+		this.close=false;
 	}
 
 	/**
@@ -122,18 +124,22 @@ public class ExcelRead {
 			}
 	}
 
-	/**
-	 * Close.
-	 */
-	public void close()  {
-		if(this.reportExcel!=null)
-			try {
-				this.reportExcel.close();
-			} catch (IOException e) {
-				throw new  ExcelReaderException(e);
-			}
-	}
 	
+	
+	/**
+	 * @return the close
+	 */
+	public boolean isClose() {
+		return close;
+	}
+
+	/**
+	 * @param close the close to set
+	 */
+	public void setClose(boolean close) {
+		this.close = close;
+	}
+
 	/**
 	 * Gets the list class sheet.
 	 *
