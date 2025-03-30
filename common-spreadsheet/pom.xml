@@ -6,11 +6,7 @@
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-<<<<<<< HEAD
-		<version>5.0.2</version>
-=======
 		<version>5.0.3</version>
->>>>>>> 3a2cd34fc3678db666658f07c79f48dbf8a7fcd3
 	</parent>
 	<artifactId>common-spreadsheet</artifactId>
 	<name>common-spreadsheet</name>
