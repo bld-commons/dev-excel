@@ -75,9 +75,11 @@ public class ReadExcelImpl implements ReadExcel {
 	@Override
 	public ExcelRead convertExcelToEntity(ExcelRead excelRead) throws Exception {
 		excelRead=this.extractEntities(excelRead);
-		excelRead.close();
+		if(excelRead.isClose() && excelRead.getReportExcel()!=null) 
+			excelRead.getReportExcel().close();
 		return excelRead;
 	}
+	
 
 	
 
@@ -327,4 +329,6 @@ public class ReadExcelImpl implements ReadExcel {
 		return sdf.parse(date);
 	}
 
+	
+	
 }

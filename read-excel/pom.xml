@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>5.0.4-SNAPSHOT</version>
+		<version>5.0.4</version>
 	</parent>
 
 

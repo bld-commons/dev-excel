@@ -1,7 +1,5 @@
 package bld.report.read.junit.entity;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.util.Calendar;
 
 import com.bld.read.report.excel.annotation.ExcelReadSheet;
