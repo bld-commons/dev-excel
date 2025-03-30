@@ -26,17 +26,6 @@ public interface ReadCsv {
 	public abstract <T extends RowSheetRead> CsvRead<T>  convertCsvToEntity(CsvRead<T> csvRead,Class<T> classT) throws Exception;
 
 	
-	
-	/**
-	 * Convert csv to entity.
-	 *
-	 * @param <T>      the generic type
-	 * @param csvRead  the csv read
-	 * @param pathFile the path file
-	 * @param classT   the class T
-	 * @return the list
-	 * @throws Exception the exception
-	 */
-	public abstract <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile,Class<T> classT) throws Exception;
+
 	
 }

@@ -23,6 +23,8 @@ public @interface ExcelReadColumn {
 	 *
 	 * @return the string
 	 */
-	public String name();
+	public String value();
+	
+	public boolean ignoreCellTypeString() default false;
 	
 }

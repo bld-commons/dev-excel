@@ -11,23 +11,23 @@ import com.bld.read.report.excel.domain.RowSheetRead;
 @CsvSettings(delimiter = ';',skipHeaderRecord = true)
 public class UserCsvRow implements RowSheetRead {
 
-	@ExcelReadColumn(name="name")
+	@ExcelReadColumn(value="name")
 	private String name;
 	
-	@ExcelReadColumn(name="email")
+	@ExcelReadColumn(value="email")
 	private String email;
 	
-	@ExcelReadColumn(name="phone")
+	@ExcelReadColumn(value="phone")
 	private String phone;	
 	
-	@ExcelReadColumn(name="country")
+	@ExcelReadColumn(value="country")
 	private String country;	
 	
-	@ExcelReadColumn(name="birth date")
+	@ExcelReadColumn(value="birth date")
 	@CsvDate(separator = "-")
 	private Date date;
 	
-	@ExcelReadColumn(name="id")
+	@ExcelReadColumn(value="id")
 	private Integer id;
 
 	public String getName() {

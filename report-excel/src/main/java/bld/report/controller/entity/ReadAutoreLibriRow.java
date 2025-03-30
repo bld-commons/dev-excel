@@ -18,35 +18,35 @@ public class ReadAutoreLibriRow implements RowSheetRead {
 
 	
 	/** The nome. */
-	@ExcelReadColumn(name = "Nome")
+	@ExcelReadColumn(value = "Nome")
 	private String nome;
 	
 	/** The cognome. */
-	@ExcelReadColumn(name = "Cognome")
+	@ExcelReadColumn(value = "Cognome")
 	private String cognome;
 	
 	/** The data di nascita. */
-	@ExcelReadColumn(name = "Data di Nascita")
+	@ExcelReadColumn(value = "Data di Nascita")
 	private Calendar dataDiNascita;
 	
 	/** The titolo. */
-	@ExcelReadColumn(name = "Titolo")
+	@ExcelReadColumn(value = "Titolo")
 	private String titolo;
 	
 	/** The genere. */
-	@ExcelReadColumn(name = "Genere")
+	@ExcelReadColumn(value = "Genere")
 	private String genere;
 	
 	/** The matricola. */
-	@ExcelReadColumn(name = "Matricola")
+	@ExcelReadColumn(value = "Matricola")
 	private Integer matricola;
 	
 	/** The prezzo. */
-	@ExcelReadColumn(name = "Prezzo")
+	@ExcelReadColumn(value = "Prezzo")
 	private Double prezzo;
 	
 	/** The anno. */
-	@ExcelReadColumn(name = "Anno")
+	@ExcelReadColumn(value = "Anno")
 	private Integer anno;
 
 	

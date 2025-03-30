@@ -4,9 +4,6 @@
  */
 package com.bld.read.report.csv.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Field;
@@ -57,39 +54,25 @@ public class ReadCsvImpl implements ReadCsv {
 	 */
 	@Override
 	public <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, Class<T> classT) throws Exception {
-		InputStream inputStream = new ByteArrayInputStream(csvRead.getCsv());
-		return this.convertCsvToEntity(csvRead, inputStream, classT);
+		csvRead=this.extractEntities(csvRead, classT);
+		csvRead.close();
+		return csvRead;
 	}
 
-	/**
-	 * Convert csv to entity.
-	 *
-	 * @param <T>      the generic type
-	 * @param csvRead  the csv read
-	 * @param pathFile the path file
-	 * @param classT   the class T
-	 * @return the list
-	 * @throws Exception the exception
-	 */
-	@Override
-	public <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, String pathFile, Class<T> classT) throws Exception {
-		InputStream inputStream = new FileInputStream(pathFile);
-		return this.convertCsvToEntity(csvRead, inputStream, classT);
-	}
+
 
 	/**
-	 * Convert csv to entity.
+	 * Extract entities.
 	 *
-	 * @param <T>         the generic type
-	 * @param csvRead     the csv read
-	 * @param inputStream the input stream
-	 * @param classT      the class T
-	 * @return the list
+	 * @param <T>     the generic type
+	 * @param csvRead the csv read
+	 * @param classT  the class T
+	 * @return the csv read
 	 * @throws Exception the exception
 	 */
-	private <T extends RowSheetRead> CsvRead<T> convertCsvToEntity(CsvRead<T> csvRead, InputStream inputStream, Class<T> classT) throws Exception {
+	private <T extends RowSheetRead> CsvRead<T> extractEntities(CsvRead<T> csvRead, Class<T> classT) throws Exception {
 
-		Reader csvReader = new InputStreamReader(inputStream);
+		Reader csvReader = new InputStreamReader(csvRead.getCsv());
 		Map<String, Field> mapField = new HashMap<>();
 		CsvSettings csvSettings = SpreadsheetUtils.getAnnotation(classT, CsvSettings.class);
 		CSVFormat csvFormat=CsvUtils.getCsvFormat(csvSettings);
@@ -98,13 +81,14 @@ public class ReadCsvImpl implements ReadCsv {
 		for (Field field : listField) {
 			if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 				ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
-				mapField.put(excelReadColumn.name(), field);
+				mapField.put(excelReadColumn.value(), field);
 			}
 		}
 		CSVParser csvParser = new CSVParser(csvReader, csvFormat);
 		for (CSVRecord csvRecord : csvParser) {
 			T t = classT.getDeclaredConstructor().newInstance();
 			for (String header : csvParser.getHeaderNames()) {
+				logger.debug("Column Name: "+header);
 				Field field = mapField.get(header);
 				Object value = null;
 				Class<?> classField = field.getType();

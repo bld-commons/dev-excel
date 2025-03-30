@@ -14,11 +14,11 @@ import com.bld.read.report.excel.domain.RowSheetRead;
 public class ReadGenereRow implements RowSheetRead {
 
 	/** The genere. */
-	@ExcelReadColumn(name = "Genere")
+	@ExcelReadColumn(value = "Genere")
 	private String genere;
 	
 	/** The count libri. */
-	@ExcelReadColumn(name = "Totale Libri")
+	@ExcelReadColumn(value = "Totale Libri")
 	private Integer countLibri;
 	
 	/**

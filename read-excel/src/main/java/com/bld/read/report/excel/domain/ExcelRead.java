@@ -4,17 +4,18 @@
  */
 package com.bld.read.report.excel.domain;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
@@ -22,13 +23,18 @@ import com.bld.read.report.excel.constant.ExcelExceptionType;
 import com.bld.read.report.excel.constant.ExcelType;
 import com.bld.read.report.excel.exception.ExcelReaderException;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * The Class ExcelRead.<br>
  * ExcelRead is the object that represents the excel file.<br>
  * It is composed by:
  * <ul>
  * <li>ReportExcel - to set the excel file in byte array</li>
- * <li>ListSheetRead - to set a SheetRead list where each object is a new instance</li>
+ * <li>ListSheetRead - to set a SheetRead list where each object is a new
+ * instance</li>
  * <li>MapSheet - to get result SheetRead list through class type</li>
  * <li>ExcelType - to set the xls or xlsx type</li>
  * </ul>
@@ -37,37 +43,29 @@ public class ExcelRead {
 
 	/** The report excel. */
 	@NotNull
-	private byte[] reportExcel;
-	
+	private InputStream reportExcel;
+
 	/** The list class sheet. */
 	@Valid
 	@NotEmpty
 	private List<SheetRead<? extends RowSheetRead>> listSheetRead;
-	
-	
+
 	/** The map sheet. */
-	private Map<String,SheetRead<?>> mapSheet;
-	
-	
-	
+	private Map<String, SheetRead<?>> mapSheet;
+
 	/** The excel type. */
 	@NotNull
 	private ExcelType excelType;
-	
-	
 
 	/**
 	 * Instantiates a new excel read.
 	 */
 	public ExcelRead() {
 		super();
-		this.excelType=ExcelType.XLS;
-		this.listSheetRead=new ArrayList<>();
-		this.mapSheet=new HashMap<>();
+		this.excelType = ExcelType.XLS;
+		this.listSheetRead = new ArrayList<>();
+		this.mapSheet = new HashMap<>();
 	}
-
-	
-	
 
 	/**
 	 * Gets the sheet.
@@ -78,22 +76,18 @@ public class ExcelRead {
 	 * @return the sheet
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends SheetRead<?>> T getSheet(Class<T>classSheetRead,String sheetName) {
-		return (T)this.mapSheet.get(sheetName);
+	public <T extends SheetRead<?>> T getSheet(Class<T> classSheetRead, String sheetName) {
+		return (T) this.mapSheet.get(sheetName);
 	}
-
-
 
 	/**
 	 * Gets the report excel.
 	 *
 	 * @return the report excel
 	 */
-	public byte[] getReportExcel() {
+	public InputStream getReportExcel() {
 		return reportExcel;
 	}
-
-
 
 	/**
 	 * Sets the report excel.
@@ -101,11 +95,45 @@ public class ExcelRead {
 	 * @param reportExcel the new report excel
 	 */
 	public void setReportExcel(byte[] reportExcel) {
+		if (ArrayUtils.isNotEmpty(reportExcel))
+			this.reportExcel = new ByteArrayInputStream(reportExcel);
+	}
+
+	/**
+	 * Sets the report excel.
+	 *
+	 * @param reportExcel the new report excel
+	 */
+	public void setReportExcel(InputStream reportExcel) {
 		this.reportExcel = reportExcel;
 	}
 
+	/**
+	 * Sets the report excel.
+	 *
+	 * @param pathFile the new report excel
+	 */
+	public void setReportExcel(String pathFile) {
+		if (StringUtils.isNotBlank(pathFile))
+			try {
+				this.reportExcel = new FileInputStream(pathFile);
+			} catch (FileNotFoundException e) {
+				throw new ExcelReaderException(e);
+			}
+	}
 
-
+	/**
+	 * Close.
+	 */
+	public void close()  {
+		if(this.reportExcel!=null)
+			try {
+				this.reportExcel.close();
+			} catch (IOException e) {
+				throw new  ExcelReaderException(e);
+			}
+	}
+	
 	/**
 	 * Gets the list class sheet.
 	 *
@@ -125,25 +153,24 @@ public class ExcelRead {
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName,String keyField) throws Exception {
+	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T> classSheetRead, String sheetName, String keyField) throws Exception {
 		Constructor<?> constructor = null;
-		T sheetRead=null;
-		if(MapSheetRead.class.isAssignableFrom(classSheetRead)) {
-			if(StringUtils.isEmpty(keyField))
+		T sheetRead = null;
+		if (MapSheetRead.class.isAssignableFrom(classSheetRead)) {
+			if (StringUtils.isEmpty(keyField))
 				throw new ExcelReaderException(ExcelExceptionType.KEY_FIELD_IS_NOT_NULL);
-			constructor = classSheetRead.getConstructor(String.class,String.class);
-			sheetRead= (T) constructor.newInstance(sheetName,keyField);
-		}else {
+			constructor = classSheetRead.getConstructor(String.class, String.class);
+			sheetRead = (T) constructor.newInstance(sheetName, keyField);
+		} else {
 			constructor = classSheetRead.getConstructor(String.class);
-			sheetRead= (T) constructor.newInstance(sheetName);
+			sheetRead = (T) constructor.newInstance(sheetName);
 		}
-			
-		
+
 		this.listSheetRead.add(sheetRead);
-		if(sheetName.length()>SpreadsheetUtils.SHEET_NAME_SIZE)
+		if (sheetName.length() > SpreadsheetUtils.SHEET_NAME_SIZE)
 			throw new ExcelReaderException(ExcelExceptionType.MAX_SHEET_NAME, null);
-		if(this.mapSheet.containsKey(sheetName))
-			throw new ExcelReaderException(ExcelExceptionType.MULTIPLE_SHEET_NAME,sheetName);
+		if (this.mapSheet.containsKey(sheetName))
+			throw new ExcelReaderException(ExcelExceptionType.MULTIPLE_SHEET_NAME, sheetName);
 		this.mapSheet.put(sheetName, sheetRead);
 	}
 
@@ -155,8 +182,8 @@ public class ExcelRead {
 	 * @param sheetName      the sheet name
 	 * @throws Exception the exception
 	 */
-	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T>classSheetRead,String sheetName) throws Exception {
-		this.addSheetConvertion(classSheetRead, sheetName,null);
+	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T> classSheetRead, String sheetName) throws Exception {
+		this.addSheetConvertion(classSheetRead, sheetName, null);
 	}
 
 	/**
@@ -168,9 +195,6 @@ public class ExcelRead {
 		this.listSheetRead = listSheetRead;
 	}
 
-
-
-
 	/**
 	 * Gets the excel type.
 	 *
@@ -179,8 +203,6 @@ public class ExcelRead {
 	public ExcelType getExcelType() {
 		return excelType;
 	}
-
-
 
 	/**
 	 * Sets the excel type.
@@ -191,8 +213,6 @@ public class ExcelRead {
 		this.excelType = excelType;
 	}
 
-
-
 	/**
 	 * Gets the map sheet.
 	 *
@@ -202,8 +222,6 @@ public class ExcelRead {
 		return mapSheet;
 	}
 
-
-
 	/**
 	 * Sets the map sheet.
 	 *
@@ -212,8 +230,6 @@ public class ExcelRead {
 	public void setMapSheet(Map<String, SheetRead<?>> mapSheetBySheetName) {
 		this.mapSheet = mapSheetBySheetName;
 	}
-
-
 
 	/**
 	 * Hash code.
@@ -227,11 +243,9 @@ public class ExcelRead {
 		result = prime * result + ((excelType == null) ? 0 : excelType.hashCode());
 		result = prime * result + ((listSheetRead == null) ? 0 : listSheetRead.hashCode());
 		result = prime * result + ((mapSheet == null) ? 0 : mapSheet.hashCode());
-		result = prime * result + Arrays.hashCode(reportExcel);
+		result = prime * result + ((reportExcel == null) ? 0 : reportExcel.hashCode());
 		return result;
 	}
-
-
 
 	/**
 	 * Equals.
@@ -241,36 +255,38 @@ public class ExcelRead {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof ExcelRead)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		ExcelRead other = (ExcelRead) obj;
-		if (excelType != other.excelType)
+		if (excelType != other.excelType) {
 			return false;
+		}
 		if (listSheetRead == null) {
-			if (other.listSheetRead != null)
+			if (other.listSheetRead != null) {
 				return false;
-		} else if (!listSheetRead.equals(other.listSheetRead))
+			}
+		} else if (!listSheetRead.equals(other.listSheetRead)) {
 			return false;
+		}
 		if (mapSheet == null) {
-			if (other.mapSheet != null)
+			if (other.mapSheet != null) {
 				return false;
-		} else if (!mapSheet.equals(other.mapSheet))
+			}
+		} else if (!mapSheet.equals(other.mapSheet)) {
 			return false;
-		if (!Arrays.equals(reportExcel, other.reportExcel))
+		}
+		if (reportExcel == null) {
+			if (other.reportExcel != null) {
+				return false;
+			}
+		} else if (!reportExcel.equals(other.reportExcel)) {
 			return false;
+		}
 		return true;
 	}
 
-
-
-	
-
-	
-
-
-	
 }

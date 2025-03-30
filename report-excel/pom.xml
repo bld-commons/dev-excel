@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.github.bld-commons</groupId>
 		<artifactId>dev-excel</artifactId>
-		<version>5.0.2-SNAPSHOT</version>
+		<version>5.0.3</version>
 	</parent>
 
 
@@ -50,6 +50,12 @@
 		</dependency>
 		-->
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
@@ -84,7 +90,7 @@
 			<artifactId>spring-tx</artifactId>
 		</dependency>
 
-	
+
 		<dependency>
 			<groupId>com.github.bld-commons</groupId>
 			<artifactId>common-rest-connection</artifactId>
@@ -104,6 +110,27 @@
 					<testFailureIgnore>true</testFailureIgnore>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+
+						<annotationProcessorPath>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</annotationProcessorPath>
+						<annotationProcessorPath>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>0.2.0</version>
+						</annotationProcessorPath>
+
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
