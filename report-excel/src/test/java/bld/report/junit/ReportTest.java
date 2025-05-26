@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.report.junit;
 
@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
@@ -47,14 +48,12 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.common.spreadsheet.constant.RowStartEndType;
@@ -99,10 +98,11 @@ import bld.report.generator.junit.entity.SituazioneUfficiSheet;
 import bld.report.generator.junit.entity.TotaleAutoreLibriRow;
 import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
 
+
+
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableExcelGenerator
 @EnableTransactionManagement
@@ -122,7 +122,7 @@ public class ReportTest {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -195,7 +195,7 @@ public class ReportTest {
 //			ExcelUtils.writeToFile(PATH_FILE, excel.getTitle(), ".pdf", byteReportPdf);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
 	}

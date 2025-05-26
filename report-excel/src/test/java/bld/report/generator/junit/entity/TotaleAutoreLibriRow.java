@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.TotaleAutoreLibriRow.java
+* @class com.bld.generator.report.junit.entity.TotaleAutoreLibriRow.java
 */
 package bld.report.generator.junit.entity;
 

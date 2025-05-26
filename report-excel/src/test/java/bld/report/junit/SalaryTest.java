@@ -1,38 +1,34 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.report.junit;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.generator.report.excel.BaseSheet;
 import bld.generator.report.excel.GenerateExcel;
+import bld.generator.report.excel.config.annotation.EnableExcelGenerator;
 import bld.generator.report.excel.data.ReportExcel;
+import bld.read.report.excel.config.annotation.EnableExcelRead;
 import bld.report.generator.junit.entity.SalaryRow;
 import bld.report.generator.junit.entity.SalarySheet;
 
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
-@ComponentScan(basePackages = {"bld.generator","bld.read"})
+@EnableExcelGenerator
+@EnableExcelRead
 @EnableTransactionManagement
 public class SalaryTest {
 
@@ -42,15 +38,13 @@ public class SalaryTest {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
-	
-	private final static Logger logger=LoggerFactory.getLogger(SalaryTest.class);
 
 	/**
 	 * Sets the up.
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -83,14 +77,8 @@ public class SalaryTest {
 		
 		ReportExcel report=new ReportExcel("test", listBaseSheet);
 		
-		byte[] byteReport=null;
-		try {
-			byteReport = this.generateExcel.createFileXlsx(report);
-			SpreadsheetUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
-		} catch (Exception e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
-		}
-		
+		byte[] byteReport = this.generateExcel.createFileXlsx(report);
+		SpreadsheetUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
 		
 	}
 	

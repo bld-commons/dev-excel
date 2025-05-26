@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.entity.AutoreLibriRow.java
+* @class com.bld.generator.report.junit.entity.AutoreLibriRow.java
 */
 package bld.report.generator.junit.entity;
 
@@ -32,6 +32,7 @@ import bld.generator.report.excel.annotation.ExcelRgbColor;
 import bld.generator.report.excel.annotation.ExcelSubtotal;
 import bld.generator.report.excel.dropdown.CharacterDropDown;
 import bld.generator.report.excel.dropdown.IntegerDropDown;
+
 
 /**
  * The Class AutoreLibriRow.

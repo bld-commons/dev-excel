@@ -1,7 +1,7 @@
 /**
 * @author Francesco Baldi
 * @mail francesco.baldi1987@gmail.com
-* @class bld.generator.report.junit.ReportTest.java
+* @class com.bld.generator.report.junit.ReportTest.java
 */
 package bld.report.junit;
 
@@ -14,14 +14,11 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.util.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bld.commons.connection.client.RestClientConnection;
@@ -39,14 +36,13 @@ import bld.report.controller.entity.ReadAutoreLibriSheet;
 import bld.report.controller.entity.ReadGenereRow;
 import bld.report.controller.entity.ReadGenereSheet;
 import bld.report.controller.input.ExcelModel;
-import bld.report.read.junit.entity.UserCsvRow;
+import bld.report.read.junit.entity.RendicontazioneMassivaImportColumn;
 
 /**
  * The Class ReportTest.
  */
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
-@ConfigurationProperties
 //@EnableExcelGenerator
 @EnableExcelRead
 @EnableTransactionManagement
@@ -72,7 +68,7 @@ public class ReadReportTest {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -108,16 +104,15 @@ public class ReadReportTest {
 
 	}
 
-	
-	
 	@Test
 	public void testReadCsv() throws Exception {
 		FileInputStream inputStream = new FileInputStream("/mnt/report/Test.csv");
 		byte[] report = IOUtils.toByteArray(inputStream);
-		CsvRead<UserCsvRow> userCsvRead=new CsvRead<>();
+		CsvRead<RendicontazioneMassivaImportColumn> userCsvRead=new CsvRead<>();
 		userCsvRead.setCsv(report);
 		try {
-			this.readCsv.convertCsvToEntity(userCsvRead,UserCsvRow.class);
+			this.readCsv.convertCsvToEntity(userCsvRead,RendicontazioneMassivaImportColumn.class);
+			logger.info("Size list: "+userCsvRead.getListRowSheet().size());
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}

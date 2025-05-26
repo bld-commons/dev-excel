@@ -17,7 +17,7 @@ import bld.read.report.excel.config.annotation.EnableExcelRead;
  * The Class ReportExcelApplication.
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"bld.report","bld.read"})
+@ComponentScan(basePackages = {"bld.report","com.bld.read"})
 @EnableExcelGenerator
 @EnableExcelRead
 public class ReportExcelApplication {
