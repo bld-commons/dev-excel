@@ -33,10 +33,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HSSFComment;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFPalette;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.sl.usermodel.PictureData.PictureType;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
@@ -45,15 +41,12 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.poi.ss.usermodel.PageMargin;
 import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -62,15 +55,11 @@ import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bld.common.spreadsheet.constant.RowStartEndType;
-import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.common.spreadsheet.exception.ExcelGeneratorException;
 import com.bld.common.spreadsheet.utils.ExcelUtils;
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
@@ -84,31 +73,24 @@ import com.bld.generator.report.excel.DynamicColumn;
 import com.bld.generator.report.excel.ExcelAttachment;
 import com.bld.generator.report.excel.ExcelHyperlink;
 import com.bld.generator.report.excel.RowSheet;
-import com.bld.generator.report.excel.SheetComponent;
 import com.bld.generator.report.excel.SheetData;
 import com.bld.generator.report.excel.SheetSummary;
-import com.bld.generator.report.excel.annotation.ExcelBorder;
 import com.bld.generator.report.excel.annotation.ExcelBoxMessage;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelColumn;
 import com.bld.generator.report.excel.annotation.ExcelDataValidation;
 import com.bld.generator.report.excel.annotation.ExcelDropDown;
-import com.bld.generator.report.excel.annotation.ExcelFont;
 import com.bld.generator.report.excel.annotation.ExcelFunction;
 import com.bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
 import com.bld.generator.report.excel.annotation.ExcelFunctionRow;
 import com.bld.generator.report.excel.annotation.ExcelFunctionRows;
 import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import com.bld.generator.report.excel.annotation.ExcelImage;
-import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
-import com.bld.generator.report.excel.annotation.ExcelNumberFormat;
 import com.bld.generator.report.excel.annotation.ExcelPivot;
 import com.bld.generator.report.excel.annotation.ExcelPivotColumn;
 import com.bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
 import com.bld.generator.report.excel.annotation.ExcelPivotFilter;
 import com.bld.generator.report.excel.annotation.ExcelPivotRow;
-import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 import com.bld.generator.report.excel.annotation.ExcelRowHeight;
 import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 import com.bld.generator.report.excel.annotation.ExcelSummary;
@@ -132,9 +114,6 @@ import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
  * The Class SuperGenerateExcelImpl.
  */
 public abstract class SuperGenerateExcelImpl {
-
-	/** The Constant FLAT_ANGLE. */
-	private static final int FLAT_ANGLE = 180;
 
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
@@ -184,160 +163,11 @@ public abstract class SuperGenerateExcelImpl {
 		super();
 	}
 
-	/**
-	 * Creates the cell style.
-	 *
-	 * @param workbook the workbook
-	 * @param layout   the layout
-	 * @return the cell style
-	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelHeaderCellLayout layout) {
-		CellStyle cellStyleHeader = workbook.createCellStyle();
-		ExcelRgbColor rgbFont = layout.rgbFont();
-		ExcelRgbColor rgbForeground = layout.rgbForeground();
-		Font font = getFont(workbook, layout.font());
-		if (workbook instanceof HSSFWorkbook) {
-			HSSFPalette paletteFont = ((HSSFWorkbook) workbook).getCustomPalette();
-			HSSFColor colorFont = paletteFont.findSimilarColor(rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((HSSFFont) font).setColor(colorFont.getIndex());
-
-			HSSFPalette palette = ((HSSFWorkbook) workbook).getCustomPalette();
-			HSSFColor colorForeground = palette.findSimilarColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			cellStyleHeader.setFillForegroundColor(colorForeground.getIndex());
-
-		} else {
-			XSSFColor colorForeground = ExcelLayoutUtility.color(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			XSSFColor colorFont = ExcelLayoutUtility.color(rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((XSSFCellStyle) cellStyleHeader).setFillForegroundColor(colorForeground);
-			((XSSFFont) font).setColor(colorFont);
-		}
-		cellStyleHeader.setRotation((short) (layout.rotation() % FLAT_ANGLE));
-		cellStyleHeader.setFont(font);
-		cellStyleHeader.setFillPattern(layout.fillPatternType());
-		cellStyleHeader.setAlignment(layout.horizontalAlignment());
-		cellStyleHeader.setVerticalAlignment(layout.verticalAlignment());
-		cellStyleHeader.setWrapText(layout.wrap());
-		cellStyleHeader.setLocked(layout.locked());
-		cellStyleHeader = getBorder(cellStyleHeader, layout.border());
-
-		return cellStyleHeader;
-	}
-
-	/**
-	 * Creates the cell style.
-	 *
-	 * @param workbook the workbook
-	 * @param layout   the layout
-	 * @param indexRow the index row
-	 * @return the cell style
-	 * @throws Exception the exception
-	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, Integer indexRow) throws Exception {
-		return createCellStyle(workbook, layout, null, indexRow);
-	}
-
-	/**
-	 * Creates the cell style.
-	 *
-	 * @param workbook    the workbook
-	 * @param layout      the layout
-	 * @param sheetHeader the sheet header
-	 * @param indexRow    the index row
-	 * @return the cell style
-	 * @throws Exception the exception
-	 */
-	protected CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow) throws Exception {
-		ExcelDate excelDate = null;
-		ExcelNumberFormat excelNumberFormat = null;
-		if (sheetHeader != null) {
-			excelDate = sheetHeader.getExcelDate();
-			excelNumberFormat = sheetHeader.getExcelNumberFormat();
-		}
-
-		CellStyle cellStyle = workbook.createCellStyle();
-		int indexFont = indexRow % layout.rgbFont().length;
-		int indexForeground = indexRow % layout.rgbForeground().length;
-		ExcelRgbColor rgbFont = layout.rgbFont()[indexFont];
-		ExcelRgbColor rgbForeground = layout.rgbForeground()[indexForeground];
-		Font font = getFont(workbook, layout.font());
-		if (workbook instanceof HSSFWorkbook) {
-			HSSFPalette paletteFont = ((HSSFWorkbook) workbook).getCustomPalette();
-			HSSFColor colorFont = paletteFont.findSimilarColor(rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((HSSFFont) font).setColor(colorFont.getIndex());
-
-			HSSFPalette palette = ((HSSFWorkbook) workbook).getCustomPalette();
-			HSSFColor colorForeground = palette.findSimilarColor(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			cellStyle.setFillForegroundColor(colorForeground.getIndex());
-
-		} else {
-			XSSFColor colorForeground = ExcelLayoutUtility.color(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue());
-			XSSFColor colorFont = ExcelLayoutUtility.color(rgbFont.red(), rgbFont.green(), rgbFont.blue());
-			((XSSFCellStyle) cellStyle).setFillForegroundColor(colorForeground);
-			((XSSFFont) font).setColor(colorFont);
-		}
-		cellStyle.setFont(font);
-		cellStyle.setFillPattern(layout.fillPatternType());
-		cellStyle.setAlignment(layout.horizontalAlignment());
-		cellStyle.setVerticalAlignment(layout.verticalAlignment());
-		cellStyle = getBorder(cellStyle, layout.border());
-		cellStyle.setWrapText(layout.wrap());
-		cellStyle.setLocked(layout.locked());
-
-		if (excelDate != null)
-			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
-		else if (excelNumberFormat != null && StringUtils.isNotBlank(excelNumberFormat.value()))
-			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value());
-		else if (layout.precision() > -1 || layout.percent()) {
-			String format = "0";
-			if (layout.precision() > 0)
-				format += ".";
-			for (int i = 0; i < layout.precision(); i++)
-				format += "0";
-			if (layout.percent())
-				format += "%";
-			cellStyle = dateCellStyle(workbook, cellStyle, format);
-		} else if (sheetHeader != null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
-			DataFormat fmt = workbook.createDataFormat();
-			cellStyle.setDataFormat(fmt.getFormat("text"));
-		}
-
-		return cellStyle;
-	}
-
-	/**
-	 * Gets the font.
-	 *
-	 * @param workbook  the workbook
-	 * @param excelFont the excel font
-	 * @return the font
-	 */
-	protected Font getFont(Workbook workbook, ExcelFont excelFont) {
-		Font font = workbook.createFont();
-		font.setBold(excelFont.bold());
-		font.setFontName(excelFont.font().getValue());
-		font.setItalic(excelFont.italic());
-		font.setUnderline(excelFont.underline().getValue());
-		font.setFontHeight((short) (excelFont.size() * 20));
-		return font;
-	}
+	
 
 
 
-	/**
-	 * Gets the border.
-	 *
-	 * @param cellStyle   the cell style
-	 * @param excelBorder the excel border
-	 * @return the border
-	 */
-	protected CellStyle getBorder(CellStyle cellStyle, ExcelBorder excelBorder) {
-		cellStyle.setBorderLeft(excelBorder.left());
-		cellStyle.setBorderRight(excelBorder.right());
-		cellStyle.setBorderTop(excelBorder.top());
-		cellStyle.setBorderBottom(excelBorder.bottom());
-		return cellStyle;
 
-	}
 
 	/**
 	 * Gets the list sheet header.
@@ -523,9 +353,9 @@ public abstract class SuperGenerateExcelImpl {
 			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
 		row.setHeight(heightRow);
-		CellStyle cellStyleColumn0 = createCellStyle(workbook, excelSummary.layout(), indexRow);
+		CellStyle cellStyleColumn0 = ExcelLayoutUtility.createCellStyle(workbook, excelSummary.layout(), indexRow,this.valueProps);
 		Cell cellColumn0 = row.createCell(excelSheetLayout.startColumn());
-		setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary);
+		ExcelLayoutUtility.setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary,this.mapCellStyle);
 		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().name()));
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
@@ -533,7 +363,7 @@ public abstract class SuperGenerateExcelImpl {
 //		ExcelDate excelDate = null;
 //		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 //			excelDate = sheetHeader.getExcelDate();
-		CellStyle cellStyleColumn1 = this.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
+		CellStyle cellStyleColumn1 = ExcelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow,this.valueProps);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
 		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column, indexRow);
@@ -599,7 +429,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected void setCellFormula(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-		setCellStyleExcel(cellStyle, cell, layoutCell);
+		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY, excelFunction.alias(),mapFieldColumn,mapSheet);
@@ -669,7 +499,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyle = mergeRow.getCellStyleFrom();
 		Cell cell = mergeRow.getCellFrom();
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-		setCellStyleExcel(cellStyle, cell, layoutCell);
+		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY, excelFunction.alias(),mapFieldColumn,mapSheet);
@@ -733,7 +563,7 @@ public abstract class SuperGenerateExcelImpl {
 
 		if (cellStyle == null)
 			cellStyle = this.mapCellStyle.get(layoutCell);
-		setCellStyleExcel(cellStyle, cell, layoutCell);
+		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
@@ -783,100 +613,9 @@ public abstract class SuperGenerateExcelImpl {
 
 	}
 
-	/**
-	 * Date cell style.
-	 *
-	 * @param workbook  the workbook
-	 * @param cellStyle the cell style
-	 * @param format    the format
-	 * @return the cell style
-	 * @throws Exception the exception
-	 */
-	protected CellStyle dateCellStyle(Workbook workbook, CellStyle cellStyle, String format) throws Exception {
-		CreationHelper helper = workbook.getCreationHelper();
-		cellStyle.setDataFormat(helper.createDataFormat().getFormat(this.valueProps.valueProps(format)));
-		return cellStyle;
-	}
 
-	/**
-	 * Sets the cell style excel.
-	 *
-	 * @param cellStyle  the cell style
-	 * @param cell       the cell
-	 * @param layoutCell the layout cell
-	 */
-	protected void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell) {
-		if (!mapCellStyle.containsKey(layoutCell))
-			mapCellStyle.put(layoutCell, cellStyle);
-		cell.setCellStyle(mapCellStyle.get(layoutCell));
-	}
 
-	/**
-	 * Gets the cell style header.
-	 *
-	 * @param workbook       the workbook
-	 * @param sheet          the sheet
-	 * @param sheetComponent the sheet component
-	 * @param rowHeader      the row header
-	 * @return the cell style header
-	 * @throws Exception the exception
-	 */
-	public CellStyle getCellStyleHeader(Workbook workbook, Sheet sheet, SheetComponent sheetComponent, Row rowHeader) throws Exception {
-		ExcelHeaderLayout layoutHeader = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelHeaderLayout.class);
-		ExcelMarginSheet excelMarginSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelMarginSheet.class);
-		ExcelSheetLayout layoutSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelSheetLayout.class);
-		sheet.setMargin(PageMargin.LEFT, excelMarginSheet.left());
-		sheet.setMargin(PageMargin.RIGHT, excelMarginSheet.right());
-		sheet.setMargin(PageMargin.TOP, excelMarginSheet.top());
-		sheet.setMargin(PageMargin.BOTTOM, excelMarginSheet.bottom());
-		if (layoutSheet.scale() != (short) 100)
-			sheet.getPrintSetup().setScale(layoutSheet.scale());
-		sheet.getPrintSetup().setLandscape(layoutSheet.landscape());
-		rowHeader.setHeight(ExcelUtils.rowHeight(layoutHeader.rowHeight()));
 
-//		worksheet.setDefaultColumnWidth(5 * layoutHeader.cmWidthCell());
-//		worksheet.setDefaultRowHeight((short)(layoutHeader.cmHeightCell() * 568));
-		if (layoutSheet.order() > -1)
-			workbook.setSheetOrder(sheet.getSheetName(), layoutSheet.order());
-		return manageCellStyleHeader(workbook, layoutHeader);
-	}
-
-	/**
-	 * Manage cell style header.
-	 *
-	 * @param workbook     the workbook
-	 * @param layoutHeader the layout header
-	 * @return the cell style
-	 */
-	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderLayout layoutHeader) {
-		return manageCellStyleHeader(workbook, layoutHeader.excelHeaderCellLayout());
-	}
-
-	/**
-	 * Manage cell style header.
-	 *
-	 * @param workbook              the workbook
-	 * @param excelHeaderCellLayout the excel header cell layout
-	 * @return the cell style
-	 */
-	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderCellLayout excelHeaderCellLayout) {
-		LayoutCell layoutCellHeader = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelHeaderCellLayout);
-		if (!this.mapCellHeaderStyle.containsKey(layoutCellHeader))
-			this.mapCellHeaderStyle.put(layoutCellHeader, createCellStyle(workbook, excelHeaderCellLayout));
-		CellStyle cellStyleHeader = this.mapCellHeaderStyle.get(layoutCellHeader);
-		return cellStyleHeader;
-	}
-
-	/**
-	 * Manage cell style header.
-	 *
-	 * @param workbook     the workbook
-	 * @param layoutHeader the layout header
-	 * @return the cell style
-	 */
-	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelSuperHeaderCell layoutHeader) {
-		return manageCellStyleHeader(workbook, layoutHeader.excelHeaderCellLayout());
-	}
 
 	/**
 	 * Generate header sheet data.
@@ -917,7 +656,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyleHeader = null;
 		if (excelSheetLayout.showHeader()) {
 			rowHeader = sheet.createRow(indexRow);
-			cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetData, rowHeader);
+			cellStyleHeader = ExcelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetData, rowHeader,this.mapCellHeaderStyle);
 
 		}
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
@@ -934,7 +673,7 @@ public abstract class SuperGenerateExcelImpl {
 						layoutHeader = sheetHeader.getExcelHeaderCellLayout();
 					else
 						layoutHeader = SpreadsheetUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
-					CellStyle differentCellStyleHeader = manageCellStyleHeader(workbook, layoutHeader);
+					CellStyle differentCellStyleHeader = ExcelLayoutUtility.manageCellStyleHeader(workbook, layoutHeader,this.mapCellHeaderStyle);
 					cellHeader.setCellStyle(differentCellStyleHeader);
 				} else
 					cellHeader.setCellStyle(cellStyleHeader);
@@ -976,7 +715,7 @@ public abstract class SuperGenerateExcelImpl {
 //						String key = ExcelUtils.getKeyColumn(worksheet, column);
 //						int columnNum = this.mapFieldColumn.get(key).getColumnNum();
 						cellSuperHeader = rowSuperHeader.createCell(columnNum);
-						CellStyle cellSuperHeaderStyle = manageCellStyleHeader(workbook, headerGroup);
+						CellStyle cellSuperHeaderStyle = ExcelLayoutUtility.manageCellStyleHeader(workbook, headerGroup,this.mapCellHeaderStyle);
 						cellSuperHeader.setCellStyle(cellSuperHeaderStyle);
 						if (setCellValue)
 							cellSuperHeader.setCellValue(this.valueProps.valueProps(headerGroup.columnName()));

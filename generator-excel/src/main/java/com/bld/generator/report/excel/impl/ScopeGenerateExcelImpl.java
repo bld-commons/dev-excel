@@ -143,6 +143,7 @@ import com.bld.generator.report.excel.query.ExcelQueryComponent;
 import com.bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import com.bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 import com.bld.generator.report.excel.utility.ExcelBuildFunctionUtility;
+import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
 
 /**
  * The Class ScopeGenerateExcelImpl.<br>
@@ -348,7 +349,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				ExcelDate excelDate = null;
 				if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())) {
 					excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
-					cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
+					cellStyle = ExcelLayoutUtility.dateCellStyle(workbook, cellStyle, excelDate.value().getValue(),this.valueProps);
 					cell.setCellStyle(cellStyle);
 				}
 				if (value != null) {
@@ -495,7 +496,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			throw new ExcelGeneratorException("The row number cannot be negative");
 		if (excelSheetLayout.showHeader() && excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
 			Row rowHeader = sheet.createRow(indexRow);
-			CellStyle cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader);
+			CellStyle cellStyleHeader = ExcelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader,this.mapCellHeaderStyle);
 			Cell cellHeader = rowHeader.createCell(excelSheetLayout.startColumn());
 			cellHeader.setCellStyle(cellStyleHeader);
 			String title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelSummary.title(), RowStartEndType.ROW_START,mapFieldColumn,mapSheet);
@@ -659,7 +660,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 						LayoutCell layoutCellTemp = sheetHeader.getLayoutCell(colorModul);
 						if (!this.mapCellStyle.containsKey(layoutCellTemp))
-							this.mapCellStyle.put(layoutCellTemp, createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul));
+							this.mapCellStyle.put(layoutCellTemp, ExcelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul,this.valueProps));
 					}
 					cellStyle = this.mapCellStyle.get(layoutCell);
 					infoColumn.setFirstRow(indexRow);
@@ -1086,9 +1087,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			layoutCell.setNumberFormat(sheetHeader.getExcelNumberFormat().value());
 		layoutCell.setColor(indexRow);
 		if (!this.mapCellStyle.containsKey(layoutCell)) {
-			cellStyle = createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow());
+			cellStyle = ExcelLayoutUtility.createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow(),this.valueProps);
 			if (sheetHeader.getExcelNumberFormat() != null && StringUtils.isNotBlank(sheetHeader.getExcelNumberFormat().value()))
-				cellStyle = dateCellStyle(workbook, cellStyle, sheetHeader.getExcelNumberFormat().value());
+				cellStyle = ExcelLayoutUtility.dateCellStyle(workbook, cellStyle, sheetHeader.getExcelNumberFormat().value(),this.valueProps);
 			this.mapCellStyle.put(layoutCell, cellStyle);
 		}
 		
@@ -1428,7 +1429,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (!(value instanceof String))
 						throw new ExcelGeneratorException(field.getName() + " field type is not supported: required String");
 					if (StringUtils.isNotBlank(value.toString())) {
-						CellStyle cellStype = createCellStyle(workbook, excelLabel.labelLayout(), 0);
+						CellStyle cellStype = ExcelLayoutUtility.createCellStyle(workbook, excelLabel.labelLayout(), 0,this.valueProps);
 						SheetHeader sheetHeader = new SheetHeader();
 						sheetHeader.setValue(value);
 						sheetHeader.setExcelCellLayout(excelLabel.labelLayout());
