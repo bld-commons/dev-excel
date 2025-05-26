@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -65,8 +66,9 @@ public class ExcelBuildFunctionUtility {
 		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
 		Matcher matcher = ExcelUtils.matcher(PATTERN, function);
 		Map<String, ExcelFormulaAlias> mapExcelFormulaAlias = new HashMap<>();
-		for (ExcelFormulaAlias formulaAlias : alias)
-			mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
+		if (ArrayUtils.isNotEmpty(alias))
+			for (ExcelFormulaAlias formulaAlias : alias)
+				mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
 
 		while (matcher.find()) {
 			String parameter = matcher.group();
@@ -79,19 +81,21 @@ public class ExcelBuildFunctionUtility {
 				String sheetPoint = "";
 				if (StringUtils.isNotEmpty(excelFormulaAlias.sheet()))
 					sheetPoint = excelFormulaAlias.sheet() + ".";
-				keyParameter = sheetPoint + mapExcelFormulaAlias.get(keyParameter).coordinate();
+				keyParameter = sheetPoint + excelFormulaAlias.coordinate();
 				blockColumn = excelFormulaAlias.blockColumn();
 				blockRow = excelFormulaAlias.blockRow();
 				// parameter=parameter.replace(excelFormulaAlias.alias(),keyParameter);
 			}
 
-			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow, mapFieldColumn, mapSheet);
+			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow,mapFieldColumn,mapSheet);
 			if (StringUtils.isNotEmpty(appFunction))
 				function = appFunction;
 
 		}
 		return function;
 	}
+	
+
 
 	/**
 	 * Builds the function.
