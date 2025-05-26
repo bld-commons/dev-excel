@@ -48,17 +48,16 @@ public class ExcelBuildFunctionUtility {
 	/** The Constant $. */
 	private static final String $ = "${";
 
-	
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param alias the alias
-	 * @param mapFieldColumn the map field column
-	 * @param mapSheet the map sheet
+	 * @param alias           the alias
+	 * @param mapFieldColumn  the map field column
+	 * @param mapSheet        the map sheet
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -87,15 +86,13 @@ public class ExcelBuildFunctionUtility {
 				// parameter=parameter.replace(excelFormulaAlias.alias(),keyParameter);
 			}
 
-			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow,mapFieldColumn,mapSheet);
+			String appFunction = buildFunction(sheet, keyParameter, indexRow, rowStartEndType, sheetName, function, parameter, blockColumn, blockRow, mapFieldColumn, mapSheet);
 			if (StringUtils.isNotEmpty(appFunction))
 				function = appFunction;
 
 		}
 		return function;
 	}
-	
-
 
 	/**
 	 * Builds the function.
@@ -109,8 +106,8 @@ public class ExcelBuildFunctionUtility {
 	 * @param parameter       the parameter
 	 * @param blockColumn     the block column
 	 * @param blockRow        the block row
-	 * @param mapFieldColumn the map field column
-	 * @param mapSheet the map sheet
+	 * @param mapFieldColumn  the map field column
+	 * @param mapSheet        the map sheet
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -243,14 +240,14 @@ public class ExcelBuildFunctionUtility {
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param blockColumn the block column
-	 * @param blockRow the block row
-	 * @param mapFieldColumn the map field column
-	 * @param mapSheet the map sheet
+	 * @param blockColumn     the block column
+	 * @param blockRow        the block row
+	 * @param mapFieldColumn  the map field column
+	 * @param mapSheet        the map sheet
 	 * @return the string
 	 * @throws Exception the exception
 	 */
@@ -273,15 +270,15 @@ public class ExcelBuildFunctionUtility {
 	/**
 	 * Gets the static value.
 	 *
-	 * @param keyParameter the key parameter
-	 * @param row the row
+	 * @param keyParameter   the key parameter
+	 * @param row            the row
 	 * @param sheetComponent the sheet component
 	 * @return the static value
-	 * @throws NoSuchFieldException the no such field exception
-	 * @throws IllegalAccessException the illegal access exception
+	 * @throws NoSuchFieldException      the no such field exception
+	 * @throws IllegalAccessException    the illegal access exception
 	 * @throws InvocationTargetException the invocation target exception
-	 * @throws NoSuchMethodException the no such method exception
-	 * @throws ExcelGeneratorException the excel generator exception
+	 * @throws NoSuchMethodException     the no such method exception
+	 * @throws ExcelGeneratorException   the excel generator exception
 	 */
 	private static Object getStaticValue(String keyParameter, Integer row, SheetComponent sheetComponent) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ExcelGeneratorException {
 		Object value = null;
@@ -310,12 +307,12 @@ public class ExcelBuildFunctionUtility {
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet the sheet
-	 * @param indexRow the index row
-	 * @param function the function
+	 * @param sheet           the sheet
+	 * @param indexRow        the index row
+	 * @param function        the function
 	 * @param rowStartEndType the row start end type
-	 * @param mapFieldColumn the map field column
-	 * @param mapSheet the map sheet
+	 * @param mapFieldColumn  the map field column
+	 * @param mapSheet        the map sheet
 	 * @return the string
 	 * @throws Exception the exception
 	 */
