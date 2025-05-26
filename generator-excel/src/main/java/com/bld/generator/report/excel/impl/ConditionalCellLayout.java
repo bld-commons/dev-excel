@@ -37,13 +37,14 @@ public class ConditionalCellLayout {
 				ConditionalFormattingRule rule = shettConditionFormatting.createConditionalFormattingRule(condition);
 
 				FontFormatting fontFormatting = rule.createFontFormatting();
+				ExcelRgbColor rgbFont = excelRgbColor(excelCellLayout.rgbForeground());
+				fontFormatting.setFontColor(ExcelLayoutUtility.color(rgbFont.red(), rgbFont.green(), rgbFont.blue()));
+				fontFormatting.setFontHeight((short) (excelCellLayout.font().size() * 20));
 				fontFormatting.setFontStyle(excelCellLayout.font().italic(), excelCellLayout.font().bold());
 				fontFormatting.setUnderlineType(excelCellLayout.font().underline().getValue());
 				PatternFormatting patternFmt = rule.createPatternFormatting();
-				if (excelCellLayout.rgbForeground().length > 1)
-					throw new ExcelGeneratorException("Only one record for rgbForeground");
-				ExcelRgbColor excelRgbColor = excelCellLayout.rgbForeground()[0];
-				patternFmt.setFillBackgroundColor(ExcelLayoutUtility.color(excelRgbColor.red(), excelRgbColor.green(), excelRgbColor.blue()));
+				ExcelRgbColor rgbForeground = excelRgbColor(excelCellLayout.rgbForeground());
+				patternFmt.setFillBackgroundColor(ExcelLayoutUtility.color(rgbForeground.red(), rgbForeground.green(), rgbForeground.blue()));
 				patternFmt.setFillPattern(excelCellLayout.fillPatternType().getCode());
 				BorderFormatting borderFormatting = rule.createBorderFormatting();
 				borderFormatting.setBorderBottom(excelCellLayout.border().bottom());
@@ -60,6 +61,13 @@ public class ConditionalCellLayout {
 			}
 
 		}
+	}
+
+	private ExcelRgbColor excelRgbColor(ExcelRgbColor[] excelRgbColors) {
+		if (excelRgbColors.length > 1)
+			throw new ExcelGeneratorException("Only one record for rgbForeground");
+		ExcelRgbColor excelRgbColor = excelRgbColors[0];
+		return excelRgbColor;
 	}
 
 }
