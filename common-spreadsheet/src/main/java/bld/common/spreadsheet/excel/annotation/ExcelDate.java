@@ -18,8 +18,8 @@ import bld.common.spreadsheet.constant.ColumnDateFormat;
  * The Interface ExcelDate.<br>
  * ExcelDate is used to set the date format and it is set on fields of the classes:
  * <ul>
- * 	<li>{@link bld.generator.report.excel.RowSheet}</li>
- * 	<li>{@link bld.generator.report.excel.SheetSummary}</li> 
+ * 	<li>{bld.generator.report.excel.RowSheet</li>
+ * 	<li>bld.generator.report.excel.SheetSummary</li> 
  * </ul>
  */
 @Documented

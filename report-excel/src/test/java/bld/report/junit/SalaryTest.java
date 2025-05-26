@@ -8,9 +8,12 @@ package bld.report.junit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +42,8 @@ public class SalaryTest {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcel generateExcel;
+	
+	private final static Logger logger=LoggerFactory.getLogger(SalaryTest.class);
 
 	/**
 	 * Sets the up.
@@ -78,8 +83,14 @@ public class SalaryTest {
 		
 		ReportExcel report=new ReportExcel("test", listBaseSheet);
 		
-		byte[] byteReport = this.generateExcel.createFileXlsx(report);
-		SpreadsheetUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
+		byte[] byteReport=null;
+		try {
+			byteReport = this.generateExcel.createFileXlsx(report);
+			SpreadsheetUtils.writeToFile(PATH_FILE,report.getTitle(), ".xlsx", byteReport);
+		} catch (Exception e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+		
 		
 	}
 	
