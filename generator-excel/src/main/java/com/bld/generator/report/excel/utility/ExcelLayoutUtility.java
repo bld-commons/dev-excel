@@ -19,6 +19,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.common.spreadsheet.utils.ExcelUtils;
@@ -38,7 +40,11 @@ import com.bld.generator.report.excel.annotation.ExcelSuperHeaderCell;
 import com.bld.generator.report.excel.data.LayoutCell;
 import com.bld.generator.report.excel.data.SheetHeader;
 
+@Component
 public class ExcelLayoutUtility {
+	
+	@Autowired
+	private ValueProps valueProps;
 
 	/** The Constant FLAT_ANGLE. */
 	private static final int FLAT_ANGLE = 180;
@@ -108,8 +114,8 @@ public class ExcelLayoutUtility {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	public static CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, Integer indexRow,ValueProps valueProps) throws Exception {
-		return createCellStyle(workbook, layout, null, indexRow,valueProps);
+	public CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, Integer indexRow) throws Exception {
+		return createCellStyle(workbook, layout, null, indexRow);
 	}
 
 	/**
@@ -122,7 +128,7 @@ public class ExcelLayoutUtility {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	public static CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow,ValueProps valueProps) throws Exception {
+	public CellStyle createCellStyle(Workbook workbook, ExcelCellLayout layout, SheetHeader sheetHeader, Integer indexRow) throws Exception {
 		ExcelDate excelDate = null;
 		ExcelNumberFormat excelNumberFormat = null;
 		if (sheetHeader != null) {
@@ -160,9 +166,9 @@ public class ExcelLayoutUtility {
 		cellStyle.setLocked(layout.locked());
 
 		if (excelDate != null)
-			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue(),valueProps);
+			cellStyle = dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
 		else if (excelNumberFormat != null && StringUtils.isNotBlank(excelNumberFormat.value()))
-			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value(),valueProps);
+			cellStyle = dateCellStyle(workbook, cellStyle, excelNumberFormat.value());
 		else if (layout.precision() > -1 || layout.percent()) {
 			String format = "0";
 			if (layout.precision() > 0)
@@ -171,7 +177,7 @@ public class ExcelLayoutUtility {
 				format += "0";
 			if (layout.percent())
 				format += "%";
-			cellStyle = dateCellStyle(workbook, cellStyle, format,valueProps);
+			cellStyle = dateCellStyle(workbook, cellStyle, format);
 		} else if (sheetHeader != null && sheetHeader.getField() != null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
 			DataFormat fmt = workbook.createDataFormat();
 			cellStyle.setDataFormat(fmt.getFormat("text"));
@@ -207,9 +213,9 @@ public class ExcelLayoutUtility {
 	 * @return the cell style
 	 * @throws Exception the exception
 	 */
-	public static CellStyle dateCellStyle(Workbook workbook, CellStyle cellStyle, String format,ValueProps valueProps) throws Exception {
+	public CellStyle dateCellStyle(Workbook workbook, CellStyle cellStyle, String format) throws Exception {
 		CreationHelper helper = workbook.getCreationHelper();
-		cellStyle.setDataFormat(helper.createDataFormat().getFormat(valueProps.valueProps(format)));
+		cellStyle.setDataFormat(helper.createDataFormat().getFormat(this.valueProps.valueProps(format)));
 		return cellStyle;
 	}
 
@@ -220,7 +226,7 @@ public class ExcelLayoutUtility {
 	 * @param cell       the cell
 	 * @param layoutCell the layout cell
 	 */
-	public static void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell,Map<LayoutCell, CellStyle> mapCellStyle) {
+	public void setCellStyleExcel(CellStyle cellStyle, Cell cell, LayoutCell layoutCell,Map<LayoutCell, CellStyle> mapCellStyle) {
 		if (!mapCellStyle.containsKey(layoutCell))
 			mapCellStyle.put(layoutCell, cellStyle);
 		cell.setCellStyle(mapCellStyle.get(layoutCell));
@@ -236,7 +242,7 @@ public class ExcelLayoutUtility {
 	 * @return the cell style header
 	 * @throws Exception the exception
 	 */
-	public static CellStyle getCellStyleHeader(Workbook workbook, Sheet sheet, SheetComponent sheetComponent, Row rowHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) throws Exception {
+	public CellStyle getCellStyleHeader(Workbook workbook, Sheet sheet, SheetComponent sheetComponent, Row rowHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) throws Exception {
 		ExcelHeaderLayout layoutHeader = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelHeaderLayout.class);
 		ExcelMarginSheet excelMarginSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelMarginSheet.class);
 		ExcelSheetLayout layoutSheet = SpreadsheetUtils.getAnnotation(sheetComponent.getClass(), ExcelSheetLayout.class);
@@ -263,7 +269,7 @@ public class ExcelLayoutUtility {
 	 * @param layoutHeader the layout header
 	 * @return the cell style
 	 */
-	private static CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderLayout layoutHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
+	private CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderLayout layoutHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
 		return manageCellStyleHeader(workbook, layoutHeader.excelHeaderCellLayout(),mapCellHeaderStyle);
 	}
 	
@@ -274,7 +280,7 @@ public class ExcelLayoutUtility {
 	 * @param excelHeaderCellLayout the excel header cell layout
 	 * @return the cell style
 	 */
-	public static CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderCellLayout excelHeaderCellLayout,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
+	public CellStyle manageCellStyleHeader(Workbook workbook, ExcelHeaderCellLayout excelHeaderCellLayout,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
 		LayoutCell layoutCellHeader = SpreadsheetUtils.reflectionAnnotation(new LayoutCell(), excelHeaderCellLayout);
 		if (!mapCellHeaderStyle.containsKey(layoutCellHeader))
 			mapCellHeaderStyle.put(layoutCellHeader, createCellStyle(workbook, excelHeaderCellLayout));
@@ -289,7 +295,7 @@ public class ExcelLayoutUtility {
 	 * @param layoutHeader the layout header
 	 * @return the cell style
 	 */
-	public static CellStyle manageCellStyleHeader(Workbook workbook, ExcelSuperHeaderCell layoutHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
+	public CellStyle manageCellStyleHeader(Workbook workbook, ExcelSuperHeaderCell layoutHeader,Map<LayoutCell, CellStyle> mapCellHeaderStyle) {
 		return manageCellStyleHeader(workbook, layoutHeader.excelHeaderCellLayout(),mapCellHeaderStyle);
 	}
 	

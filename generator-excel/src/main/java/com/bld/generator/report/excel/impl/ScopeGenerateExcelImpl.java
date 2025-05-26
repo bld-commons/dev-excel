@@ -94,6 +94,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+
 import com.bld.common.spreadsheet.constant.RowStartEndType;
 import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.common.spreadsheet.exception.ExcelGeneratorException;
@@ -143,7 +144,6 @@ import com.bld.generator.report.excel.query.ExcelQueryComponent;
 import com.bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import com.bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 import com.bld.generator.report.excel.utility.ExcelBuildFunctionUtility;
-import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
 
 /**
  * The Class ScopeGenerateExcelImpl.<br>
@@ -349,7 +349,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				ExcelDate excelDate = null;
 				if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())) {
 					excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
-					cellStyle = ExcelLayoutUtility.dateCellStyle(workbook, cellStyle, excelDate.value().getValue(),this.valueProps);
+					cellStyle = this.excelLayoutUtility.dateCellStyle(workbook, cellStyle, excelDate.value().getValue());
 					cell.setCellStyle(cellStyle);
 				}
 				if (value != null) {
@@ -496,7 +496,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			throw new ExcelGeneratorException("The row number cannot be negative");
 		if (excelSheetLayout.showHeader() && excelSummary != null && StringUtils.isNotBlank(excelSummary.title())) {
 			Row rowHeader = sheet.createRow(indexRow);
-			CellStyle cellStyleHeader = ExcelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader,this.mapCellHeaderStyle);
+			CellStyle cellStyleHeader = this.excelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader,this.mapCellHeaderStyle);
 			Cell cellHeader = rowHeader.createCell(excelSheetLayout.startColumn());
 			cellHeader.setCellStyle(cellStyleHeader);
 			String title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelSummary.title(), RowStartEndType.ROW_START,mapFieldColumn,mapSheet);
@@ -660,7 +660,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					for (int colorModul = 0; colorModul < colorSize; colorModul++) {
 						LayoutCell layoutCellTemp = sheetHeader.getLayoutCell(colorModul);
 						if (!this.mapCellStyle.containsKey(layoutCellTemp))
-							this.mapCellStyle.put(layoutCellTemp, ExcelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul,this.valueProps));
+							this.mapCellStyle.put(layoutCellTemp, this.excelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul));
 					}
 					cellStyle = this.mapCellStyle.get(layoutCell);
 					infoColumn.setFirstRow(indexRow);
@@ -1087,9 +1087,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			layoutCell.setNumberFormat(sheetHeader.getExcelNumberFormat().value());
 		layoutCell.setColor(indexRow);
 		if (!this.mapCellStyle.containsKey(layoutCell)) {
-			cellStyle = ExcelLayoutUtility.createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow(),this.valueProps);
+			cellStyle = this.excelLayoutUtility.createCellStyle(workbook, sheetHeader.getExcelCellLayout(), null, emptyRow.getEmptyRow());
 			if (sheetHeader.getExcelNumberFormat() != null && StringUtils.isNotBlank(sheetHeader.getExcelNumberFormat().value()))
-				cellStyle = ExcelLayoutUtility.dateCellStyle(workbook, cellStyle, sheetHeader.getExcelNumberFormat().value(),this.valueProps);
+				cellStyle = this.excelLayoutUtility.dateCellStyle(workbook, cellStyle, sheetHeader.getExcelNumberFormat().value());
 			this.mapCellStyle.put(layoutCell, cellStyle);
 		}
 		
@@ -1429,7 +1429,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					if (!(value instanceof String))
 						throw new ExcelGeneratorException(field.getName() + " field type is not supported: required String");
 					if (StringUtils.isNotBlank(value.toString())) {
-						CellStyle cellStype = ExcelLayoutUtility.createCellStyle(workbook, excelLabel.labelLayout(), 0,this.valueProps);
+						CellStyle cellStype = this.excelLayoutUtility.createCellStyle(workbook, excelLabel.labelLayout(), 0);
 						SheetHeader sheetHeader = new SheetHeader();
 						sheetHeader.setValue(value);
 						sheetHeader.setExcelCellLayout(excelLabel.labelLayout());
