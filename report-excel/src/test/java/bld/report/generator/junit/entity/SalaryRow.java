@@ -15,7 +15,9 @@ import com.bld.generator.report.excel.annotation.ExcelSubtotals;
 
 
 @ExcelSubtotals(labelTotalGroup = "Total",endLabel = "total",sumForGroup = {"city","state"})
-@ExcelConditionCellLayouts(@ExcelConditionCellLayout(columns = { "state","city","district" }, condition = "ISNUMBER(SEARCH(\"total\", LOWER(${state[start]})))", excelCellLayout = @ExcelCellLayout(rgbForeground = @ExcelRgbColor(blue=(byte)145 ,red=(byte)25,green=(byte)46))))
+@ExcelConditionCellLayouts(@ExcelConditionCellLayout(columns = { "state","city","district" }, condition = "ISNUMBER(SEARCH(\"total\", LOWER(${state[start]})))", excelCellLayout = @ExcelCellLayout(
+		rgbFont = @ExcelRgbColor(red=(byte)0),
+		rgbForeground = @ExcelRgbColor(blue=(byte)0))))
 public class SalaryRow implements RowSheet {
 
 	

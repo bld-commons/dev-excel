@@ -37,7 +37,7 @@ public class ConditionalCellLayout {
 				ConditionalFormattingRule rule = shettConditionFormatting.createConditionalFormattingRule(condition);
 
 				FontFormatting fontFormatting = rule.createFontFormatting();
-				ExcelRgbColor rgbFont = excelRgbColor(excelCellLayout.rgbForeground());
+				ExcelRgbColor rgbFont = excelRgbColor(excelCellLayout.rgbFont());
 				fontFormatting.setFontColor(ExcelLayoutUtility.color(rgbFont.red(), rgbFont.green(), rgbFont.blue()));
 				fontFormatting.setFontHeight((short) (excelCellLayout.font().size() * 20));
 				fontFormatting.setFontStyle(excelCellLayout.font().italic(), excelCellLayout.font().bold());
