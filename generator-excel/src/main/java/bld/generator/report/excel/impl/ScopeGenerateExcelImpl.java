@@ -118,6 +118,7 @@ import bld.generator.report.excel.annotation.ExcelChart;
 import bld.generator.report.excel.annotation.ExcelChartCategory;
 import bld.generator.report.excel.annotation.ExcelChartDataLabel;
 import bld.generator.report.excel.annotation.ExcelCharts;
+import bld.generator.report.excel.annotation.ExcelConditionCellLayouts;
 import bld.generator.report.excel.annotation.ExcelFreezePane;
 import bld.generator.report.excel.annotation.ExcelLabel;
 import bld.generator.report.excel.annotation.ExcelPivot;
@@ -141,6 +142,7 @@ import bld.generator.report.excel.data.SubtotalRow;
 import bld.generator.report.excel.query.ExcelQueryComponent;
 import bld.generator.report.excel.sheet_mapping.SheetMappingRow;
 import bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
+import bld.generator.report.excel.utility.ExcelBuildFunctionUtility;
 
 /**
  * The Class ScopeGenerateExcelImpl.<br>
@@ -189,6 +191,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private ExcelQueryComponent excelQueryComponent;
 
 	private Map<String, Integer> mapSubTotals = new HashMap<>();
+	
+	@Autowired
+	private ConditionalCellLayout conditionalCellLayout;
 
 	/**
 	 * Creates the file xls.
@@ -510,10 +515,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			CellStyle cellStyleHeader = getCellStyleHeader(workbook, sheet, sheetSummary, rowHeader);
 			Cell cellHeader = rowHeader.createCell(excelSheetLayout.startColumn());
 			cellHeader.setCellStyle(cellStyleHeader);
-			String title = buildFunction(sheet, indexRow, excelSummary.title(), RowStartEndType.ROW_START);
-			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_END);
-			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_EMPTY);
-			title = buildFunction(sheet, indexRow, title, RowStartEndType.ROW_HEADER);
+			String title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelSummary.title(), RowStartEndType.ROW_START,mapFieldColumn,mapSheet);
+			title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, title, RowStartEndType.ROW_END,mapFieldColumn,mapSheet);
+			title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, title, RowStartEndType.ROW_EMPTY,mapFieldColumn,mapSheet);
+			title = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, title, RowStartEndType.ROW_HEADER,mapFieldColumn,mapSheet);
 			if (excelSummary.titleCellFormulta())
 				cellHeader.setCellFormula(title);
 			else {
@@ -729,11 +734,14 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 			}
 			lastRowSheet = rowSheet;
+			
+
+			
 			if (sheetData.getClass().isAnnotationPresent(ExcelCharts.class) || (sheetData instanceof DynamicChart && CollectionUtils.isNotEmpty(((DynamicChart<? extends DynamicRowSheet>) sheetData).getListExcelChart()))) {
 				List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 				for (ExcelChart excelChart : listExcelChart) {
 					for (ExcelChartCategory excelChartCategory : excelChart.excelChartCategories()) {
-						String functionChart = buildFunction(sheet, indexRow, excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true);
+						String functionChart = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true,mapFieldColumn,mapSheet);
 						String title = "";
 						if (mapValue.containsKey(excelChartCategory.fieldName().replace("${", "").replace("}", ""))) {
 							title = mapValue.get(excelChartCategory.fieldName().replace("${", "").replace("}", "")).toString();
@@ -745,10 +753,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								int lastRow = sheet.getLastRowNum() + 1;
 								sheet.createRow(lastRow).createCell(0, CellType.FORMULA);
 								Cell lastCell = sheet.getRow(lastRow).getCell(0);
-								String rowRegex = buildFunction(sheet, indexRow, excelChartCategory.rowRegex(), RowStartEndType.ROW_EMPTY, true, true);
-								rowRegex = buildFunction(sheet, indexRow, rowRegex, RowStartEndType.ROW_HEADER, true, true);
-								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_START, true, true);
-								rowRegex = buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_END, true, true);
+								String rowRegex = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelChartCategory.rowRegex(), RowStartEndType.ROW_EMPTY, true, true,mapFieldColumn,mapSheet);
+								rowRegex = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, rowRegex, RowStartEndType.ROW_HEADER, true, true,mapFieldColumn,mapSheet);
+								rowRegex = ExcelBuildFunctionUtility.buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_START, true, true,mapFieldColumn,mapSheet);
+								rowRegex = ExcelBuildFunctionUtility.buildFunction(sheet, null, rowRegex, RowStartEndType.ROW_END, true, true,mapFieldColumn,mapSheet);
 								lastCell.setCellFormula(rowRegex);
 								CellType cellType = formulaEvaluator.evaluateFormulaCell(lastCell);
 								if (!CellType.NUMERIC.equals(cellType))
@@ -756,10 +764,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								rowRegexIndex = (int) lastCell.getNumericCellValue();
 								sheet.removeRow(sheet.getRow(lastRow));
 							}
-							String areaFieldName = buildFunction(sheet, indexRow, excelChartCategory.fieldName(), RowStartEndType.ROW_EMPTY, true, true);
-							areaFieldName = buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true, true);
-							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true, true);
-							areaFieldName = buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true, true);
+							String areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, excelChartCategory.fieldName(), RowStartEndType.ROW_EMPTY, true, true,mapFieldColumn,mapSheet);
+							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true, true,mapFieldColumn,mapSheet);
+							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true, true,mapFieldColumn,mapSheet);
+							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true, true,mapFieldColumn,mapSheet);
 							AreaReference areaReference = new AreaReference(areaFieldName, excelChart.spreadsheetVersion());
 							for (CellReference cr : areaReference.getAllReferencedCells()) {
 								Sheet appSheet = StringUtils.isNotEmpty(cr.getSheetName()) ? workbook.getSheet(cr.getSheetName()) : sheet;
@@ -767,7 +775,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								Integer firstRow = indexRow;
 								if (!sheet.getSheetName().equals(appSheet.getSheetName())) {
 									firstRow = cr.getRow();
-									functionChart = buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true);
+									functionChart = ExcelBuildFunctionUtility.buildFunction(sheet, cr.getRow(), excelChartCategory.function(), RowStartEndType.ROW_EMPTY, true, true,mapFieldColumn,mapSheet);
 								}
 
 								if (rowRegexIndex == null)
@@ -843,8 +851,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							lastRowSubtotal = emptyRow.getEmptyRow() - 1;
 						}
 
-						function = buildFunction(sheet, firstRowSubtotal, function, RowStartEndType.ROW_START);
-						function = buildFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_END);
+						function = ExcelBuildFunctionUtility.buildFunction(sheet, firstRowSubtotal, function, RowStartEndType.ROW_START,mapFieldColumn,mapSheet);
+						function = ExcelBuildFunctionUtility.buildFunction(sheet, lastRowSubtotal, function, RowStartEndType.ROW_END,mapFieldColumn,mapSheet);
 						ExcelFunctionImpl excelFuctionImpl = null;
 						excelFuctionImpl = new ExcelFunctionImpl(function, nameField + "Function", false);
 						sheetHeader.setExcelFunction(excelFuctionImpl.getAnnotation());
@@ -868,6 +876,9 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			}
 		}
 
+		if(sheetData.getRowClass().isAnnotationPresent(ExcelConditionCellLayouts.class)) 
+			this.conditionalCellLayout.createConditionalCellLayout(sheetData.getRowClass().getAnnotation(ExcelConditionCellLayouts.class), sheet, mapFieldColumn,mapSheet,indexRow-1);
+		
 		if (excelSheetLayout.groupRow())
 			sheet.groupRow(startRowSheet, indexRow - 1);
 
@@ -903,13 +914,13 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			List<ExcelChart> listExcelChart = getExcelChart(sheetData);
 			Set<String> ids = new HashSet<>();
 			for (ExcelChart excelChart : listExcelChart) {
-				String xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_EMPTY, true, true);
+				String xAxis = ExcelBuildFunctionUtility.buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_EMPTY, true, true,mapFieldColumn,mapSheet);
 				indexRow += 2;
 				if (excelChart.group()) {
 					if (!ids.contains(excelChart.id())) {
 						ids.add(excelChart.id());
 						boolean isVertical = xAxis.contains(RowStartEndType.ROW_START.getValue()) || xAxis.replace(" ", "").contains(START) || xAxis.contains(RowStartEndType.ROW_END.getValue()) || xAxis.contains(END);
-						xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true);
+						xAxis = ExcelBuildFunctionUtility.buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true,mapFieldColumn,mapSheet);
 						xAxis = setInfoColumnByMapCharts(xAxis, sheet, null);
 						indexRow = generateChart((XSSFWorkbook) workbook, (XSSFSheet) sheet, excelChart, indexRow, xAxis, mapChart, isVertical && !excelSheetLayout.notMerge(), sheetData);
 					}
@@ -924,7 +935,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 									xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
 								} else {
-									xAxis = buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true);
+									xAxis = ExcelBuildFunctionUtility.buildFunction(sheet, null, excelChart.xAxis(), RowStartEndType.ROW_HEADER, true, true,mapFieldColumn,mapSheet);
 									seriesChart = infoChart.getFunction();
 								}
 
@@ -948,10 +959,10 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 
 		for (ExcelAreaBorder areaBorder : excelSheetLayout.areaBorder()) {
 			String areaRange = areaBorder.areaRange();
-			areaRange = this.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_EMPTY);
-			areaRange = this.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END);
-			areaRange = this.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_HEADER);
-			areaRange = this.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START);
+			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_EMPTY,mapFieldColumn,mapSheet);
+			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END,mapFieldColumn,mapSheet);
+			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_HEADER,mapFieldColumn,mapSheet);
+			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START,mapFieldColumn,mapSheet);
 			CellRangeAddress region = CellRangeAddress.valueOf(areaRange);
 			int firstRow = region.getFirstRow();
 			int firstColumn = region.getFirstColumn();
@@ -1066,8 +1077,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				mapFieldColumn.get(fieldName).setFirstRow(infoChart.getFirstRow());
 				mapFieldColumn.get(fieldName).setLastRow(infoChart.getLastRow());
 			}
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_START, true, true);
-			function = buildFunction(sheet, null, function, RowStartEndType.ROW_END, true, true);
+			function = ExcelBuildFunctionUtility.buildFunction(sheet, null, function, RowStartEndType.ROW_START, true, true,mapFieldColumn,mapSheet);
+			function = ExcelBuildFunctionUtility.buildFunction(sheet, null, function, RowStartEndType.ROW_END, true, true,mapFieldColumn,mapSheet);
 		}
 		logger.info("Function: " + function);
 		return function;
@@ -1258,7 +1269,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					// xAxis = setInfoColumnByMapCharts(excelChart.xAxis(), sheet, infoChart);
 
 				} else {
-					// xAxis = buildFunction(sheet, null, excelChart.xAxis(),
+					// xAxis = ExcelBuildFunctionUtils.buildFunction(sheet, null, excelChart.xAxis(),
 					// RowStartEndType.ROW_HEADER);
 					seriesChart = infoChart.getFunction();
 				}
