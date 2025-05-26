@@ -151,6 +151,9 @@ public abstract class SuperGenerateExcelImpl {
 	protected Map<String, BaseSheet> mapSheet = new HashMap<>();
 
 	protected SheetMappingSheet sheetMapping;
+	
+	@Autowired
+	protected ExcelLayoutUtility excelLayoutUtility;
 
 	/** The value props. */
 	@Autowired
@@ -353,9 +356,9 @@ public abstract class SuperGenerateExcelImpl {
 			heightRow = ExcelUtils.rowHeight(excelRowHeight.height());
 		}
 		row.setHeight(heightRow);
-		CellStyle cellStyleColumn0 = ExcelLayoutUtility.createCellStyle(workbook, excelSummary.layout(), indexRow,this.valueProps);
+		CellStyle cellStyleColumn0 = this.excelLayoutUtility.createCellStyle(workbook, excelSummary.layout(), indexRow);
 		Cell cellColumn0 = row.createCell(excelSheetLayout.startColumn());
-		ExcelLayoutUtility.setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary,this.mapCellStyle);
+		this.excelLayoutUtility.setCellStyleExcel(cellStyleColumn0, cellColumn0, layoutCellSummary,this.mapCellStyle);
 		cellColumn0.setCellValue(this.valueProps.valueProps(sheetHeader.getExcelColumn().name()));
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
@@ -363,7 +366,7 @@ public abstract class SuperGenerateExcelImpl {
 //		ExcelDate excelDate = null;
 //		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
 //			excelDate = sheetHeader.getExcelDate();
-		CellStyle cellStyleColumn1 = ExcelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow,this.valueProps);
+		CellStyle cellStyleColumn1 = this.excelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
 		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column, indexRow);
@@ -429,7 +432,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected void setCellFormula(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
+		this.excelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY, excelFunction.alias(),mapFieldColumn,mapSheet);
@@ -499,7 +502,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyle = mergeRow.getCellStyleFrom();
 		Cell cell = mergeRow.getCellFrom();
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
+		this.excelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY, excelFunction.alias(),mapFieldColumn,mapSheet);
@@ -563,7 +566,7 @@ public abstract class SuperGenerateExcelImpl {
 
 		if (cellStyle == null)
 			cellStyle = this.mapCellStyle.get(layoutCell);
-		ExcelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
+		this.excelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell,this.mapCellStyle);
 
 		if (sheetHeader.getValue() instanceof Date)
 			cell.setCellValue((Date) sheetHeader.getValue());
@@ -656,7 +659,7 @@ public abstract class SuperGenerateExcelImpl {
 		CellStyle cellStyleHeader = null;
 		if (excelSheetLayout.showHeader()) {
 			rowHeader = sheet.createRow(indexRow);
-			cellStyleHeader = ExcelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetData, rowHeader,this.mapCellHeaderStyle);
+			cellStyleHeader = this.excelLayoutUtility.getCellStyleHeader(workbook, sheet, sheetData, rowHeader,this.mapCellHeaderStyle);
 
 		}
 		int maxColumn = listSheetHeader.size() + excelSheetLayout.startColumn();
@@ -673,7 +676,7 @@ public abstract class SuperGenerateExcelImpl {
 						layoutHeader = sheetHeader.getExcelHeaderCellLayout();
 					else
 						layoutHeader = SpreadsheetUtils.getAnnotation(sheetHeader.getField(), ExcelHeaderCellLayout.class);
-					CellStyle differentCellStyleHeader = ExcelLayoutUtility.manageCellStyleHeader(workbook, layoutHeader,this.mapCellHeaderStyle);
+					CellStyle differentCellStyleHeader = this.excelLayoutUtility.manageCellStyleHeader(workbook, layoutHeader,this.mapCellHeaderStyle);
 					cellHeader.setCellStyle(differentCellStyleHeader);
 				} else
 					cellHeader.setCellStyle(cellStyleHeader);
@@ -715,7 +718,7 @@ public abstract class SuperGenerateExcelImpl {
 //						String key = ExcelUtils.getKeyColumn(worksheet, column);
 //						int columnNum = this.mapFieldColumn.get(key).getColumnNum();
 						cellSuperHeader = rowSuperHeader.createCell(columnNum);
-						CellStyle cellSuperHeaderStyle = ExcelLayoutUtility.manageCellStyleHeader(workbook, headerGroup,this.mapCellHeaderStyle);
+						CellStyle cellSuperHeaderStyle = this.excelLayoutUtility.manageCellStyleHeader(workbook, headerGroup,this.mapCellHeaderStyle);
 						cellSuperHeader.setCellStyle(cellSuperHeaderStyle);
 						if (setCellValue)
 							cellSuperHeader.setCellValue(this.valueProps.valueProps(headerGroup.columnName()));
