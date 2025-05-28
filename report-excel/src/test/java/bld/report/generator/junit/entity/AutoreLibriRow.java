@@ -34,6 +34,7 @@ import com.bld.generator.report.excel.dropdown.CharacterDropDown;
 import com.bld.generator.report.excel.dropdown.IntegerDropDown;
 
 
+
 /**
  * The Class AutoreLibriRow.
  */

@@ -6,11 +6,18 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import com.bld.generator.report.excel.RowSheet;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelColumn;
+import com.bld.generator.report.excel.annotation.ExcelConditionCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelConditionCellLayouts;
 import com.bld.generator.report.excel.annotation.ExcelFont;
+import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 import com.bld.generator.report.excel.annotation.ExcelSubtotal;
 import com.bld.generator.report.excel.annotation.ExcelSubtotals;
 
+
 @ExcelSubtotals(labelTotalGroup = "Total",endLabel = "total",sumForGroup = {"city","state"})
+@ExcelConditionCellLayouts(@ExcelConditionCellLayout(columns = { "state","city","district" }, condition = "ISNUMBER(SEARCH(\"total\", LOWER(${state[start]})))", excelCellLayout = @ExcelCellLayout(
+		rgbFont = @ExcelRgbColor(red=(byte)255,blue=0,green=0),
+		rgbForeground = @ExcelRgbColor(blue=(byte)255,red=0,green=0))))
 public class SalaryRow implements RowSheet {
 
 	

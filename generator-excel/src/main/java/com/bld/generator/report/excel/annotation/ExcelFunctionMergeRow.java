@@ -27,7 +27,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
  * <li>ExcelMergeRow - it is used to merge cells after checking the equality the
  * reference field values</li>
  * <li>ExcelFunction - to define the function</li>
- * <li>ExcelColumnWidth - to set column width<7li>
+ * <li>ExcelColumnWidth - to set column width</li>
  * <li>ExcelHeaderCellLayout - to define header cell layout</li>
  * <li>ExcelSubtotal - to execute subtotal function</li>
  * </ul>

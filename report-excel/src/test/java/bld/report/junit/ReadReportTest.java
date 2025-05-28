@@ -46,7 +46,6 @@ import bld.report.read.junit.entity.RendicontazioneMassivaImportColumn;
  */
 
 @SpringBootTest
-
 //@EnableExcelGenerator
 @EnableExcelRead
 @EnableTransactionManagement
@@ -124,6 +123,7 @@ public class ReadReportTest {
 		logger.info("Time conversion: "+(end.getTime()-start.getTime())+"ms");
 	}
 	
+
 	@Test
 	public void testReadCsv() throws Exception {
 		FileInputStream inputStream = new FileInputStream("/mnt/report/Test.csv");
