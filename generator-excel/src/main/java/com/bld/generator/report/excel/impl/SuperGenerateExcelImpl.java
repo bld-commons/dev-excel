@@ -784,6 +784,8 @@ public abstract class SuperGenerateExcelImpl {
 		Set<Field> listField = SpreadsheetUtils.getListField(sheetData.getRowClass());
 		String startCell = ExcelUtils.coordinateCalculation(firstRow, firstColumn, true, true);
 		String endCell = ExcelUtils.coordinateCalculation(lastRow, lastColumn, true, true);
+		logger.debug("start cell: "+startCell);
+		logger.debug("end cell: "+endCell);
 		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
 		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
 		indexRow += 3;
@@ -821,6 +823,7 @@ public abstract class SuperGenerateExcelImpl {
 				pivotTable.addColumnLabel(dataConsolidateFunction, columnIndex);
 
 		}
+		
 		return indexRow;
 
 	}

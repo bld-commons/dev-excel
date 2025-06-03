@@ -83,7 +83,7 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", Arrays.asList("Rossi","Bianchi"));
 		listBaseSheet.add(utenteSheet);
 		
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", System.getProperty("user.home")+"/Documents/git-project/dev-excel/linux.jpg","Drammatico");
 		listBaseSheet.add(casaEditrice);
 		//Libri d'autore
 		
