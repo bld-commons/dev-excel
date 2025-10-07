@@ -60,5 +60,9 @@ public @interface CsvSettings {
 	 * @return true, if successful
 	 */
 	public boolean trim() default true;
+	
+	public String[] ignoreColumns() default {};
+	
+	public boolean parallel() default false;
 
 }

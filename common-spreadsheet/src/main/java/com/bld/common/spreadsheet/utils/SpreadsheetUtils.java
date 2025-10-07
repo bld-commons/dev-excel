@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.bld.common.spreadsheet.exception.SpreadsheetException;
@@ -25,7 +28,7 @@ public class SpreadsheetUtils {
 
 	private static final List<String> CLASS_PACKAGES = Arrays.asList("com.bld.generator", "com.bld.common");
 
-
+    private static final Logger logger=LoggerFactory.getLogger(SpreadsheetUtils.class);
 	/**
 	 * Gets the annotation.
 	 *
@@ -173,7 +176,7 @@ public class SpreadsheetUtils {
 			fos.write(data);
 			fos.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(ExceptionUtils.getStackTrace(e));
 		}
 
 	}

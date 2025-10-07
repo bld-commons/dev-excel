@@ -36,4 +36,7 @@ public @interface CsvDate {
 	public String separator() default "/";
 	
 	
+	public String timezone() default "Europe/Rome";
+	
+	
 }
