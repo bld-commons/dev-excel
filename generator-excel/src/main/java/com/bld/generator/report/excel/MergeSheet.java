@@ -6,32 +6,48 @@
 package com.bld.generator.report.excel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
- * The Class MergeSheet.
- * <br>
- * MergeSheet is used to merge different {@link com.bld.generator.report.excel.SheetComponent} type, through the field listSheet. <br>
- * SheetComponent is implemented from:<br> 
+ * The Class MergeSheet. <br>
+ * MergeSheet is used to merge different
+ * {@link com.bld.generator.report.excel.SheetComponent} type, through the field
+ * listSheet. <br>
+ * SheetComponent is implemented from:<br>
  * <ol>
- * <li>{@link com.bld.generator.report.excel.SheetData}</li> 
+ * <li>{@link com.bld.generator.report.excel.SheetData}</li>
  * <li>{@link com.bld.generator.report.excel.SheetSummary}</li>
  * </ol>
  */
 public class MergeSheet extends BaseSheet {
 
 	/** The list sheet. */
-	private List<SheetComponent> listSheet;
+	private List<SheetComponent> sheets;
 
 	/**
 	 * Instantiates a new merge sheet.
 	 *
-	 * @param listSheet the list sheet
-	 * @param sheetName the name sheet
+	 * @param sheetName the sheet name
+	 * @param sheets the sheets
 	 */
-	public MergeSheet(List<SheetComponent> listSheet,String sheetName) {
+	public MergeSheet(String sheetName, List<SheetComponent> sheets) {
 		super(sheetName);
-		this.listSheet = listSheet;
+		this.sheets = sheets;
+	}
+
+	/**
+	 * Instantiates a new merge sheet.
+	 *
+	 * @param sheetName the sheet name
+	 * @param sheets the sheets
+	 */
+	public MergeSheet(String sheetName, SheetComponent... sheets) {
+		super(sheetName);
+		if (ArrayUtils.isNotEmpty(sheets))
+			this.sheets = Arrays.asList(sheets);
 	}
 
 	/**
@@ -41,7 +57,7 @@ public class MergeSheet extends BaseSheet {
 	 */
 	public MergeSheet(String sheetName) {
 		super(sheetName);
-		this.listSheet=new ArrayList<>();
+		this.sheets = new ArrayList<>();
 	}
 
 	/**
@@ -49,8 +65,8 @@ public class MergeSheet extends BaseSheet {
 	 *
 	 * @return the list sheet
 	 */
-	public List<SheetComponent> getListSheet() {
-		return listSheet;
+	public List<SheetComponent> getSheets() {
+		return sheets;
 	}
 
 	/**
@@ -58,8 +74,8 @@ public class MergeSheet extends BaseSheet {
 	 *
 	 * @param listSheet the new list sheet
 	 */
-	public void setListSheet(List<SheetComponent> listSheet) {
-		this.listSheet = listSheet;
+	public void setSheets(List<SheetComponent> listSheet) {
+		this.sheets = listSheet;
 	}
 
 	/**
@@ -71,7 +87,7 @@ public class MergeSheet extends BaseSheet {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((listSheet == null) ? 0 : listSheet.hashCode());
+		result = prime * result + ((sheets == null) ? 0 : sheets.hashCode());
 		return result;
 	}
 
@@ -90,13 +106,12 @@ public class MergeSheet extends BaseSheet {
 		if (getClass() != obj.getClass())
 			return false;
 		MergeSheet other = (MergeSheet) obj;
-		if (listSheet == null) {
-			if (other.listSheet != null)
+		if (sheets == null) {
+			if (other.sheets != null)
 				return false;
-		} else if (!listSheet.equals(other.listSheet))
+		} else if (!sheets.equals(other.sheets))
 			return false;
 		return true;
 	}
-
 
 }

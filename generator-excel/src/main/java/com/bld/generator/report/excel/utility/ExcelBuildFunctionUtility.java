@@ -223,7 +223,7 @@ public class ExcelBuildFunctionUtility {
 			if (baseSheet instanceof MergeSheet) {
 				MergeSheet mergeSheet = (MergeSheet) baseSheet;
 
-				for (SheetComponent bs : mergeSheet.getListSheet()) {
+				for (SheetComponent bs : mergeSheet.getSheets()) {
 					value = getStaticValue(keyParameter, row != null && infoColumn != null ? row - 1 - infoColumn.getRowHeader() : null, bs);
 					if (value != null)
 						break;
@@ -284,7 +284,7 @@ public class ExcelBuildFunctionUtility {
 		Object value = null;
 		if (sheetComponent instanceof SheetDynamicData) {
 			SheetDynamicData<?> sheetDynamicData = (SheetDynamicData<?>) sheetComponent;
-			DynamicRowSheet dynamicRowShet = sheetDynamicData.getListRowSheet().get(row);
+			DynamicRowSheet dynamicRowShet = sheetDynamicData.getRows().get(row);
 			if (sheetDynamicData.getMapExtraColumnAnnotation().containsKey(keyParameter))
 				value = dynamicRowShet.getMapValue().get(keyParameter);
 			else if (dynamicRowShet.getClass().getDeclaredField(keyParameter) != null)
@@ -292,7 +292,7 @@ public class ExcelBuildFunctionUtility {
 
 		} else if (sheetComponent instanceof SheetData) {
 			SheetData<?> sheetData = (SheetData<?>) sheetComponent;
-			RowSheet rowSheet = sheetData.getListRowSheet().get(row);
+			RowSheet rowSheet = sheetData.getRows().get(row);
 			if (rowSheet.getClass().getDeclaredField(keyParameter) != null)
 				value = PropertyUtils.getProperty(rowSheet, keyParameter);
 

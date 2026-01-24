@@ -5,6 +5,8 @@
 */
 package com.bld.generator.report.excel;
 
+import java.io.OutputStream;
+
 import com.bld.generator.report.excel.data.ReportExcel;
 
 /**
@@ -18,29 +20,53 @@ public interface GenerateExcel {
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception the exception
+	 * 
 	 */
-	public byte[] createFileXls(ReportExcel report) throws Exception;
+	public byte[] createFileXls(ReportExcel report);
+
+	/**
+	 * Creates the file xls.
+	 *
+	 * @param report       the report
+	 * @param outputStream the output stream
+	 * 
+	 */
+	public void createFileXls(ReportExcel report, OutputStream outputStream);
 
 	/**
 	 * Creates the file xlsx.
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception the exception
+	 * 
 	 */
-	public byte[] createFileXlsx(ReportExcel report) throws Exception;
+	public byte[] createFileXlsx(ReportExcel report);
+
+	/**
+	 * Creates the file xlsx.
+	 *
+	 * @param report       the report
+	 * @param outputStream the output stream
+	 * 
+	 */
+	public void createFileXlsx(ReportExcel report, OutputStream outputStream);
 
 	/**
 	 * Creates the big data file xlsx.
 	 *
 	 * @param report the report
 	 * @return the byte[]
-	 * @throws Exception the exception
+	 * 
 	 */
-	public byte[] createBigDataFileXlsx(ReportExcel report) throws Exception;
-	
-	
-	
-	
+	public byte[] createBigDataFileXlsx(ReportExcel report);
+
+	/**
+	 * Creates the big data file xlsx.
+	 *
+	 * @param report       the report
+	 * @param outputStream the output stream
+	 * 
+	 */
+	public void createBigDataFileXlsx(ReportExcel report, OutputStream outputStream);
+
 }

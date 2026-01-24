@@ -89,21 +89,21 @@ public class ReportTestJpa {
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
-		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
+		totaleAutoreLibriSheet.addRows(new TotaleAutoreLibriRow("Totale"));
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 		listBaseSheet.add(autoreLibriSheet);
 		
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		listBaseSheet.add(genereSheet);
 		SalarySheet salarySheet=new SalarySheet("salary");
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
 		listBaseSheet.add(salarySheet);
 		
 		
@@ -113,7 +113,7 @@ public class ReportTestJpa {
 //		for(int i=0;i<500000;i++) {
 //			BigDataUtenteRow utenteRow=new BigDataUtenteRow();
 //			PropertyUtils.copyProperties(utenteRow, listUtente.get((int)(Math.random()*maxRandom)));
-//			bigDataUtenteSheet.getListRowSheet().add(utenteRow);
+//			bigDataUtenteSheet.addRows(utenteRow);
 //		}
 //		listBaseSheet.add(bigDataUtenteSheet);
 		
