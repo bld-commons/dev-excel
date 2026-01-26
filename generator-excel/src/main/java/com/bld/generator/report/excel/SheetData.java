@@ -61,8 +61,8 @@ import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
 public abstract class SheetData<T extends RowSheet> extends BaseSheet implements SheetComponent{
 	
 
-	/** The list row sheet. */
-	protected List<T> listRowSheet;
+	/** The rows. */
+	protected List<T> rows;
 	
 	/** The row class. */
 	private Class<T> rowClass;
@@ -76,7 +76,7 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 */
 	public SheetData(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super(sheetName);
-		listRowSheet = new ArrayList<T>();
+		rows = new ArrayList<T>();
 		this.rowClass=ExcelUtils.getTClass(this);
 		this.enableInfoSheet=true;
 	}
@@ -86,20 +86,20 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 *
 	 * @return the list row sheet
 	 */
-	public List<T> getListRowSheet() {
-		return listRowSheet;
+	public List<T> getRows() {
+		return rows;
 	}
 	
 	/**
-	 * Adds the row sheets.
+	 * Adds the rows.
 	 *
 	 * @param rows the rows
 	 */
 	@SuppressWarnings("unchecked")
-	public void addRowSheets(T... rows) {
+	public void addRows(T... rows) {
 		if(ArrayUtils.isNotEmpty(rows))
 			for(T row:rows)
-				this.listRowSheet.add(row);
+				this.rows.add(row);
 	}
 
 	/**
@@ -107,8 +107,8 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	 *
 	 * @param listRowSheet the new list row sheet
 	 */
-	public void setListRowSheet(List<T> listRowSheet) {
-		this.listRowSheet = listRowSheet;
+	public void setRows(List<T> listRowSheet) {
+		this.rows = listRowSheet;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((listRowSheet == null) ? 0 : listRowSheet.hashCode());
+		result = prime * result + ((rows == null) ? 0 : rows.hashCode());
 		result = prime * result + ((rowClass == null) ? 0 : rowClass.hashCode());
 		return result;
 	}
@@ -159,10 +159,10 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 		if (getClass() != obj.getClass())
 			return false;
 		SheetData<?> other = (SheetData<?>) obj;
-		if (listRowSheet == null) {
-			if (other.listRowSheet != null)
+		if (rows == null) {
+			if (other.rows != null)
 				return false;
-		} else if (!listRowSheet.equals(other.listRowSheet))
+		} else if (!rows.equals(other.rows))
 			return false;
 		if (rowClass == null) {
 			if (other.rowClass != null)
@@ -173,7 +173,10 @@ public abstract class SheetData<T extends RowSheet> extends BaseSheet implements
 	}
 
 
-	
+	public void clear() {
+		if(this.rows!=null)
+			this.rows.clear();
+	}
 	
 	
 }

@@ -37,7 +37,7 @@ logging:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/excel_db
-    username: ${EXCEL_USER_DB}
+    username: postgres
     password: Pa$$wd87!
   jpa:
     show-sql: true

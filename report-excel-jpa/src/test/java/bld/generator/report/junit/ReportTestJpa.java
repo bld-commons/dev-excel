@@ -83,27 +83,27 @@ public class ReportTestJpa {
 		utenteSheet.getMapParameters().put("cognome", Arrays.asList("Rossi","Bianchi"));
 		listBaseSheet.add(utenteSheet);
 		
-		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", "/home/francesco/Documents/git-project/dev-excel/linux.jpg","Drammatico");
+		CasaEditrice casaEditrice = new CasaEditrice("Casa Editrice","Mondadori", new GregorianCalendar(1955, Calendar.MAY, 10), "Roma", System.getProperty("user.home")+"/Documents/git-project/dev-excel/linux.jpg","Drammatico");
 		listBaseSheet.add(casaEditrice);
 		//Libri d'autore
 		
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore","Test label");
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet=new TotaleAutoreLibriSheet();
-		totaleAutoreLibriSheet.getListRowSheet().add(new TotaleAutoreLibriRow("Totale"));
+		totaleAutoreLibriSheet.addRows(new TotaleAutoreLibriRow("Totale"));
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 		listBaseSheet.add(autoreLibriSheet);
 		
 		GenereSheet genereSheet=new GenereSheet("Genere");
 		listBaseSheet.add(genereSheet);
 		SalarySheet salarySheet=new SalarySheet("salary");
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("a",2.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
-		salarySheet.getListRowSheet().add(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("a",2.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
+		salarySheet.addRows(new SalaryRow("c",1.0));
 		listBaseSheet.add(salarySheet);
 		
 		
@@ -113,7 +113,7 @@ public class ReportTestJpa {
 //		for(int i=0;i<500000;i++) {
 //			BigDataUtenteRow utenteRow=new BigDataUtenteRow();
 //			PropertyUtils.copyProperties(utenteRow, listUtente.get((int)(Math.random()*maxRandom)));
-//			bigDataUtenteSheet.getListRowSheet().add(utenteRow);
+//			bigDataUtenteSheet.addRows(utenteRow);
 //		}
 //		listBaseSheet.add(bigDataUtenteSheet);
 		
@@ -139,7 +139,7 @@ public class ReportTestJpa {
 		CensimentoSheet censimento=new CensimentoSheet("Censimento");
 		ReportExcel excel=new ReportExcel();
 		excel.setTitle("Censimento");
-		excel.getListBaseSheet().add(censimento);
+		excel.getSheets().add(censimento);
 		
 		byte[] byteReport=null;
 		try {
@@ -156,7 +156,7 @@ public class ReportTestJpa {
 	public void bigData() {
 		StatoMatricolareSheet sheet=new StatoMatricolareSheet("Stato Matricolare");
 		ReportExcel excel=new ReportExcel("Stato Matricolare");
-		excel.addBaseSheet(sheet);
+		excel.addSheets(sheet);
 		byte[] byteReport=null;
 		try {
 			byteReport = this.generateExcel.createFileXlsx(excel);

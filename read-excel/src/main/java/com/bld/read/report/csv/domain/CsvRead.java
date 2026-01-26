@@ -94,6 +94,11 @@ public class CsvRead<T extends RowSheetRead> {
 	public List<T> getListRowSheet() {
 		return listRowSheet;
 	}
+	
+	
+	public void addRowSheet(T t) {
+		this.listRowSheet.add(t);
+	}
 
 	/**
 	 * @return the close

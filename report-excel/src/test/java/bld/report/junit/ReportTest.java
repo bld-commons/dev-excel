@@ -149,9 +149,9 @@ public class ReportTest {
 //		listBaseSheet.add(casaEditrice);
 
 		DateSheet dateSheet = new DateSheet("Test Date");
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
-		dateSheet.getListRowSheet().add(new DateRow(null, new Date()));
+		dateSheet.addRows(new DateRow(null, new Date()));
+		dateSheet.addRows(new DateRow(null, new Date()));
+		dateSheet.addRows(new DateRow(null, new Date()));
 
 		listBaseSheet.add(dateSheet);
 
@@ -164,7 +164,7 @@ public class ReportTest {
 		list.add(new AutoreLibriRow("Mario", "Verdi", new GregorianCalendar(1945, Calendar.JULY, 14), "Arancio", "Sentimentale", 2, 23.24, 3.0));
 
 		AutoreLibriSheet autoreLibriSheet = new AutoreLibriSheet("Libri d'autore", "Test label");
-		autoreLibriSheet.setListRowSheet(list);
+		autoreLibriSheet.setRows(list);
 
 		listBaseSheet.add(autoreLibriSheet);
 
@@ -180,7 +180,7 @@ public class ReportTest {
 		List<GenereRow> listGenere = new ArrayList<>();
 		listGenere.add(new GenereRow("Giallo", "Test remove cell 1:1", 23, "Test Remove cell 1:2"));
 		listGenere.add(new GenereRow("Romanzi", "Test remove cell 2:1", 17, "Test Remove cell 2:2"));
-		genereSheet.setListRowSheet(listGenere);
+		genereSheet.setRows(listGenere);
 
 		listBaseSheet.add(genereSheet);
 
@@ -337,7 +337,7 @@ public class ReportTest {
 		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
 		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno3", extraColumnAnnotation);
 
-		autoreLibriSheet.setListRowSheet(list);
+		autoreLibriSheet.setRows(list);
 		ExcelChartDataLabelImpl excelChartDataLabel = new ExcelChartDataLabelImpl();
 		ExcelChartCategoryImpl excelChartCategoryImpl = new ExcelChartCategoryImpl("titolo", RowStartEndType.ROW_EMPTY.getParameter("percAnno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("percAnno3"));
 		ExcelChartImpl excelChartImpl = null;
@@ -355,10 +355,10 @@ public class ReportTest {
 		TotaleAutoreLibriSheet totaleAutoreLibriSheet = new TotaleAutoreLibriSheet();
 
 		TotaleAutoreLibriRow totaleAutoreLibriRow = new TotaleAutoreLibriRow(1);
-		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);
+		totaleAutoreLibriSheet.addRows(totaleAutoreLibriRow);
 
 		totaleAutoreLibriRow = new TotaleAutoreLibriRow(2);
-		totaleAutoreLibriSheet.getListRowSheet().add(totaleAutoreLibriRow);
+		totaleAutoreLibriSheet.addRows(totaleAutoreLibriRow);
 
 		autoreLibriSheet.setSheetFunctionsTotal(totaleAutoreLibriSheet);
 
@@ -535,23 +535,23 @@ public class ReportTest {
 		SituazioneUfficiSheet situazioneUfficiSheet = new SituazioneUfficiSheet("PROVA SOMME INTERMEDIE");
 		for (int i = 0; i < 10; i++) {
 			
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Comparto Dirigenti", "DIRIGENTI", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            situazioneUfficiSheet.addRows(new SituazioneUfficiRow("Tempo Indeterminato","Comparto Dirigenti", "DIRIGENTI", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
             		BigDecimal.valueOf(75), BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA1", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(65),
+            situazioneUfficiSheet.addRows(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA1", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(65),
             		BigDecimal.valueOf(14), BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali",  "AREA2", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            situazioneUfficiSheet.addRows(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali",  "AREA2", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
             		BigDecimal.valueOf(33), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA3", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            situazioneUfficiSheet.addRows(new SituazioneUfficiRow("Tempo Indeterminato","Funzioni Centrali", "AREA3", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
             		BigDecimal.valueOf(24), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
         for (int i = 0; i < 10; i++) {
-            situazioneUfficiSheet.addRowSheets(new SituazioneUfficiRow("Tempo Determinato", "Funzioni Centrali", "TD", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
+            situazioneUfficiSheet.addRows(new SituazioneUfficiRow("Tempo Determinato", "Funzioni Centrali", "TD", "PROFESSIONALE ".concat(String.valueOf(i)), BigDecimal.valueOf(100),
             		BigDecimal.valueOf(80), BigDecimal.ONE,  BigDecimal.ONE, BigDecimal.ONE,BigDecimal.ONE));
         }
 		

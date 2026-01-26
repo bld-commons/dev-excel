@@ -57,10 +57,10 @@ public class ExcelQueryComponentImpl extends SpreadsheetQueryComponentImpl imple
 	 */
 	@Override
 	public <T extends RowSheet> void executeQuery(QuerySheetData<T> querySheetData) throws Exception {
-		if (CollectionUtils.isEmpty(querySheetData.getListRowSheet())) {
+		if (CollectionUtils.isEmpty(querySheetData.getRows())) {
 			Date start=new Date();
 			ExcelQuery excelQuery = SpreadsheetUtils.getAnnotation(querySheetData.getClass(), ExcelQuery.class);
-			querySheetData.setListRowSheet(excelQuery.nativeQuery() ? nativeQuery(querySheetData, excelQuery) : jpaQuery(querySheetData, excelQuery));
+			querySheetData.setRows(excelQuery.nativeQuery() ? nativeQuery(querySheetData, excelQuery) : jpaQuery(querySheetData, excelQuery));
 			Date end=new Date();
 			logger.info("Time query: "+(((double)(end.getTime()-start.getTime()))/1000)+"s");
 		}

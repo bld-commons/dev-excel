@@ -37,7 +37,7 @@ create table utente(
   cognome varchar(100) not null, 
   nome varchar(100) not null,
   data_nascita date not null, 
-  image bytea,  
+  image bytea,
   "path" varchar(1024),
   primary key (id_utente)
 

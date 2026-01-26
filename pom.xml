@@ -6,7 +6,7 @@
 	<groupId>com.github.bld-commons</groupId>
 	<artifactId>dev-excel</artifactId>
 	<packaging>pom</packaging>
-	<version>5.0.5</version>
+	<version>5.1.0</version>
 	<name>Development Excel</name>
 	<url>https://github.com/FrancescoBaldi87/dev-excel</url>
 
@@ -41,7 +41,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.4</version>
+		<version>3.5.8</version>
 		<relativePath />
 	</parent>
 
@@ -56,9 +56,8 @@
 		<org.reflections-version>0.10.2</org.reflections-version>
 		<com.fathzer-version>3.0.6</com.fathzer-version>
 		<commons-csv.version>1.11.0</commons-csv.version>
-		<junit.version>4.13.2</junit.version>
 		<bld-commons.version>2.0.3</bld-commons.version>
-		<commons-io.version>2.17.0</commons-io.version>
+		<commons-io.version>2.19.0</commons-io.version>
 		<jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -92,6 +91,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+			
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -111,12 +111,6 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml-lite</artifactId>
 				<version>${org.apache.poi-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.github.bld-commons</groupId>
@@ -192,11 +186,6 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-csv</artifactId>
 				<version>${commons-csv.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>2.19.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
