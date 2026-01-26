@@ -41,23 +41,23 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.8</version>
+		<version>3.5.10</version>
 		<relativePath />
 	</parent>
 
 	<properties>
-		<org.apache.poi-version>5.4.1</org.apache.poi-version>
-		<commons-compress.version>1.27.1</commons-compress.version>
+		<org.apache.poi-version>5.5.1</org.apache.poi-version>
+		<commons-compress.version>1.28.0</commons-compress.version>
 		<org.apache.commons-version>4.4</org.apache.commons-version>
-		<commons-lang3.version>3.17.0</commons-lang3.version>
-		<commons-text.version>1.12.0</commons-text.version>
-		<commons-beanutils.version>1.9.4</commons-beanutils.version>
-		<io.leangen.geantyref-version>2.0.0</io.leangen.geantyref-version>
+		<commons-lang3.version>3.20.0</commons-lang3.version>
+		<commons-text.version>1.15.0</commons-text.version>
+		<commons-beanutils.version>1.11.0</commons-beanutils.version>
+		<io.leangen.geantyref-version>2.0.1</io.leangen.geantyref-version>
 		<org.reflections-version>0.10.2</org.reflections-version>
 		<com.fathzer-version>3.0.6</com.fathzer-version>
-		<commons-csv.version>1.11.0</commons-csv.version>
-		<bld-commons.version>2.0.3</bld-commons.version>
-		<commons-io.version>2.19.0</commons-io.version>
+		<commons-csv.version>1.14.1</commons-csv.version>
+		<bld-commons.version>2.1.2</bld-commons.version>
+		<commons-io.version>2.21.0</commons-io.version>
 		<jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
 		<!-- PLUGIN INIZIO -->
 		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
