@@ -36,8 +36,8 @@ public class ReportExcel {
 	@ExcelDate(value = ColumnDateFormat.PARAMETER)
 	private Date date;
 
-	/** The list base sheet. */
-	private List<BaseSheet> listBaseSheet;
+	/** The sheets. */
+	private List<BaseSheet> sheets;
 
 	/** The ignore cover. */
 	private boolean ignoreCover;
@@ -66,7 +66,7 @@ public class ReportExcel {
 		this.title = title;
 		this.date = new Date();
 		this.ignoreCover = ignoreCover;
-		this.listBaseSheet = new ArrayList<>();
+		this.sheets = new ArrayList<>();
 		this.enableSheetMapping = enableSheetMapping;
 	}
 
@@ -102,7 +102,7 @@ public class ReportExcel {
 	public ReportExcel(String title, List<BaseSheet> listBaseSheet) {
 		super();
 		this.title = title;
-		this.listBaseSheet = listBaseSheet;
+		this.sheets = listBaseSheet;
 		this.date = new Date();
 	}
 
@@ -112,7 +112,7 @@ public class ReportExcel {
 	public ReportExcel() {
 		super();
 		this.date = new Date();
-		this.listBaseSheet = new ArrayList<>();
+		this.sheets = new ArrayList<>();
 	}
 
 	/**
@@ -151,33 +151,36 @@ public class ReportExcel {
 		this.date = date;
 	}
 
-	/**
-	 * Gets the list base sheet.
-	 *
-	 * @return the list base sheet
-	 */
-	public List<BaseSheet> getListBaseSheet() {
-		return listBaseSheet;
-	}
 
 	/**
-	 * Adds the base sheet.
+	 * Gets the sheets.
+	 *
+	 * @return the sheets
+	 */
+	public List<BaseSheet> getSheets() {
+		return sheets;
+	}
+
+
+	/**
+	 * Adds the sheets.
 	 *
 	 * @param baseSheets the base sheets
 	 */
-	public void addBaseSheet(BaseSheet... baseSheets) {
+	public void addSheets(BaseSheet... baseSheets) {
 		if (ArrayUtils.isNotEmpty(baseSheets))
 			for (BaseSheet baseSheet : baseSheets)
-				this.listBaseSheet.add(baseSheet);
+				this.sheets.add(baseSheet);
 	}
 
+
 	/**
-	 * Sets the list base sheet.
+	 * Sets the sheets.
 	 *
-	 * @param listBaseSheet the new list base sheet
+	 * @param sheets the new sheets
 	 */
-	public void setListBaseSheet(List<BaseSheet> listBaseSheet) {
-		this.listBaseSheet = listBaseSheet;
+	public void setSheets(List<BaseSheet> sheets) {
+		this.sheets = sheets;
 	}
 
 	/**
@@ -228,7 +231,7 @@ public class ReportExcel {
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + (enableSheetMapping ? 1231 : 1237);
 		result = prime * result + (ignoreCover ? 1231 : 1237);
-		result = prime * result + ((listBaseSheet == null) ? 0 : listBaseSheet.hashCode());
+		result = prime * result + ((sheets == null) ? 0 : sheets.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -257,10 +260,10 @@ public class ReportExcel {
 			return false;
 		if (ignoreCover != other.ignoreCover)
 			return false;
-		if (listBaseSheet == null) {
-			if (other.listBaseSheet != null)
+		if (sheets == null) {
+			if (other.sheets != null)
 				return false;
-		} else if (!listBaseSheet.equals(other.listBaseSheet))
+		} else if (!sheets.equals(other.sheets))
 			return false;
 		if (title == null) {
 			if (other.title != null)

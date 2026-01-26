@@ -31,6 +31,7 @@ import com.bld.generator.report.excel.SheetDynamicData;
 import com.bld.generator.report.excel.SheetSummary;
 import com.bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import com.bld.generator.report.excel.data.InfoColumn;
+import com.bld.generator.report.excel.data.KeyParameterAlias;
 
 /**
  * The Class ExcelBuildFunctionUtility.
@@ -48,27 +49,23 @@ public class ExcelBuildFunctionUtility {
 	/** The Constant $. */
 	private static final String $ = "${";
 
+	
 	/**
 	 * Builds the function.
 	 *
-	 * @param sheet           the sheet
-	 * @param indexRow        the index row
-	 * @param function        the function
+	 * @param sheet the sheet
+	 * @param indexRow the index row
+	 * @param function the function
 	 * @param rowStartEndType the row start end type
-	 * @param alias           the alias
-	 * @param mapFieldColumn  the map field column
-	 * @param mapSheet        the map sheet
+	 * @param mapExcelFormulaAlias the map excel formula alias
+	 * @param mapFieldColumn the map field column
+	 * @param mapSheet the map sheet
 	 * @return the string
 	 * @throws Exception the exception
 	 */
-	public static String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, ExcelFormulaAlias[] alias, Map<String, InfoColumn> mapFieldColumn, Map<String, BaseSheet> mapSheet) throws Exception {
+	public static String buildFunction(Sheet sheet, Integer indexRow, String function, RowStartEndType rowStartEndType, Map<String, KeyParameterAlias> mapExcelFormulaAlias, Map<String, InfoColumn> mapFieldColumn, Map<String, BaseSheet> mapSheet) throws Exception {
 		function = function.replace(ExcelUtils.ENV_SHEET_NAME, "\"" + sheet.getSheetName() + "\"");
 		Matcher matcher = ExcelUtils.matcher(PATTERN, function);
-		Map<String, ExcelFormulaAlias> mapExcelFormulaAlias = new HashMap<>();
-		if (ArrayUtils.isNotEmpty(alias))
-			for (ExcelFormulaAlias formulaAlias : alias)
-				mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), formulaAlias);
-
 		while (matcher.find()) {
 			String parameter = matcher.group();
 			String keyParameter = parameter.replace($, "").replace(rowStartEndType.getValue(), "").replace("}", "").replace("'", BaseSheet.APOS).trim();
@@ -76,13 +73,10 @@ public class ExcelBuildFunctionUtility {
 			boolean blockRow = false;
 			String sheetName = sheet.getSheetName();
 			if (mapExcelFormulaAlias.containsKey(keyParameter)) {
-				ExcelFormulaAlias excelFormulaAlias = mapExcelFormulaAlias.get(keyParameter);
-				String sheetPoint = "";
-				if (StringUtils.isNotEmpty(excelFormulaAlias.sheet()))
-					sheetPoint = excelFormulaAlias.sheet() + ".";
-				keyParameter = sheetPoint + excelFormulaAlias.coordinate();
-				blockColumn = excelFormulaAlias.blockColumn();
-				blockRow = excelFormulaAlias.blockRow();
+				KeyParameterAlias keyParameterAlias = mapExcelFormulaAlias.get(keyParameter);
+				keyParameter = keyParameterAlias.getKeyParameter();
+				blockColumn = keyParameterAlias.isBlockColumn();
+				blockRow = keyParameterAlias.isBlockRow();
 				// parameter=parameter.replace(excelFormulaAlias.alias(),keyParameter);
 			}
 
@@ -92,6 +86,20 @@ public class ExcelBuildFunctionUtility {
 
 		}
 		return function;
+	}
+
+	/**
+	 * Map excel formula alias.
+	 *
+	 * @param alias the alias
+	 * @return the map
+	 */
+	public static Map<String, KeyParameterAlias> mapExcelFormulaAlias(ExcelFormulaAlias[] alias) {
+		Map<String, KeyParameterAlias> mapExcelFormulaAlias = new HashMap<>();
+		if (ArrayUtils.isNotEmpty(alias))
+			for (ExcelFormulaAlias formulaAlias : alias)
+				mapExcelFormulaAlias.put(formulaAlias.alias().replace("'", BaseSheet.APOS), new KeyParameterAlias(formulaAlias));
+		return mapExcelFormulaAlias;
 	}
 
 	/**
@@ -204,7 +212,7 @@ public class ExcelBuildFunctionUtility {
 						if (!fieldValue) {
 							sheetName = "'" + sheetName.replace("'", BaseSheet.APOS) + "'!";
 
-							if (function.contains(sheetName))
+							if (function.contains(sheetName+parameter))
 								function = function.replace(parameter, ExcelUtils.coordinateCalculation(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));
 							else
 								function = function.replace(parameter, sheetName + ExcelUtils.coordinateCalculation(row + 1, infoColumn.getColumnNum(), blockColumn, blockRow));

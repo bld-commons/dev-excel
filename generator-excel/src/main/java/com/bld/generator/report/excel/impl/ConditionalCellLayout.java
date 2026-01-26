@@ -11,17 +11,17 @@ import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.stereotype.Component;
 
+import com.bld.common.spreadsheet.constant.RowStartEndType;
+import com.bld.common.spreadsheet.exception.ExcelGeneratorException;
 import com.bld.generator.report.excel.BaseSheet;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelConditionCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelConditionCellLayouts;
 import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 import com.bld.generator.report.excel.data.InfoColumn;
+import com.bld.generator.report.excel.data.KeyParameterAlias;
 import com.bld.generator.report.excel.utility.ExcelBuildFunctionUtility;
 import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
-
-import com.bld.common.spreadsheet.constant.RowStartEndType;
-import com.bld.common.spreadsheet.exception.ExcelGeneratorException;
 
 @Component
 public class ConditionalCellLayout {
@@ -30,8 +30,8 @@ public class ConditionalCellLayout {
 
 		for (ExcelConditionCellLayout excelConditionCellLayout : excelConditionCellLayouts.value()) {
 			ExcelCellLayout excelCellLayout = excelConditionCellLayout.excelCellLayout();
-			
-			String condition = ExcelBuildFunctionUtility.buildFunction(sheet, null, excelConditionCellLayout.condition(), RowStartEndType.ROW_START, excelConditionCellLayout.alias(), mapFieldColumn, mapSheet);
+			Map<String, KeyParameterAlias> mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelConditionCellLayout.alias());
+			String condition = ExcelBuildFunctionUtility.buildFunction(sheet, null, excelConditionCellLayout.condition(), RowStartEndType.ROW_START, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
 			for (String column : excelConditionCellLayout.columns()) {
 				SheetConditionalFormatting shettConditionFormatting = sheet.getSheetConditionalFormatting();
 				ConditionalFormattingRule rule = shettConditionFormatting.createConditionalFormattingRule(condition);

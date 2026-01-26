@@ -139,7 +139,7 @@ public class ReportTestJpa {
 		CensimentoSheet censimento=new CensimentoSheet("Censimento");
 		ReportExcel excel=new ReportExcel();
 		excel.setTitle("Censimento");
-		excel.getListBaseSheet().add(censimento);
+		excel.getSheets().add(censimento);
 		
 		byte[] byteReport=null;
 		try {
@@ -156,7 +156,7 @@ public class ReportTestJpa {
 	public void bigData() {
 		StatoMatricolareSheet sheet=new StatoMatricolareSheet("Stato Matricolare");
 		ReportExcel excel=new ReportExcel("Stato Matricolare");
-		excel.addBaseSheet(sheet);
+		excel.addSheets(sheet);
 		byte[] byteReport=null;
 		try {
 			byteReport = this.generateExcel.createFileXlsx(excel);

@@ -69,13 +69,14 @@ public class MergeSheet extends BaseSheet {
 		return sheets;
 	}
 
+
 	/**
-	 * Sets the list sheet.
+	 * Sets the sheets.
 	 *
-	 * @param listSheet the new list sheet
+	 * @param sheets the new sheets
 	 */
-	public void setSheets(List<SheetComponent> listSheet) {
-		this.sheets = listSheet;
+	public void setSheets(List<SheetComponent> sheets) {
+		this.sheets = sheets;
 	}
 
 	/**
