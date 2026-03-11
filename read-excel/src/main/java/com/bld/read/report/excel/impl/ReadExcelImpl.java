@@ -25,6 +25,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -188,8 +189,8 @@ public class ReadExcelImpl implements ReadExcel {
 									} else if (String.class.isAssignableFrom(classField)) {
 										DataFormat fmt = workbook.createDataFormat();
 										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
-										// cell.setCellType(CellType.STRING);
-										String stringValue = cell.getStringCellValue().trim();
+										DataFormatter formatter = new DataFormatter();
+										String stringValue = formatter.formatCellValue(cell).trim();
 										value = stringValue.isEmpty() ? null : stringValue;
 									} else if (Calendar.class.isAssignableFrom(classField)) {
 										Date dateValue = cell.getDateCellValue();
