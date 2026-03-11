@@ -174,10 +174,11 @@ public class ReadExcelImpl implements ReadExcel {
 									else if (Number.class.isAssignableFrom(classField)) {
 										value = getNumberValue(cell, classField);
 									} else if (String.class.isAssignableFrom(classField)) {
+
+										DataFormat fmt = workbook.createDataFormat();
+										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
 										DataFormatter formatter = new DataFormatter();
 										String stringValue = formatter.formatCellValue(cell).trim();
-//										DataFormat fmt = workbook.createDataFormat();
-//										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
 //										// cell.setCellType(CellType.STRING);
 //										String stringValue = cell.getStringCellValue().trim();
 										value = stringValue.isEmpty() ? null : stringValue;
