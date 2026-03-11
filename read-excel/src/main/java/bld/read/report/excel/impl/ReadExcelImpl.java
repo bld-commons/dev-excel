@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,7 +38,6 @@ import org.springframework.stereotype.Component;
 
 import bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 import bld.common.spreadsheet.excel.annotation.ExcelDate;
-import bld.common.spreadsheet.utils.ExcelUtils;
 import bld.common.spreadsheet.utils.SpreadsheetUtils;
 import bld.read.report.excel.ReadExcel;
 import bld.read.report.excel.annotation.ExcelReadColumn;
@@ -174,10 +174,12 @@ public class ReadExcelImpl implements ReadExcel {
 									else if (Number.class.isAssignableFrom(classField)) {
 										value = getNumberValue(cell, classField);
 									} else if (String.class.isAssignableFrom(classField)) {
-										DataFormat fmt = workbook.createDataFormat();
-										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
-										// cell.setCellType(CellType.STRING);
-										String stringValue = cell.getStringCellValue().trim();
+										DataFormatter formatter = new DataFormatter();
+										String stringValue = formatter.formatCellValue(cell).trim();
+//										DataFormat fmt = workbook.createDataFormat();
+//										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
+//										// cell.setCellType(CellType.STRING);
+//										String stringValue = cell.getStringCellValue().trim();
 										value = stringValue.isEmpty() ? null : stringValue;
 									} else if (Calendar.class.isAssignableFrom(classField)) {
 										Date dateValue = null;
