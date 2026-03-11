@@ -300,15 +300,16 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			} else {
 				workbook = new SXSSFWorkbook();
 			}
-
 			this.setCoverParameters(report, byteArrayOutputStream, workbook, false);
 			result = byteArrayOutputStream.toByteArray();
 
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			if (workbook != null)
+			if (workbook != null) {
+				
 				workbook.close();
+			}
 			if (byteArrayOutputStream != null)
 				byteArrayOutputStream.close();
 		}
@@ -1695,7 +1696,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			} else {
 				workbook = new SXSSFWorkbook();
 			}
-
 			this.setCoverParameters(report, outputStream, workbook, false);
 
 		} catch (Exception e) {
