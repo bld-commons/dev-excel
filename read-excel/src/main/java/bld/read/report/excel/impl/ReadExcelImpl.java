@@ -178,6 +178,8 @@ public class ReadExcelImpl implements ReadExcel {
 										DataFormat fmt = workbook.createDataFormat();
 										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
 										DataFormatter formatter = new DataFormatter();
+										if (CellType.FORMULA.equals(cell.getCellType()))
+											formatter.setUseCachedValuesForFormulaCells(true);
 										String stringValue = formatter.formatCellValue(cell).trim();
 //										// cell.setCellType(CellType.STRING);
 //										String stringValue = cell.getStringCellValue().trim();
