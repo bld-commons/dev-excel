@@ -75,15 +75,11 @@ public class ReadExcelImpl implements ReadExcel {
 	 */
 	@Override
 	public ExcelRead convertExcelToEntity(ExcelRead excelRead) throws Exception {
-		excelRead=this.extractEntities(excelRead);
-		if(excelRead.isClose() && excelRead.getReportExcel()!=null) 
+		excelRead = this.extractEntities(excelRead);
+		if (excelRead.isClose() && excelRead.getReportExcel() != null)
 			excelRead.getReportExcel().close();
 		return excelRead;
 	}
-	
-
-	
-
 
 	/**
 	 * Extract entities.
@@ -101,7 +97,8 @@ public class ReadExcelImpl implements ReadExcel {
 			workbook = new XSSFWorkbook(excelRead.getReportExcel());
 		for (SheetRead<? extends RowSheetRead> sheet : excelRead.getListSheetRead()) {
 			SheetRead<T> sheetType = (SheetRead<T>) sheet;
-			Class<? extends SheetRead<? extends RowSheetRead>> classSheet = (Class<? extends SheetRead<? extends RowSheetRead>>) sheet.getClass();
+			Class<? extends SheetRead<? extends RowSheetRead>> classSheet = (Class<? extends SheetRead<? extends RowSheetRead>>) sheet
+					.getClass();
 			ExcelReadSheet excelReadSheet = SpreadsheetUtils.getAnnotation(classSheet, ExcelReadSheet.class);
 			logger.debug("Sheet: " + sheetType.getSheetName());
 			if (sheetType.getSheetName().length() > SpreadsheetUtils.SHEET_NAME_SIZE)
@@ -129,7 +126,8 @@ public class ReadExcelImpl implements ReadExcel {
 						if (field.isAnnotationPresent(ExcelReadColumn.class)) {
 							ExcelReadColumn excelReadColumn = field.getAnnotation(ExcelReadColumn.class);
 							if (!mapColumns.containsKey(excelReadColumn.value()))
-								throw new ExcelReaderException(ExcelExceptionType.COLUMN_NOT_FOUND, excelReadColumn.value());
+								throw new ExcelReaderException(ExcelExceptionType.COLUMN_NOT_FOUND,
+										excelReadColumn.value());
 							int indexColumn = mapColumns.get(excelReadColumn.value());
 							Cell cell = row.getCell(indexColumn);
 							for (int indexRegion = 0; indexRegion < worksheet.getNumMergedRegions(); indexRegion++) {
@@ -141,55 +139,62 @@ public class ReadExcelImpl implements ReadExcel {
 
 							}
 							if (cell != null && !IGNORE_CELL_TYPE.contains(cell.getCellType())) {
-								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
+								String nameMethod = SET + ("" + field.getName().charAt(0)).toUpperCase()
+										+ field.getName().substring(1);
 								logger.debug("Set Function: " + nameMethod);
 								Class<?> classField = field.getType();
-								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName() + " type");
+								logger.debug("The field " + field.getName() + " is of " + classField.getSimpleName()
+										+ " type");
 								Object value = null;
-								ExcelBooleanText excelBooleanText=null;
-								if(field.isAnnotationPresent(ExcelBooleanText.class))
-									excelBooleanText=field.getAnnotation(ExcelBooleanText.class);
-								if(excelBooleanText!=null && !Boolean.class.isAssignableFrom(classField))
-									throw new ExcelReaderException("The \"ExcelBooleanText\" annotation can only be assigned to boolean fields");
+								ExcelBooleanText excelBooleanText = null;
+								if (field.isAnnotationPresent(ExcelBooleanText.class))
+									excelBooleanText = field.getAnnotation(ExcelBooleanText.class);
+								if (excelBooleanText != null && !Boolean.class.isAssignableFrom(classField))
+									throw new ExcelReaderException(
+											"The \"ExcelBooleanText\" annotation can only be assigned to boolean fields");
 								try {
-									if(excelBooleanText!=null) {
+									if (excelBooleanText != null) {
 										String stringValue = cell.getStringCellValue();
-										if(excelBooleanText.enable().equalsIgnoreCase(stringValue))
-											value=true;
-										else if(excelBooleanText.disable().equalsIgnoreCase(stringValue))
-											value=false;
+										if (excelBooleanText.enable().equalsIgnoreCase(stringValue))
+											value = true;
+										else if (excelBooleanText.disable().equalsIgnoreCase(stringValue))
+											value = false;
 									}
-									if (excelReadColumn.ignoreCellTypeString() && CellType.STRING.equals(cell.getCellType()) && !String.class.isAssignableFrom(classField)) {
-										String stringValue=cell.getStringCellValue();
+									if (excelReadColumn.ignoreCellTypeString()
+											&& CellType.STRING.equals(cell.getCellType())
+											&& !String.class.isAssignableFrom(classField)) {
+										String stringValue = cell.getStringCellValue();
 										if (Number.class.isAssignableFrom(classField))
-											value=this.getNumberValue(stringValue, classField);
-										else if(Calendar.class.isAssignableFrom(classField)) {
+											value = this.getNumberValue(stringValue, classField);
+										else if (Calendar.class.isAssignableFrom(classField)) {
 											Date dateValue = convertStringToDate(stringValue, field);
-											if(dateValue!=null) {
+											if (dateValue != null) {
 												Calendar calendar = Calendar.getInstance();
 												calendar.setTime(dateValue);
 												value = calendar;
 											}
-										} else if(Date.class.isAssignableFrom(classField)) 
+										} else if (Date.class.isAssignableFrom(classField))
 											value = convertStringToDate(stringValue, field);
 										else if (Boolean.class.isAssignableFrom(classField))
-											value=Boolean.parseBoolean(stringValue);
+											value = Boolean.parseBoolean(stringValue);
 										else if (Character.class.isAssignableFrom(classField)) {
 											if (StringUtils.isNotEmpty(stringValue)) {
 												stringValue = stringValue.trim();
 												if (stringValue.length() > 1)
-													throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID, field.getName());
+													throw new ExcelReaderException(
+															ExcelExceptionType.CHARACTER_NOT_VALID, field.getName());
 												value = stringValue.charAt(0);
 											}
-										}	
-											
-											
-									}else if (Number.class.isAssignableFrom(classField)) {
+										}
+
+									} else if (Number.class.isAssignableFrom(classField)) {
 										value = getNumberValue(cell, classField);
 									} else if (String.class.isAssignableFrom(classField)) {
 										DataFormat fmt = workbook.createDataFormat();
 										cell.getCellStyle().setDataFormat(fmt.getFormat("text"));
 										DataFormatter formatter = new DataFormatter();
+										if (CellType.FORMULA.equals(cell.getCellType()))
+											formatter.setUseCachedValuesForFormulaCells(true);
 										String stringValue = formatter.formatCellValue(cell).trim();
 										value = stringValue.isEmpty() ? null : stringValue;
 									} else if (Calendar.class.isAssignableFrom(classField)) {
@@ -200,22 +205,24 @@ public class ReadExcelImpl implements ReadExcel {
 											value = calendar;
 										}
 									} else if (Date.class.isAssignableFrom(classField)) {
-											value = cell.getDateCellValue();
+										value = cell.getDateCellValue();
 									} else if (Boolean.class.isAssignableFrom(classField)) {
 										value = cell.getBooleanCellValue();
 									} else if (Character.class.isAssignableFrom(classField)) {
-										String stringValue=cell.getStringCellValue();
+										String stringValue = cell.getStringCellValue();
 										if (StringUtils.isNotEmpty(stringValue)) {
 											stringValue = stringValue.trim();
 											if (stringValue.length() > 1)
-												throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID, field.getName());
+												throw new ExcelReaderException(ExcelExceptionType.CHARACTER_NOT_VALID,
+														field.getName());
 											value = stringValue.charAt(0);
 										}
-									}	 else {
-										logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
+									} else {
+										logger.debug(
+												"The type \"" + field.getType().getSimpleName() + "\" is not manage");
 									}
 								} catch (Exception e) {
-									logger.error("The \""+field.getName()+"\" field throw exception");
+									logger.error("The \"" + field.getName() + "\" field throw exception");
 									if (!CellType.FORMULA.equals(cell.getCellType()))
 										throw e;
 									else
@@ -223,7 +230,8 @@ public class ReadExcelImpl implements ReadExcel {
 								}
 
 								if (value != null) {
-									String nameColumn = ("" + field.getName().charAt(0)).toUpperCase() + field.getName().substring(1);
+									String nameColumn = ("" + field.getName().charAt(0)).toUpperCase()
+											+ field.getName().substring(1);
 									logger.debug(nameColumn + ": " + value);
 									Method method = mapMethod.get(SET + nameColumn);
 									method.invoke(rowSheetRead, value);
@@ -246,8 +254,7 @@ public class ReadExcelImpl implements ReadExcel {
 
 	private Object getNumberValue(String numberValue, Class<?> classField) {
 		Object value = null;
-		
-		
+
 		if (numberValue != null) {
 			if (Integer.class.isAssignableFrom(classField))
 				value = Integer.parseInt(numberValue);
@@ -262,8 +269,7 @@ public class ReadExcelImpl implements ReadExcel {
 		}
 		return value;
 	}
-	
-	
+
 	/**
 	 * Gets the number value.
 	 *
@@ -273,7 +279,7 @@ public class ReadExcelImpl implements ReadExcel {
 	 */
 	private Object getNumberValue(Cell cell, Class<?> classField) {
 		Object value = null;
-		
+
 		Double numberValue = cell.getNumericCellValue();
 		if (numberValue != null) {
 			if (Integer.class.isAssignableFrom(classField))
@@ -322,7 +328,6 @@ public class ReadExcelImpl implements ReadExcel {
 		return mapColumn;
 	}
 
-
 	private Date convertStringToDate(String textDate, Field field) throws Exception {
 		ExcelDate excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
 		String date = textDate.replace(".", "/").replace("-", "/");
@@ -330,6 +335,4 @@ public class ReadExcelImpl implements ReadExcel {
 		return sdf.parse(date);
 	}
 
-	
-	
 }
