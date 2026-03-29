@@ -4,12 +4,16 @@
 
 This project provides two libraries built on top of Apache POI to simplify the generation and reading of Excel and CSV files in Spring Boot applications through an annotation-driven approach.
 
-### Libraries
+### Modules
 
-| Library | Artifact | Description |
+| Module | Type | Description |
 |---|---|---|
-| **generator-excel** | `com.github.bld-commons.excel:generator-excel` | Generates `.xls`, `.xlsx` and CSV files from annotated Java objects |
-| **read-excel** | `com.github.bld-commons.excel:read-excel` | Reads `.xls` and `.xlsx` files and maps them to annotated Java objects |
+| [**common-spreadsheet**](common-spreadsheet/README.md) | Library | Shared annotations, utilities and exceptions used by both libraries |
+| [**generator-excel**](generator-excel/README.md) | Library | Generates `.xls`, `.xlsx` and CSV files from annotated Java objects |
+| [**read-excel**](read-excel/README.md) | Library | Reads `.xls`, `.xlsx` and CSV files and maps them to annotated Java objects |
+| [**report-excel**](report-excel/README.md) | Integration test | Static data, Excel/CSV reading, REST endpoints — no database required |
+| [**report-excel-jpa**](report-excel-jpa/README.md) | Integration test | Query-driven generation with JPA, charts, pivot tables, big data |
+| [**report-excel-multiple-datasource**](report-excel-multiple-datasource/README.md) | Integration test | Multi-sheet generation from two different databases simultaneously |
 
 ### Requirements
 
@@ -17,27 +21,27 @@ This project provides two libraries built on top of Apache POI to simplify the g
 - Spring Boot 3.x
 - Apache POI 5.x (included as transitive dependency)
 
-### Maven dependency
+### Maven Dependencies
 
 ```xml
-<!-- Excel Generator -->
+<!-- Excel / CSV Generator -->
 <dependency>
-    <groupId>com.github.bld-commons.excel</groupId>
+    <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.2</version>
+    <version>5.1.3</version>
 </dependency>
 
-<!-- Excel Reader -->
+<!-- Excel / CSV Reader -->
 <dependency>
-    <groupId>com.github.bld-commons.excel</groupId>
+    <groupId>com.github.bld-commons</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.2</version>
+    <version>5.1.3</version>
 </dependency>
 ```
 
-### Enable the libraries
+### Enable the Libraries
 
-Add one of the following annotations to your Spring Boot configuration class:
+Add one of the following annotations to your Spring Boot configuration class or test class:
 
 ```java
 @EnableExcelGenerator  // activates generator-excel
@@ -48,37 +52,42 @@ Add one of the following annotations to your Spring Boot configuration class:
 
 ## generator-excel
 
-### Main classes
+> Full documentation: [generator-excel/README.md](generator-excel/README.md)
+
+### Main Classes
 
 | Class | Description |
 |---|---|
 | `ReportExcel` | Root object representing the entire Excel document |
 | `BaseSheet` | Abstract base class for all sheet types (max 31-character name) |
 | `SheetData<T>` | Sheet backed by a typed list of rows |
-| `SheetSummary` | Sheet containing summary/aggregated data |
-| `MergeSheet` | Sheet that merges multiple sheet components |
+| `QuerySheetData<T>` | Sheet populated automatically from a JPA/SQL query via `@ExcelQuery` |
 | `RowSheet` | Interface implemented by each row entity |
 | `GenerateExcel` | Service interface injected via Spring to trigger generation |
+| `GenerateCsv` | Service interface for CSV generation |
 
-### Key annotations
+### Key Annotations
 
 | Annotation | Level | Description |
 |---|---|---|
 | `@ExcelSheetLayout` | Class | Configures sheet layout, start row/column, merge behaviour |
 | `@ExcelHeaderLayout` | Class | Configures the header row appearance |
+| `@ExcelMarginSheet` | Class | Sets page margins |
 | `@ExcelColumn` | Field | Maps a field to an Excel column |
-| `@ExcelCellLayout` | Field | Configures font, colour, border of a cell |
-| `@ExcelFunction` | Field | Applies a formula (sum, subtotal, custom) to a column |
-| `@ExcelFunctionRow` | Field | Applies a formula per row |
-| `@ExcelChart` | Class | Embeds a chart in the sheet |
-| `@ExcelPivot` | Class | Creates a pivot table |
-| `@ExcelDataValidation` | Field | Adds data validation / drop-down list |
-| `@ExcelMergeRow` | Field | Merges equal consecutive values in a column |
+| `@ExcelCellLayout` | Field | Configures font, colour, border, alignment of a cell |
 | `@ExcelDate` | Field | Configures date format |
-| `@ExcelImage` | Field | Embeds an image |
-| `@ExcelQuery` | Class | Populates sheet rows from a JPA query |
+| `@ExcelBooleanText` | Field | Displays boolean values as custom text |
+| `@ExcelImage` | Field | Embeds an image from byte array or file path |
+| `@ExcelMergeRow` | Field | Merges equal consecutive values in a column |
+| `@ExcelSubtotals` / `@ExcelSubtotal` | Class / Field | Inserts grouped subtotal rows |
+| `@ExcelConditionCellLayouts` | Class | Applies conditional cell formatting via Excel formula |
+| `@ExcelCharts` / `@ExcelChart` | Class | Embeds one or more charts |
+| `@ExcelPivot` | Class | Creates a pivot table (XSSF only) |
+| `@ExcelSuperHeaders` | Class | Adds a merged header row above the regular header |
+| `@ExcelDataValidation` | Field | Adds dropdown list validation |
+| `@ExcelQuery` | Class | Populates rows from a native SQL or JPQL query |
 
-### Generation modes
+### Generation Methods
 
 | Method | Format | POI Engine | Notes |
 |---|---|---|---|
@@ -86,145 +95,104 @@ Add one of the following annotations to your Spring Boot configuration class:
 | `createFileXlsx` | `.xlsx` | XSSF | Full feature set |
 | `createBigDataFileXlsx` | `.xlsx` | SXSSF | Streaming — lower memory, limited features |
 
-### Feature comparison
+### Feature Comparison
 
-<table style="width:70%; border: 1px solid #666;">
-<tr>
-<th style="border: 1px solid #666; text-align: center;">Feature</th>
-<th style="border: 1px solid #666; text-align: center;">HSSF (.xls)</th>
-<th style="border: 1px solid #666; text-align: center;">XSSF (.xlsx)</th>
-<th style="border: 1px solid #666; text-align: center;">SXSSF (big data)</th>
-</tr>
-<tr><td style="border: 1px solid #666;">CPU and memory efficiency</td><td style="border: 1px solid #666; text-align: center;">Varies</td><td style="border: 1px solid #666; text-align: center;">Varies</td><td style="border: 1px solid #666; text-align: center;">Good</td></tr>
-<tr><td style="border: 1px solid #666;">Read files</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Write files</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td></tr>
-<tr><td style="border: 1px solid #666;">Create sheets / rows / cells</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td></tr>
-<tr><td style="border: 1px solid #666;">Delete sheets / rows / cells</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Cell styling</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td></tr>
-<tr><td style="border: 1px solid #666;">Shift rows</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Clone sheets</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Formula evaluation</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Cell comments</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Images</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Charts</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-<tr><td style="border: 1px solid #666;">Pivot tables</td><td style="border: 1px solid #666; text-align: center;">No</td><td style="border: 1px solid #666; text-align: center;">Yes</td><td style="border: 1px solid #666; text-align: center;">No</td></tr>
-</table>
-
-### Quick start — generator-excel
-
-```java
-// 1. Define a row entity
-@ExcelSheetLayout
-public class SalesSheet extends SheetData<SalesRow> { ... }
-
-// 2. Annotate the row fields
-public class SalesRow implements RowSheet {
-    @ExcelColumn(name = "Product", position = 1)
-    private String product;
-
-    @ExcelColumn(name = "Amount", position = 2)
-    @ExcelFunction(function = "SUM")
-    private BigDecimal amount;
-}
-
-// 3. Build and generate
-@Autowired
-private GenerateExcel generateExcel;
-
-ReportExcel report = new ReportExcel("Sales Report");
-SalesSheet sheet = new SalesSheet("Sales");
-sheet.addRows(salesRows);
-report.addSheet(sheet);
-
-byte[] xlsx = generateExcel.createFileXlsx(report);
-```
-
-### Optional Spring properties
-
-| Property | Type | Description |
-|---|---|---|
-| `com.bld.commons.check.annotation` | Boolean | Validates annotation consistency at startup |
-| `com.bld.commons.resource.cover.path` | String | Path to the cover sheet template |
-| `com.bld.commons.report.excel.title` | String | Default report title |
-| `com.bld.commons.report.excel.date` | String | Default date format for the cover |
-| `com.bld.commons.number.empty.rows` | Integer | Number of empty rows inserted after each sheet |
-| `com.bld.commons.multiple.datasource` | Boolean | Enables multiple datasource support for `@ExcelQuery` |
-
-### Full Javadoc
-
-- https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel/latest/index.html
+| Feature | HSSF (.xls) | XSSF (.xlsx) | SXSSF (big data) |
+|---|:---:|:---:|:---:|
+| Static data | yes | yes | yes |
+| JPA query data | yes | yes | yes |
+| Cell styling | yes | yes | yes |
+| Images | yes | yes | no |
+| Charts | no | yes | no |
+| Pivot tables | no | yes | no |
+| Subtotals | yes | yes | no |
+| Conditional formatting | yes | yes | no |
+| Merge rows | yes | yes | no |
+| Super headers | yes | yes | no |
 
 ---
 
 ## read-excel
 
-### Main classes
+> Full documentation: [read-excel/README.md](read-excel/README.md)
+
+### Main Classes
 
 | Class | Description |
 |---|---|
-| `ExcelRead` | Container representing the Excel file to be read (byte array or `InputStream`) |
+| `ExcelRead` | Container representing the Excel file to be read (byte array, `InputStream` or file path) |
 | `SheetRead<T>` | Abstract class representing a sheet; holds the list of parsed rows |
-| `MapSheetRead<ID, T>` | Variant of `SheetRead` that indexes rows by a key field |
+| `MapSheetRead<ID, T>` | Variant of `SheetRead` that indexes rows by a key field for O(1) lookup |
 | `RowSheetRead` | Interface implemented by each row entity |
 | `ReadExcel` | Service interface injected via Spring to trigger reading |
+| `ReadCsv` | Service interface for CSV reading |
 
-### Key annotations
+### Key Annotations
 
 | Annotation | Level | Description |
 |---|---|---|
-| `@ExcelReadSheet` | Class | Maps a class to an Excel sheet by name and start row/column |
+| `@ExcelReadSheet` | Class | Configures sheet name, start row and start column |
 | `@ExcelReadColumn` | Field | Maps a field to an Excel column header name |
 
-### Supported field types
+### Supported Field Types
 
-`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `BigInteger`, `Boolean`, `Character`, `Date`, `Calendar`
-
-### Quick start — read-excel
-
-```java
-// 1. Define the row entity
-@ExcelReadSheet(name = "Sales")
-public class SalesSheetRead extends SheetRead<SalesRowRead> {
-    public SalesSheetRead() { super("Sales"); }
-}
-
-// 2. Annotate the row fields
-public class SalesRowRead implements RowSheetRead {
-    @ExcelReadColumn("Product")
-    private String product;
-
-    @ExcelReadColumn("Amount")
-    private BigDecimal amount;
-}
-
-// 3. Read the file
-@Autowired
-private ReadExcel readExcel;
-
-ExcelRead excelRead = new ExcelRead();
-excelRead.setReportExcel(fileBytes);          // byte[], InputStream or file path
-excelRead.setExcelType(ExcelType.XLSX);
-excelRead.addSheetConvertion(SalesSheetRead.class, "Sales");
-readExcel.convertExcelToEntity(excelRead);
-
-SalesSheetRead sheet = excelRead.getSheet(SalesSheetRead.class, "Sales");
-List<SalesRowRead> rows = sheet.getListRowSheet();
-```
-
-### Full Javadoc
-
-- https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html
+`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
 
 ---
 
-## Exception handling
+## Spring Properties
+
+| Property | Description |
+|---|---|
+| `com.bld.commons.check.annotation` | Validates annotation consistency at startup |
+| `com.bld.commons.resource.cover.path` | Path to the cover sheet template |
+| `com.bld.commons.date.format` | Global date format (used with `ColumnDateFormat.PARAMETER`) |
+| `com.bld.commons.report.excel.title` | Cell address for the report title in the cover |
+| `com.bld.commons.report.excel.date` | Cell address for the date in the cover |
+| `com.bld.commons.multiple.datasource` | Enables multiple datasource support for `@ExcelQuery` |
+
+```yaml
+com:
+  bld:
+    commons:
+      check.annotation: true
+      date.format: dd/MM/yyyy
+      resource.cover.path: classpath:/excel/Copertina.xlsx
+      report.excel:
+        title: A12
+        date: A18
+```
+
+---
+
+## Exception Handling
 
 | Exception | Module | Description |
 |---|---|---|
 | `SpreadsheetException` | common-spreadsheet | Base unchecked exception for configuration errors |
 | `ExcelGeneratorException` | generator-excel | Thrown when sheet generation fails |
 | `CsvGeneratorException` | generator-excel | Thrown when CSV generation fails |
-| `ExcelReaderException` | read-excel | Thrown when reading fails; carries a structured `ExcelExceptionType` code |
+| `ExcelReaderException` | read-excel | Thrown when reading fails; carries a structured `ExcelExceptionType` code and parameter |
+
+---
+
+## Quick Start Examples
+
+See the module-specific READMEs for full annotated examples:
+
+- [Static data with subtotals and conditional formatting](report-excel/README.md#salarytest----static-data-with-subtotals-and-conditional-formatting)
+- [JPA query-driven sheets with charts](report-excel-jpa/README.md#reporttestjpa)
+- [Multiple datasources in a single workbook](report-excel-multiple-datasource/README.md#test----multi-datasource-excel-generation)
+- [Reading multi-sheet XLSX files](read-excel/README.md#reading-a-multi-sheet-xlsx)
+- [Row filtering with filtered() hook](read-excel/README.md#reading-with-custom-filtering)
+- [CSV reading with Bean Validation](read-excel/README.md#reading-a-csv-with-bean-validation)
+
+---
+
+## Javadoc
+
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
 
 ---
 
@@ -234,12 +202,16 @@ List<SalesRowRead> rows = sheet.getListRowSheet();
 
 Questo progetto fornisce due librerie basate su Apache POI per semplificare la generazione e la lettura di file Excel e CSV in applicazioni Spring Boot attraverso un approccio annotation-driven.
 
-### Librerie
+### Moduli
 
-| Libreria | Artifact | Descrizione |
+| Modulo | Tipo | Descrizione |
 |---|---|---|
-| **generator-excel** | `com.github.bld-commons.excel:generator-excel` | Genera file `.xls`, `.xlsx` e CSV da oggetti Java annotati |
-| **read-excel** | `com.github.bld-commons.excel:read-excel` | Legge file `.xls` e `.xlsx` e li mappa su oggetti Java annotati |
+| [**common-spreadsheet**](common-spreadsheet/README.md) | Libreria | Annotazioni, utility ed eccezioni condivise da entrambe le librerie |
+| [**generator-excel**](generator-excel/README.md) | Libreria | Genera file `.xls`, `.xlsx` e CSV da oggetti Java annotati |
+| [**read-excel**](read-excel/README.md) | Libreria | Legge file `.xls`, `.xlsx` e CSV e li mappa su oggetti Java annotati |
+| [**report-excel**](report-excel/README.md) | Test di integrazione | Dati statici, lettura Excel/CSV, endpoint REST — senza database |
+| [**report-excel-jpa**](report-excel-jpa/README.md) | Test di integrazione | Generazione query-driven con JPA, grafici, tabelle pivot, big data |
+| [**report-excel-multiple-datasource**](report-excel-multiple-datasource/README.md) | Test di integrazione | Generazione multi-foglio da due database diversi in simultanea |
 
 ### Requisiti
 
@@ -247,27 +219,27 @@ Questo progetto fornisce due librerie basate su Apache POI per semplificare la g
 - Spring Boot 3.x
 - Apache POI 5.x (incluso come dipendenza transitiva)
 
-### Dipendenza Maven
+### Dipendenze Maven
 
 ```xml
-<!-- Generazione Excel -->
+<!-- Generazione Excel / CSV -->
 <dependency>
-    <groupId>com.github.bld-commons.excel</groupId>
+    <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.2</version>
+    <version>5.1.3</version>
 </dependency>
 
-<!-- Lettura Excel -->
+<!-- Lettura Excel / CSV -->
 <dependency>
-    <groupId>com.github.bld-commons.excel</groupId>
+    <groupId>com.github.bld-commons</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.2</version>
+    <version>5.1.3</version>
 </dependency>
 ```
 
-### Abilitare le librerie
+### Abilitare le Librerie
 
-Aggiungere una delle seguenti annotazioni alla propria classe di configurazione Spring Boot:
+Aggiungere una delle seguenti annotazioni alla propria classe di configurazione Spring Boot o di test:
 
 ```java
 @EnableExcelGenerator  // attiva generator-excel
@@ -278,37 +250,42 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 
 ## generator-excel
 
-### Classi principali
+> Documentazione completa: [generator-excel/README.md](generator-excel/README.md)
+
+### Classi Principali
 
 | Classe | Descrizione |
 |---|---|
 | `ReportExcel` | Oggetto radice che rappresenta l'intero documento Excel |
 | `BaseSheet` | Classe astratta base per tutti i tipi di foglio (nome max 31 caratteri) |
 | `SheetData<T>` | Foglio associato a una lista tipizzata di righe |
-| `SheetSummary` | Foglio contenente dati di riepilogo/aggregati |
-| `MergeSheet` | Foglio che unisce più componenti sheet |
+| `QuerySheetData<T>` | Foglio popolato automaticamente da una query JPA/SQL tramite `@ExcelQuery` |
 | `RowSheet` | Interfaccia implementata da ogni entità riga |
-| `GenerateExcel` | Interfaccia del servizio Spring da iniettare per avviare la generazione |
+| `GenerateExcel` | Interfaccia del servizio Spring da iniettare per la generazione |
+| `GenerateCsv` | Interfaccia del servizio Spring per la generazione CSV |
 
-### Annotazioni principali
+### Annotazioni Principali
 
 | Annotazione | Livello | Descrizione |
 |---|---|---|
 | `@ExcelSheetLayout` | Classe | Configura il layout del foglio, riga/colonna iniziale, comportamento merge |
 | `@ExcelHeaderLayout` | Classe | Configura l'aspetto della riga di intestazione |
+| `@ExcelMarginSheet` | Classe | Imposta i margini di pagina |
 | `@ExcelColumn` | Campo | Mappa un campo a una colonna Excel |
-| `@ExcelCellLayout` | Campo | Configura font, colore, bordo di una cella |
-| `@ExcelFunction` | Campo | Applica una formula (somma, subtotale, personalizzata) a una colonna |
-| `@ExcelFunctionRow` | Campo | Applica una formula per riga |
-| `@ExcelChart` | Classe | Inserisce un grafico nel foglio |
-| `@ExcelPivot` | Classe | Crea una tabella pivot |
-| `@ExcelDataValidation` | Campo | Aggiunge validazione dati / lista a discesa |
-| `@ExcelMergeRow` | Campo | Unisce valori consecutivi uguali in una colonna |
+| `@ExcelCellLayout` | Campo | Configura font, colore, bordo, allineamento di una cella |
 | `@ExcelDate` | Campo | Configura il formato della data |
-| `@ExcelImage` | Campo | Inserisce un'immagine |
-| `@ExcelQuery` | Classe | Popola le righe del foglio tramite query JPA |
+| `@ExcelBooleanText` | Campo | Rappresenta i booleani con testo personalizzato |
+| `@ExcelImage` | Campo | Inserisce un'immagine da byte array o percorso file |
+| `@ExcelMergeRow` | Campo | Unisce valori consecutivi uguali in una colonna |
+| `@ExcelSubtotals` / `@ExcelSubtotal` | Classe / Campo | Inserisce righe di subtotale raggruppate |
+| `@ExcelConditionCellLayouts` | Classe | Applica formattazione condizionale tramite formula Excel |
+| `@ExcelCharts` / `@ExcelChart` | Classe | Inserisce uno o più grafici |
+| `@ExcelPivot` | Classe | Crea una tabella pivot (solo XSSF) |
+| `@ExcelSuperHeaders` | Classe | Aggiunge una riga di intestazione unificata sopra quella standard |
+| `@ExcelDataValidation` | Campo | Aggiunge validazione con lista a discesa |
+| `@ExcelQuery` | Classe | Popola le righe da query SQL nativa o JPQL |
 
-### Modalità di generazione
+### Modalità di Generazione
 
 | Metodo | Formato | Engine POI | Note |
 |---|---|---|---|
@@ -316,113 +293,92 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 | `createFileXlsx` | `.xlsx` | XSSF | Set completo di funzionalità |
 | `createBigDataFileXlsx` | `.xlsx` | SXSSF | Streaming — minore memoria, funzionalità limitate |
 
-### Avvio rapido — generator-excel
+### Confronto Funzionalità
 
-```java
-// 1. Definire l'entità riga
-@ExcelSheetLayout
-public class VenditeSheet extends SheetData<VenditeRow> { ... }
-
-// 2. Annotare i campi della riga
-public class VenditeRow implements RowSheet {
-    @ExcelColumn(name = "Prodotto", position = 1)
-    private String prodotto;
-
-    @ExcelColumn(name = "Importo", position = 2)
-    @ExcelFunction(function = "SUM")
-    private BigDecimal importo;
-}
-
-// 3. Costruire e generare
-@Autowired
-private GenerateExcel generateExcel;
-
-ReportExcel report = new ReportExcel("Report Vendite");
-VenditeSheet sheet = new VenditeSheet("Vendite");
-sheet.addRows(listaVendite);
-report.addSheet(sheet);
-
-byte[] xlsx = generateExcel.createFileXlsx(report);
-```
-
-### Proprietà Spring opzionali
-
-| Proprietà | Tipo | Descrizione |
-|---|---|---|
-| `com.bld.commons.check.annotation` | Boolean | Valida la consistenza delle annotazioni all'avvio |
-| `com.bld.commons.resource.cover.path` | String | Percorso del template del foglio di copertina |
-| `com.bld.commons.report.excel.title` | String | Titolo di default del report |
-| `com.bld.commons.report.excel.date` | String | Formato data di default per la copertina |
-| `com.bld.commons.number.empty.rows` | Integer | Numero di righe vuote inserite dopo ogni foglio |
-| `com.bld.commons.multiple.datasource` | Boolean | Abilita il supporto a più datasource per `@ExcelQuery` |
+| Funzionalità | HSSF (.xls) | XSSF (.xlsx) | SXSSF (big data) |
+|---|:---:|:---:|:---:|
+| Dati statici | si | si | si |
+| Dati da query JPA | si | si | si |
+| Stile celle | si | si | si |
+| Immagini | si | si | no |
+| Grafici | no | si | no |
+| Tabelle pivot | no | si | no |
+| Subtotali | si | si | no |
+| Formattazione condizionale | si | si | no |
+| Merge righe | si | si | no |
+| Super intestazioni | si | si | no |
 
 ---
 
 ## read-excel
 
-### Classi principali
+> Documentazione completa: [read-excel/README.md](read-excel/README.md)
+
+### Classi Principali
 
 | Classe | Descrizione |
 |---|---|
-| `ExcelRead` | Container che rappresenta il file Excel da leggere (byte array o `InputStream`) |
+| `ExcelRead` | Container che rappresenta il file Excel da leggere (byte array, `InputStream` o percorso) |
 | `SheetRead<T>` | Classe astratta che rappresenta un foglio; contiene la lista delle righe lette |
-| `MapSheetRead<ID, T>` | Variante di `SheetRead` che indicizza le righe per un campo chiave |
+| `MapSheetRead<ID, T>` | Variante di `SheetRead` che indicizza le righe per un campo chiave (ricerca O(1)) |
 | `RowSheetRead` | Interfaccia implementata da ogni entità riga |
-| `ReadExcel` | Interfaccia del servizio Spring da iniettare per avviare la lettura |
+| `ReadExcel` | Interfaccia del servizio Spring da iniettare per la lettura |
+| `ReadCsv` | Interfaccia del servizio Spring per la lettura CSV |
 
-### Annotazioni principali
+### Annotazioni Principali
 
 | Annotazione | Livello | Descrizione |
 |---|---|---|
-| `@ExcelReadSheet` | Classe | Mappa una classe a un foglio Excel per nome e riga/colonna iniziale |
-| `@ExcelReadColumn` | Campo | Mappa un campo al nome intestazione di una colonna Excel |
+| `@ExcelReadSheet` | Classe | Configura nome foglio, riga e colonna iniziale |
+| `@ExcelReadColumn` | Campo | Mappa un campo al nome di intestazione di una colonna Excel |
 
-### Tipi di campo supportati
+### Tipi di Campo Supportati
 
-`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `BigInteger`, `Boolean`, `Character`, `Date`, `Calendar`
-
-### Avvio rapido — read-excel
-
-```java
-// 1. Definire l'entità riga
-@ExcelReadSheet(name = "Vendite")
-public class VenditeSheetRead extends SheetRead<VenditeRowRead> {
-    public VenditeSheetRead() { super("Vendite"); }
-}
-
-// 2. Annotare i campi della riga
-public class VenditeRowRead implements RowSheetRead {
-    @ExcelReadColumn("Prodotto")
-    private String prodotto;
-
-    @ExcelReadColumn("Importo")
-    private BigDecimal importo;
-}
-
-// 3. Leggere il file
-@Autowired
-private ReadExcel readExcel;
-
-ExcelRead excelRead = new ExcelRead();
-excelRead.setReportExcel(fileBytes);         // byte[], InputStream o percorso file
-excelRead.setExcelType(ExcelType.XLSX);
-excelRead.addSheetConvertion(VenditeSheetRead.class, "Vendite");
-readExcel.convertExcelToEntity(excelRead);
-
-VenditeSheetRead foglio = excelRead.getSheet(VenditeSheetRead.class, "Vendite");
-List<VenditeRowRead> righe = foglio.getListRowSheet();
-```
+`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
 
 ---
 
-## Gestione delle eccezioni
+## Proprietà Spring
+
+| Proprietà | Descrizione |
+|---|---|
+| `com.bld.commons.check.annotation` | Valida la consistenza delle annotazioni all'avvio |
+| `com.bld.commons.resource.cover.path` | Percorso del template del foglio di copertina |
+| `com.bld.commons.date.format` | Formato data globale (usato con `ColumnDateFormat.PARAMETER`) |
+| `com.bld.commons.report.excel.title` | Indirizzo cella per il titolo nella copertina |
+| `com.bld.commons.report.excel.date` | Indirizzo cella per la data nella copertina |
+| `com.bld.commons.multiple.datasource` | Abilita il supporto a più datasource per `@ExcelQuery` |
+
+---
+
+## Gestione delle Eccezioni
 
 | Eccezione | Modulo | Descrizione |
 |---|---|---|
 | `SpreadsheetException` | common-spreadsheet | Eccezione unchecked base per errori di configurazione |
 | `ExcelGeneratorException` | generator-excel | Lanciata quando la generazione del foglio fallisce |
 | `CsvGeneratorException` | generator-excel | Lanciata quando la generazione CSV fallisce |
-| `ExcelReaderException` | read-excel | Lanciata in caso di errore di lettura; contiene un codice `ExcelExceptionType` strutturato |
+| `ExcelReaderException` | read-excel | Lanciata in caso di errore di lettura; contiene codice `ExcelExceptionType` e parametro |
+
+---
+
+## Esempi Rapidi
+
+Vedere i README dei singoli moduli per esempi completi e annotati:
+
+- [Dati statici con subtotali e formattazione condizionale](report-excel/README.md#salarytest----static-data-with-subtotals-and-conditional-formatting)
+- [Fogli da query JPA con grafici](report-excel-jpa/README.md#reporttestjpa)
+- [Sorgenti dati multiple in un singolo workbook](report-excel-multiple-datasource/README.md#test----multi-datasource-excel-generation)
+- [Lettura di file XLSX multi-foglio](read-excel/README.md#reading-a-multi-sheet-xlsx)
+- [Filtro righe con hook filtered()](read-excel/README.md#reading-with-custom-filtering)
+- [Lettura CSV con Bean Validation](read-excel/README.md#reading-a-csv-with-bean-validation)
+
+---
+
+## Javadoc
+
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
 
 ---
 
