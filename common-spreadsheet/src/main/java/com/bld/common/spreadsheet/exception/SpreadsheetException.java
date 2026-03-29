@@ -7,8 +7,9 @@ package com.bld.common.spreadsheet.exception;
 /**
  * The Class SpreadsheetException.
  */
-@SuppressWarnings("serial")
 public class SpreadsheetException extends RuntimeException {
+
+	private static final long serialVersionUID = 482346351416862179L;
 
 	/**
 	 * Instantiates a new spreadsheet exception.

@@ -11,9 +11,10 @@ import com.bld.read.report.excel.constant.ExcelReaderConstant;
  * The Class ExcelReaderException.<br>
  * ExcelReaderException is used to manage the exceptions when reading the excel.
  */
-@SuppressWarnings("serial")
 public class ExcelReaderException extends RuntimeException {
 	
+	private static final long serialVersionUID = 6618285188860815977L;
+
 	/** The code. */
 	private String code;
 	

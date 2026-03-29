@@ -25,7 +25,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -186,7 +188,7 @@ public abstract class SuperGenerateExcelImpl {
 			if (column != null && !column.ignore()) {
 				Object value = null;
 				if (entity != null)
-					value = PropertyUtils.getProperty(entity, field.getName());
+					value = new BeanWrapperImpl(entity).getPropertyValue(field.getName());
 				SheetHeader sheetHeader = new SheetHeader(field, value);
 				if (value != null) {
 					value = manageExcelImage(sheetHeader, value);
@@ -644,7 +646,7 @@ public abstract class SuperGenerateExcelImpl {
 					sheetHeader.setExcelCellLayout(extraColumnAnnotation.getExcelCellLayout());
 					if (extraColumnAnnotation.getExcelColumn() == null)
 						throw new ExcelGeneratorException("Annotation " + ExcelColumn.class.getSimpleName() + " is not presented on " + ExtraColumnAnnotation.class.getSimpleName());
-					PropertyUtils.copyProperties(sheetHeader, extraColumnAnnotation);
+					BeanUtils.copyProperties(extraColumnAnnotation, sheetHeader);
 					sheetHeader.setKeyMap(entry.getKey());
 					listSheetHeader.add(sheetHeader);
 				}

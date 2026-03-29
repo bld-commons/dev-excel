@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -161,7 +161,7 @@ public class ReadCsvImpl implements ReadCsv {
 				} else {
 					logger.debug("The type \"" + field.getType().getSimpleName() + "\" is not manage");
 				}
-				PropertyUtils.setProperty(t, field.getName(), value);
+				new BeanWrapperImpl(t).setPropertyValue(field.getName(), value);
 			}
 		}
 		logger.debug(t.toString());

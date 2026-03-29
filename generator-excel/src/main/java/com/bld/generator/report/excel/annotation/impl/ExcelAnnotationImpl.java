@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,9 +72,10 @@ public abstract class ExcelAnnotationImpl<T extends Annotation> implements Clone
 		try {
 			Set<Field> listField = SpreadsheetUtils.getListField(this.getClass());
 			Map<String,Object>mapParameters=new HashMap<>();
+			BeanWrapper wrapper = new BeanWrapperImpl(this);
 			for(Field field:listField) {
 				if(!field.isAnnotationPresent(IgnoreCheck.class)) {
-					Object value=PropertyUtils.getProperty(this, field.getName());
+					Object value=wrapper.getPropertyValue(field.getName());
 					if(value!=null)
 						mapParameters.put(field.getName(), value);
 				}

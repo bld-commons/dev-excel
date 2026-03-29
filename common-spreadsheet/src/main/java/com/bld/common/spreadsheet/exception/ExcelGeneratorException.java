@@ -9,8 +9,9 @@ package com.bld.common.spreadsheet.exception;
 /**
  * The Class ExceptionExcelGenerator.
  */
-@SuppressWarnings("serial")
 public class ExcelGeneratorException extends RuntimeException {
+
+	private static final long serialVersionUID = 8600159398467191244L;
 
 	/**
 	 * Instantiates a new exception excel generator.

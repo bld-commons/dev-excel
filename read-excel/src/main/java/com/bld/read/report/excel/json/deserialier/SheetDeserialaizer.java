@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Base64;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bld.read.report.excel.ReadExcel;
@@ -146,7 +146,7 @@ public class SheetDeserialaizer extends StdDeserializer<Object> implements Conte
 		for (JsonSheet sheet : sheets) {
 			Field field = this.objClass.getDeclaredField(sheet.fieldName());
 			SheetRead<? extends RowSheetRead> sheetRead = excelRead.getSheet((Class<? extends SheetRead<? extends RowSheetRead>>) field.getType(), sheet.name());
-			PropertyUtils.setProperty(obj, sheet.fieldName(), sheetRead);
+			new BeanWrapperImpl(obj).setPropertyValue(sheet.fieldName(), sheetRead);
 		}
 		return obj;
 	}

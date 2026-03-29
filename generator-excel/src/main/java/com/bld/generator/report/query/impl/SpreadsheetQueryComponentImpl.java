@@ -1,17 +1,14 @@
 package com.bld.generator.report.query.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.converters.CalendarConverter;
-import org.apache.commons.beanutils.converters.DateConverter;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.support.DefaultConversionService;
 
 import com.bld.common.spreadsheet.utils.ExcelUtils;
 import com.bld.generator.report.QuerySpreadsheetData;
@@ -41,12 +38,12 @@ public abstract class SpreadsheetQueryComponentImpl {
 			String nameField = ExcelUtils.getNameParameter(keyResult);
 			mapResultApp.put(nameField, mapResult.get(keyResult));
 		}
-		BeanUtilsBean beanUtilsBean = BeanUtilsBean.getInstance();
-		Converter converter = new DateConverter();
-		beanUtilsBean.getConvertUtils().register(converter, Date.class);
-		converter = new CalendarConverter(null);
-		beanUtilsBean.getConvertUtils().register(converter, Calendar.class);
-		beanUtilsBean.copyProperties(t, mapResultApp);
+		BeanWrapper wrapper = new BeanWrapperImpl(t);
+		wrapper.setConversionService(DefaultConversionService.getSharedInstance());
+		for (Map.Entry<String, Object> entry : mapResultApp.entrySet()) {
+			if (wrapper.isWritableProperty(entry.getKey()))
+				wrapper.setPropertyValue(entry.getKey(), entry.getValue());
+		}
 
 	}
 	

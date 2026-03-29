@@ -10,7 +10,7 @@ import java.util.Map;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapperImpl;
 
 /**
  * The Class MapSheetRead.
@@ -59,7 +59,7 @@ public abstract class MapSheetRead<ID, T extends RowSheetRead> extends SheetRead
 	@Override
 	public void addRowSheet(T t) throws Exception {
 		super.addRowSheet(t);
-		this.mapRows.put((ID) PropertyUtils.getProperty(t, keyField), t);
+		this.mapRows.put((ID) new BeanWrapperImpl(t).getPropertyValue(keyField), t);
 	}
 
 }

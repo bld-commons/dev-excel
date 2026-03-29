@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -63,7 +64,8 @@ public class GenerateCsvImpl implements GenerateCsv {
 				row = new Object[size];
 				for (int i = 0; i < headers.size(); i++) {
 					CsvHeader csvHeader = headers.get(i);
-					Object value = PropertyUtils.getProperty(csvRow, csvHeader.getField().getName());
+					BeanWrapper wrapper = new BeanWrapperImpl(csvRow);
+					Object value = wrapper.getPropertyValue(csvHeader.getField().getName());
 					if (value!=null && csvHeader.getDateFormat() != null) {
 						String format = csvHeader.getDateFormat().value().getValue();
 						format = format.replace("/", csvHeader.getDateFormat().separator());
