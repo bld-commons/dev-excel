@@ -7,8 +7,9 @@ package com.bld.common.spreadsheet.exception;
 /**
  * The Class CsvGeneratorException.
  */
-@SuppressWarnings("serial")
 public class CsvGeneratorException extends RuntimeException {
+
+	private static final long serialVersionUID = -3444702735598040980L;
 
 	/**
 	 * Instantiates a new csv generator exception.

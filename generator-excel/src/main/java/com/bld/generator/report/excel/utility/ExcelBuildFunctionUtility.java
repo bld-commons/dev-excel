@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -296,17 +296,17 @@ public class ExcelBuildFunctionUtility {
 			if (sheetDynamicData.getMapExtraColumnAnnotation().containsKey(keyParameter))
 				value = dynamicRowShet.getMapValue().get(keyParameter);
 			else if (dynamicRowShet.getClass().getDeclaredField(keyParameter) != null)
-				value = PropertyUtils.getProperty(dynamicRowShet, keyParameter);
+				value = new BeanWrapperImpl(dynamicRowShet).getPropertyValue(keyParameter);
 
 		} else if (sheetComponent instanceof SheetData) {
 			SheetData<?> sheetData = (SheetData<?>) sheetComponent;
 			RowSheet rowSheet = sheetData.getRows().get(row);
 			if (rowSheet.getClass().getDeclaredField(keyParameter) != null)
-				value = PropertyUtils.getProperty(rowSheet, keyParameter);
+				value = new BeanWrapperImpl(rowSheet).getPropertyValue(keyParameter);
 
 		} else if (sheetComponent instanceof SheetSummary) {
 			if (sheetComponent.getClass().getDeclaredField(keyParameter) != null)
-				value = PropertyUtils.getProperty(sheetComponent, keyParameter);
+				value = new BeanWrapperImpl(sheetComponent).getPropertyValue(keyParameter);
 		}
 
 		return value;

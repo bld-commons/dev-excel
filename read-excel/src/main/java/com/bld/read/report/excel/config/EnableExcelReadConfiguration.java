@@ -7,7 +7,7 @@ package com.bld.read.report.excel.config;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.bld.context.annotation.config.EnableContextAnnotatation;
+import com.bld.context.annotation.config.EnableContextAnnotation;
 
 /**
  * The Class ExcelReadConfiguration.<br>
@@ -15,7 +15,7 @@ import com.bld.context.annotation.config.EnableContextAnnotatation;
  */
 @Configuration
 @ComponentScan({"com.bld.read","com.bld.common.spreadsheet"})
-@EnableContextAnnotatation
+@EnableContextAnnotation
 public class EnableExcelReadConfiguration {
 	
 	

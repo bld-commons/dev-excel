@@ -19,6 +19,24 @@ import org.springframework.stereotype.Component;
 
 import com.bld.common.spreadsheet.exception.SpreadsheetException;
 
+/**
+ * Shared utility component providing reflection helpers used by both the generator and reader modules.
+ * <p>
+ * Key responsibilities:
+ * </p>
+ * <ul>
+ *   <li>Retrieving and validating annotations on classes and fields</li>
+ *   <li>Mapping annotation attribute values to Java object properties via reflection</li>
+ *   <li>Collecting all declared fields from a class hierarchy</li>
+ *   <li>Writing byte arrays to the file system</li>
+ * </ul>
+ * <p>
+ * All methods are {@code static}; the class is registered as a Spring {@code @Component}
+ * only to allow injection where an instance reference is required.
+ * </p>
+ *
+ * @author Francesco Baldi
+ */
 @SuppressWarnings("unchecked")
 @Component
 public class SpreadsheetUtils {
@@ -30,12 +48,14 @@ public class SpreadsheetUtils {
 
     private static final Logger logger=LoggerFactory.getLogger(SpreadsheetUtils.class);
 	/**
-	 * Gets the annotation.
+	 * Returns the requested annotation from the given class, throwing a {@link SpreadsheetException}
+	 * if the annotation is not present.
 	 *
-	 * @param <T>             the generic type
-	 * @param classExcel      the class excel
-	 * @param classAnnotation the class annotation
-	 * @return the annotation
+	 * @param <T>             the annotation type
+	 * @param classExcel      the class to inspect
+	 * @param classAnnotation the annotation type to look for
+	 * @return the annotation instance
+	 * @throws SpreadsheetException if the annotation is not present on the class
 	 */
 	public static <T extends Annotation> T getAnnotation(Class<?> classExcel, Class<T> classAnnotation) {
 		if (!classExcel.isAnnotationPresent(classAnnotation))
@@ -45,12 +65,14 @@ public class SpreadsheetUtils {
 	}
 
 	/**
-	 * Gets the annotation.
+	 * Returns the requested annotation from the given field, throwing a {@link SpreadsheetException}
+	 * if the annotation is not present.
 	 *
-	 * @param <T>             the generic type
-	 * @param field           the field
-	 * @param classAnnotation the class annotation
-	 * @return the annotation
+	 * @param <T>             the annotation type
+	 * @param field           the field to inspect
+	 * @param classAnnotation the annotation type to look for
+	 * @return the annotation instance
+	 * @throws SpreadsheetException if the annotation is not present on the field
 	 */
 	public static <T extends Annotation> T getAnnotation(Field field, Class<T> classAnnotation) {
 		if (!field.isAnnotationPresent(classAnnotation))
@@ -60,13 +82,18 @@ public class SpreadsheetUtils {
 	}
 
 	/**
-	 * Reflection annotation.
+	 * Copies annotation attribute values onto the matching fields of the given entity using reflection.
+	 * <p>
+	 * For each method declared on the annotation whose name matches a field in the entity,
+	 * the method return value is set on that field via its setter. Nested annotations belonging
+	 * to the {@code com.bld} package hierarchy are handled recursively.
+	 * </p>
 	 *
-	 * @param <T>        the generic type
-	 * @param <K>        the key type
-	 * @param entity     the entity
-	 * @param annotation the annotation
-	 * @return the t
+	 * @param <T>        the entity type
+	 * @param <K>        the annotation type
+	 * @param entity     the target entity to populate
+	 * @param annotation the source annotation carrying the values
+	 * @return the populated entity
 	 */
 	public static <T, K extends Annotation> T reflectionAnnotation(T entity, K annotation) {
 		Map<String, Field> mapField = getMapField(entity.getClass());
@@ -126,10 +153,11 @@ public class SpreadsheetUtils {
 	}
 
 	/**
-	 * Gets the list field.
+	 * Collects all declared fields from the given class and its superclass hierarchy,
+	 * stopping before {@link Object}.
 	 *
-	 * @param classComponentExcel the class component excel
-	 * @return the list field
+	 * @param classComponentExcel the class to inspect
+	 * @return a {@link java.util.Set} containing all declared fields in the hierarchy
 	 */
 	public static Set<Field> getListField(Class<?> classComponentExcel) {
 		Set<Field> listField = new HashSet<>();
@@ -142,10 +170,11 @@ public class SpreadsheetUtils {
 	}
 
 	/**
-	 * Gets the map field.
+	 * Collects all declared fields from the given class hierarchy and returns them
+	 * as a map keyed by field name.
 	 *
-	 * @param classComponentExcel the class component excel
-	 * @return the map field
+	 * @param classComponentExcel the class to inspect
+	 * @return a {@link java.util.Map} from field name to {@link java.lang.reflect.Field}
 	 */
 	public static Map<String, Field> getMapField(Class<?> classComponentExcel) {
 		Set<Field> listField = getListField(classComponentExcel);
@@ -159,12 +188,17 @@ public class SpreadsheetUtils {
 	
 	
 	/**
-	 * Write to file.
+	 * Writes a byte array to the file system at the given path.
+	 * <p>
+	 * The method ensures that {@code fileName} starts with {@code /} and {@code typeFile}
+	 * starts with {@code .} before concatenating them with {@code pathFile}.
+	 * Errors are logged but not propagated; callers will not receive any indication of failure.
+	 * </p>
 	 *
-	 * @param pathFile the path file
-	 * @param fileName the file name
-	 * @param typeFile the type file
-	 * @param data     the dati
+	 * @param pathFile the directory path (e.g. {@code "/tmp/"})
+	 * @param fileName the file name without extension (e.g. {@code "report"})
+	 * @param typeFile the file extension (e.g. {@code "xlsx"} or {@code ".xlsx"})
+	 * @param data     the byte array to write
 	 */
 	public static void writeToFile(String pathFile, String fileName, String typeFile, byte[] data) {
 		FileOutputStream fos=null;
@@ -184,11 +218,11 @@ public class SpreadsheetUtils {
 	
 
 	/**
-	 * Start string.
+	 * Ensures that the given text starts with the specified prefix, prepending it if absent.
 	 *
-	 * @param text the text
-	 * @param start the start
-	 * @return the string
+	 * @param text  the string to check
+	 * @param start the required prefix
+	 * @return the string guaranteed to start with {@code start}
 	 */
 	private static String startString(String text,String start) {
 		if(!text.startsWith(start))

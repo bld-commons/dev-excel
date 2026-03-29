@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -354,7 +354,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				CellStyle cellStyle = sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol()).getCellStyle();
 				cellStyle.setWrapText(true);
 				Cell cell = sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
-				Object value = PropertyUtils.getProperty(report, field.getName());
+				Object value = new BeanWrapperImpl(report).getPropertyValue(field.getName());
 				ExcelDate excelDate = null;
 				if (Date.class.isAssignableFrom(field.getType()) || Calendar.class.isAssignableFrom(field.getType()) || Timestamp.class.isAssignableFrom(field.getType())) {
 					excelDate = SpreadsheetUtils.getAnnotation(field, ExcelDate.class);
@@ -627,7 +627,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class)) {
 				if (enableSumForGroup && lastRowSheet != null) {
 					for (String fieldName : sumForGroups)
-						if (!PropertyUtils.getProperty(lastRowSheet, fieldName).equals(PropertyUtils.getProperty(rowSheet, fieldName)))
+						if (!new BeanWrapperImpl(lastRowSheet).getPropertyValue(fieldName).equals(new BeanWrapperImpl(rowSheet).getPropertyValue(fieldName)))
 							splitRow = sumForGroups.indexOf(fieldName) + 1;
 					for (int i = 0; i < splitRow; i++) {
 						String fieldName = sumForGroups.get(i);
@@ -657,7 +657,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				Field field = sheetHeader.getField();
 				Object value = null;
 				if (sheetHeader.getField() != null) {
-					value = PropertyUtils.getProperty(rowSheet, field.getName());
+					value = new BeanWrapperImpl(rowSheet).getPropertyValue(field.getName());
 					mapValue.put(field.getName(), value);
 				} else if (StringUtils.isNotBlank(sheetHeader.getKeyMap())) {
 					DynamicRowSheet dynamicRowSheet = (DynamicRowSheet) rowSheet;
@@ -712,7 +712,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 						if (numColumn > excelSheetLayout.startColumn() && ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField()))
 							throw new ExcelGeneratorException("Only first column can have the propertie \"referenceColumn\" is blank!!!");
 						if (field != null)
-							valueBefore = PropertyUtils.getProperty(lastRowSheet, field.getName());
+							valueBefore = new BeanWrapperImpl(lastRowSheet).getPropertyValue(field.getName());
 						if (ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
 							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
@@ -1011,7 +1011,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	 * @throws NoSuchMethodException     the no such method exception
 	 */
 	private Integer mapRowSubTotals(Integer indexRow, RowSheet lastRowSheet, List<SubtotalRow> emptyRows, String fieldName, Integer firstRow, Integer lastRow) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		emptyRows.add(new SubtotalRow(indexRow++, BeanUtils.getProperty(lastRowSheet, fieldName), fieldName, firstRow, lastRow));
+		emptyRows.add(new SubtotalRow(indexRow++, String.valueOf(new BeanWrapperImpl(lastRowSheet).getPropertyValue(fieldName)), fieldName, firstRow, lastRow));
 		firstRow = indexRow.intValue();
 		mapSubTotals.put(fieldName, firstRow);
 		return indexRow;
@@ -1059,8 +1059,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	private boolean checkMergeColumn(SheetHeader sheetHeader, RowSheet rowSheet, RowSheet lastRowSheet, Object valueBefore) throws Exception {
 		for (String referenceField : sheetHeader.getExcelMergeRow().referenceField()) {
 			if (StringUtils.isNotBlank(referenceField)) {
-				Object valueRefColumn = PropertyUtils.getProperty(rowSheet, referenceField);
-				Object valueRefColumnBefore = PropertyUtils.getProperty(lastRowSheet, referenceField);
+				Object valueRefColumn = new BeanWrapperImpl(rowSheet).getPropertyValue(referenceField);
+				Object valueRefColumnBefore = new BeanWrapperImpl(lastRowSheet).getPropertyValue(referenceField);
 				if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
 					return true;
 			}
@@ -1474,7 +1474,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (field.isAnnotationPresent(ExcelLabel.class)) {
 				Row row = sheet.createRow(indexRow);
 				ExcelLabel excelLabel = field.getAnnotation(ExcelLabel.class);
-				Object value = PropertyUtils.getProperty(baseSheet, field.getName());
+				Object value = new BeanWrapperImpl(baseSheet).getPropertyValue(field.getName());
 				if (value != null) {
 					if (!(value instanceof String))
 						throw new ExcelGeneratorException(field.getName() + " field type is not supported: required String");
