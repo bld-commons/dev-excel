@@ -47,10 +47,24 @@ import com.bld.read.report.excel.domain.SheetRead;
 import com.bld.read.report.excel.exception.ExcelReaderException;
 
 /**
- * The Class ReadExcelImpl.<br>
- * ReadExcelImpl is the class that read excel file and converts it to a
- * SheetRead list.<br>
- * 
+ * Spring component that reads an Excel file and maps its content to a list of typed Java objects.
+ * <p>
+ * This class is stateless and safe for concurrent use as a singleton Spring bean.
+ * It supports both {@code .xls} (HSSF) and {@code .xlsx} (XSSF) formats, merged cells,
+ * and a wide range of field types including {@code String}, {@code Number} subtypes,
+ * {@code Date}, {@code Calendar}, {@code Boolean}, and {@code Character}.
+ * </p>
+ * <p>
+ * The mapping between Excel columns and Java fields is driven by the
+ * {@link com.bld.read.report.excel.annotation.ExcelReadColumn} annotation.
+ * Sheet configuration (name, start row and column) is defined via
+ * {@link com.bld.read.report.excel.annotation.ExcelReadSheet}.
+ * </p>
+ *
+ * @author Francesco Baldi
+ * @see com.bld.read.report.excel.ReadExcel
+ * @see com.bld.read.report.excel.domain.ExcelRead
+ * @see com.bld.read.report.excel.domain.SheetRead
  */
 @SuppressWarnings({ "unchecked" })
 @Component
@@ -66,12 +80,17 @@ public class ReadExcelImpl implements ReadExcel {
 	private static final List<CellType> IGNORE_CELL_TYPE = Arrays.asList(CellType.BLANK, CellType.ERROR);
 
 	/**
-	 * Convert excel to entity.<br>
-	 * This function read excel file by byte array.<br>
-	 * 
-	 * @param excelRead the excel read
-	 * @return the excel read
-	 * @throws Exception the exception
+	 * Reads the Excel file described by the given {@link ExcelRead} object and populates
+	 * each registered {@link com.bld.read.report.excel.domain.SheetRead} with the parsed rows.
+	 * <p>
+	 * If {@link ExcelRead#isClose()} is {@code true}, the underlying {@link java.io.InputStream}
+	 * is closed after reading.
+	 * </p>
+	 *
+	 * @param excelRead the descriptor containing the file stream, format type, and sheet mappings
+	 * @return the same {@link ExcelRead} instance with all sheets populated
+	 * @throws Exception if the file cannot be read, a required sheet or column is missing,
+	 *                   or a field type conversion fails
 	 */
 	@Override
 	public ExcelRead convertExcelToEntity(ExcelRead excelRead) throws Exception {
@@ -82,12 +101,15 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Extract entities.
+	 * Iterates over all registered sheets, reads each row, converts cell values to the
+	 * declared field types, and adds the resulting entity to the corresponding {@link com.bld.read.report.excel.domain.SheetRead}.
+	 * <p>Merged cell regions are resolved so that a merged cell always returns the value
+	 * of its top-left origin cell.</p>
 	 *
-	 * @param <T>       the generic type
-	 * @param excelRead the excel read
-	 * @return the excel read
-	 * @throws Exception the exception
+	 * @param <T>       the row entity type, must implement {@link com.bld.read.report.excel.domain.RowSheetRead}
+	 * @param excelRead the descriptor containing file content and sheet configuration
+	 * @return the populated {@link ExcelRead} instance
+	 * @throws Exception if sheet or column resolution fails, or a type conversion error occurs
 	 */
 	private <T extends RowSheetRead> ExcelRead extractEntities(ExcelRead excelRead) throws Exception {
 		Workbook workbook = null;
@@ -271,11 +293,11 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Gets the number value.
+	 * Converts the numeric value of an Excel cell to the declared Java number type.
 	 *
-	 * @param cell       the cell
-	 * @param classField the class field
-	 * @return the number value
+	 * @param cell       the Excel cell containing a numeric value
+	 * @param classField the target Java type ({@code Integer}, {@code BigDecimal}, {@code Float}, {@code Long}, or {@code Double})
+	 * @return the converted number value, or {@code null} if the cell value is {@code null}
 	 */
 	private Object getNumberValue(Cell cell, Class<?> classField) {
 		Object value = null;
@@ -295,10 +317,11 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Sets the map method.
+	 * Populates a name-to-method map from an array of {@link java.lang.reflect.Method} objects.
+	 * Used to cache setter methods for efficient lookup during row population.
 	 *
-	 * @param mapMethod  the map method
-	 * @param listMethod the list method
+	 * @param mapMethod  the map to populate, keyed by method name
+	 * @param listMethod the array of methods to register
 	 */
 	private void setMapMethod(Map<String, Method> mapMethod, Method[] listMethod) {
 		for (Method method : listMethod)
@@ -306,11 +329,12 @@ public class ReadExcelImpl implements ReadExcel {
 	}
 
 	/**
-	 * Gets the map columns.
+	 * Builds a map from column header name to column index by reading the header row of the sheet.
+	 * Iteration stops at the first blank or null cell.
 	 *
-	 * @param header         the header
-	 * @param excelReadSheet the excel read sheet
-	 * @return the map columns
+	 * @param header         the Excel row containing column headers
+	 * @param excelReadSheet the sheet annotation defining the start column index
+	 * @return a map where each key is a header label and each value is its zero-based column index
 	 */
 	private Map<String, Integer> getMapColumns(Row header, ExcelReadSheet excelReadSheet) {
 

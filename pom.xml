@@ -45,7 +45,7 @@
 		<org.reflections-version>0.10.2</org.reflections-version>
 		<com.fathzer-version>3.0.6</com.fathzer-version>
 		<commons-csv.version>1.14.1</commons-csv.version>
-		<bld-commons.version>2.1.2</bld-commons.version>
+		<bld-commons.version>2.1.4</bld-commons.version>
 		<commons-io.version>2.21.0</commons-io.version>
 		<jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
 		<!-- PLUGIN INIZIO -->

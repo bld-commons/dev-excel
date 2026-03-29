@@ -15,15 +15,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * The Class SheetRead.<br>
- * SheetRead is the object that represents the excel sheet.<br>
- * It is composed by:
- * <ul>
- * <li>ListRowSheet - to get the result of the RowSheetRead list</li>
- * <lI>SheetName - to get the excel sheet through the name</li>
- * </ul>
- * 
- * @param <T> the generic type
+ * Abstract representation of an Excel sheet produced by the read-excel library.
+ * <p>
+ * Concrete subclasses must declare the row entity type {@code T} and provide a
+ * constructor accepting the sheet name. The name must not exceed
+ * {@link com.bld.common.spreadsheet.utils.SpreadsheetUtils#SHEET_NAME_SIZE} characters
+ * (Excel limit of 31).
+ * </p>
+ * <p>
+ * After {@link com.bld.read.report.excel.ReadExcel#convertExcelToEntity(ExcelRead)} completes,
+ * the parsed rows are available via {@link #getListRowSheet()}.
+ * Override {@link #filtered(Object)} to apply custom row-level filtering during parsing.
+ * </p>
+ *
+ * @param <T> the row entity type, must implement {@link RowSheetRead}
+ * @author Francesco Baldi
+ * @see RowSheetRead
+ * @see MapSheetRead
  */
 public abstract class SheetRead<T extends RowSheetRead> {
 
@@ -54,6 +62,11 @@ public abstract class SheetRead<T extends RowSheetRead> {
 		return listRowSheet;
 	}
 
+	/**
+	 * Returns the number of rows currently held by this sheet.
+	 *
+	 * @return the row count, or {@code 0} if the list is empty
+	 */
 	public int size() {
 		if(CollectionUtils.isNotEmpty(this.listRowSheet))
 			return this.listRowSheet.size();
@@ -61,16 +74,23 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	}
 	
 	/**
-	 * Adds the row sheet.
+	 * Adds a parsed row to the sheet, provided it passes the {@link #filtered(Object)} check.
 	 *
-	 * @param t the t
-	 * @throws Exception the exception
+	 * @param t the row entity to add
+	 * @throws Exception if an error occurs during the addition (e.g. in {@link MapSheetRead})
 	 */
 	public void addRowSheet(T t) throws Exception {
 		if (this.filtered(t))
 			this.listRowSheet.add(t);
 	}
 
+	/**
+	 * Hook method called before adding each parsed row. Override to implement custom filtering logic.
+	 * Returns {@code true} by default, meaning all rows are accepted.
+	 *
+	 * @param t the parsed row entity
+	 * @return {@code true} to include the row, {@code false} to discard it
+	 */
 	protected boolean filtered(T t) {
 		return true;
 	}

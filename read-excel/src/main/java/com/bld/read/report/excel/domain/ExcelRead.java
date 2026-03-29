@@ -27,16 +27,26 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The Class ExcelRead.<br>
- * ExcelRead is the object that represents the excel file.<br>
- * It is composed by:
- * <ul>
- * <li>ReportExcel - to set the excel file in byte array</li>
- * <li>ListSheetRead - to set a SheetRead list where each object is a new
- * instance</li>
- * <li>MapSheet - to get result SheetRead list through class type</li>
- * <li>ExcelType - to set the xls or xlsx type</li>
- * </ul>
+ * Container representing the Excel file to be read and the set of sheets to extract from it.
+ * <p>
+ * Before passing this object to {@link com.bld.read.report.excel.ReadExcel#convertExcelToEntity(ExcelRead)},
+ * the caller must:
+ * </p>
+ * <ol>
+ *   <li>Provide the file content via one of the {@code setReportExcel} overloads
+ *       (byte array, {@link java.io.InputStream}, or file path).</li>
+ *   <li>Set the file format via {@link #setExcelType(com.bld.read.report.excel.constant.ExcelType)}
+ *       ({@code XLS} by default).</li>
+ *   <li>Register at least one sheet via {@link #addSheetConvertion}.</li>
+ * </ol>
+ * <p>
+ * After reading, the populated {@link SheetRead} instances can be retrieved with
+ * {@link #getSheet(Class, String)}.
+ * </p>
+ *
+ * @author Francesco Baldi
+ * @see com.bld.read.report.excel.ReadExcel
+ * @see SheetRead
  */
 public class ExcelRead {
 
@@ -70,12 +80,12 @@ public class ExcelRead {
 	}
 
 	/**
-	 * Gets the sheet.
+	 * Returns the populated {@link SheetRead} registered under the given sheet name.
 	 *
-	 * @param <T>            the generic type
-	 * @param classSheetRead the class sheet read
-	 * @param sheetName      the sheet name
-	 * @return the sheet
+	 * @param <T>            the concrete {@link SheetRead} type
+	 * @param classSheetRead the class of the expected sheet type
+	 * @param sheetName      the Excel sheet name used during registration
+	 * @return the populated sheet, or {@code null} if not found
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends SheetRead<?>> T getSheet(Class<T> classSheetRead, String sheetName) {
@@ -92,9 +102,9 @@ public class ExcelRead {
 	}
 
 	/**
-	 * Sets the report excel.
+	 * Sets the Excel file to read from a byte array.
 	 *
-	 * @param reportExcel the new report excel
+	 * @param reportExcel the file content as a byte array; ignored if empty or {@code null}
 	 */
 	public void setReportExcel(byte[] reportExcel) {
 		if (ArrayUtils.isNotEmpty(reportExcel))
@@ -102,18 +112,19 @@ public class ExcelRead {
 	}
 
 	/**
-	 * Sets the report excel.
+	 * Sets the Excel file to read from an {@link java.io.InputStream}.
 	 *
-	 * @param reportExcel the new report excel
+	 * @param reportExcel the input stream of the file
 	 */
 	public void setReportExcel(InputStream reportExcel) {
 		this.reportExcel = reportExcel;
 	}
 
 	/**
-	 * Sets the report excel.
+	 * Sets the Excel file to read from a file system path.
 	 *
-	 * @param pathFile the new report excel
+	 * @param pathFile the absolute or relative path to the Excel file; ignored if blank
+	 * @throws com.bld.read.report.excel.exception.ExcelReaderException if the file is not found
 	 */
 	public void setReportExcel(String pathFile) {
 		if (StringUtils.isNotBlank(pathFile))
@@ -127,14 +138,18 @@ public class ExcelRead {
 	
 	
 	/**
-	 * @return the close
+	 * Returns whether the underlying {@link java.io.InputStream} should be closed after reading.
+	 *
+	 * @return {@code true} if the stream will be closed automatically after reading
 	 */
 	public boolean isClose() {
 		return close;
 	}
 
 	/**
-	 * @param close the close to set
+	 * Sets whether the underlying {@link java.io.InputStream} should be closed after reading.
+	 *
+	 * @param close {@code true} to close the stream automatically after reading
 	 */
 	public void setClose(boolean close) {
 		this.close = close;
@@ -150,13 +165,18 @@ public class ExcelRead {
 	}
 
 	/**
-	 * Adds the sheet convertion.
+	 * Registers a sheet to be extracted from the Excel file.
+	 * <p>
+	 * If {@code classSheetRead} extends {@link MapSheetRead}, the {@code keyField} parameter is
+	 * mandatory and must match a field name in the row entity. For plain {@link SheetRead}
+	 * subclasses, {@code keyField} is ignored.
+	 * </p>
 	 *
-	 * @param <T>            the generic type
-	 * @param classSheetRead the class sheet read
-	 * @param sheetName      the sheet name
-	 * @param keyField       the key field
-	 * @throws Exception the exception
+	 * @param <T>            the concrete {@link SheetRead} type
+	 * @param classSheetRead the class of the sheet to register
+	 * @param sheetName      the name of the Excel sheet to read (max 31 characters)
+	 * @param keyField       the row field name to use as map key for {@link MapSheetRead}; {@code null} otherwise
+	 * @throws Exception if the sheet name is too long, already registered, or the constructor cannot be invoked
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T> classSheetRead, String sheetName, String keyField) throws Exception {
@@ -181,12 +201,13 @@ public class ExcelRead {
 	}
 
 	/**
-	 * Adds the sheet convertion.
+	 * Registers a plain {@link SheetRead} sheet to be extracted from the Excel file.
+	 * Convenience overload of {@link #addSheetConvertion(Class, String, String)} with no key field.
 	 *
-	 * @param <T>            the generic type
-	 * @param classSheetRead the class sheet read
-	 * @param sheetName      the sheet name
-	 * @throws Exception the exception
+	 * @param <T>            the concrete {@link SheetRead} type
+	 * @param classSheetRead the class of the sheet to register
+	 * @param sheetName      the name of the Excel sheet to read (max 31 characters)
+	 * @throws Exception if the sheet name is too long, already registered, or the constructor cannot be invoked
 	 */
 	public <T extends SheetRead<? extends RowSheetRead>> void addSheetConvertion(Class<T> classSheetRead, String sheetName) throws Exception {
 		this.addSheetConvertion(classSheetRead, sheetName, null);
