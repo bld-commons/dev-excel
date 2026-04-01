@@ -90,6 +90,15 @@ public @interface ExcelFunctionMergeRow {
 	 */
 	public ExcelSubtotal excelSubtotal() default @ExcelSubtotal(enable=false,dataConsolidateFunction=DataConsolidateFunction.SUM);
 	
+	/**
+	 * Number format applied to the function-result cell of the merged row.
+	 * <p>
+	 * Defaults to {@link ExcelNumberFormat} with no explicit format code, which
+	 * means the cell inherits the sheet's default number format.
+	 * </p>
+	 *
+	 * @return the {@link ExcelNumberFormat} for the merged result cell
+	 */
 	public ExcelNumberFormat excelNumberFormat() default @ExcelNumberFormat;
-	
+
 }

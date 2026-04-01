@@ -9,17 +9,28 @@ import org.apache.commons.csv.CSVFormat;
 import com.bld.common.spreadsheet.csv.annotation.CsvSettings;
 
 /**
- * The Class CsvUtils.
+ * Static utility class that builds an Apache Commons CSV {@link CSVFormat} from
+ * a {@link com.bld.common.spreadsheet.csv.annotation.CsvSettings} annotation.
+ * <p>
+ * Used internally by both the {@code generator-excel} and {@code read-excel} modules
+ * to ensure consistent CSV formatting across generation and parsing.
+ * All members are {@code static}; this class is not instantiable.
+ * </p>
  */
 public class CsvUtils {
 
-	
 	/**
-	 * Gets the csv format.
+	 * Builds a {@link CSVFormat} configured according to the given {@link CsvSettings}
+	 * annotation and the provided column headers.
+	 * <p>
+	 * The following settings are applied: delimiter, quote character, empty-line
+	 * handling, whitespace trimming, header names, and whether the header record
+	 * should be skipped during parsing.
+	 * </p>
 	 *
-	 * @param csvSettings the csv settings
-	 * @param headers the headers
-	 * @return the csv format
+	 * @param csvSettings the annotation carrying the CSV format configuration
+	 * @param headers     the ordered column header names to register in the format
+	 * @return a configured {@link CSVFormat} instance ready for use with a CSV printer or parser
 	 */
 	public static CSVFormat getCsvFormat(CsvSettings csvSettings,String... headers) {
 		CSVFormat csvFormat = CSVFormat.DEFAULT;
