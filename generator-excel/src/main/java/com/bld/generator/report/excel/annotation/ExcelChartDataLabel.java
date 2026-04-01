@@ -13,7 +13,30 @@ import java.lang.annotation.Retention;
 
 
 /**
- * The Interface ExcelChartDataLabel.
+ * Controls the visibility and content of data labels rendered on a chart series.
+ * <p>
+ * Apply this annotation as the {@code excelChartDataLabel} attribute of
+ * {@link ExcelChartCategory} to configure which label elements are shown next to
+ * each data point (value, category name, series name, legend key).
+ * </p>
+ * <p>
+ * Data labels are only rendered when {@link #enable()} is {@code true}; all other
+ * flags are ignored otherwise.
+ * </p>
+ *
+ * <p><b>Example:</b></p>
+ * <pre>{@code
+ * @ExcelChartCategory(
+ *     fieldName = "amount",
+ *     excelChartDataLabel = @ExcelChartDataLabel(
+ *         enable      = true,
+ *         showVal     = true,
+ *         showCatName = false,
+ *         showSerName = false,
+ *         showLegendKey = false
+ *     )
+ * )
+ * }</pre>
  */
 @Documented
 @Retention(RUNTIME)
