@@ -409,21 +409,364 @@ Configures a summary row appended after the last data row.
 
 ### Functions and Formulas
 
-#### `@ExcelFunction` / `@ExcelFunctionRow` / `@ExcelFunctionRows`
+Formula rows are added below the data area by annotating the `RowSheet` class with `@ExcelFunctionRows`.
+Each formula row is configured either with `@ExcelFunctionRow` (simple row) or `@ExcelFunctionMergeRow` (merged cells + formula).
+The actual Excel formula is defined inside `@ExcelFunction`.
 
-Add formula rows to the sheet.
+---
 
-#### `@ExcelFunctionSubTotal` / `@ExcelFormulaAlias`
+#### `@ExcelFunctionRows`
 
-Define subtotal formulas and formula aliases.
+Container annotation applied at **class level** on a `RowSheet`. Holds two independent lists:
+
+| Attribute              | Type                    | Default | Description                                   |
+|------------------------|-------------------------|---------|-----------------------------------------------|
+| `excelFunctions`       | `ExcelFunctionRow[]`    | `{}`    | Simple formula rows appended below the data   |
+| `excelFunctionMerges`  | `ExcelFunctionMergeRow[]`| `{}`   | Formula rows whose cells span merged groups   |
+
+Both lists are processed independently and can coexist on the same class.
+
+---
+
+#### `@ExcelFunctionRow`
+
+Configures a single formula row. Is a parameter of `@ExcelFunctionRows.excelFunctions`.
+
+| Attribute               | Type                   | Default                                      | Description                                   |
+|-------------------------|------------------------|----------------------------------------------|-----------------------------------------------|
+| `excelColumn`           | `ExcelColumn`          | —                                            | **Required.** Column header and position      |
+| `excelFunction`         | `ExcelFunction`        | —                                            | **Required.** Formula definition              |
+| `excelCellsLayout`      | `ExcelCellLayout`      | right-aligned, precision 2                   | Style for the result cell                     |
+| `excelColumnWidth`      | `ExcelColumnWidth`     | default width                                | Column width                                  |
+| `excelHeaderCellLayout` | `ExcelHeaderCellLayout`| default header style                         | Style for the header cell of this column      |
+| `excelSubtotal`         | `ExcelSubtotal`        | `enable=false`, function=SUM                 | Subtotal for this formula column (disabled by default) |
+| `excelNumberFormat`     | `ExcelNumberFormat`    | `""` (inherits sheet default)                | Number format applied to the result cell      |
+
+---
+
+#### `@ExcelFunctionMergeRow`
+
+Like `@ExcelFunctionRow`, but merges consecutive cells in the column that share the same value in a reference field, then applies the formula over each merged group. Is a parameter of `@ExcelFunctionRows.excelFunctionMerges`.
+
+| Attribute               | Type                   | Default                        | Description                                              |
+|-------------------------|------------------------|--------------------------------|----------------------------------------------------------|
+| `excelColumn`           | `ExcelColumn`          | —                              | **Required.** Column header and position                 |
+| `excelFunction`         | `ExcelFunction`        | —                              | **Required.** Formula definition                         |
+| `excelMergeRow`         | `ExcelMergeRow`        | —                              | **Required.** Field(s) that determine merge boundaries   |
+| `excelCellsLayout`      | `ExcelCellLayout`      | right-aligned, precision 2     | Style for the merged result cell                         |
+| `excelColumnWidth`      | `ExcelColumnWidth`     | default width                  | Column width                                             |
+| `excelHeaderCellLayout` | `ExcelHeaderCellLayout`| default header style           | Style for the header cell of this column                 |
+| `excelSubtotal`         | `ExcelSubtotal`        | `enable=false`, function=SUM   | Subtotal for this merged formula column                  |
+| `excelNumberFormat`     | `ExcelNumberFormat`    | `""` (inherits sheet default)  | Number format applied to each merged result cell         |
+
+---
+
+#### `@ExcelFunction`
+
+Defines the Excel formula and its identifier. Used inside `@ExcelFunctionRow` and `@ExcelFunctionMergeRow`.
+
+| Attribute        | Type                    | Default               | Description                                                              |
+|------------------|-------------------------|-----------------------|--------------------------------------------------------------------------|
+| `function`       | `String`                | —                     | **Required.** Excel formula with `${fieldName}` placeholders             |
+| `nameFunction`   | `String`                | —                     | **Required.** Unique name used to reference this formula's result cells  |
+| `anotherTable`   | `boolean`               | `true`                | `true` if the formula references columns from another sheet/table        |
+| `alias`          | `ExcelFormulaAlias[]`   | `{}`                  | Named cell-range aliases used inside the formula                         |
+| `onSubTotalRow`  | `ExcelFunctionSubTotal` | `value=false`         | Configuration for a grand-total row appended below all data rows         |
+
+##### Formula placeholder syntax
+
+The `function` string supports the following placeholders that are resolved to actual Excel cell addresses at generation time:
+
+| Placeholder                              | Resolves to                                               | Use case                                 |
+|------------------------------------------|-----------------------------------------------------------|------------------------------------------|
+| `${fieldName}`                           | The cell in the current row for that field                | Row-level formula (sum across columns)   |
+| `${fieldNameRowStart}:${fieldNameRowEnd}`| First to last cell of that column in the data range       | Column aggregate (sum, average, …)       |
+| `${fieldName[start]}:${fieldName[end]}`  | Same as above (alternative syntax)                        | Column aggregate                         |
+| `${fieldName[start+N]}:${fieldName[end-M]}`| Column range with row offset                            | Exclude header/footer rows from range    |
+| `${fieldName.field-value[start]}`        | The first cell value of that column                       | Reference the first cell as a constant   |
+| `${SheetName.fieldRowStart}:${SheetName.fieldRowEnd}` | Cross-sheet column range                    | Formula referencing another sheet        |
+
+When `anotherTable=false` the formula acts on the same table; ranges like `${fieldRowStart}:${fieldRowEnd}` are resolved relative to the current sheet's data block.
+
+---
+
+#### `@ExcelFunctionSubTotal`
+
+Controls whether a **grand-total row** is appended at the very bottom of a formula column (below all data rows). Configured via the `onSubTotalRow` attribute of `@ExcelFunction`.
+
+| Attribute        | Type             | Default                             | Description                                |
+|------------------|------------------|-------------------------------------|--------------------------------------------|
+| `value`          | `boolean`        | `false`                             | `true` to append the grand-total row       |
+| `excelCellLayout`| `ExcelCellLayout`| right-aligned, bold font            | Style applied to the grand-total cell      |
+
+---
+
+#### `@ExcelFormulaAlias`
+
+Defines a **named alias** for a cell or cell range, so that the alias can be used as a placeholder in formula strings. Useful for cross-sheet references or when the natural field-name syntax is insufficient.
+
+| Attribute     | Type      | Default | Description                                                                 |
+|---------------|-----------|---------|-----------------------------------------------------------------------------|
+| `alias`       | `String`  | —       | **Required.** The placeholder name used in `${alias}` expressions           |
+| `coordinate`  | `String`  | —       | **Required.** Target coordinate — field name with optional `[start]`/`[end]` or `Genere.genere[start]` cross-sheet syntax |
+| `sheet`       | `String`  | `""`    | Sheet name for cross-sheet references (leave empty for the current sheet)   |
+| `blockColumn` | `boolean` | `false` | Produce an absolute column reference (`$A1`)                               |
+| `blockRow`    | `boolean` | `false` | Produce an absolute row reference (`A$1`)                                   |
+
+---
+
+#### Examples — Functions and Formulas
+
+**1. Row formula (sum of two columns on the same row)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn = @ExcelColumn(index = 9, name = "Total Price"),
+        excelFunction = @ExcelFunction(
+            function    = "sum(${price},${supplement})",
+            nameFunction = "totalPrice"
+        ),
+        excelCellsLayout = @ExcelCellLayout(
+            horizontalAlignment = HorizontalAlignment.RIGHT,
+            precision = 2,
+            locked = true
+        ),
+        excelColumnWidth = @ExcelColumnWidth(width = 7)
+    )
+})
+public class BookRow implements RowSheet { ... }
+```
+
+**2. Column aggregate (sum all rows of a column)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 8, name = "Total Price"),
+        excelFunction = @ExcelFunction(
+            function     = "sum(${priceRowStart}:${priceRowEnd})",
+            nameFunction = "totalPrice"
+        )
+    )
+})
+public class TotalsRow implements RowSheet { ... }
+```
+
+**3. Conditional aggregate (SUMIF)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 2, name = "Total by ID"),
+        excelFunction = @ExcelFunction(
+            function     = "sumif(${idRowStart}:${idRowEnd},${filterId},${priceRowStart}:${priceRowEnd})",
+            nameFunction = "totalById"
+        )
+    )
+})
+public class TotalsRow implements RowSheet {
+    @ExcelColumn(name = "ID", index = 1)
+    private Integer filterId;
+}
+```
+
+**4. Column aggregate with row offset**
+
+```java
+// Exclude the first and last rows of the data range
+@ExcelFunction(
+    function     = "sum(${price[start+1]}:${price[end-1]})",
+    nameFunction = "trimmedTotal"
+)
+```
+
+**5. Percentage formula with number format and grand-total row**
+
+```java
+@ExcelFunctionRows(
+    excelFunctions = @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 3, name = "% Coverage"),
+        excelFunction = @ExcelFunction(
+            function     = "${presence}/${headcount}",
+            nameFunction = "coverageRate",
+            onSubTotalRow = @ExcelFunctionSubTotal(
+                value = true,
+                excelCellLayout = @ExcelCellLayout(
+                    horizontalAlignment = HorizontalAlignment.RIGHT,
+                    font = @ExcelFont(bold = true)
+                )
+            )
+        ),
+        excelNumberFormat = @ExcelNumberFormat("0.00%")
+    )
+)
+public class StaffRow implements RowSheet { ... }
+```
+
+**6. Merged formula (subtotal per group)**
+
+```java
+@ExcelFunctionRows(
+    excelFunctionMerges = {
+        @ExcelFunctionMergeRow(
+            excelColumn   = @ExcelColumn(index = 7.1, name = "Total per Author"),
+            excelMergeRow = @ExcelMergeRow(referenceField = "authorId"),
+            excelFunction = @ExcelFunction(
+                function      = "sum(${priceRowStart}:${priceRowEnd})",
+                nameFunction  = "totalPerAuthor",
+                anotherTable  = false
+            ),
+            excelSubtotal = @ExcelSubtotal(
+                enable = true,
+                dataConsolidateFunction = DataConsolidateFunction.SUM,
+                excelCellLayout = @ExcelCellLayout(
+                    horizontalAlignment = HorizontalAlignment.RIGHT,
+                    precision = 2,
+                    font = @ExcelFont(bold = true)
+                )
+            ),
+            excelCellsLayout = @ExcelCellLayout(
+                horizontalAlignment = HorizontalAlignment.RIGHT,
+                precision = 2
+            )
+        )
+    }
+)
+public class BookRow implements RowSheet { ... }
+```
+
+**7. Multi-field merge boundaries**
+
+The `referenceField` of `@ExcelMergeRow` inside `@ExcelFunctionMergeRow` accepts an array; cells are merged only when **all** listed fields are equal:
+
+```java
+@ExcelFunctionMergeRow(
+    excelColumn   = @ExcelColumn(index = 7.3, name = "Total per Genre"),
+    excelMergeRow = @ExcelMergeRow(referenceField = {"genre", "authorId"}),
+    excelFunction = @ExcelFunction(
+        function     = "sum(${priceRowStart}:${priceRowEnd})",
+        nameFunction = "totalPerGenre",
+        anotherTable = false
+    )
+)
+```
+
+**8. Cross-sheet reference via alias**
+
+```java
+@ExcelFunctionRow(
+    excelColumn  = @ExcelColumn(index = 10, name = "Test Date"),
+    excelFunction = @ExcelFunction(
+        function     = "${TestSheet.dataA}",
+        nameFunction = "testRef"
+    )
+)
+```
 
 ---
 
 ### Data Validation
 
-#### `@ExcelDataValidation` / `@ExcelDropDown`
+---
 
-Add dropdown list validation to a column.
+#### `@ExcelDataValidation`
+
+Applies a **formula-based validation rule** to a field's column. If the formula evaluates to `FALSE` for the entered value, Excel shows an error dialog. Applied directly on the field.
+
+| Attribute  | Type                  | Default                                         | Description                                              |
+|------------|-----------------------|-------------------------------------------------|----------------------------------------------------------|
+| `value`    | `String`              | —                                               | **Required.** Excel validation formula; use `${fieldName}` to reference the current cell |
+| `alias`    | `ExcelFormulaAlias[]` | `{}`                                            | Aliases for cell references used inside the formula      |
+| `errorBox` | `ExcelBoxMessage`     | STOP, title "Error", message "The value is not valid" | Error dialog shown when validation fails           |
+
+`@ExcelBoxMessage` attributes:
+
+| Attribute   | Type       | Default | Description                                    |
+|-------------|------------|---------|------------------------------------------------|
+| `show`      | `boolean`  | `true`  | Whether to display the error dialog            |
+| `boxStyle`  | `BoxStyle` | —       | `STOP`, `WARNING`, or `INFORMATION`            |
+| `title`     | `String`   | —       | Dialog title                                   |
+| `message`   | `String`   | —       | Dialog message body                            |
+
+```java
+// Validate that the field contains a real date (not a number entered manually)
+@ExcelColumn(name = "Birth Date", index = 4)
+@ExcelDate(value = ColumnDateFormat.YYYY_MM_DD)
+@ExcelDataValidation(
+    "AND(ISNUMBER(${birthDate});${birthDate}=DATE(YEAR(${birthDate});MONTH(${birthDate});DAY(${birthDate})))"
+)
+private Calendar birthDate;
+```
+
+---
+
+#### `@ExcelDropDown`
+
+Creates a **dropdown list** in a cell by referencing a range from another sheet or table in the same workbook. Applied directly on the field.
+
+| Attribute              | Type                  | Default                                         | Description                                                       |
+|------------------------|-----------------------|-------------------------------------------------|-------------------------------------------------------------------|
+| `areaRange`            | `String`              | —                                               | **Required.** Cell range formula (use `${alias}` placeholders)    |
+| `suppressDropDownArrow`| `boolean`             | `true`                                          | `false` to show the dropdown arrow in the cell                    |
+| `alias`                | `ExcelFormulaAlias[]` | `{}`                                            | Aliases that map placeholder names to actual cell range addresses |
+| `errorBox`             | `ExcelBoxMessage`     | STOP, title "Error", message "The value is not valid" | Error dialog shown when an invalid value is entered         |
+
+##### `areaRange` syntax
+
+The `areaRange` value is an Excel cell-range expression. Placeholders of the form `${aliasName}` are resolved using the `alias` array.
+
+Two reference styles are supported:
+
+| Style             | Example                                         | Description                                       |
+|-------------------|-------------------------------------------------|---------------------------------------------------|
+| Alias-based       | `${genreStart}:${genreEnd}`                     | Aliases defined in `alias` resolve to cell addresses |
+| Auto-resolved     | `${SheetName.fieldRowStart}:${SheetName.fieldRowEnd}` | Resolved automatically from another sheet's data range |
+
+```java
+// Style 1 — explicit aliases pointing to another sheet
+@ExcelColumn(name = "Genre", index = 5)
+@ExcelDropDown(
+    areaRange = "${genreStart}:${genreEnd}",
+    alias = {
+        @ExcelFormulaAlias(alias = "genreStart", coordinate = "genre[start]", sheet = "Genre"),
+        @ExcelFormulaAlias(alias = "genreEnd",   coordinate = "genre[end]",   sheet = "Genre")
+    }
+)
+private String genre;
+
+// Style 2 — auto-resolved cross-sheet range (no explicit aliases needed)
+@ExcelColumn(name = "Genre", index = 5)
+@ExcelDropDown(
+    areaRange = "${Genre.genreRowStart}:${Genre.genreRowEnd}",
+    suppressDropDownArrow = true
+)
+private String genre;
+```
+
+---
+
+#### `IntegerDropDown` / `CharacterDropDown` — inline value list
+
+For simple static lists that do not reference another sheet, use the wrapper types `IntegerDropDown` and `CharacterDropDown`. Declare the field with one of these types and initialise it with the list of allowed values:
+
+```java
+// Integer dropdown — values 0, 1, 2
+@ExcelColumn(name = "Option", index = 8)
+@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+private IntegerDropDown option;
+
+// Character dropdown — values A, B, C
+@ExcelColumn(name = "Option", index = 9)
+@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+private CharacterDropDown optionChar;
+
+// In the constructor
+this.option    = new IntegerDropDown(null, Arrays.asList(0, 1, 2));
+this.optionChar = new CharacterDropDown(null, Arrays.asList('A', 'B', 'C'));
+```
+
+No `@ExcelDropDown` annotation is needed — the type itself signals that a dropdown should be generated.
 
 ---
 
