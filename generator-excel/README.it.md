@@ -409,21 +409,364 @@ Configura una riga di riepilogo aggiunta dopo l'ultima riga di dati.
 
 ### Funzioni e Formule
 
-#### `@ExcelFunction` / `@ExcelFunctionRow` / `@ExcelFunctionRows`
+Le righe con formule vengono aggiunte sotto l'area dati annotando la classe `RowSheet` con `@ExcelFunctionRows`.
+Ogni riga formula è configurata con `@ExcelFunctionRow` (riga semplice) oppure `@ExcelFunctionMergeRow` (celle unite + formula).
+La formula Excel vera e propria è definita all'interno di `@ExcelFunction`.
 
-Aggiungono righe con formule al foglio.
+---
 
-#### `@ExcelFunctionSubTotal` / `@ExcelFormulaAlias`
+#### `@ExcelFunctionRows`
 
-Definiscono formule di subtotale e alias di formula.
+Annotazione contenitore applicata a **livello di classe** su un `RowSheet`. Contiene due liste indipendenti:
+
+| Attributo              | Tipo                     | Default | Descrizione                                        |
+|------------------------|--------------------------|---------|----------------------------------------------------|
+| `excelFunctions`       | `ExcelFunctionRow[]`     | `{}`    | Righe formula semplici aggiunte sotto i dati       |
+| `excelFunctionMerges`  | `ExcelFunctionMergeRow[]`| `{}`    | Righe formula con celle unite per gruppi           |
+
+Le due liste sono elaborate indipendentemente e possono coesistere sulla stessa classe.
+
+---
+
+#### `@ExcelFunctionRow`
+
+Configura una singola riga formula. È un parametro di `@ExcelFunctionRows.excelFunctions`.
+
+| Attributo               | Tipo                    | Default                                    | Descrizione                                              |
+|-------------------------|-------------------------|--------------------------------------------|----------------------------------------------------------|
+| `excelColumn`           | `ExcelColumn`           | —                                          | **Obbligatorio.** Intestazione e posizione della colonna |
+| `excelFunction`         | `ExcelFunction`         | —                                          | **Obbligatorio.** Definizione della formula              |
+| `excelCellsLayout`      | `ExcelCellLayout`       | allineamento destra, precisione 2          | Stile della cella risultato                              |
+| `excelColumnWidth`      | `ExcelColumnWidth`      | larghezza predefinita                      | Larghezza della colonna                                  |
+| `excelHeaderCellLayout` | `ExcelHeaderCellLayout` | stile intestazione predefinito             | Stile della cella di intestazione di questa colonna      |
+| `excelSubtotal`         | `ExcelSubtotal`         | `enable=false`, funzione=SUM               | Subtotale per questa colonna formula (disabilitato di default) |
+| `excelNumberFormat`     | `ExcelNumberFormat`     | `""` (eredita il formato predefinito)      | Formato numerico applicato alla cella risultato          |
+
+---
+
+#### `@ExcelFunctionMergeRow`
+
+Come `@ExcelFunctionRow`, ma unisce celle consecutive nella colonna che condividono lo stesso valore nel campo di riferimento, poi applica la formula per ogni gruppo unito. È un parametro di `@ExcelFunctionRows.excelFunctionMerges`.
+
+| Attributo               | Tipo                    | Default                                    | Descrizione                                                         |
+|-------------------------|-------------------------|--------------------------------------------|---------------------------------------------------------------------|
+| `excelColumn`           | `ExcelColumn`           | —                                          | **Obbligatorio.** Intestazione e posizione della colonna            |
+| `excelFunction`         | `ExcelFunction`         | —                                          | **Obbligatorio.** Definizione della formula                         |
+| `excelMergeRow`         | `ExcelMergeRow`         | —                                          | **Obbligatorio.** Campo/i che determinano i confini di unione       |
+| `excelCellsLayout`      | `ExcelCellLayout`       | allineamento destra, precisione 2          | Stile della cella risultato unita                                   |
+| `excelColumnWidth`      | `ExcelColumnWidth`      | larghezza predefinita                      | Larghezza della colonna                                             |
+| `excelHeaderCellLayout` | `ExcelHeaderCellLayout` | stile intestazione predefinito             | Stile della cella di intestazione                                   |
+| `excelSubtotal`         | `ExcelSubtotal`         | `enable=false`, funzione=SUM               | Subtotale per questa colonna formula unita                          |
+| `excelNumberFormat`     | `ExcelNumberFormat`     | `""` (eredita il formato predefinito)      | Formato numerico applicato a ogni cella risultato unita             |
+
+---
+
+#### `@ExcelFunction`
+
+Definisce la formula Excel e il suo identificatore. Usato dentro `@ExcelFunctionRow` e `@ExcelFunctionMergeRow`.
+
+| Attributo        | Tipo                     | Default       | Descrizione                                                                   |
+|------------------|--------------------------|---------------|-------------------------------------------------------------------------------|
+| `function`       | `String`                 | —             | **Obbligatorio.** Formula Excel con segnaposto `${fieldName}`                 |
+| `nameFunction`   | `String`                 | —             | **Obbligatorio.** Nome univoco usato per riferirsi alle celle risultato       |
+| `anotherTable`   | `boolean`                | `true`        | `true` se la formula fa riferimento a colonne di un altro foglio/tabella      |
+| `alias`          | `ExcelFormulaAlias[]`    | `{}`          | Alias di intervallo celle usati nella formula                                 |
+| `onSubTotalRow`  | `ExcelFunctionSubTotal`  | `value=false` | Configurazione della riga totale complessivo in fondo ai dati                 |
+
+##### Sintassi dei segnaposto nelle formule
+
+La stringa `function` supporta i seguenti segnaposto, risolti in indirizzi Excel reali in fase di generazione:
+
+| Segnaposto                                            | Risolto in                                            | Caso d'uso                                      |
+|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------|
+| `${fieldName}`                                        | La cella nella riga corrente per quel campo           | Formula di riga (somma su colonne)              |
+| `${fieldNameRowStart}:${fieldNameRowEnd}`             | Prima e ultima cella di quella colonna nel range dati | Aggregato di colonna (somma, media, …)          |
+| `${fieldName[start]}:${fieldName[end]}`               | Come sopra (sintassi alternativa)                     | Aggregato di colonna                            |
+| `${fieldName[start+N]}:${fieldName[end-M]}`           | Range di colonna con offset di riga                   | Escludere righe iniziali/finali dal range       |
+| `${fieldName.field-value[start]}`                     | Il valore della prima cella di quella colonna         | Riferirsi alla prima cella come costante        |
+| `${SheetName.fieldRowStart}:${SheetName.fieldRowEnd}` | Range di colonna su un altro foglio                   | Formula che fa riferimento a un altro foglio    |
+
+Con `anotherTable=false` la formula agisce sulla stessa tabella; i range `${fieldRowStart}:${fieldRowEnd}` sono risolti relativamente al blocco dati del foglio corrente.
+
+---
+
+#### `@ExcelFunctionSubTotal`
+
+Controlla se viene aggiunta una **riga totale complessivo** in fondo alla colonna formula (sotto tutte le righe dati). Si configura tramite l'attributo `onSubTotalRow` di `@ExcelFunction`.
+
+| Attributo         | Tipo              | Default                              | Descrizione                                      |
+|-------------------|-------------------|--------------------------------------|--------------------------------------------------|
+| `value`           | `boolean`         | `false`                              | `true` per aggiungere la riga totale complessivo |
+| `excelCellLayout` | `ExcelCellLayout` | allineamento destra, font grassetto  | Stile applicato alla cella totale complessivo    |
+
+---
+
+#### `@ExcelFormulaAlias`
+
+Definisce un **alias nominato** per una cella o un intervallo di celle, in modo che l'alias possa essere usato come segnaposto nelle stringhe formula. Utile per riferimenti cross-sheet o quando la sintassi del nome campo non è sufficiente.
+
+| Attributo     | Tipo      | Default | Descrizione                                                                                   |
+|---------------|-----------|---------|-----------------------------------------------------------------------------------------------|
+| `alias`       | `String`  | —       | **Obbligatorio.** Il nome segnaposto usato nelle espressioni `${alias}`                       |
+| `coordinate`  | `String`  | —       | **Obbligatorio.** Coordinata target — nome campo con `[start]`/`[end]` opzionali o sintassi cross-sheet `SheetName.field[start]` |
+| `sheet`       | `String`  | `""`    | Nome del foglio per riferimenti cross-sheet (vuoto per il foglio corrente)                   |
+| `blockColumn` | `boolean` | `false` | Produce un riferimento assoluto alla colonna (`$A1`)                                         |
+| `blockRow`    | `boolean` | `false` | Produce un riferimento assoluto alla riga (`A$1`)                                            |
+
+---
+
+#### Esempi — Funzioni e Formule
+
+**1. Formula di riga (somma di due colonne nella stessa riga)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 9, name = "Prezzo Totale"),
+        excelFunction = @ExcelFunction(
+            function     = "sum(${prezzo},${supplemento})",
+            nameFunction = "prezzoTotale"
+        ),
+        excelCellsLayout = @ExcelCellLayout(
+            horizontalAlignment = HorizontalAlignment.RIGHT,
+            precision = 2,
+            locked = true
+        ),
+        excelColumnWidth = @ExcelColumnWidth(width = 7)
+    )
+})
+public class LibroRow implements RowSheet { ... }
+```
+
+**2. Aggregato di colonna (somma di tutte le righe di una colonna)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 8, name = "Totale Prezzo"),
+        excelFunction = @ExcelFunction(
+            function     = "sum(${prezzoRowStart}:${prezzoRowEnd})",
+            nameFunction = "totalePrezzo"
+        )
+    )
+})
+public class TotaleRow implements RowSheet { ... }
+```
+
+**3. Aggregato condizionale (SUMIF)**
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 2, name = "Totale per Matricola"),
+        excelFunction = @ExcelFunction(
+            function     = "sumif(${matricolaRowStart}:${matricolaRowEnd},${totMatricola},${prezzoRowStart}:${prezzoRowEnd})",
+            nameFunction = "totalePerMatricola"
+        )
+    )
+})
+public class TotaleAutoreLibriRow implements RowSheet {
+    @ExcelColumn(name = "Matricola", index = 1)
+    private Integer totMatricola;
+}
+```
+
+**4. Aggregato di colonna con offset di riga**
+
+```java
+// Esclude la prima e l'ultima riga del range dati
+@ExcelFunction(
+    function     = "sum(${prezzo[start+1]}:${prezzo[end-1]})",
+    nameFunction = "totaleTroncato"
+)
+```
+
+**5. Formula percentuale con formato numerico e riga totale complessivo**
+
+```java
+@ExcelFunctionRows(
+    excelFunctions = @ExcelFunctionRow(
+        excelColumn  = @ExcelColumn(index = 3, name = "% Scop. Giuridica"),
+        excelFunction = @ExcelFunction(
+            function     = "${presenzaGiuridica}/${organico}",
+            nameFunction = "scoperturaGiuridica",
+            onSubTotalRow = @ExcelFunctionSubTotal(
+                value = true,
+                excelCellLayout = @ExcelCellLayout(
+                    horizontalAlignment = HorizontalAlignment.RIGHT,
+                    font = @ExcelFont(bold = true)
+                )
+            )
+        ),
+        excelNumberFormat = @ExcelNumberFormat("0.00%")
+    )
+)
+public class SituazioneUfficiRow implements RowSheet { ... }
+```
+
+**6. Formula unita (subtotale per gruppo)**
+
+```java
+@ExcelFunctionRows(
+    excelFunctionMerges = {
+        @ExcelFunctionMergeRow(
+            excelColumn   = @ExcelColumn(index = 7.1, name = "Prezzo Totale per Autore"),
+            excelMergeRow = @ExcelMergeRow(referenceField = "matricola"),
+            excelFunction = @ExcelFunction(
+                function     = "sum(${prezzoRowStart}:${prezzoRowEnd})",
+                nameFunction = "prezzoTotalePerAutore",
+                anotherTable = false
+            ),
+            excelSubtotal = @ExcelSubtotal(
+                enable = true,
+                dataConsolidateFunction = DataConsolidateFunction.SUM,
+                excelCellLayout = @ExcelCellLayout(
+                    horizontalAlignment = HorizontalAlignment.RIGHT,
+                    precision = 2,
+                    font = @ExcelFont(bold = true)
+                )
+            ),
+            excelCellsLayout = @ExcelCellLayout(
+                horizontalAlignment = HorizontalAlignment.RIGHT,
+                precision = 2
+            )
+        )
+    }
+)
+public class LibroRow implements RowSheet { ... }
+```
+
+**7. Confini di unione multi-campo**
+
+Il campo `referenceField` di `@ExcelMergeRow` dentro `@ExcelFunctionMergeRow` accetta un array; le celle vengono unite solo quando **tutti** i campi elencati sono uguali:
+
+```java
+@ExcelFunctionMergeRow(
+    excelColumn   = @ExcelColumn(index = 7.3, name = "Prezzo Totale per Genere"),
+    excelMergeRow = @ExcelMergeRow(referenceField = {"genere", "matricola"}),
+    excelFunction = @ExcelFunction(
+        function     = "sum(${prezzoRowStart}:${prezzoRowEnd})",
+        nameFunction = "prezzoTotalePerGenere",
+        anotherTable = false
+    )
+)
+```
+
+**8. Riferimento cross-sheet tramite alias**
+
+```java
+@ExcelFunctionRow(
+    excelColumn  = @ExcelColumn(index = 10, name = "Data Test"),
+    excelFunction = @ExcelFunction(
+        function     = "${Test Date.dataA}",
+        nameFunction = "dataTest"
+    )
+)
+```
 
 ---
 
 ### Validazione Dati
 
-#### `@ExcelDataValidation` / `@ExcelDropDown`
+---
 
-Aggiungono la validazione con lista a discesa a una colonna.
+#### `@ExcelDataValidation`
+
+Applica una **regola di validazione basata su formula** alla colonna di un campo. Se la formula restituisce `FALSE` per il valore inserito, Excel mostra un dialogo di errore. Si applica direttamente sul campo.
+
+| Attributo  | Tipo                  | Default                                                    | Descrizione                                                           |
+|------------|-----------------------|------------------------------------------------------------|-----------------------------------------------------------------------|
+| `value`    | `String`              | —                                                          | **Obbligatorio.** Formula di validazione; usa `${fieldName}` per riferirsi alla cella corrente |
+| `alias`    | `ExcelFormulaAlias[]` | `{}`                                                       | Alias per riferimenti cella usati nella formula                       |
+| `errorBox` | `ExcelBoxMessage`     | STOP, titolo "Error", messaggio "The value is not valid"   | Dialogo mostrato quando la validazione fallisce                       |
+
+Attributi di `@ExcelBoxMessage`:
+
+| Attributo   | Tipo       | Default | Descrizione                                        |
+|-------------|------------|---------|----------------------------------------------------|
+| `show`      | `boolean`  | `true`  | Se mostrare il dialogo di errore                   |
+| `boxStyle`  | `BoxStyle` | —       | `STOP`, `WARNING` o `INFORMATION`                  |
+| `title`     | `String`   | —       | Titolo del dialogo                                 |
+| `message`   | `String`   | —       | Testo del messaggio                                |
+
+```java
+// Valida che il campo contenga una data reale (non un numero inserito manualmente)
+@ExcelColumn(name = "Data di Nascita", index = 4)
+@ExcelDate(value = ColumnDateFormat.YYYY_MM_DD)
+@ExcelDataValidation(
+    "AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita});MONTH(${dataDiNascita});DAY(${dataDiNascita})))"
+)
+private Calendar dataDiNascita;
+```
+
+---
+
+#### `@ExcelDropDown`
+
+Crea una **lista a discesa** in una cella referenziando un range da un altro foglio o tabella nello stesso workbook. Si applica direttamente sul campo.
+
+| Attributo               | Tipo                  | Default                                                  | Descrizione                                                            |
+|-------------------------|-----------------------|----------------------------------------------------------|------------------------------------------------------------------------|
+| `areaRange`             | `String`              | —                                                        | **Obbligatorio.** Espressione di range celle (usa segnaposto `${alias}`) |
+| `suppressDropDownArrow` | `boolean`             | `true`                                                   | `false` per mostrare la freccia a discesa nella cella                  |
+| `alias`                 | `ExcelFormulaAlias[]` | `{}`                                                     | Alias che mappano i segnaposto agli indirizzi reali delle celle         |
+| `errorBox`              | `ExcelBoxMessage`     | STOP, titolo "Error", messaggio "The value is not valid" | Dialogo mostrato quando viene inserito un valore non valido            |
+
+##### Sintassi di `areaRange`
+
+Il valore `areaRange` è un'espressione di range Excel. I segnaposto `${aliasName}` vengono risolti tramite l'array `alias`.
+
+Sono supportati due stili di riferimento:
+
+| Stile                    | Esempio                                                       | Descrizione                                               |
+|--------------------------|---------------------------------------------------------------|-----------------------------------------------------------|
+| Basato su alias          | `${genereStart}:${genereEnd}`                                 | Gli alias definiti in `alias` vengono risolti in indirizzi celle |
+| Risolto automaticamente  | `${SheetName.fieldRowStart}:${SheetName.fieldRowEnd}`         | Risolto automaticamente dal range dati di un altro foglio |
+
+```java
+// Stile 1 — alias espliciti che puntano a un altro foglio
+@ExcelColumn(name = "Genere", index = 5)
+@ExcelDropDown(
+    areaRange = "${genereStart}:${genereEnd}",
+    alias = {
+        @ExcelFormulaAlias(alias = "genereStart", coordinate = "genere[start]", sheet = "Genere"),
+        @ExcelFormulaAlias(alias = "genereEnd",   coordinate = "genere[end]",   sheet = "Genere")
+    }
+)
+private String genere;
+
+// Stile 2 — range cross-sheet risolto automaticamente (nessun alias esplicito necessario)
+@ExcelColumn(name = "Genere", index = 5)
+@ExcelDropDown(
+    areaRange = "${Genere.genereRowStart}:${Genere.genereRowEnd}",
+    suppressDropDownArrow = true
+)
+private String desGenere;
+```
+
+---
+
+#### `IntegerDropDown` / `CharacterDropDown` — lista di valori inline
+
+Per elenchi statici semplici che non fanno riferimento a un altro foglio, usa i tipi wrapper `IntegerDropDown` e `CharacterDropDown`. Dichiara il campo con uno di questi tipi e inizializzalo con la lista dei valori ammessi:
+
+```java
+// Dropdown intero — valori 0, 1, 2
+@ExcelColumn(name = "Opzione", index = 8)
+@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+private IntegerDropDown option;
+
+// Dropdown carattere — valori A, B, C
+@ExcelColumn(name = "Opzione Char", index = 9)
+@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+private CharacterDropDown optionChar;
+
+// Nel costruttore
+this.option     = new IntegerDropDown(null, Arrays.asList(0, 1, 2));
+this.optionChar = new CharacterDropDown(null, Arrays.asList('A', 'B', 'C'));
+```
+
+Non è necessaria alcuna annotazione `@ExcelDropDown` — il tipo stesso segnala che deve essere generata una lista a discesa.
 
 ---
 
