@@ -3,6 +3,150 @@
 Spring Boot library for generating Excel (XLS, XLSX, SXSSF) and CSV files from annotated Java objects.
 Supports static data, JPA query-driven data, charts, pivot tables, images, subtotals, conditional formatting, and more.
 
+---
+
+## Why generator-excel?
+
+The goal: generate this Excel sheet.
+
+| ID | Name | Department | Salary | Start Date |
+|----|------|------------|-------:|------------|
+| 1  | Alice Rossi | Engineering | 4,500.00 | 2021-03-15 |
+| 2  | Bob Verdi | Marketing | 3,800.00 | 2022-07-01 |
+
+Headers in bold, salary right-aligned with 2 decimal places, date formatted as `yyyy-MM-dd`.
+
+---
+
+### With Apache POI — ~70 lines of boilerplate
+
+```java
+try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+    XSSFSheet sheet = workbook.createSheet("Employees");
+
+    // Header style
+    CellStyle headerStyle = workbook.createCellStyle();
+    Font headerFont = workbook.createFont();
+    headerFont.setBold(true);
+    headerStyle.setFont(headerFont);
+    headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+    headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+    // Header row
+    Row header = sheet.createRow(0);
+    String[] columns = {"ID", "Name", "Department", "Salary", "Start Date"};
+    for (int i = 0; i < columns.length; i++) {
+        Cell cell = header.createCell(i);
+        cell.setCellValue(columns[i]);
+        cell.setCellStyle(headerStyle);
+    }
+
+    // Number style (salary)
+    CellStyle numberStyle = workbook.createCellStyle();
+    DataFormat format = workbook.createDataFormat();
+    numberStyle.setDataFormat(format.getFormat("#,##0.00"));
+    numberStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+    // Date style
+    CellStyle dateStyle = workbook.createCellStyle();
+    CreationHelper createHelper = workbook.getCreationHelper();
+    dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-MM-dd"));
+
+    // Data rows
+    Object[][] data = {
+        {1, "Alice Rossi", "Engineering", 4500.00, new GregorianCalendar(2021, 2, 15)},
+        {2, "Bob Verdi",   "Marketing",   3800.00, new GregorianCalendar(2022, 6,  1)}
+    };
+    for (int r = 0; r < data.length; r++) {
+        Row row = sheet.createRow(r + 1);
+        row.createCell(0).setCellValue((Integer) data[r][0]);
+        row.createCell(1).setCellValue((String)  data[r][1]);
+        row.createCell(2).setCellValue((String)  data[r][2]);
+        Cell salaryCell = row.createCell(3);
+        salaryCell.setCellValue((Double) data[r][3]);
+        salaryCell.setCellStyle(numberStyle);
+        Cell dateCell = row.createCell(4);
+        dateCell.setCellValue((Calendar) data[r][4]);
+        dateCell.setCellStyle(dateStyle);
+    }
+
+    // Auto-size columns
+    for (int i = 0; i < columns.length; i++) sheet.autoSizeColumn(i);
+
+    // Write to file
+    try (FileOutputStream fos = new FileOutputStream("employees.xlsx")) {
+        workbook.write(fos);
+    }
+}
+```
+
+---
+
+### With generator-excel — ~20 lines, zero boilerplate
+
+**1. Row entity**
+
+```java
+public class EmployeeRow implements RowSheet {
+
+    @ExcelColumn(name = "ID", index = 1)
+    private Integer id;
+
+    @ExcelColumn(name = "Name", index = 2)
+    @ExcelCellLayout(autoSizeColumn = true)
+    private String name;
+
+    @ExcelColumn(name = "Department", index = 3)
+    @ExcelCellLayout(autoSizeColumn = true)
+    private String department;
+
+    @ExcelColumn(name = "Salary", index = 4)
+    @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2)
+    private Double salary;
+
+    @ExcelColumn(name = "Start Date", index = 5)
+    @ExcelDate(ColumnDateFormat.YYYY_MM_DD)
+    @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
+    private Calendar startDate;
+
+    // getters / setters ...
+}
+```
+
+**2. Sheet entity**
+
+```java
+@ExcelSheetLayout
+@ExcelHeaderLayout
+public class EmployeeSheet extends SheetData<EmployeeRow> {
+    public EmployeeSheet(String name) { super(name); }
+}
+```
+
+**3. Generate**
+
+```java
+@Autowired
+private GenerateExcel generateExcel;
+
+public byte[] export(List<EmployeeRow> employees) throws Exception {
+    EmployeeSheet sheet = new EmployeeSheet("Employees");
+    sheet.setListRowSheet(employees);
+    ReportExcel report = new ReportExcel("Company Report", sheet);
+    return generateExcel.createFileXlsx(report);
+}
+```
+
+| | Apache POI | generator-excel |
+|---|---|---|
+| Lines of code | ~70 | ~20 |
+| Style management | Manual (`CellStyle`, `Font`, …) | Annotations |
+| Date formatting | Manual (`DataFormat`) | `@ExcelDate` |
+| Adding a column | Edit style + row creation code | Add a field + `@ExcelColumn` |
+| Maintenance | High | Low |
+
+---
+
 ## Maven Dependency
 
 ```xml

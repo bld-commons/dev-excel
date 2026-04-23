@@ -3,6 +3,134 @@
 Spring Boot library for reading Excel (XLS, XLSX) and CSV files into typed Java objects.
 Supports multi-sheet reading, map-indexed sheets, custom row filtering, and Bean Validation.
 
+---
+
+## Why read-excel?
+
+The goal: read this Excel sheet and map each row to a Java object.
+
+| ID | Name | Department | Salary | Start Date |
+|----|------|------------|-------:|------------|
+| 1  | Alice Rossi | Engineering | 4,500.00 | 2021-03-15 |
+| 2  | Bob Verdi | Marketing | 3,800.00 | 2022-07-01 |
+
+---
+
+### With Apache POI — ~60 lines of boilerplate
+
+```java
+List<EmployeeRow> employees = new ArrayList<>();
+
+try (FileInputStream fis = new FileInputStream("employees.xlsx");
+     XSSFWorkbook workbook = new XSSFWorkbook(fis)) {
+
+    XSSFSheet sheet = workbook.getSheet("Employees");
+    Iterator<Row> rows = sheet.iterator();
+
+    // Skip header row
+    if (rows.hasNext()) rows.next();
+
+    while (rows.hasNext()) {
+        Row row = rows.next();
+        EmployeeRow employee = new EmployeeRow();
+
+        // ID
+        Cell idCell = row.getCell(0);
+        if (idCell != null)
+            employee.setId((int) idCell.getNumericCellValue());
+
+        // Name
+        Cell nameCell = row.getCell(1);
+        if (nameCell != null)
+            employee.setName(nameCell.getStringCellValue());
+
+        // Department
+        Cell deptCell = row.getCell(2);
+        if (deptCell != null)
+            employee.setDepartment(deptCell.getStringCellValue());
+
+        // Salary — numeric cell, must handle type explicitly
+        Cell salaryCell = row.getCell(3);
+        if (salaryCell != null && salaryCell.getCellType() == CellType.NUMERIC)
+            employee.setSalary(salaryCell.getNumericCellValue());
+
+        // Start Date — stored as numeric in Excel, must convert
+        Cell dateCell = row.getCell(4);
+        if (dateCell != null && DateUtil.isCellDateFormatted(dateCell)) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(dateCell.getDateCellValue());
+            employee.setStartDate(cal);
+        }
+
+        employees.add(employee);
+    }
+}
+```
+
+---
+
+### With read-excel — ~15 lines, zero boilerplate
+
+**1. Row entity**
+
+```java
+public class EmployeeRow implements RowSheetRead {
+
+    @ExcelReadColumn("ID")
+    private Integer id;
+
+    @ExcelReadColumn("Name")
+    private String name;
+
+    @ExcelReadColumn("Department")
+    private String department;
+
+    @ExcelReadColumn("Salary")
+    private Double salary;
+
+    @ExcelReadColumn("Start Date")
+    private Calendar startDate;
+
+    // getters / setters ...
+}
+```
+
+**2. Sheet entity**
+
+```java
+@ExcelReadSheet(startRow = 2)
+public class EmployeeSheet extends SheetRead<EmployeeRow> {
+    public EmployeeSheet(String name) { super(name); }
+}
+```
+
+**3. Read**
+
+```java
+@Autowired
+private ReadExcel readExcel;
+
+public List<EmployeeRow> read(byte[] fileBytes) throws Exception {
+    ExcelRead excelRead = new ExcelRead();
+    excelRead.setReportExcel(fileBytes);
+    excelRead.setExcelType(ExcelType.XLSX);
+    excelRead.addSheetConvertion(EmployeeSheet.class, "Employees");
+    excelRead = readExcel.convertExcelToEntity(excelRead);
+    return excelRead.getSheet(EmployeeSheet.class, "Employees").getListRowSheet();
+}
+```
+
+| | Apache POI | read-excel |
+|---|---|---|
+| Lines of code | ~60 | ~15 |
+| Cell type handling | Manual (`CellType`, `DateUtil`, …) | Automatic |
+| Date conversion | Manual (`setTime`, `Calendar`) | Automatic |
+| Adding a column | Edit iterator + type-check code | Add a field + `@ExcelReadColumn` |
+| Multiple sheets | Nested loops, repeated code | `addSheetConvertion()` per sheet |
+| Maintenance | High | Low |
+
+---
+
 ## Maven Dependency
 
 ```xml
