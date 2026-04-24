@@ -174,25 +174,46 @@ public class MyTest { ... }
 
 ---
 
-## Domain Classes
+## Class Hierarchy
 
-| Class | Role |
-|-------|------|
-| `ReportExcel` | Root container for all sheets to generate |
-| `SheetData<T>` | Abstract base for sheets with static data |
-| `QuerySheetData<T>` | Abstract base for sheets populated via `@ExcelQuery` |
-| `SheetSummary` | Abstract base for two-column key/value summary sheets |
-| `RowSheet` | Marker interface for every row class |
-| `CsvData<T>` | Abstract base for CSV datasets |
-| `CsvRow` | Marker interface for every CSV row class |
+```
+BaseSheet
+├── SheetData<T extends RowSheet>                    implements SheetComponent
+│   ├── QuerySheetData<T>
+│   ├── SheetDynamicData<T extends DynamicRowSheet>  implements DynamicColumn
+│   │   └── DynamicChart<T>
+│   ├── LoadSheetData<R, S>
+│   └── SheetFunctionTotal<T>
+│       └── SheetDynamicFunctionTotal<T>             implements DynamicColumn
+└── SheetSummary                                     implements SheetComponent
+
+MergeSheet extends BaseSheet    (groups SheetComponent instances on one tab)
+
+RowSheet  (interface)
+└── DynamicRowSheet  (abstract class)
+
+FunctionsTotal<T>  (interface — implemented by SheetData subclasses
+                    that expose a companion total sheet)
+```
+
+---
+
+## Domain Classes Reference
+
+| Category | Classes | Details |
+|----------|---------|---------|
+| **Static Sheets** | `RowSheet`, `SheetData`, `SheetSummary`, `MergeSheet`, `FunctionsTotal`, `ExcelHyperlink`, `ExcelAttachment` | [→ docs/sheet-data.md](docs/sheet-data.md) |
+| **Dynamic Sheets** | `DynamicRowSheet`, `SheetDynamicData`, `ExtraColumnAnnotation`, `DynamicChart`, `SheetDynamicFunctionTotal` | [→ docs/dynamic-sheets.md](docs/dynamic-sheets.md) |
+| **Query, Load & Function Sheets** | `QuerySheetData`, `LoadSheetData`, `SheetFunctionTotal` | [→ docs/query-load-function.md](docs/query-load-function.md) |
+
+Full hierarchy overview: [→ docs/domain-classes.md](docs/domain-classes.md)
 
 ---
 
 ## Annotations Reference
 
-| Category | Contents | Details |
-|----------|----------|---------|
-| **Domain Classes** | `RowSheet`, `DynamicRowSheet`, `SheetData`, `QuerySheetData`, `SheetSummary`, `SheetFunctionTotal`, `SheetDynamicData`, `DynamicChart`, `LoadSheetData`, `MergeSheet`, `FunctionsTotal`, `ExcelHyperlink`, `ExcelAttachment` | [→ docs/domain-classes.md](docs/domain-classes.md) |
+| Category | Annotations | Details |
+|----------|-------------|---------|
 | **Sheet Layout & Structure** | `@ExcelSheetLayout`, `@ExcelHeaderLayout`, `@ExcelHeaderCellLayout`, `@ExcelMarginSheet`, `@ExcelFreezePane`, `@ExcelAreaBorder`, `@ExcelLocked`, `@ExcelRowHeight` | [→ docs/sheet-layout.md](docs/sheet-layout.md) |
 | **Columns & Cells** | `@ExcelColumn`, `@ExcelCellLayout`, `@ExcelFont`, `@ExcelBorder`, `@ExcelRgbColor`, `@ExcelColumnWidth`, `@ExcelNumberFormat`, `@ExcelMergeRow` | [→ docs/columns-cells.md](docs/columns-cells.md) |
 | **Functions & Formulas** | `@ExcelFunctionRows`, `@ExcelFunctionRow`, `@ExcelFunctionMergeRow`, `@ExcelFunction`, `@ExcelFunctionSubTotal`, `@ExcelFormulaAlias` | [→ docs/functions-formulas.md](docs/functions-formulas.md) |
