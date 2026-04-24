@@ -190,8 +190,9 @@ public class MyTest { ... }
 
 ## Annotations Reference
 
-| Category | Annotations | Details |
-|----------|-------------|---------|
+| Category | Contents | Details |
+|----------|----------|---------|
+| **Domain Classes** | `RowSheet`, `DynamicRowSheet`, `SheetData`, `QuerySheetData`, `SheetSummary`, `SheetFunctionTotal`, `SheetDynamicData`, `DynamicChart`, `LoadSheetData`, `MergeSheet`, `FunctionsTotal`, `ExcelHyperlink`, `ExcelAttachment` | [→ docs/domain-classes.md](docs/domain-classes.md) |
 | **Sheet Layout & Structure** | `@ExcelSheetLayout`, `@ExcelHeaderLayout`, `@ExcelHeaderCellLayout`, `@ExcelMarginSheet`, `@ExcelFreezePane`, `@ExcelAreaBorder`, `@ExcelLocked`, `@ExcelRowHeight` | [→ docs/sheet-layout.md](docs/sheet-layout.md) |
 | **Columns & Cells** | `@ExcelColumn`, `@ExcelCellLayout`, `@ExcelFont`, `@ExcelBorder`, `@ExcelRgbColor`, `@ExcelColumnWidth`, `@ExcelNumberFormat`, `@ExcelMergeRow` | [→ docs/columns-cells.md](docs/columns-cells.md) |
 | **Functions & Formulas** | `@ExcelFunctionRows`, `@ExcelFunctionRow`, `@ExcelFunctionMergeRow`, `@ExcelFunction`, `@ExcelFunctionSubTotal`, `@ExcelFormulaAlias` | [→ docs/functions-formulas.md](docs/functions-formulas.md) |
