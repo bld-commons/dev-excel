@@ -210,6 +210,15 @@ Full hierarchy overview: [→ docs/domain-classes.md](docs/domain-classes.md)
 
 ---
 
+## Guides
+
+| Guide | Contents |
+|-------|---------|
+| [→ docs/examples.md](docs/examples.md) | End-to-end examples: project setup, REST export, multi-sheet workbook, formulas + merges + FunctionsTotal, subtotals + conditional formatting, best practices |
+| [→ docs/performance.md](docs/performance.md) | SXSSF streaming, large-dataset tips, memory sizing, SXSSF limitations, pagination pattern |
+
+---
+
 ## Annotations Reference
 
 | Category | Annotations | Details |
