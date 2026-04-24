@@ -361,9 +361,50 @@ Full cell style definition (border, alignment, font, color, number format).
 | `green`   | `byte` | `255`   |
 | `blue`    | `byte` | `255`   |
 
-#### `@ExcelColumnWidth` / `@ExcelRowHeight`
+#### `@ExcelColumnWidth`
 
-Set custom column widths or row heights.
+Sets a fixed column width (in centimetres) on a `RowSheet` field. When omitted, the default width of **5 cm** is used.
+
+| Attribute | Type  | Default | Description              |
+|-----------|-------|---------|--------------------------|
+| `width`   | `int` | `5`     | Column width in centimetres |
+
+```java
+public class BookRow implements RowSheet {
+
+    @ExcelColumn(name = "Title", index = 1)
+    @ExcelCellLayout(autoSizeColumn = true)
+    private String title;
+
+    @ExcelColumn(name = "Price", index = 2)
+    @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2)
+    @ExcelColumnWidth(width = 10)   // fixed width of 10 cm
+    private Double price;
+
+    // getters / setters ...
+}
+```
+
+The annotation can also appear inside `@ExcelFunctionRow` or `@ExcelFunctionMergeRow` to control the width of formula columns:
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn      = @ExcelColumn(index = 3, name = "Total Price"),
+        excelFunction    = @ExcelFunction(function = "sum(${price},${supplement})", nameFunction = "totalPrice"),
+        excelColumnWidth = @ExcelColumnWidth(width = 7)
+    )
+})
+public class BookRow implements RowSheet { ... }
+```
+
+#### `@ExcelRowHeight`
+
+Sets a fixed row height (in centimetres). Can be placed at **class level** on a `RowSheet` (applies to every data row) or at **field level** inside a `SheetSummary` class (applies to the summary row that field belongs to). The default value `-1` lets Excel auto-size the height.
+
+| Attribute | Type    | Default | Description                            |
+|-----------|---------|---------|----------------------------------------|
+| `height`  | `short` | `-1`    | Row height in centimetres; `-1` = auto |
 
 #### `@ExcelNumberFormat`
 
