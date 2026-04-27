@@ -191,8 +191,8 @@ See the module-specific READMEs for full annotated examples:
 
 ## Javadoc
 
-- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
-- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html)
 
 ---
 
@@ -377,8 +377,8 @@ Vedere i README dei singoli moduli per esempi completi e annotati:
 
 ## Javadoc
 
-- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
-- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html)
 
 ---
 
