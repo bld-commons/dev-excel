@@ -12,7 +12,7 @@ Main modules: `generator-excel`, `read-excel`, `common-spreadsheet`.
 ### 5.1.4 — 2026-04-30
 **Stack:** Java 17 · Spring Boot 3.5.10 · Apache POI 5.5.1
 
-- **fix(`read-excel`)** — `ReadExcelImpl`: aggiunto fallback `else value = numberValue` nella conversione dei tipi numerici; in precedenza i campi di tipo `Number` non mappati esplicitamente (es. `BigDecimal`) venivano restituiti come `null` anziché con il valore originale
+- **fix(`read-excel`)** — `ReadExcelImpl`: added fallback `else value = numberValue` in numeric type conversion; previously fields of type `Number` not explicitly mapped (e.g. `BigDecimal`) were returned as `null` instead of the original value
 
 ### 5.1.3 — 2026-03-30
 **Stack:** Java 17 · Spring Boot 3.5.10 · Apache POI 5.5.1
