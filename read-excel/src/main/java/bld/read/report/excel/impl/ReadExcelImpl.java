@@ -256,6 +256,8 @@ public class ReadExcelImpl implements ReadExcel {
 				value = Float.valueOf(numberValue.floatValue());
 			else if (Long.class.isAssignableFrom(classField))
 				value = numberValue.longValue();
+			else
+				value=numberValue;
 		}
 		return value;
 	}
