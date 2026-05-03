@@ -6,6 +6,7 @@
 package com.bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -412,7 +413,70 @@ public class ExcelCellLayoutImpl extends ExcelAnnotationImpl<ExcelCellLayout>{
 		this.percent = percent;
 	}
 
-	
+	/**
+	 * Sets the font via a configurator lambda.
+	 *
+	 * @param consumer the font configurator
+	 */
+	public void setFont(Consumer<ExcelFontImpl> consumer) {
+		ExcelFontImpl impl = new ExcelFontImpl();
+		consumer.accept(impl);
+		this.font = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the border via a configurator lambda.
+	 *
+	 * @param consumer the border configurator
+	 */
+	public void setBorder(Consumer<ExcelBorderImpl> consumer) {
+		ExcelBorderImpl impl = new ExcelBorderImpl();
+		consumer.accept(impl);
+		this.border = impl.getAnnotation();
+	}
+
+	/**
+	 * Adds an {@link com.bld.generator.report.excel.annotation.ExcelRgbColor} to the rgbForeground array.<br>
+	 * The consumer receives an {@link ExcelRgbColorImpl} already instantiated; set the desired values and
+	 * the resulting color is appended to the array.
+	 *
+	 * @param consumer the rgb foreground configurator
+	 * @return this (for chaining inside a lambda)
+	 */
+	public ExcelCellLayoutImpl addRgbForeground(Consumer<ExcelRgbColorImpl> consumer) {
+		ExcelRgbColorImpl impl = new ExcelRgbColorImpl();
+		consumer.accept(impl);
+		if (this.rgbForeground == null) {
+			this.rgbForeground = new ExcelRgbColor[]{impl.getAnnotation()};
+		} else {
+			ExcelRgbColor[] updated = Arrays.copyOf(this.rgbForeground, this.rgbForeground.length + 1);
+			updated[updated.length - 1] = impl.getAnnotation();
+			this.rgbForeground = updated;
+		}
+		return this;
+	}
+
+	/**
+	 * Adds an {@link com.bld.generator.report.excel.annotation.ExcelRgbColor} to the rgbFont array.<br>
+	 * The consumer receives an {@link ExcelRgbColorImpl} already instantiated; set the desired values and
+	 * the resulting color is appended to the array.
+	 *
+	 * @param consumer the rgb font configurator
+	 * @return this (for chaining inside a lambda)
+	 */
+	public ExcelCellLayoutImpl addRgbFont(Consumer<ExcelRgbColorImpl> consumer) {
+		ExcelRgbColorImpl impl = new ExcelRgbColorImpl();
+		consumer.accept(impl);
+		if (this.rgbFont == null) {
+			this.rgbFont = new ExcelRgbColor[]{impl.getAnnotation()};
+		} else {
+			ExcelRgbColor[] updated = Arrays.copyOf(this.rgbFont, this.rgbFont.length + 1);
+			updated[updated.length - 1] = impl.getAnnotation();
+			this.rgbFont = updated;
+		}
+		return this;
+	}
+
 	/**
 	 * Hash code.
 	 *

@@ -8,6 +8,8 @@ package com.bld.generator.report.csv;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.bld.common.spreadsheet.utils.ExcelUtils;
 
 /**
@@ -59,4 +61,13 @@ public abstract class CsvData<T extends CsvRow> {
 		this.rows = rows;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public void addRows(T... rows) {
+		if(ArrayUtils.isNotEmpty(rows))
+			for(T row:rows)
+				this.rows.add(row);
+	}
+
+	
 }

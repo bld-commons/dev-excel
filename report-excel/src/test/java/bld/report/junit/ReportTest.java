@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -56,31 +57,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.bld.common.spreadsheet.constant.ColumnDateFormat;
 import com.bld.common.spreadsheet.constant.RowStartEndType;
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.generator.report.csv.GenerateCsv;
 import com.bld.generator.report.excel.BaseSheet;
 import com.bld.generator.report.excel.ExcelAttachment;
 import com.bld.generator.report.excel.annotation.ExcelChartCategory;
-import com.bld.generator.report.excel.annotation.impl.ExcelBorderImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelChartCategoryImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelChartDataLabelImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelChartImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelColumnImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelDataValidationImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelFontImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelRgbColorImpl;
-import com.bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
 import com.bld.generator.report.excel.config.annotation.EnableExcelGenerator;
 import com.bld.generator.report.excel.constant.AttachmentType;
-import com.bld.generator.report.excel.constant.ExcelConstant;
 import com.bld.generator.report.excel.constant.FontType;
 import com.bld.generator.report.excel.constant.UnderlineType;
-import com.bld.generator.report.excel.data.ExtraColumnAnnotation;
 import com.bld.generator.report.excel.data.ReportExcel;
 import com.bld.generator.report.excel.dropdown.CalendarDropDown;
 import com.bld.generator.report.excel.impl.GenerateExcelImpl;
@@ -92,10 +83,14 @@ import bld.report.generator.junit.entity.AutoreLibriSheetDynamic;
 import bld.report.generator.junit.entity.CasaEditrice;
 import bld.report.generator.junit.entity.DateRow;
 import bld.report.generator.junit.entity.DateSheet;
+import bld.report.generator.junit.entity.EmployeeCsvData;
+import bld.report.generator.junit.entity.EmployeeSheet;
 import bld.report.generator.junit.entity.GenereRow;
 import bld.report.generator.junit.entity.GenereSheet;
+import bld.report.generator.junit.entity.ProductSheet;
 import bld.report.generator.junit.entity.SituazioneUfficiRow;
 import bld.report.generator.junit.entity.SituazioneUfficiSheet;
+import bld.report.generator.junit.entity.TestDataGenerator;
 import bld.report.generator.junit.entity.TotaleAutoreLibriRow;
 import bld.report.generator.junit.entity.TotaleAutoreLibriSheet;
 
@@ -115,6 +110,9 @@ public class ReportTest {
 	/** The generate excel. */
 	@Autowired
 	private GenerateExcelImpl generateExcel;
+
+	@Autowired
+	private GenerateCsv generateCsv;
 	
 	private final static Logger logger=LoggerFactory.getLogger(ReportTest.class);
 
@@ -265,77 +263,136 @@ public class ReportTest {
 		list.add(autoreLibriRow);
 
 		AutoreLibriSheetDynamic autoreLibriSheet = new AutoreLibriSheetDynamic("Libri d'autore", "Test di etichetta su report");
-		ExcelCellLayoutImpl excelCellLayoutImplSubTotal = (ExcelCellLayoutImpl) ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE.clone();
 
-		ExcelFontImpl fontSubtotal = new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true);
-		excelCellLayoutImplSubTotal.setFont(fontSubtotal.getAnnotation());
-		
-		
-		
-		
-		ExtraColumnAnnotation extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni", null, 21, false));
-		extraColumnAnnotation.setExcelSubtotal(new ExcelSubtotalImpl(excelCellLayoutImplSubTotal.getAnnotation(), true, DataConsolidateFunction.SUM));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(" + RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3") + ")", "totalePrezzoAnni", false));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnni", extraColumnAnnotation);
+		Consumer<ExcelCellLayoutImpl> doubleCellLayout = l -> {
+			l.setWrap(true);
+			l.setVerticalAlignment(VerticalAlignment.CENTER);
+			l.addRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 255); r.setBlue((byte) 255); });
+			l.addRgbFont(r -> {});
+			l.setPrecision(2);
+			l.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+			l.setFont(f -> { f.setUnderline(UnderlineType.NONE); f.setSize((short) 11); f.setFont(FontType.CALIBRI); });
+			l.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+			l.setBorder(b -> { b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN); b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN); });
+		};
+		Consumer<ExcelCellLayoutImpl> dateCellLayout = l -> {
+			l.setWrap(true);
+			l.setVerticalAlignment(VerticalAlignment.CENTER);
+			l.addRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 255); r.setBlue((byte) 255); });
+			l.addRgbFont(r -> {});
+			l.setPrecision(-1);
+			l.setHorizontalAlignment(HorizontalAlignment.CENTER);
+			l.setFont(f -> { f.setUnderline(UnderlineType.NONE); f.setSize((short) 11); f.setFont(FontType.CALIBRI); });
+			l.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+			l.setBorder(b -> { b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN); b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN); });
+		};
+		Consumer<ExcelCellLayoutImpl> stringCellLayout = l -> {
+			l.setWrap(true);
+			l.setVerticalAlignment(VerticalAlignment.CENTER);
+			l.addRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 255); r.setBlue((byte) 255); });
+			l.addRgbFont(r -> {});
+			l.setPrecision(-1);
+			l.setHorizontalAlignment(HorizontalAlignment.LEFT);
+			l.setFont(f -> { f.setUnderline(UnderlineType.NONE); f.setSize((short) 11); f.setFont(FontType.CALIBRI); });
+			l.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+			l.setBorder(b -> { b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN); b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN); });
+		};
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Totale prezzo anni per Autore", null, 22, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl("sum(" + RowStartEndType.ROW_START.getParameter("totalePrezzoAnni") + ":" + RowStartEndType.ROW_END.getParameter("totalePrezzoAnni") + ")", "totalePrezzoAnniAutore", false));
-		extraColumnAnnotation.setExcelMergeRow(new ExcelMergeRowImpl("matricola"));
-		extraColumnAnnotation.setExcelColumnWidth(new ExcelColumnWidthImpl(10));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("totalePrezzoAnniAutore", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("totalePrezzoAnni", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("Totale prezzo anni"); c.setIndex(21); });
+			a.setExcelSubtotal(s -> {
+				s.setEnable(true);
+				s.setDataConsolidateFunction(DataConsolidateFunction.SUM);
+				s.setExcelCellLayout(doubleCellLayout.andThen(l ->
+					l.setFont(f -> { f.setUnderline(UnderlineType.NONE); f.setSize((short) 11); f.setFont(FontType.CALIBRI); f.setBold(true); })
+				));
+			});
+			a.setExcelFunction(f -> {
+				f.setFunction("sum(" + RowStartEndType.ROW_EMPTY.getParameter("anno1") + ":" + RowStartEndType.ROW_EMPTY.getParameter("anno3") + ")");
+				f.setNameFunction("totalePrezzoAnni");
+				f.setAnotherTable(false);
+			});
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelHeaderCellLayout(new ExcelHeaderCellLayoutImpl(true, VerticalAlignment.CENTER, (new ExcelRgbColorImpl(255, 0, 0)).getAnnotation(), (new ExcelRgbColorImpl(0, 0, 0)).getAnnotation(), HorizontalAlignment.CENTER,
-				(new ExcelFontImpl(UnderlineType.NONE, 11, false, FontType.CALIBRI, true)).getAnnotation(), FillPatternType.SOLID_FOREGROUND,
-				(new ExcelBorderImpl(BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN, BorderStyle.THIN)).getAnnotation(), 0, false));
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2015", null, 20, false));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno1", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("totalePrezzoAnniAutore", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("Totale prezzo anni per Autore"); c.setIndex(22); });
+			a.setExcelFunction(f -> {
+				f.setFunction("sum(" + RowStartEndType.ROW_START.getParameter("totalePrezzoAnni") + ":" + RowStartEndType.ROW_END.getParameter("totalePrezzoAnni") + ")");
+				f.setNameFunction("totalePrezzoAnniAutore");
+				f.setAnotherTable(false);
+			});
+			a.setExcelMergeRow(m -> m.setReferenceField("matricola"));
+			a.setExcelColumnWidth(cw -> cw.setWidth(10));
+		});
 
-		extraColumnAnnotation=new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DATE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Date", null, 30, false));
-		extraColumnAnnotation.setExcelDate(ExcelConstant.EXCEL_DATE_DD_MM_YYYY);
-		extraColumnAnnotation.setExcelDataValidation(new ExcelDataValidationImpl("AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita}); MONTH(${dataDiNascita}); DAY(${dataDiNascita})))"));
-		autoreLibriSheet.addExtraColumn("data", extraColumnAnnotation);
-		
-		
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_STRING);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("Ignore Column", null, 20.05, true));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("ignoreColumn", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("anno1", a -> {
+			a.setExcelHeaderCellLayout(h -> {
+				h.setWrap(true);
+				h.setVerticalAlignment(VerticalAlignment.CENTER);
+				h.setRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 0); r.setBlue((byte) 0); });
+				h.setRgbFont(r -> {});
+				h.setHorizontalAlignment(HorizontalAlignment.CENTER);
+				h.setFont(f -> { f.setUnderline(UnderlineType.NONE); f.setSize((short) 11); f.setFont(FontType.CALIBRI); f.setBold(true); });
+				h.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+				h.setBorder(b -> { b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN); b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN); });
+			});
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("2015"); c.setIndex(20); });
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2016", null, 20.1, false));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno2", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("data", a -> {
+			a.setExcelCellLayout(dateCellLayout);
+			a.setExcelColumn(c -> { c.setName("Date"); c.setIndex(30); });
+			a.setExcelDate(d -> d.setValue(ColumnDateFormat.DD_MM_YYYY));
+			a.setExcelDataValidation(v -> v.setValue("AND(ISNUMBER(${dataDiNascita});${dataDiNascita}=DATE(YEAR(${dataDiNascita}); MONTH(${dataDiNascita}); DAY(${dataDiNascita})))"));
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("2017", null, 20.2, false));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("anno3", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("ignoreColumn", a -> {
+			a.setExcelCellLayout(stringCellLayout);
+			a.setExcelColumn(c -> { c.setName("Ignore Column"); c.setIndex(20.05); c.setIgnore(true); });
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2015", null, 30, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno1") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno1"));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno1", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("anno2", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("2016"); c.setIndex(20.1); });
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2016", null, 30.1, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno2") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno2"));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno2", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("anno3", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("2017"); c.setIndex(20.2); });
+		});
 
-		extraColumnAnnotation = new ExtraColumnAnnotation();
-		extraColumnAnnotation.setExcelCellLayout(ExcelConstant.EXCEL_CELL_LAYOUT_DOUBLE);
-		extraColumnAnnotation.setExcelColumn(new ExcelColumnImpl("%2017", null, 30.2, false));
-		extraColumnAnnotation.setExcelFunction(new ExcelFunctionImpl(RowStartEndType.ROW_EMPTY.getParameter("anno3") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"), "percAnno3"));
-		autoreLibriSheet.getMapExtraColumnAnnotation().put("percAnno3", extraColumnAnnotation);
+		autoreLibriSheet.addExtraColumnAnnotation("percAnno1", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("%2015"); c.setIndex(30); });
+			a.setExcelFunction(f -> {
+				f.setFunction(RowStartEndType.ROW_EMPTY.getParameter("anno1") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"));
+				f.setNameFunction("percAnno1");
+				f.setAnotherTable(true);
+			});
+		});
+
+		autoreLibriSheet.addExtraColumnAnnotation("percAnno2", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("%2016"); c.setIndex(30.1); });
+			a.setExcelFunction(f -> {
+				f.setFunction(RowStartEndType.ROW_EMPTY.getParameter("anno2") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"));
+				f.setNameFunction("percAnno2");
+				f.setAnotherTable(true);
+			});
+		});
+
+		autoreLibriSheet.addExtraColumnAnnotation("percAnno3", a -> {
+			a.setExcelCellLayout(doubleCellLayout);
+			a.setExcelColumn(c -> { c.setName("%2017"); c.setIndex(30.2); });
+			a.setExcelFunction(f -> {
+				f.setFunction(RowStartEndType.ROW_EMPTY.getParameter("anno3") + "/" + RowStartEndType.ROW_EMPTY.getParameter("totalePrezzoAnni"));
+				f.setNameFunction("percAnno3");
+				f.setAnotherTable(true);
+			});
+		});
 
 		autoreLibriSheet.setRows(list);
 		ExcelChartDataLabelImpl excelChartDataLabel = new ExcelChartDataLabelImpl();
@@ -562,6 +619,31 @@ public class ReportTest {
         byte[] byteReport = this.generateExcel.createFileXlsx(reportExcel);
 
 		SpreadsheetUtils.writeToFile(PATH_FILE, reportExcel.getTitle(), ".xlsx", byteReport);
+	}
+
+	@Test
+	public void testGenerateEmployee() throws Exception {
+		TestDataGenerator dataGenerator = new TestDataGenerator(System.currentTimeMillis());
+
+		EmployeeSheet employeeSheet = new EmployeeSheet("Dipendenti");
+		employeeSheet.setRows(dataGenerator.generateEmployees(10000));
+
+		ProductSheet productSheet = new ProductSheet("Prodotti");
+		productSheet.setRows(dataGenerator.generateProducts(5000));
+
+		List<BaseSheet> listBaseSheet = new ArrayList<>();
+		listBaseSheet.add(employeeSheet);
+		listBaseSheet.add(productSheet);
+		ReportExcel report = new ReportExcel("employees", listBaseSheet);
+		byte[] excelBytes = this.generateExcel.createFileXlsx(report);
+		SpreadsheetUtils.writeToFile(PATH_FILE, report.getTitle(), ".xlsx", excelBytes);
+		logger.info("Excel generato: " + report.getTitle() + ".xlsx");
+
+		EmployeeCsvData csvData = new EmployeeCsvData();
+		csvData.setRows(employeeSheet.getRows());
+		byte[] csvBytes = this.generateCsv.generateCsv(csvData);
+		SpreadsheetUtils.writeToFile(PATH_FILE, "employees", ".csv", csvBytes);
+		logger.info("CSV generato: employees.csv");
 	}
 
 }

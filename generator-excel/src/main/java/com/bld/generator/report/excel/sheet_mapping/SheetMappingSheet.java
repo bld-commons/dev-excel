@@ -9,7 +9,8 @@ import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
 import com.bld.generator.report.excel.annotation.ExcelRgbColor;
 import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 
-@ExcelSheetLayout(hidden = true,locked = @ExcelLocked)
+@ExcelSheetLayout(hidden = true)
+@ExcelLocked
 @ExcelHeaderLayout(excelHeaderCellLayout = @ExcelHeaderCellLayout(locked = true,
 rgbFont = @ExcelRgbColor(red = (byte) 0, green = (byte) 0, blue = (byte) 0),rgbForeground = @ExcelRgbColor(red = (byte) 255, green = (byte) 255, blue = (byte) 255)))
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)

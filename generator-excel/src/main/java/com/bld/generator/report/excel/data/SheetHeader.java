@@ -30,7 +30,7 @@ import com.bld.generator.report.excel.annotation.ExcelImage;
 import com.bld.generator.report.excel.annotation.ExcelMergeRow;
 import com.bld.generator.report.excel.annotation.ExcelNumberFormat;
 import com.bld.generator.report.excel.annotation.ExcelSubtotal;
-import com.bld.generator.report.excel.constant.ExcelConstant;
+import com.bld.generator.report.excel.annotation.impl.ExcelColumnWidthImpl;
 import com.bld.generator.report.excel.dropdown.CalendarDropDown;
 import com.bld.generator.report.excel.dropdown.DateDropDown;
 import com.bld.generator.report.excel.dropdown.DropDown;
@@ -182,7 +182,7 @@ public class SheetHeader implements Cloneable {
 	 */
 	public ExcelColumnWidth getExcelColumnWidth() {
 		if (excelColumnWidth == null)
-			this.excelColumnWidth = ExcelConstant.EXCEL_COLUMN_WIDTH.getAnnotation();
+			this.excelColumnWidth = new ExcelColumnWidthImpl(5).getAnnotation();
 		return excelColumnWidth;
 	}
 

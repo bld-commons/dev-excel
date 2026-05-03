@@ -23,7 +23,8 @@ import com.bld.generator.report.excel.annotation.ExcelSuperHeaders;
 /**
  * The Class AutoreLibriSheet.
  */
-@ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false,scale=30,locked = @ExcelLocked)
+@ExcelSheetLayout(startRow = 1,groupRow = true,notMerge = false,scale=30)
+@ExcelLocked
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5, left = 1.5, right = 1.5, top = 1.5)
 //@ExcelFreezePane(rowFreez = 5, columnFreez = 1)

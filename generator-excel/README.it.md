@@ -9,7 +9,7 @@ Supporta dati statici, dati da query JPA, grafici, tabelle pivot, immagini, subt
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -132,6 +132,59 @@ Imposta i margini di pagina.
 
 Blocca righe e/o colonne.
 
+#### Protezione Foglio — `@ExcelLocked` e `LockedSheet`
+
+La protezione di un foglio può essere attivata in due modi alternativi.
+
+**1. `@ExcelLocked` — password statica o da property Spring**
+
+Annotazione da applicare direttamente sulla classe del foglio (non più come attributo di `@ExcelSheetLayout`). Il foglio viene bloccato; se `value` risolve a una stringa non vuota viene impostata una password, altrimenti il foglio è bloccato senza password.
+
+| Attributo | Tipo     | Default                            | Descrizione |
+|-----------|----------|------------------------------------|-------------|
+| `value`   | `String` | `${bld.commons.sheet.password:}` | Password (supporta placeholder Spring) |
+
+```java
+// Password fissa
+@ExcelSheetLayout
+@ExcelLocked("myPassword")
+public class MySheet extends SheetData<MyRow> { ... }
+
+// Password da property Spring
+@ExcelSheetLayout
+@ExcelLocked("${my.sheet.password}")
+public class MySheet extends SheetData<MyRow> { ... }
+
+// Lock senza password (usa la property globale, di default vuota)
+@ExcelSheetLayout
+@ExcelLocked
+public class MySheet extends SheetData<MyRow> { ... }
+```
+
+**2. `LockedSheet` — password dinamica a runtime**
+
+Implementa l'interfaccia `LockedSheet` sulla classe del foglio per restituire la password a runtime. Se `password()` restituisce `null` o una stringa vuota il foglio è bloccato senza password.
+
+```java
+@ExcelSheetLayout
+public class DateSheet extends SheetData<DateRow> implements LockedSheet {
+
+    private final String sheetPassword;
+
+    public DateSheet(String sheetName, String sheetPassword) {
+        super(sheetName);
+        this.sheetPassword = sheetPassword;
+    }
+
+    @Override
+    public String password() {
+        return sheetPassword;
+    }
+}
+```
+
+> Entrambe le modalità sono compatibili con `SheetData`, `SheetSummary` e `MergeSheet`.
+
 #### `@ExcelQuery`
 
 Applicata a una sottoclasse di `QuerySheetData` per definire la query SQL o JPQL per il popolamento automatico delle righe.
@@ -229,11 +282,44 @@ Impostano larghezze di colonna o altezze di riga personalizzate.
 
 #### `@ExcelMergeRow`
 
-Unisce celle consecutive in una colonna che hanno lo stesso valore.
+Unisce celle consecutive in una colonna quando il valore del campo annotato non cambia tra una riga e la successiva.
 
-| Attributo        | Tipo     | Default | Descrizione                                   |
-|------------------|----------|---------|-----------------------------------------------|
-| `referenceField` | `String` | —       | Nome del campo da usare come riferimento di merge |
+| Attributo        | Tipo       | Default | Descrizione                                                                 |
+|------------------|------------|---------|-----------------------------------------------------------------------------|
+| `referenceField` | `String[]` | `{}`    | Nomi dei campi (o `nameFunction`) usati come condizione di interruzione del merge |
+
+**Comportamento**
+
+| Configurazione | Effetto |
+|---|---|
+| `@ExcelMergeRow` (senza parametri) | Merge basato sul valore della cella stessa; si interrompe quando il valore cambia. Valido solo sulla prima colonna. |
+| `@ExcelMergeRow(referenceField = "campo")` | Merge interrotto quando il campo `campo` cambia nella riga corrente rispetto alla precedente. |
+| `@ExcelMergeRow(referenceField = {"campo1","campo2"})` | Merge interrotto quando uno qualsiasi dei campi elencati cambia. |
+
+Ogni valore in `referenceField` deve corrispondere a:
+- un nome di campo Java della classe `RowSheet`, oppure
+- un `nameFunction` di una colonna `@ExcelFunction` / `ExtraColumnAnnotation`.
+
+Un valore blank o non corrispondente ad alcun campo fa lanciare una `ExcelGeneratorException` a runtime.
+
+> `@ExcelMergeRow` funziona solo se `notMerge = false` in `@ExcelSheetLayout` (valore di default).
+
+```java
+// Merge basato sul valore della cella — solo prima colonna
+@ExcelColumn(name = "Matricola", index = 1)
+@ExcelMergeRow
+private Integer matricola;
+
+// Merge interrotto quando cambia "matricola"
+@ExcelColumn(name = "Nome", index = 2)
+@ExcelMergeRow(referenceField = "matricola")
+private String nome;
+
+// Merge interrotto quando cambia "matricola" o "cognome"
+@ExcelColumn(name = "Genere", index = 5)
+@ExcelMergeRow(referenceField = {"matricola", "cognome"})
+private String genere;
+```
 
 #### `@ExcelHeaderCellLayout` / `@ExcelHeaderLayout`
 
@@ -412,6 +498,26 @@ Configura una riga di riepilogo aggiunta dopo l'ultima riga di dati.
 Le righe con formule vengono aggiunte sotto l'area dati annotando la classe `RowSheet` con `@ExcelFunctionRows`.
 Ogni riga formula è configurata con `@ExcelFunctionRow` (riga semplice) oppure `@ExcelFunctionMergeRow` (celle unite + formula).
 La formula Excel vera e propria è definita all'interno di `@ExcelFunction`.
+
+È anche possibile aggiungere una **colonna formula calcolata interamente tramite annotazione**, senza alcun valore corrispondente nell'entità riga. I segnaposto `${nomeCampo}` nella stringa della formula vengono risolti negli indirizzi Excel reali durante la generazione:
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn = @ExcelColumn(index = 9, name = "Tassazione"),
+        excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2),
+        excelFunction = @ExcelFunction(
+            function = "IF(${stipendio}<=28000,${stipendio}*0.23,IF(${stipendio}<=50000,${stipendio}*0.35,${stipendio}*0.43))",
+            nameFunction = "tassazione"
+        )
+    )
+})
+public class EmployeeRow implements RowSheet, CsvRow { ... }
+```
+
+La formula applica un'aliquota fiscale progressiva a ogni riga: stipendio ≤ 28.000 → 23%, 28.001–50.000 → 35%, > 50.000 → 43%. Il valore `nameFunction` (`"tassazione"`) identifica univocamente la colonna calcolata e può essere referenziato in `@ExcelMergeRow(referenceField = ...)` o in altre formule.
+
+La stessa classe riga può implementare sia `RowSheet` (per la generazione Excel) che `CsvRow` (per la generazione CSV), permettendo di usare lo stesso oggetto dati con entrambi i generatori.
 
 ---
 
@@ -770,6 +876,144 @@ Non è necessaria alcuna annotazione `@ExcelDropDown` — il tipo stesso segnala
 
 ---
 
+## Colonne Dinamiche
+
+Le **colonne dinamiche** permettono di aggiungere colonne al foglio a runtime, senza definirle con annotazioni nel `RowSheet`. Sono utili quando il numero o il tipo di colonne è noto solo durante l'esecuzione (es. anni, parametri variabili).
+
+### `DynamicRowSheet`
+
+Classe astratta che estende `RowSheet`. I valori delle colonne dinamiche vengono memorizzati in una mappa interna `mapValue` indicizzata per chiave stringa.
+
+```java
+public class AutoreLibriRowDynamic extends DynamicRowSheet {
+
+    @ExcelColumn(name = "Nome", index = 2)
+    @ExcelCellLayout
+    @ExcelMergeRow(referenceField = "matricola")
+    private String nome;
+
+    // campi statici normali ...
+
+    public AutoreLibriRowDynamic(...) {
+        super();
+        // ...
+    }
+}
+
+// Aggiunta di valori dinamici per riga
+AutoreLibriRowDynamic row = new AutoreLibriRowDynamic(...);
+row.addValue("anno1", 23.4);
+row.addValue("anno2", 30.12);
+row.addValue("data",  new Date());
+```
+
+### `SheetDynamicData<T extends DynamicRowSheet>`
+
+Classe astratta di foglio che accetta colonne dinamiche. Le colonne sono configurate tramite `addExtraColumnAnnotation`.
+
+```java
+@ExcelSheetLayout
+@ExcelHeaderLayout
+public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDynamic> {
+    public AutoreLibriSheetDynamic(String sheetName) { super(sheetName); }
+}
+```
+
+### `addExtraColumnAnnotation(String key, Consumer<ExtraColumnAnnotation>)`
+
+Aggiunge e configura una colonna dinamica tramite lambda. La `key` deve corrispondere alla chiave usata in `DynamicRowSheet.addValue(...)`.
+
+`ExtraColumnAnnotation` supporta le stesse annotazioni di un campo `RowSheet` statico:
+
+| Setter | Descrizione |
+|--------|-------------|
+| `setExcelColumn(Consumer<ExcelColumnImpl>)` | **Obbligatorio.** Nome, indice, ignore della colonna |
+| `setExcelCellLayout(Consumer<ExcelCellLayoutImpl>)` | **Obbligatorio.** Stile cella |
+| `setExcelDate(Consumer<ExcelDateImpl>)` | Formato data |
+| `setExcelFunction(Consumer<ExcelFunctionImpl>)` | Formula Excel calcolata per riga |
+| `setExcelSubtotal(Consumer<ExcelSubtotalImpl>)` | Subtotale della colonna |
+| `setExcelMergeRow(Consumer<ExcelMergeRowImpl>)` | Merge di celle consecutive |
+| `setExcelHeaderCellLayout(Consumer<ExcelHeaderCellLayoutImpl>)` | Stile intestazione colonna |
+| `setExcelColumnWidth(Consumer<ExcelColumnWidthImpl>)` | Larghezza colonna |
+| `setExcelDataValidation(Consumer<ExcelDataValidationImpl>)` | Validazione cella |
+| `setExcelDropDown(Consumer<ExcelDropDownImpl>)` | Lista a discesa |
+| `setExcelSubtotal(Consumer<ExcelSubtotalImpl>)` | Subtotale |
+| `setExcelBooleanText(Consumer<ExcelBooleanTextImpl>)` | Testo booleano |
+| `setExcelNumberFormat(Consumer<ExcelNumberFormatImpl>)` | Formato numero personalizzato |
+| `setExcelImage(Consumer<ExcelImageImpl>)` | Immagine nella cella |
+
+### Esempio completo
+
+```java
+// 1. Classe riga con campi statici + valori dinamici
+public class AutoreLibriRowDynamic extends DynamicRowSheet {
+
+    @ExcelColumn(name = "Matricola", index = 1)
+    @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+    @ExcelMergeRow
+    private Integer matricola;
+
+    @ExcelColumn(name = "Nome", index = 2)
+    @ExcelCellLayout
+    @ExcelMergeRow(referenceField = "matricola")
+    private String nome;
+
+    // altri campi statici ...
+}
+
+// 2. Classe foglio dinamico
+@ExcelSheetLayout
+@ExcelHeaderLayout
+public class AutoreLibriSheetDynamic extends SheetDynamicData<AutoreLibriRowDynamic> {
+    public AutoreLibriSheetDynamic(String sheetName) { super(sheetName); }
+}
+
+// 3. Configurazione colonne e generazione
+AutoreLibriSheetDynamic sheet = new AutoreLibriSheetDynamic("Libri d'autore");
+
+Consumer<ExcelCellLayoutImpl> doubleCellLayout = l -> {
+    l.setWrap(true);
+    l.setVerticalAlignment(VerticalAlignment.CENTER);
+    l.setPrecision(2);
+    l.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+    l.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+    l.addRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 255); r.setBlue((byte) 255); });
+    l.addRgbFont(r -> {});
+    l.setBorder(b -> {
+        b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN);
+        b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN);
+    });
+};
+
+// Colonna con valore dalla mapValue
+sheet.addExtraColumnAnnotation("anno1", a -> {
+    a.setExcelColumn(c -> { c.setName("2015"); c.setIndex(20); });
+    a.setExcelCellLayout(doubleCellLayout);
+});
+
+// Colonna formula con subtotale e merge
+sheet.addExtraColumnAnnotation("totalePrezzoAnniAutore", a -> {
+    a.setExcelColumn(c -> { c.setName("Totale anni per Autore"); c.setIndex(22); });
+    a.setExcelCellLayout(doubleCellLayout);
+    a.setExcelFunction(f -> {
+        f.setFunction("sum(${totalePrezzoAnniRowStart}:${totalePrezzoAnniRowEnd})");
+        f.setNameFunction("totalePrezzoAnniAutore");
+        f.setAnotherTable(false);
+    });
+    a.setExcelMergeRow(m -> m.setReferenceField("matricola"));
+    a.setExcelColumnWidth(cw -> cw.setWidth(10));
+});
+
+// Dati di riga
+AutoreLibriRowDynamic row = new AutoreLibriRowDynamic("Mario", "Rossi", 1, 25.5, 3.0);
+row.addValue("anno1", 23.4);
+sheet.addRows(row);
+
+byte[] bytes = generateExcel.createFileXlsx(new ReportExcel("report", List.of(sheet)));
+```
+
+---
+
 ## Esempio Rapido
 
 ### Dati Statici — SalarySheet
@@ -903,12 +1147,14 @@ public class CensimentoSheet extends QuerySheetData<CensimentoRow> {
 | `com.bld.commons.check.annotation`    | Abilita la validazione delle annotazioni all'avvio (`true`/`false`) |
 | `com.bld.commons.date.format`         | Formato data globale (usato con `ColumnDateFormat.PARAMETER`)      |
 | `com.bld.commons.multiple.datasource` | Abilita il supporto a datasource multipli (`true`/`false`)         |
+| `bld.commons.sheet.password`          | Password globale di default per i fogli con `@ExcelLocked` senza valore esplicito (default: `""` — lock senza password) |
 
 ```yaml
 com.bld.commons:
   check.annotation: true
   date.format: dd/MM/yyyy
   multiple.datasource: false
+bld.commons.sheet.password: myGlobalPassword
 ```
 
 ---

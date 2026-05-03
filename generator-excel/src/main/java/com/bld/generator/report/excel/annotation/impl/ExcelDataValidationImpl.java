@@ -1,6 +1,7 @@
 package com.bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import com.bld.generator.report.excel.annotation.ExcelBoxMessage;
 import com.bld.generator.report.excel.annotation.ExcelDataValidation;
@@ -77,6 +78,36 @@ public class ExcelDataValidationImpl extends ExcelAnnotationImpl<ExcelDataValida
 	 */
 	public void setErrorBox(ExcelBoxMessage errorBox) {
 		this.errorBox = errorBox;
+	}
+
+	/**
+	 * Adds an {@link com.bld.generator.report.excel.annotation.ExcelFormulaAlias} to the alias array.
+	 *
+	 * @param consumer the alias configurator
+	 * @return this (for chaining inside a lambda)
+	 */
+	public ExcelDataValidationImpl addAlias(Consumer<ExcelFormulaAliasImpl> consumer) {
+		ExcelFormulaAliasImpl impl = new ExcelFormulaAliasImpl();
+		consumer.accept(impl);
+		if (this.alias == null) {
+			this.alias = new ExcelFormulaAlias[]{impl.getAnnotation()};
+		} else {
+			ExcelFormulaAlias[] updated = Arrays.copyOf(this.alias, this.alias.length + 1);
+			updated[updated.length - 1] = impl.getAnnotation();
+			this.alias = updated;
+		}
+		return this;
+	}
+
+	/**
+	 * Sets the error box via a configurator lambda.
+	 *
+	 * @param consumer the error box configurator
+	 */
+	public void setErrorBox(Consumer<ExcelBoxMessageImpl> consumer) {
+		ExcelBoxMessageImpl impl = new ExcelBoxMessageImpl();
+		consumer.accept(impl);
+		this.errorBox = impl.getAnnotation();
 	}
 
 	@Override

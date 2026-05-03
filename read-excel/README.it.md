@@ -9,7 +9,7 @@ Supporta lettura multi-foglio, fogli indicizzati per chiave, filtraggio personal
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -211,6 +211,87 @@ public class DataMeteoRow implements RowSheetRead {
 
 ---
 
+### `@ExcelBooleanText`
+
+Mappa il valore testuale di una cella a un campo `Boolean`. Si applica insieme a `@ExcelReadColumn` quando la colonna Excel contiene testo ("Sì"/"No", "Yes"/"No", "true"/"false", ecc.) invece di una cella booleana nativa.
+
+| Attributo  | Tipo     | Descrizione                                  |
+|------------|----------|----------------------------------------------|
+| `enable`   | `String` | Valore stringa che corrisponde a `true`       |
+| `disable`  | `String` | Valore stringa che corrisponde a `false`      |
+
+Il confronto è case-insensitive. Se il valore della cella non corrisponde né a `enable` né a `disable`, il campo viene impostato a `null`.
+
+```java
+public class EmployeeRow implements RowSheetRead {
+
+    @ExcelReadColumn(value = "Attivo")
+    @ExcelBooleanText(enable = "Sì", disable = "No")
+    private Boolean attivo;
+}
+```
+
+---
+
+### `@ExcelDate`
+
+Specifica il formato della data quando si legge un campo `Date` o `Calendar` da una cella stringa (richiede `ignoreCellTypeString = true` su `@ExcelReadColumn`).
+
+```java
+@ExcelReadColumn(value = "Data Assunzione")
+@ExcelDate(value = ColumnDateFormat.DD_MM_YYYY)
+private Date dataAssunzione;
+```
+
+---
+
+### `@CsvSettings`
+
+Applicata a livello di classe su un'implementazione `RowSheetRead` per configurare il parsing CSV.
+
+| Attributo           | Tipo       | Default | Descrizione                                         |
+|---------------------|------------|---------|-----------------------------------------------------|
+| `delimiter`         | `char`     | `','`   | Carattere delimitatore di colonna                   |
+| `skipHeaderRecord`  | `boolean`  | `true`  | Salta la prima riga (intestazione)                  |
+| `ignoreColumns`     | `String[]` | `{}`    | Nomi di colonne da ignorare durante il parsing      |
+| `parallel`          | `boolean`  | `false` | Analizza i record con uno stream parallelo          |
+
+```java
+@CsvSettings(skipHeaderRecord = true, delimiter = ',')
+public class EmployeeCsvRow implements RowSheetRead {
+
+    @ExcelReadColumn(value = "Nome")
+    private String nome;
+
+    @ExcelReadColumn(value = "Data Assunzione")
+    @CsvDate(value = ColumnDateFormat.DD_MM_YYYY)
+    private Date dataAssunzione;
+
+    @ExcelReadColumn(value = "Attivo")
+    private Boolean attivo;  // legge stringhe "true"/"false"
+}
+```
+
+---
+
+### `@CsvDate`
+
+Specifica il formato della data per un campo `Date` o `Calendar` in lettura da CSV. Separata da `@ExcelDate` perché il formato nel CSV può differire da quello Excel.
+
+| Attributo    | Tipo                | Default  | Descrizione                          |
+|--------------|---------------------|----------|--------------------------------------|
+| `value`      | `ColumnDateFormat`  | —        | Pattern del formato data             |
+| `separator`  | `String`            | `"/"`    | Carattere separatore nel pattern     |
+| `timezone`   | `String`            | `"UTC"`  | Fuso orario per il parsing           |
+
+```java
+@ExcelReadColumn(value = "Data Assunzione")
+@CsvDate(value = ColumnDateFormat.DD_MM_YYYY)
+private Date dataAssunzione;
+```
+
+---
+
 ## Tipi di Campo Supportati
 
 | Tipo Java    | Note                                                              |
@@ -236,6 +317,16 @@ public class DataMeteoRow implements RowSheetRead {
 |--------|--------------------------------|
 | `XLS`  | HSSF (`.xls`) — **predefinito** |
 | `XLSX` | XSSF (`.xlsx`)                 |
+
+---
+
+## Performance
+
+`ReadExcelImpl` e `ReadCsvImpl` utilizzano una `ConcurrentHashMap` statica con chiave la classe riga. Al primo utilizzo di una classe vengono eseguiti una sola volta la scansione dei campi, la risoluzione delle annotazioni (`@ExcelReadColumn`, `@ExcelBooleanText`, `@ExcelDate`, `@CsvDate`) e la ricerca dei setter; i risultati vengono memorizzati nella cache. Le letture successive della stessa classe non eseguono alcuna reflection.
+
+Inoltre, `BeanWrapperImpl` viene istanziato una sola volta per record (anziché per ogni campo), riducendo l'allocazione di oggetti su file di grandi dimensioni.
+
+La cache è condivisa per tutta la durata del contesto Spring ed è sicura per l'accesso concorrente.
 
 ---
 

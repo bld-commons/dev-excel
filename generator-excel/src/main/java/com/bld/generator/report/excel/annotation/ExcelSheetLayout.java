@@ -26,11 +26,17 @@ import java.lang.annotation.Target;
  * <li>StartRow - to set the row start</li>
  * <li>Order - to set index on sheets list</li>
  * <li>AreaBorder - to define the border areas</li>
- * <li>showHeader - to enable/disable the writing of the header</li>
+ * <li>ShowHeader - to enable/disable the writing of the header</li>
+ * <li>GroupRow - to enable row grouping</li>
+ * <li>GroupColumn - to enable column grouping</li>
+ * <li>Scale - to set the print scale percentage</li>
+ * <li>Hidden - to hide the sheet in the workbook</li>
  * </ul>
- * 
+ * To protect a sheet with a password use {@link com.bld.generator.report.excel.annotation.ExcelLocked}
+ * on the sheet class, or implement {@link com.bld.generator.report.excel.LockedSheet}.
+ *
  * It is used on {@link com.bld.generator.report.excel.SheetData} and {@link com.bld.generator.report.excel.SheetSummary} classes.
- * 
+ *
  */
 @Retention(RUNTIME)
 @Target({TYPE})
@@ -116,13 +122,6 @@ public @interface ExcelSheetLayout {
 	 * @return the paper size
 	 */
 	public short scale() default 100;
-	
-	/**
-	 * Locked.
-	 *
-	 * @return true, if successful
-	 */
-	public ExcelLocked locked() default @ExcelLocked(locked = false);
 	
 	/**
 	 * Hide.

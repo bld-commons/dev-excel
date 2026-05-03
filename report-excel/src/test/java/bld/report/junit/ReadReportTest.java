@@ -39,6 +39,11 @@ import bld.report.controller.entity.ReadGenereSheet;
 import bld.report.controller.input.ExcelModel;
 import bld.report.read.junit.entity.DataMeteoRow;
 import bld.report.read.junit.entity.DataMeteoSheet;
+import bld.report.read.junit.entity.ReadEmployeeCsvRow;
+import bld.report.read.junit.entity.ReadEmployeeRow;
+import bld.report.read.junit.entity.ReadEmployeeSheet;
+import bld.report.read.junit.entity.ReadProductRow;
+import bld.report.read.junit.entity.ReadProductSheet;
 import bld.report.read.junit.entity.RendicontazioneMassivaImportColumn;
 
 /**
@@ -95,11 +100,11 @@ public class ReadReportTest {
 		excelRead = this.readExcel.convertExcelToEntity(excelRead);
 		try {
 			ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class,sheetName);
-			for (ReadAutoreLibriRow row : sheet.getListRowSheet())
+			for (ReadAutoreLibriRow row : sheet.getRows())
 				System.out.println(row.toString());
 
 			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class,"Genere");
-			for (ReadGenereRow row : readGenereSheet.getListRowSheet())
+			for (ReadGenereRow row : readGenereSheet.getRows())
 				System.out.println(row.toString());
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -117,7 +122,7 @@ public class ReadReportTest {
 		excelRead=this.readExcel.convertExcelToEntity(excelRead);
 		Date end=new Date();
 		DataMeteoSheet sheet=excelRead.getSheet(DataMeteoSheet.class, "sheet");
-		for (DataMeteoRow row : sheet.getListRowSheet())
+		for (DataMeteoRow row : sheet.getRows())
 			logger.info(row.toString());
 		logger.info("row size: "+sheet.size());
 		logger.info("Time conversion: "+(end.getTime()-start.getTime())+"ms");
@@ -132,7 +137,7 @@ public class ReadReportTest {
 		userCsvRead.setCsv(report);
 		try {
 			this.readCsv.convertCsvToEntity(userCsvRead,RendicontazioneMassivaImportColumn.class);
-			logger.info("Size list: "+userCsvRead.getListRowSheet().size());
+			logger.info("Size list: "+userCsvRead.getRows().size());
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
 		}
@@ -166,6 +171,42 @@ public class ReadReportTest {
 		readExcelClient("http://localhost:8080/excel/excel-read");
 	}
 	
+	@Test
+	public void testReadEmployee() throws Exception {
+		ExcelRead excelRead = new ExcelRead();
+		excelRead.setReportExcel("/mnt/report/employees.xlsx");
+		excelRead.setExcelType(ExcelType.XLSX);
+		excelRead.addSheetConvertion(ReadEmployeeSheet.class, "Dipendenti");
+		excelRead.addSheetConvertion(ReadProductSheet.class, "Prodotti");
+		Date start = new Date();
+		excelRead = this.readExcel.convertExcelToEntity(excelRead);
+		Date end = new Date();
+		ReadEmployeeSheet employeeSheet = excelRead.getSheet(ReadEmployeeSheet.class, "Dipendenti");
+		ReadProductSheet productSheet = excelRead.getSheet(ReadProductSheet.class, "Prodotti");
+		logger.info("Dipendenti letti: " + employeeSheet.size());
+		logger.info("Prodotti letti: " + productSheet.size());
+		logger.info("Tempo lettura Excel: " + (end.getTime() - start.getTime()) + "ms");
+		for(ReadEmployeeRow row:employeeSheet.getRows()) 
+			logger.info(row);
+		for(ReadProductRow row:productSheet.getRows()) 
+			logger.info(row);
+		
+		
+		 end = new Date();
+		logger.info("Tempo print Excel: " + (end.getTime() - start.getTime()) + "ms");
+	}
+
+	@Test
+	public void testReadEmployeeCsv() throws Exception {
+		CsvRead<ReadEmployeeCsvRow> csvRead = new CsvRead<>();
+		csvRead.setCsv("/mnt/report/employees.csv");
+		Date start = new Date();
+		this.readCsv.convertCsvToEntity(csvRead, ReadEmployeeCsvRow.class);
+		Date end = new Date();
+		logger.info("Dipendenti CSV letti: " + csvRead.getRows().size());
+		logger.info("Tempo lettura CSV: " + (end.getTime() - start.getTime()) + "ms");
+	}
+
 	@Test
 	public void readFile() throws Exception{
 		FileInputStream inputStream = new FileInputStream("/mnt/report/inserimento-massivo-persona.xlsx");

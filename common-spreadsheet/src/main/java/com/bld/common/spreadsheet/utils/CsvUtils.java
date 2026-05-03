@@ -34,7 +34,7 @@ public class CsvUtils {
 	 */
 	public static CSVFormat getCsvFormat(CsvSettings csvSettings,String... headers) {
 		CSVFormat csvFormat = CSVFormat.DEFAULT;
-		csvFormat=csvFormat.builder().setDelimiter(csvSettings.delimiter()).setQuote(csvSettings.quoteChar()).setIgnoreEmptyLines(csvSettings.ignoreEmptyLines()).setTrim(csvSettings.trim()).setHeader(headers).setSkipHeaderRecord(csvSettings.skipHeaderRecord()).build();
+		csvFormat=csvFormat.builder().setDelimiter(csvSettings.delimiter()).setQuote(csvSettings.quoteChar()).setIgnoreEmptyLines(csvSettings.ignoreEmptyLines()).setTrim(csvSettings.trim()).setHeader(headers).setSkipHeaderRecord(csvSettings.skipHeaderRecord()).get();
 		return csvFormat;
 	}
 }

@@ -12,8 +12,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.bld.generator.report.excel.constant.ExcelConstant;
-
 
 /**
  * The Interface ExcelSummary.<br>
@@ -67,13 +65,13 @@ public @interface ExcelSummary {
 	 *
 	 * @return the int
 	 */
-	public int widthColumn1() default ExcelConstant.DEFAULT_WIDTH_COLUMN;
+	public int widthColumn1() default 5;
 	
 	/**
 	 * Width column 2.
 	 *
 	 * @return the int
 	 */
-	public int widthColumn2() default ExcelConstant.DEFAULT_WIDTH_COLUMN;
+	public int widthColumn2() default 5;
 	
 }

@@ -5,6 +5,8 @@
 */
 package com.bld.generator.report.excel.data;
 
+import java.util.function.Consumer;
+
 import com.bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -14,7 +16,9 @@ import com.bld.generator.report.excel.annotation.ExcelDataValidation;
 import com.bld.generator.report.excel.annotation.ExcelDropDown;
 import com.bld.generator.report.excel.annotation.ExcelFunction;
 import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
+import com.bld.generator.report.excel.annotation.ExcelImage;
 import com.bld.generator.report.excel.annotation.ExcelMergeRow;
+import com.bld.generator.report.excel.annotation.ExcelNumberFormat;
 import com.bld.generator.report.excel.annotation.ExcelSubtotal;
 import com.bld.generator.report.excel.annotation.impl.ExcelBooleanTextImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelCellLayoutImpl;
@@ -25,7 +29,9 @@ import com.bld.generator.report.excel.annotation.impl.ExcelDateImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelDropDownImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelFunctionImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelHeaderCellLayoutImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelImageImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelMergeRowImpl;
+import com.bld.generator.report.excel.annotation.impl.ExcelNumberFormatImpl;
 import com.bld.generator.report.excel.annotation.impl.ExcelSubtotalImpl;
 
 import jakarta.validation.constraints.NotNull;
@@ -78,6 +84,12 @@ public class ExtraColumnAnnotation {
 
 	/** The excel boolean text. */
 	private ExcelBooleanText excelBooleanText;
+
+	/** The excel number format. */
+	private ExcelNumberFormat excelNumberFormat;
+
+	/** The excel image. */
+	private ExcelImage excelImage;
 
 	/**
 	 * Sets the excel cell layout.
@@ -289,6 +301,415 @@ public class ExtraColumnAnnotation {
 	}
 
 	/**
+	 * Gets the excel number format.
+	 *
+	 * @return the excelNumberFormat
+	 */
+	public ExcelNumberFormat getExcelNumberFormat() {
+		return excelNumberFormat;
+	}
+
+	/**
+	 * Sets the excel number format.
+	 *
+	 * @param excelNumberFormat the new excel number format
+	 */
+	public void setExcelNumberFormat(ExcelNumberFormatImpl excelNumberFormat) {
+		if (excelNumberFormat != null)
+			this.excelNumberFormat = excelNumberFormat.getAnnotation();
+	}
+
+	/**
+	 * Gets the excel image.
+	 *
+	 * @return the excelImage
+	 */
+	public ExcelImage getExcelImage() {
+		return excelImage;
+	}
+
+	/**
+	 * Sets the excel image.
+	 *
+	 * @param excelImage the new excel image
+	 */
+	public void setExcelImage(ExcelImageImpl excelImage) {
+		if (excelImage != null)
+			this.excelImage = excelImage.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel cell layout via a configurator lambda.
+	 *
+	 * @param consumer the cell layout configurator
+	 */
+	public void setExcelCellLayout(Consumer<ExcelCellLayoutImpl> consumer) {
+		ExcelCellLayoutImpl impl = new ExcelCellLayoutImpl();
+		consumer.accept(impl);
+		this.excelCellLayout = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel column via a configurator lambda.
+	 *
+	 * @param consumer the column configurator
+	 */
+	public void setExcelColumn(Consumer<ExcelColumnImpl> consumer) {
+		ExcelColumnImpl impl = new ExcelColumnImpl();
+		consumer.accept(impl);
+		this.excelColumn = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel date via a configurator lambda.
+	 *
+	 * @param consumer the date configurator
+	 */
+	public void setExcelDate(Consumer<ExcelDateImpl> consumer) {
+		ExcelDateImpl impl = new ExcelDateImpl();
+		consumer.accept(impl);
+		this.excelDate = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel data validation via a configurator lambda.
+	 *
+	 * @param consumer the data validation configurator
+	 */
+	public void setExcelDataValidation(Consumer<ExcelDataValidationImpl> consumer) {
+		ExcelDataValidationImpl impl = new ExcelDataValidationImpl();
+		consumer.accept(impl);
+		this.excelDataValidation = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel column width via a configurator lambda.
+	 *
+	 * @param consumer the column width configurator
+	 */
+	public void setExcelColumnWidth(Consumer<ExcelColumnWidthImpl> consumer) {
+		ExcelColumnWidthImpl impl = new ExcelColumnWidthImpl();
+		consumer.accept(impl);
+		this.excelColumnWidth = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel merge row via a configurator lambda.
+	 *
+	 * @param consumer the merge row configurator
+	 */
+	public void setExcelMergeRow(Consumer<ExcelMergeRowImpl> consumer) {
+		ExcelMergeRowImpl impl = new ExcelMergeRowImpl();
+		consumer.accept(impl);
+		this.excelMergeRow = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel function via a configurator lambda.
+	 *
+	 * @param consumer the function configurator
+	 */
+	public void setExcelFunction(Consumer<ExcelFunctionImpl> consumer) {
+		ExcelFunctionImpl impl = new ExcelFunctionImpl();
+		consumer.accept(impl);
+		this.excelFunction = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel header cell layout via a configurator lambda.
+	 *
+	 * @param consumer the header cell layout configurator
+	 */
+	public void setExcelHeaderCellLayout(Consumer<ExcelHeaderCellLayoutImpl> consumer) {
+		ExcelHeaderCellLayoutImpl impl = new ExcelHeaderCellLayoutImpl();
+		consumer.accept(impl);
+		this.excelHeaderCellLayout = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel drop down via a configurator lambda.
+	 *
+	 * @param consumer the drop down configurator
+	 */
+	public void setExcelDropDown(Consumer<ExcelDropDownImpl> consumer) {
+		ExcelDropDownImpl impl = new ExcelDropDownImpl();
+		consumer.accept(impl);
+		this.excelDropDown = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel subtotal via a configurator lambda.
+	 *
+	 * @param consumer the subtotal configurator
+	 */
+	public void setExcelSubtotal(Consumer<ExcelSubtotalImpl> consumer) {
+		ExcelSubtotalImpl impl = new ExcelSubtotalImpl();
+		consumer.accept(impl);
+		this.excelSubtotal = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel boolean text via a configurator lambda.
+	 *
+	 * @param consumer the boolean text configurator
+	 */
+	public void setExcelBooleanText(Consumer<ExcelBooleanTextImpl> consumer) {
+		ExcelBooleanTextImpl impl = new ExcelBooleanTextImpl();
+		consumer.accept(impl);
+		this.excelBooleanText = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel number format via a configurator lambda.
+	 *
+	 * @param consumer the number format configurator
+	 */
+	public void setExcelNumberFormat(Consumer<ExcelNumberFormatImpl> consumer) {
+		ExcelNumberFormatImpl impl = new ExcelNumberFormatImpl();
+		consumer.accept(impl);
+		this.excelNumberFormat = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the excel image via a configurator lambda.
+	 *
+	 * @param consumer the image configurator
+	 */
+	public void setExcelImage(Consumer<ExcelImageImpl> consumer) {
+		ExcelImageImpl impl = new ExcelImageImpl();
+		consumer.accept(impl);
+		this.excelImage = impl.getAnnotation();
+	}
+
+	/**
+	 * Creates a new {@link Builder} starting from the cell layout configuration.
+	 *
+	 * @param consumer the cell layout configurator
+	 * @return the builder
+	 */
+	public static Builder cellLayout(Consumer<ExcelCellLayoutImpl> consumer) {
+		return new Builder().cellLayout(consumer);
+	}
+
+	/**
+	 * Creates a new {@link Builder} starting from the column configuration.
+	 *
+	 * @param consumer the column configurator
+	 * @return the builder
+	 */
+	public static Builder column(Consumer<ExcelColumnImpl> consumer) {
+		return new Builder().column(consumer);
+	}
+
+	/**
+	 * The Class Builder.<br>
+	 * Fluent builder for {@link ExtraColumnAnnotation}.<br>
+	 * {@code excelColumn} and {@code excelCellLayout} are required; all other fields are optional.
+	 *
+	 * <pre>
+	 * ExtraColumnAnnotation annotation = ExtraColumnAnnotation
+	 *     .cellLayout(layout -&gt; {
+	 *         layout.setPrecision(2);
+	 *         layout.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+	 *     })
+	 *     .column(col -&gt; {
+	 *         col.setName("Prezzo");
+	 *         col.setIndex(5);
+	 *     })
+	 *     .dateFormat(date -&gt; date.setValue("dd/MM/yyyy"))
+	 *     .build();
+	 * </pre>
+	 */
+	public static class Builder {
+
+		/** The target. */
+		private final ExtraColumnAnnotation target = new ExtraColumnAnnotation();
+
+		/**
+		 * Cell layout.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder cellLayout(Consumer<ExcelCellLayoutImpl> consumer) {
+			ExcelCellLayoutImpl impl = new ExcelCellLayoutImpl();
+			consumer.accept(impl);
+			target.setExcelCellLayout(impl);
+			return this;
+		}
+
+		/**
+		 * Column.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder column(Consumer<ExcelColumnImpl> consumer) {
+			ExcelColumnImpl impl = new ExcelColumnImpl();
+			consumer.accept(impl);
+			target.setExcelColumn(impl);
+			return this;
+		}
+
+		/**
+		 * Date format.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder dateFormat(Consumer<ExcelDateImpl> consumer) {
+			ExcelDateImpl impl = new ExcelDateImpl();
+			consumer.accept(impl);
+			target.setExcelDate(impl);
+			return this;
+		}
+
+		/**
+		 * Column width.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder columnWidth(Consumer<ExcelColumnWidthImpl> consumer) {
+			ExcelColumnWidthImpl impl = new ExcelColumnWidthImpl();
+			consumer.accept(impl);
+			target.setExcelColumnWidth(impl);
+			return this;
+		}
+
+		/**
+		 * Header cell layout.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder headerCellLayout(Consumer<ExcelHeaderCellLayoutImpl> consumer) {
+			ExcelHeaderCellLayoutImpl impl = new ExcelHeaderCellLayoutImpl();
+			consumer.accept(impl);
+			target.setExcelHeaderCellLayout(impl);
+			return this;
+		}
+
+		/**
+		 * Merge row.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder mergeRow(Consumer<ExcelMergeRowImpl> consumer) {
+			ExcelMergeRowImpl impl = new ExcelMergeRowImpl();
+			consumer.accept(impl);
+			target.setExcelMergeRow(impl);
+			return this;
+		}
+
+		/**
+		 * Function.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder function(Consumer<ExcelFunctionImpl> consumer) {
+			ExcelFunctionImpl impl = new ExcelFunctionImpl();
+			consumer.accept(impl);
+			target.setExcelFunction(impl);
+			return this;
+		}
+
+		/**
+		 * Drop down.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder dropDown(Consumer<ExcelDropDownImpl> consumer) {
+			ExcelDropDownImpl impl = new ExcelDropDownImpl();
+			consumer.accept(impl);
+			target.setExcelDropDown(impl);
+			return this;
+		}
+
+		/**
+		 * Subtotal.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder subtotal(Consumer<ExcelSubtotalImpl> consumer) {
+			ExcelSubtotalImpl impl = new ExcelSubtotalImpl();
+			consumer.accept(impl);
+			target.setExcelSubtotal(impl);
+			return this;
+		}
+
+		/**
+		 * Boolean text.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder booleanText(Consumer<ExcelBooleanTextImpl> consumer) {
+			ExcelBooleanTextImpl impl = new ExcelBooleanTextImpl();
+			consumer.accept(impl);
+			target.setExcelBooleanText(impl);
+			return this;
+		}
+
+		/**
+		 * Data validation.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder dataValidation(Consumer<ExcelDataValidationImpl> consumer) {
+			ExcelDataValidationImpl impl = new ExcelDataValidationImpl();
+			consumer.accept(impl);
+			target.setExcelDataValidation(impl);
+			return this;
+		}
+
+		/**
+		 * Number format.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder numberFormat(Consumer<ExcelNumberFormatImpl> consumer) {
+			ExcelNumberFormatImpl impl = new ExcelNumberFormatImpl();
+			consumer.accept(impl);
+			target.setExcelNumberFormat(impl);
+			return this;
+		}
+
+		/**
+		 * Image.
+		 *
+		 * @param consumer the consumer
+		 * @return the builder
+		 */
+		public Builder image(Consumer<ExcelImageImpl> consumer) {
+			ExcelImageImpl impl = new ExcelImageImpl();
+			consumer.accept(impl);
+			target.setExcelImage(impl);
+			return this;
+		}
+
+		/**
+		 * Builds the {@link ExtraColumnAnnotation}.<br>
+		 * Throws {@link IllegalStateException} if {@code excelColumn} or {@code excelCellLayout} are not set.
+		 *
+		 * @return the extra column annotation
+		 */
+		public ExtraColumnAnnotation build() {
+			if (target.excelColumn == null)
+				throw new IllegalStateException("excelColumn is required");
+			if (target.excelCellLayout == null)
+				throw new IllegalStateException("excelCellLayout is required");
+			return target;
+		}
+	}
+
+	/**
 	 * Hash code.
 	 *
 	 * @return the int
@@ -304,7 +725,9 @@ public class ExtraColumnAnnotation {
 		result = prime * result + ((excelDropDown == null) ? 0 : excelDropDown.hashCode());
 		result = prime * result + ((excelFunction == null) ? 0 : excelFunction.hashCode());
 		result = prime * result + ((excelHeaderCellLayout == null) ? 0 : excelHeaderCellLayout.hashCode());
+		result = prime * result + ((excelImage == null) ? 0 : excelImage.hashCode());
 		result = prime * result + ((excelMergeRow == null) ? 0 : excelMergeRow.hashCode());
+		result = prime * result + ((excelNumberFormat == null) ? 0 : excelNumberFormat.hashCode());
 		result = prime * result + ((excelSubtotal == null) ? 0 : excelSubtotal.hashCode());
 		return result;
 	}
@@ -359,10 +782,20 @@ public class ExtraColumnAnnotation {
 				return false;
 		} else if (!excelHeaderCellLayout.equals(other.excelHeaderCellLayout))
 			return false;
+		if (excelImage == null) {
+			if (other.excelImage != null)
+				return false;
+		} else if (!excelImage.equals(other.excelImage))
+			return false;
 		if (excelMergeRow == null) {
 			if (other.excelMergeRow != null)
 				return false;
 		} else if (!excelMergeRow.equals(other.excelMergeRow))
+			return false;
+		if (excelNumberFormat == null) {
+			if (other.excelNumberFormat != null)
+				return false;
+		} else if (!excelNumberFormat.equals(other.excelNumberFormat))
 			return false;
 		if (excelSubtotal == null) {
 			if (other.excelSubtotal != null)

@@ -26,16 +26,16 @@ This project provides two libraries built on top of Apache POI to simplify the g
 ```xml
 <!-- Excel / CSV Generator -->
 <dependency>
-    <groupId>com.github.bld-commons</groupId>
+    <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 
 <!-- Excel / CSV Reader -->
 <dependency>
-    <groupId>com.github.bld-commons</groupId>
+    <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -86,6 +86,7 @@ Add one of the following annotations to your Spring Boot configuration class or 
 | `@ExcelSuperHeaders` | Class | Adds a merged header row above the regular header |
 | `@ExcelDataValidation` | Field | Adds dropdown list validation |
 | `@ExcelQuery` | Class | Populates rows from a native SQL or JPQL query |
+| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Class | Adds computed formula columns entirely via annotation; `${fieldName}` placeholders resolve to cell addresses |
 
 ### Generation Methods
 
@@ -133,10 +134,16 @@ Add one of the following annotations to your Spring Boot configuration class or 
 |---|---|---|
 | `@ExcelReadSheet` | Class | Configures sheet name, start row and start column |
 | `@ExcelReadColumn` | Field | Maps a field to an Excel column header name |
+| `@ExcelBooleanText` | Field | Maps a string cell ("Sì"/"No", "Yes"/"No", …) to a `Boolean` field |
+| `@ExcelDate` | Field | Specifies the date format when reading string cells |
+| `@CsvSettings` | Class | Configures CSV parsing (delimiter, header skip, parallel mode) |
+| `@CsvDate` | Field | Specifies the date format for CSV date columns |
 
 ### Supported Field Types
 
 `String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
+
+> **Performance:** per-class metadata is cached in a `ConcurrentHashMap` after the first read; subsequent reads of the same class incur zero reflection overhead.
 
 ---
 
@@ -191,8 +198,8 @@ See the module-specific READMEs for full annotated examples:
 
 ## Javadoc
 
-- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
-- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html)
 
 ---
 
@@ -224,16 +231,16 @@ Questo progetto fornisce due librerie basate su Apache POI per semplificare la g
 ```xml
 <!-- Generazione Excel / CSV -->
 <dependency>
-    <groupId>com.github.bld-commons</groupId>
+    <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 
 <!-- Lettura Excel / CSV -->
 <dependency>
-    <groupId>com.github.bld-commons</groupId>
+    <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.3</version>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -377,8 +384,8 @@ Vedere i README dei singoli moduli per esempi completi e annotati:
 
 ## Javadoc
 
-- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/generator-excel/latest/index.html)
-- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons/read-excel/latest/index.html)
+- [generator-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel/latest/index.html)
+- [read-excel Javadoc](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel/latest/index.html)
 
 ---
 

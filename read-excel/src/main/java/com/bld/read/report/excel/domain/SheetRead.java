@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Size;
  * </p>
  * <p>
  * After {@link com.bld.read.report.excel.ReadExcel#convertExcelToEntity(ExcelRead)} completes,
- * the parsed rows are available via {@link #getListRowSheet()}.
+ * the parsed rows are available via {@link #getRows()}.
  * Override {@link #filtered(Object)} to apply custom row-level filtering during parsing.
  * </p>
  *
@@ -36,7 +36,7 @@ import jakarta.validation.constraints.Size;
 public abstract class SheetRead<T extends RowSheetRead> {
 
 	/** The list row sheet. */
-	private List<T> listRowSheet;
+	private List<T> rows;
 
 	/** The sheet name. */
 	@NotNull
@@ -49,7 +49,7 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 */
 	public SheetRead(@Size(max = SpreadsheetUtils.SHEET_NAME_SIZE) String sheetName) {
 		super();
-		this.listRowSheet = new ArrayList<>();
+		this.rows = new ArrayList<>();
 		this.sheetName = sheetName;
 	}
 
@@ -58,8 +58,8 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 *
 	 * @return the list row sheet
 	 */
-	public List<T> getListRowSheet() {
-		return listRowSheet;
+	public List<T> getRows() {
+		return rows;
 	}
 
 	/**
@@ -68,8 +68,8 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 * @return the row count, or {@code 0} if the list is empty
 	 */
 	public int size() {
-		if(CollectionUtils.isNotEmpty(this.listRowSheet))
-			return this.listRowSheet.size();
+		if(CollectionUtils.isNotEmpty(this.rows))
+			return this.rows.size();
 		return 0;
 	}
 	
@@ -79,9 +79,9 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	 * @param t the row entity to add
 	 * @throws Exception if an error occurs during the addition (e.g. in {@link MapSheetRead})
 	 */
-	public void addRowSheet(T t) throws Exception {
+	public void addRow(T t) throws Exception {
 		if (this.filtered(t))
-			this.listRowSheet.add(t);
+			this.rows.add(t);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public abstract class SheetRead<T extends RowSheetRead> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((listRowSheet == null) ? 0 : listRowSheet.hashCode());
+		result = prime * result + ((rows == null) ? 0 : rows.hashCode());
 		result = prime * result + ((sheetName == null) ? 0 : sheetName.hashCode());
 		return result;
 	}
@@ -142,10 +142,10 @@ public abstract class SheetRead<T extends RowSheetRead> {
 		if (getClass() != obj.getClass())
 			return false;
 		SheetRead<?> other = (SheetRead<?>) obj;
-		if (listRowSheet == null) {
-			if (other.listRowSheet != null)
+		if (rows == null) {
+			if (other.rows != null)
 				return false;
-		} else if (!listRowSheet.equals(other.listRowSheet))
+		} else if (!rows.equals(other.rows))
 			return false;
 		if (sheetName == null) {
 			if (other.sheetName != null)

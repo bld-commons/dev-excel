@@ -7,6 +7,7 @@ package bld.generator.report.junit.entity;
 
 import jakarta.validation.constraints.Size;
 
+import com.bld.generator.report.excel.LockedSheet;
 import com.bld.generator.report.excel.SheetData;
 import com.bld.generator.report.excel.annotation.ExcelHeaderLayout;
 import com.bld.generator.report.excel.annotation.ExcelMarginSheet;
@@ -18,7 +19,7 @@ import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 @ExcelSheetLayout
 @ExcelHeaderLayout
 @ExcelMarginSheet(bottom = 1.5,left = 1.5,right = 1.5,top = 1.5)
-public class DateSheet extends SheetData<DateRow> {
+public class DateSheet extends SheetData<DateRow> implements LockedSheet {
 
 	/**
 	 * Instantiates a new date sheet.
@@ -29,5 +30,9 @@ public class DateSheet extends SheetData<DateRow> {
 		super(nameSheet);
 	}
 
+	@Override
+	public String password() {
+		return "abc";
+	}
 
 }

@@ -122,11 +122,11 @@ public class ReportTestMultipleDataSource {
 		ReadAutoreLibriSheet sheet;
 		try {
 			sheet = excelRead.getSheet(ReadAutoreLibriSheet.class,"Libri d'autore");
-			for(ReadAutoreLibriRow row:sheet.getListRowSheet()) 
+			for(ReadAutoreLibriRow row:sheet.getRows()) 
 				System.out.println(row.toString());
 			
 			ReadGenereSheet readGenereSheet = excelRead.getSheet(ReadGenereSheet.class,"Genere");
-			for(ReadGenereRow row:readGenereSheet.getListRowSheet()) 
+			for(ReadGenereRow row:readGenereSheet.getRows()) 
 				System.out.println(row.toString());
 		} catch (Exception e) {
 			ExceptionUtils.getStackTrace(e);
