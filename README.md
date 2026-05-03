@@ -28,14 +28,14 @@ This project provides two libraries built on top of Apache POI to simplify the g
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 
 <!-- Excel / CSV Reader -->
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -233,14 +233,14 @@ Questo progetto fornisce due librerie basate su Apache POI per semplificare la g
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 
 <!-- Lettura Excel / CSV -->
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 

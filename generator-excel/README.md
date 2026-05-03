@@ -147,7 +147,7 @@ public byte[] export(List<EmployeeRow> employees) throws Exception {
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 

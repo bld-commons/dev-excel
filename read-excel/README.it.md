@@ -9,7 +9,7 @@ Supporta lettura multi-foglio, fogli indicizzati per chiave, filtraggio personal
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 

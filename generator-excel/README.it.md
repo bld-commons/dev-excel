@@ -9,7 +9,7 @@ Supporta dati statici, dati da query JPA, grafici, tabelle pivot, immagini, subt
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
