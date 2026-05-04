@@ -35,8 +35,13 @@ public @interface ExcelDate {
 	 * @return the column date format
 	 */
 	public ColumnDateFormat value() default ColumnDateFormat.DD_MM_YYYY;
-	
-	
-	
-	
+
+	/**
+	 * Timezone.
+	 *
+	 * @return the timezone id string
+	 */
+	public String timezone() default "${spring.jackson.time-zone:}";
+
+
 }

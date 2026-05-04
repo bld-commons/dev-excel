@@ -5,70 +5,49 @@
 */
 package com.bld.generator.report.excel.impl;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HSSFComment;
-import org.apache.poi.sl.usermodel.PictureData.PictureType;
-import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFPivotTable;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bld.common.spreadsheet.constant.RowStartEndType;
 import com.bld.common.spreadsheet.exception.ExcelGeneratorException;
 import com.bld.common.spreadsheet.utils.ExcelUtils;
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
 import com.bld.common.spreadsheet.utils.ValueProps;
-import com.bld.generator.report.comparator.PivotColumnComparator;
-import com.bld.generator.report.comparator.PivotColumnFunctionComparator;
-import com.bld.generator.report.comparator.PivotRowComparator;
 import com.bld.generator.report.comparator.SheetColumnComparator;
 import com.bld.generator.report.excel.BaseSheet;
 import com.bld.generator.report.excel.DynamicColumn;
@@ -81,18 +60,8 @@ import com.bld.generator.report.excel.annotation.ExcelBoxMessage;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
 import com.bld.generator.report.excel.annotation.ExcelColumn;
 import com.bld.generator.report.excel.annotation.ExcelDataValidation;
-import com.bld.generator.report.excel.annotation.ExcelDropDown;
 import com.bld.generator.report.excel.annotation.ExcelFunction;
-import com.bld.generator.report.excel.annotation.ExcelFunctionMergeRow;
-import com.bld.generator.report.excel.annotation.ExcelFunctionRow;
-import com.bld.generator.report.excel.annotation.ExcelFunctionRows;
 import com.bld.generator.report.excel.annotation.ExcelHeaderCellLayout;
-import com.bld.generator.report.excel.annotation.ExcelImage;
-import com.bld.generator.report.excel.annotation.ExcelPivot;
-import com.bld.generator.report.excel.annotation.ExcelPivotColumn;
-import com.bld.generator.report.excel.annotation.ExcelPivotColumnFunction;
-import com.bld.generator.report.excel.annotation.ExcelPivotFilter;
-import com.bld.generator.report.excel.annotation.ExcelPivotRow;
 import com.bld.generator.report.excel.annotation.ExcelRowHeight;
 import com.bld.generator.report.excel.annotation.ExcelSheetLayout;
 import com.bld.generator.report.excel.annotation.ExcelSummary;
@@ -107,7 +76,6 @@ import com.bld.generator.report.excel.data.KeyParameterAlias;
 import com.bld.generator.report.excel.data.LayoutCell;
 import com.bld.generator.report.excel.data.MergeCell;
 import com.bld.generator.report.excel.data.SheetHeader;
-import com.bld.generator.report.excel.dropdown.BoxMessage;
 import com.bld.generator.report.excel.dropdown.DropDown;
 import com.bld.generator.report.excel.sheet_mapping.SheetMappingSheet;
 import com.bld.generator.report.excel.utility.ExcelBuildFunctionUtility;
@@ -117,13 +85,6 @@ import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
  * The Class SuperGenerateExcelImpl.
  */
 public abstract class SuperGenerateExcelImpl {
-
-	/** The Constant PATTERN. */
-	private static final String PATTERN = "\\$\\{.*?}";
-
-	private static final Map<Class<?>, List<SheetHeader>> SHEET_HEADER_TEMPLATE_CACHE = new ConcurrentHashMap<>();
-
-	// private static final String PATTERN_QUAD = "\\[.*?\\]";
 
 	/** The merge calcolo cells. */
 	protected CellStyle mergeCalcoloCells = null;
@@ -157,102 +118,55 @@ public abstract class SuperGenerateExcelImpl {
 
 	protected SheetMappingSheet sheetMapping;
 
-	@Autowired
 	protected ExcelLayoutUtility excelLayoutUtility;
 
 	/** The value props. */
-	@Autowired
 	protected ValueProps valueProps;
+
+	/** The excel image manager. */
+	protected ExcelImageManager excelImageManager;
+
+	/** The excel drop down builder. */
+	protected ExcelDropDownBuilder excelDropDownBuilder;
+
+	/** The excel pivot builder. */
+	protected ExcelPivotBuilder excelPivotBuilder;
+
+	/** The excel sheet header builder. */
+	protected ExcelSheetHeaderBuilder excelSheetHeaderBuilder;
 
 	/**
 	 * Instantiates a new super generate excel impl.
+	 *
+	 * @param excelLayoutUtility      the excel layout utility
+	 * @param valueProps              the value props
+	 * @param excelImageManager       the excel image manager
+	 * @param excelDropDownBuilder    the excel drop down builder
+	 * @param excelPivotBuilder       the excel pivot builder
+	 * @param excelSheetHeaderBuilder the excel sheet header builder
 	 */
-	public SuperGenerateExcelImpl() {
-		super();
+	protected SuperGenerateExcelImpl(ExcelLayoutUtility excelLayoutUtility, ValueProps valueProps,
+			ExcelImageManager excelImageManager, ExcelDropDownBuilder excelDropDownBuilder,
+			ExcelPivotBuilder excelPivotBuilder, ExcelSheetHeaderBuilder excelSheetHeaderBuilder) {
+		this.excelLayoutUtility = excelLayoutUtility;
+		this.valueProps = valueProps;
+		this.excelImageManager = excelImageManager;
+		this.excelDropDownBuilder = excelDropDownBuilder;
+		this.excelPivotBuilder = excelPivotBuilder;
+		this.excelSheetHeaderBuilder = excelSheetHeaderBuilder;
 	}
 
 	/**
 	 * Gets the list sheet header.
 	 *
-	 * @param classRow the class row
-	 * @param entity   the entity
-	 * @param sheet    the sheet
+	 * @param classRow  the class row
+	 * @param baseSheet the base sheet
+	 * @param sheet     the sheet
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
 	protected List<SheetHeader> getListSheetHeader(Class<?> classRow, BaseSheet baseSheet, Sheet sheet) throws Exception {
-		logger.debug("Row: " + classRow.getSimpleName());
-		if (baseSheet != null)
-			return buildSheetHeaderList(classRow, baseSheet);
-		List<SheetHeader> cached = SHEET_HEADER_TEMPLATE_CACHE.get(classRow);
-		if (cached != null)
-			return cloneSheetHeaderList(cached);
-		List<SheetHeader> listSheetHeader = buildSheetHeaderList(classRow, null);
-		SHEET_HEADER_TEMPLATE_CACHE.put(classRow, Collections.unmodifiableList(listSheetHeader));
-		return listSheetHeader;
-	}
-
-	private List<SheetHeader> buildSheetHeaderList(Class<?> classRow, BaseSheet baseSheet) throws Exception {
-		Set<String> listTitle = new HashSet<>();
-		List<SheetHeader> listSheetHeader = new ArrayList<>();
-		Set<Field> listField = SpreadsheetUtils.getListField(classRow);
-		for (Field field : listField) {
-			ExcelColumn column = field.getAnnotation(ExcelColumn.class);
-			if (column != null && !column.ignore()) {
-				Object value = null;
-				if (baseSheet != null)
-					value = new BeanWrapperImpl(baseSheet).getPropertyValue(field.getName());
-				SheetHeader sheetHeader = new SheetHeader(field, value);
-				if (value != null) {
-					value = manageExcelImage(sheetHeader, value);
-					sheetHeader.setValue(value);
-				}
-
-				if (field.isAnnotationPresent(ExcelDropDown.class) && field.getClass().isAssignableFrom(DropDown.class))
-					throw new ExcelGeneratorException("The following annotation @ExcelDropDown can not be assigned on fields of classes type DropDown");
-				if (field.isAnnotationPresent(ExcelDropDown.class))
-					sheetHeader.setExcelDropDown(field.getAnnotation(ExcelDropDown.class));
-				listSheetHeader.add(sheetHeader);
-				if (listTitle.contains(column.name()))
-					logger.warn("Exist another equal column with columnName= \"" + column.name() + "\" for the same sheet!!!");
-				listTitle.add(column.name());
-			}
-		}
-		if (classRow.isAnnotationPresent(ExcelFunctionRows.class)) {
-			ExcelFunctionRows excelFunctionRows = classRow.getAnnotation(ExcelFunctionRows.class);
-			for (ExcelFunctionRow excelFunction : excelFunctionRows.excelFunctions()) {
-				SheetHeader sheetHeader = new SheetHeader();
-				sheetHeader.setExcelColumn(excelFunction.excelColumn());
-				sheetHeader.setExcelCellLayout(excelFunction.excelCellsLayout());
-				sheetHeader.setExcelFunction(excelFunction.excelFunction());
-				sheetHeader.setExcelColumnWidth(excelFunction.excelColumnWidth());
-				sheetHeader.setExcelHeaderCellLayout(excelFunction.excelHeaderCellLayout());
-				sheetHeader.setExcelSubtotal(excelFunction.excelSubtotal());
-				sheetHeader.setExcelNumberFormat(excelFunction.excelNumberFormat());
-				listSheetHeader.add(sheetHeader);
-			}
-			for (ExcelFunctionMergeRow excelFunctionMerge : excelFunctionRows.excelFunctionMerges()) {
-				SheetHeader sheetHeader = new SheetHeader();
-				sheetHeader.setExcelColumn(excelFunctionMerge.excelColumn());
-				sheetHeader.setExcelCellLayout(excelFunctionMerge.excelCellsLayout());
-				sheetHeader.setExcelFunction(excelFunctionMerge.excelFunction());
-				sheetHeader.setExcelMergeRow(excelFunctionMerge.excelMergeRow());
-				sheetHeader.setExcelColumnWidth(excelFunctionMerge.excelColumnWidth());
-				sheetHeader.setExcelHeaderCellLayout(excelFunctionMerge.excelHeaderCellLayout());
-				sheetHeader.setExcelSubtotal(excelFunctionMerge.excelSubtotal());
-				sheetHeader.setExcelNumberFormat(excelFunctionMerge.excelNumberFormat());
-				listSheetHeader.add(sheetHeader);
-			}
-		}
-		Collections.sort(listSheetHeader, new SheetColumnComparator(this.valueProps));
-		return listSheetHeader;
-	}
-
-	private List<SheetHeader> cloneSheetHeaderList(List<SheetHeader> source) throws CloneNotSupportedException {
-		List<SheetHeader> result = new ArrayList<>(source.size());
-		for (SheetHeader sheetHeader : source)
-			result.add((SheetHeader) sheetHeader.clone());
-		return result;
+		return excelSheetHeaderBuilder.getListSheetHeader(classRow, baseSheet);
 	}
 
 	/**
@@ -268,10 +182,7 @@ public abstract class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected boolean setCellValueWillMerged(Workbook workbook, CellStyle cellStyle, Cell cell, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
-		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet); // writeCellEmpty(workbook,
-		// cellStyle,
-		// cell,
-		// sheetHeader);
+		this.setCellValueExcel(workbook, cell, cellStyle, sheetHeader, indexRow, sheet);
 		return false;
 	}
 
@@ -304,7 +215,7 @@ public abstract class SuperGenerateExcelImpl {
 	 */
 	protected void mergeRow(Workbook workbook, Sheet sheet, Integer indexRow, Map<Integer, MergeCell> mapMergeRow, int numColumn, FormulaEvaluator formulaEvaluator) throws Exception {
 		MergeCell mergeRow = mapMergeRow.get(numColumn);
-		this.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn, indexRow);
+		this.excelDropDownBuilder.manageDropDown(sheet, mergeRow.getSheetHeader(), mergeRow.getRowStart(), mergeRow.getRowStart(), numColumn, numColumn, indexRow, this.listDropDown, this.mapFieldColumn, this.mapSheet);
 		mergeRow.setRowEnd(indexRow - 1);
 		runMergeCell(workbook, sheet, mergeRow, formulaEvaluator);
 	}
@@ -377,16 +288,11 @@ public abstract class SuperGenerateExcelImpl {
 		if (StringUtils.isNotBlank(sheetHeader.getExcelColumn().comment()))
 			addComment(workbook, sheet, row, cellColumn0, sheetHeader.getExcelColumn().comment());
 		ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
-//		ExcelDate excelDate = null;
-//		if (sheetHeader.getField() != null && (Date.class.isAssignableFrom(sheetHeader.getField().getType()) || Calendar.class.isAssignableFrom(sheetHeader.getField().getType()) || Timestamp.class.isAssignableFrom(sheetHeader.getField().getType())))
-//			excelDate = sheetHeader.getExcelDate();
 		CellStyle cellStyleColumn1 = this.excelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, indexRow);
 		int column = excelSheetLayout.startColumn() + 1;
 		Cell cellColumn1 = row.createCell(column);
-		manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column, indexRow);
+		this.excelDropDownBuilder.manageDropDown(sheet, sheetHeader, indexRow, indexRow, column, column, indexRow, this.listDropDown, this.mapFieldColumn, this.mapSheet);
 		setCellValueExcel(workbook, sheet, cellColumn1, cellStyleColumn1, sheetHeader, cellColumn1.getRowIndex(), formulaEvaluator);
-		// setCellValueExcel(workbook, cellColumn1, cellStyleColumn1, sheetHeader);
-
 	}
 
 	/**
@@ -445,13 +351,17 @@ public abstract class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setCellFormula(Cell cell, CellStyle cellStyle, SheetHeader sheetHeader, Integer indexRow, Sheet sheet) throws Exception {
-		
+
 
 		LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
 		this.excelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell, this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		Map<String, KeyParameterAlias> mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelFunction.alias());
+		Map<String, KeyParameterAlias> mapExcelFormulaAlias = sheetHeader.getMapFormulaAlias();
+		if (mapExcelFormulaAlias == null) {
+			mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelFunction.alias());
+			sheetHeader.setMapFormulaAlias(mapExcelFormulaAlias);
+		}
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, function, RowStartEndType.ROW_EMPTY, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
 		if (excelFunction.anotherTable()) {
 			function = ExcelBuildFunctionUtility.buildFunction(sheet, null, function, RowStartEndType.ROW_START, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
@@ -465,7 +375,7 @@ public abstract class SuperGenerateExcelImpl {
 		logger.debug("Function: " + function);
 		if (StringUtils.isNotEmpty(function))
 			cell.setCellFormula(function);
-		
+
 	}
 
 	/**
@@ -522,7 +432,11 @@ public abstract class SuperGenerateExcelImpl {
 		this.excelLayoutUtility.setCellStyleExcel(cellStyle, cell, layoutCell, this.mapCellStyle);
 		ExcelFunction excelFunction = sheetHeader.getExcelFunction();
 		String function = excelFunction.function();
-		Map<String, KeyParameterAlias> mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelFunction.alias());
+		Map<String, KeyParameterAlias> mapExcelFormulaAlias = sheetHeader.getMapFormulaAlias();
+		if (mapExcelFormulaAlias == null) {
+			mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelFunction.alias());
+			sheetHeader.setMapFormulaAlias(mapExcelFormulaAlias);
+		}
 		function = ExcelBuildFunctionUtility.buildFunction(sheet, mergeRow.getRowStart(), function, RowStartEndType.ROW_EMPTY, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
 		if (excelFunction.anotherTable()) {
 			function = ExcelBuildFunctionUtility.buildFunction(sheet, null, function, RowStartEndType.ROW_START, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
@@ -536,16 +450,6 @@ public abstract class SuperGenerateExcelImpl {
 		cell.setCellFormula(function);
 		return cell;
 	}
-
-//	private void formatCell(SheetHeader sheetHeader,Cell cell) {
-//		if(sheetHeader.getValue()==null && String.class.isAssignableFrom(sheetHeader.getField().getType())) {
-//			DataFormatter formatter=new DataFormatter();
-//			//formatter.formatCellValue(cell);
-//			formatter.getDefaultFormat(cell);
-//			cell.setCellType(CellType.STRING);
-//		}
-//		
-//	}
 
 	private void dataValidation(Sheet sheet, Cell cell, SheetHeader sheetHeader) throws Exception {
 		if (sheetHeader.getExcelDataValidation() != null) {
@@ -593,7 +497,18 @@ public abstract class SuperGenerateExcelImpl {
 			cell.setCellValue((Calendar) sheetHeader.getValue());
 		else if (sheetHeader.getValue() instanceof Timestamp)
 			cell.setCellValue(new Date(((Timestamp) sheetHeader.getValue()).getTime()));
-		else if (sheetHeader.getValue() instanceof String || sheetHeader.getValue() instanceof Character) {
+		else if (sheetHeader.getValue() instanceof LocalDate) {
+			ZoneId zone = SpreadsheetUtils.resolveZone(sheetHeader.getExcelDate(), this.valueProps);
+			cell.setCellValue(Date.from(((LocalDate) sheetHeader.getValue()).atStartOfDay(zone).toInstant()));
+		} else if (sheetHeader.getValue() instanceof LocalDateTime) {
+			ZoneId zone = SpreadsheetUtils.resolveZone(sheetHeader.getExcelDate(), this.valueProps);
+			cell.setCellValue(Date.from(((LocalDateTime) sheetHeader.getValue()).atZone(zone).toInstant()));
+		} else if (sheetHeader.getValue() instanceof Instant) {
+			cell.setCellValue(Date.from((Instant) sheetHeader.getValue()));
+		} else if (sheetHeader.getValue() instanceof OffsetDateTime) {
+			ZoneId zone = SpreadsheetUtils.resolveZone(sheetHeader.getExcelDate(), this.valueProps);
+			cell.setCellValue(Date.from(((OffsetDateTime) sheetHeader.getValue()).atZoneSameInstant(zone).toInstant()));
+		} else if (sheetHeader.getValue() instanceof String || sheetHeader.getValue() instanceof Character) {
 			String value = null;
 			if (sheetHeader.getValue() != null)
 				value = "" + sheetHeader.getValue();
@@ -622,9 +537,9 @@ public abstract class SuperGenerateExcelImpl {
 			cell.setHyperlink(hyperlink);
 			cell.setCellValue(excelHyperlink.getValue());
 		} else if (sheetHeader.getValue() instanceof ExcelAttachment<?>) {
-			this.addAttachment(workbook, sheet, sheetHeader, cell);
+			this.excelImageManager.addAttachment(workbook, sheet, sheetHeader, cell);
 		} else if (sheetHeader.getValue() instanceof byte[])
-			this.addImage(workbook, sheet, sheetHeader, cell);
+			this.excelImageManager.addImage(workbook, sheet, sheetHeader, cell);
 		else if (sheetHeader.getValue() instanceof DropDown<?>) {
 			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
 			sheetHeader.setValue(dropDown.getValue());
@@ -649,7 +564,7 @@ public abstract class SuperGenerateExcelImpl {
 	protected <T extends RowSheet> List<SheetHeader> generateHeaderSheetData(Workbook workbook, Sheet sheet, SheetData<T> sheetData, Integer indexRow) throws Exception {
 
 		ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(sheetData.getClass(), ExcelSheetLayout.class);
-		List<SheetHeader> listSheetHeader = this.getListSheetHeader(sheetData.getRowClass(), null, sheet);
+		List<SheetHeader> listSheetHeader = this.excelSheetHeaderBuilder.getListSheetHeader(sheetData.getRowClass(), null);
 		if (sheetData instanceof DynamicColumn) {
 			DynamicColumn sheetDynamicData = (DynamicColumn) sheetData;
 			for (Entry<String, ExtraColumnAnnotation> entry : sheetDynamicData.getMapExtraColumnAnnotation().entrySet()) {
@@ -728,10 +643,7 @@ public abstract class SuperGenerateExcelImpl {
 					int startColumn = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, columns[0])).getColumnNum();
 					int endColumn = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, columns[1])).getColumnNum();
 
-					// for (String column : columns) {
 					for (int columnNum = startColumn; columnNum <= endColumn; columnNum++) {
-//						String key = ExcelUtils.getKeyColumn(worksheet, column);
-//						int columnNum = this.mapFieldColumn.get(key).getColumnNum();
 						cellSuperHeader = rowSuperHeader.createCell(columnNum);
 						CellStyle cellSuperHeaderStyle = this.excelLayoutUtility.manageCellStyleHeader(workbook, headerGroup, this.mapCellHeaderStyle);
 						cellSuperHeader.setCellStyle(cellSuperHeaderStyle);
@@ -784,66 +696,6 @@ public abstract class SuperGenerateExcelImpl {
 	}
 
 	/**
-	 * Creates the pivot.
-	 *
-	 * @param sheet       the sheet
-	 * @param sheetData   the sheet data
-	 * @param firstRow    the first row
-	 * @param firstColumn the first column
-	 * @param lastRow     the last row
-	 * @param lastColumn  the last column
-	 * @param indexRow    the index row
-	 * @return the integer
-	 */
-	protected Integer createPivot(XSSFSheet sheet, SheetData<?> sheetData, int firstRow, int firstColumn, int lastRow, int lastColumn, Integer indexRow) {
-		Set<Field> listField = SpreadsheetUtils.getListField(sheetData.getRowClass());
-		String startCell = ExcelUtils.coordinateCalculation(firstRow, firstColumn, true, true);
-		String endCell = ExcelUtils.coordinateCalculation(lastRow, lastColumn, true, true);
-		logger.debug("start cell: " + startCell);
-		logger.debug("end cell: " + endCell);
-		AreaReference areaReference = new AreaReference(startCell + ":" + endCell, SpreadsheetVersion.EXCEL2007);
-		ExcelPivot excelPivot = sheetData.getClass().getAnnotation(ExcelPivot.class);
-		indexRow += 3;
-		XSSFPivotTable pivotTable = sheet.createPivotTable(areaReference, new CellReference(indexRow, excelPivot.startColumn()));
-		List<Field> listRow = new ArrayList<>();
-		List<Field> listColumn = new ArrayList<>();
-		List<Field> listColumnFunction = new ArrayList<>();
-		for (Field field : listField) {
-			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			if (field.isAnnotationPresent(ExcelPivotFilter.class))
-				pivotTable.addReportFilter(columnIndex);
-			if (field.isAnnotationPresent(ExcelPivotRow.class))
-				listRow.add(field);
-			if (field.isAnnotationPresent(ExcelPivotColumn.class))
-				listColumn.add(field);
-			if (field.isAnnotationPresent(ExcelPivotColumnFunction.class))
-				listColumnFunction.add(field);
-		}
-		Collections.sort(listRow, new PivotRowComparator());
-		Collections.sort(listColumn, new PivotColumnComparator());
-		Collections.sort(listColumnFunction, new PivotColumnFunctionComparator());
-
-		for (Field field : listRow) {
-			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			pivotTable.addRowLabel(columnIndex);
-		}
-		for (Field field : listColumn) {
-			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			pivotTable.addColLabel(columnIndex);
-		}
-		for (Field field : listColumnFunction) {
-			int columnIndex = this.mapFieldColumn.get(ExcelUtils.getKeyColumn(sheet, field.getName())).getColumnNum();
-			ExcelPivotColumnFunction excelPivotColumnFunction = field.getAnnotation(ExcelPivotColumnFunction.class);
-			for (DataConsolidateFunction dataConsolidateFunction : excelPivotColumnFunction.dataConsolidateFunction())
-				pivotTable.addColumnLabel(dataConsolidateFunction, columnIndex);
-
-		}
-
-		return indexRow;
-
-	}
-
-	/**
 	 * Manage drop down.
 	 *
 	 * @param sheet       the sheet
@@ -852,192 +704,10 @@ public abstract class SuperGenerateExcelImpl {
 	 * @param lastRow     the last row
 	 * @param firstCol    the first col
 	 * @param lastCol     the last col
+	 * @param indexRow    the index row
 	 */
 	protected void manageDropDown(Sheet sheet, SheetHeader sheetHeader, int firstRow, int lastRow, int firstCol, int lastCol, Integer indexRow) {
-		if (sheetHeader.isDropDown()) {
-			DropDownCell dropDownCell = null;
-			dropDownCell = new DropDownCell(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow);
-			try {
-				this.addDropDown(dropDownCell);
-			} catch (Exception e) {
-				this.listDropDown.add(dropDownCell);
-			}
-		}
-	}
-
-	/**
-	 * Adds the drop down.
-	 *
-	 * @param dropDownCell the drop down cell
-	 * @throws Exception the exception
-	 */
-	protected void addDropDown(DropDownCell dropDownCell) throws Exception {
-		SheetHeader sheetHeader = dropDownCell.getSheetHeader();
-		Sheet sheet = dropDownCell.getSheet();
-		DataValidationConstraint constraint = null;
-		DataValidation dataValidation = null;
-		DataValidationHelper validationHelper = sheet.getDataValidationHelper();
-		CellRangeAddressList addressList = new CellRangeAddressList(dropDownCell.getFirstRow(), dropDownCell.getLastRow(), dropDownCell.getFirstCol(), dropDownCell.getLastCol());
-		if (sheetHeader.getExcelDropDown() != null) {
-			ExcelDropDown excelDropDown = sheetHeader.getExcelDropDown();
-			String areaRange = excelDropDown.areaRange();
-			Map<String, KeyParameterAlias> mapExcelFormulaAlias = ExcelBuildFunctionUtility.mapExcelFormulaAlias(excelDropDown.alias());
-			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, dropDownCell.getIndexRow(), areaRange, RowStartEndType.ROW_EMPTY, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
-			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_START, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
-			areaRange = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaRange, RowStartEndType.ROW_END, mapExcelFormulaAlias, mapFieldColumn, mapSheet);
-
-			Pattern p = Pattern.compile(PATTERN);
-			Matcher m = p.matcher(areaRange);
-			if (m.find())
-				throw new ExcelGeneratorException("The formula '" + areaRange + "' is not valid");
-			constraint = validationHelper.createFormulaListConstraint(areaRange);
-			dataValidation = validationHelper.createValidation(constraint, addressList);
-			dataValidation.setSuppressDropDownArrow(excelDropDown.suppressDropDownArrow());
-			if (excelDropDown.errorBox().show()) {
-				dataValidation.setShowErrorBox(excelDropDown.errorBox().show());
-				dataValidation.createErrorBox(excelDropDown.errorBox().title(), excelDropDown.errorBox().message());
-				dataValidation.setErrorStyle(excelDropDown.errorBox().boxStyle().getValue());
-			}
-
-		} else {
-			DropDown<?> dropDown = (DropDown<?>) sheetHeader.getValue();
-			if (CollectionUtils.isNotEmpty(dropDown.getList())) {
-				String[] list = new String[dropDown.getList().size()];
-				int i = 0;
-				SimpleDateFormat sdf = null;
-				if (sheetHeader.getExcelDate() != null)
-					sdf = new SimpleDateFormat(sheetHeader.getExcelDate().value().getValue());
-				for (Object item : dropDown.getList()) {
-					if (item instanceof Date)
-						list[i] = sdf.format((Date) item);
-					else if (item instanceof Calendar)
-						list[i] = sdf.format(((Calendar) item).getTime());
-					else if (item instanceof Timestamp)
-						list[i] = sdf.format(new Date(((Timestamp) item).getTime()));
-					else
-						list[i] = item.toString();
-
-					i++;
-				}
-				constraint = validationHelper.createExplicitListConstraint(list);
-				dataValidation = validationHelper.createValidation(constraint, addressList);
-				dataValidation.setSuppressDropDownArrow(dropDown.isSuppressDropDownArrow());
-				if (dropDown.getBoxMessage() != null) {
-					BoxMessage boxMessage = dropDown.getBoxMessage();
-					dataValidation.setShowErrorBox(boxMessage.isShow());
-					dataValidation.createErrorBox(boxMessage.getTitle(), boxMessage.getMessage());
-					dataValidation.setErrorStyle(boxMessage.getBoxStyle().getValue());
-				}
-
-			}
-
-		}
-
-		sheet.addValidationData(dataValidation);
-
-	}
-
-	/**
-	 * Adds the image.
-	 *
-	 * @param workbook    the workbook
-	 * @param sheet       the sheet
-	 * @param sheetHeader the sheet header
-	 * @param cell        the cell
-	 * @throws Exception the exception
-	 */
-	private void addImage(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception {
-		ExcelImage excelImage = sheetHeader.getExcelImage();
-		int pictureureIdx = workbook.addPicture((byte[]) sheetHeader.getValue(), excelImage.pictureType().nativeId);
-		CreationHelper helper = workbook.getCreationHelper();
-		Drawing<?> drawing = sheet.createDrawingPatriarch();
-
-		ClientAnchor anchor = helper.createClientAnchor();
-
-		anchor.setCol1(cell.getColumnIndex());
-		anchor.setRow1(cell.getRowIndex());
-		anchor.setCol2(cell.getColumnIndex() + 1);
-		anchor.setRow2(cell.getRowIndex() + 1);
-		anchor.setAnchorType(excelImage.anchorType());
-
-		Picture pict = drawing.createPicture(anchor, pictureureIdx);
-		pict.resize(excelImage.resizeWidth(), excelImage.resizeHeight());
-
-	}
-
-	/**
-	 * Manage excel image.
-	 *
-	 * @param sheetHeader the sheet header
-	 * @param value       the value
-	 * @return the object
-	 * @throws Exception             the exception
-	 * @throws FileNotFoundException the file not found exception
-	 * @throws IOException           Signals that an I/O exception has occurred.
-	 */
-	protected Object manageExcelImage(SheetHeader sheetHeader, Object value) throws Exception, FileNotFoundException, IOException {
-		if (sheetHeader.getExcelImage() != null) {
-			value = manageExcelAttachment(value);
-		}
-		return value;
-	}
-
-	/**
-	 * Manage excel attachment.
-	 *
-	 * @param value the value
-	 * @return the byte[]
-	 * @throws Exception             the exception
-	 * @throws FileNotFoundException the file not found exception
-	 * @throws IOException           Signals that an I/O exception has occurred.
-	 */
-	private byte[] manageExcelAttachment(Object value) throws Exception, FileNotFoundException, IOException {
-		byte[] file = null;
-		if (value != null) {
-			if (!(value instanceof String || value instanceof byte[]))
-				throw new ExcelGeneratorException("The annotation ExcelImage can to be used only with fields String or byte[] type");
-			if (value instanceof String) {
-				InputStream inputStream = new FileInputStream((String) value);
-				file = IOUtils.toByteArray(inputStream);
-			} else
-				file = (byte[]) value;
-		}
-		return file;
-	}
-
-	/**
-	 * Adds the attachment.
-	 *
-	 * @param workbook    the workbook
-	 * @param sheet       the sheet
-	 * @param sheetHeader the sheet header
-	 * @param cell        the cell
-	 * @throws Exception the exception
-	 */
-	private void addAttachment(Workbook workbook, Sheet sheet, SheetHeader sheetHeader, Cell cell) throws Exception {
-		if (sheetHeader.getValue() != null && sheetHeader.getValue() instanceof ExcelAttachment<?>) {
-			ExcelAttachment<?> excelAttachment = (ExcelAttachment<?>) sheetHeader.getValue();
-			byte[] file = manageExcelAttachment(excelAttachment.getAttachment());
-			String fileNameExtension = excelAttachment.getFileName() + excelAttachment.getAttachmentType().getFileExtension();
-			int storageId = workbook.addOlePackage(file, fileNameExtension, fileNameExtension, fileNameExtension);
-			byte[] image = IOUtils.toByteArray(getClass().getResourceAsStream(excelAttachment.getAttachmentType().getImage()));
-			int iconId = workbook.addPicture(image, PictureType.JPEG.nativeId);
-
-			Drawing<?> drawing = sheet.createDrawingPatriarch();
-
-//			ClientAnchor anchor = helper.createClientAnchor();
-//
-//			anchor.setCol1(cell.getColumnIndex());
-//			anchor.setRow1(cell.getRowIndex());
-			ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, cell.getColumnIndex(), cell.getRowIndex(), cell.getColumnIndex() + 1, cell.getRowIndex() + 1);
-			anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
-
-			// ObjectData objectData =drawing.createObjectData(anchor, storageId,
-			// pictureureIdx);
-			drawing.createObjectData(anchor, storageId, iconId);
-
-		}
-
+		this.excelDropDownBuilder.manageDropDown(sheet, sheetHeader, firstRow, lastRow, firstCol, lastCol, indexRow, this.listDropDown, this.mapFieldColumn, this.mapSheet);
 	}
 
 }

@@ -9,6 +9,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -32,11 +37,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bld.common.spreadsheet.excel.annotation.ExcelBooleanText;
 import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.common.spreadsheet.utils.SpreadsheetUtils;
+import com.bld.common.spreadsheet.utils.ValueProps;
 import com.bld.read.report.excel.ReadExcel;
 import com.bld.read.report.excel.annotation.ExcelReadColumn;
 import com.bld.read.report.excel.annotation.ExcelReadSheet;
@@ -87,6 +94,9 @@ public class ReadExcelImpl implements ReadExcel {
 
 	/** Per-class metadata cache — computed once per SheetRead subclass. */
 	private static final ConcurrentHashMap<Class<?>, SheetMeta> SHEET_CACHE = new ConcurrentHashMap<>();
+
+	@Autowired
+	private ValueProps valueProps;
 
 	// -------------------------------------------------------------------------
 	// Cache records
@@ -214,7 +224,19 @@ public class ReadExcelImpl implements ReadExcel {
 										}
 									} else if (Date.class.isAssignableFrom(classField))
 										value = convertStringToDate(stringValue, fm.excelDate());
-									else if (Boolean.class.isAssignableFrom(classField))
+									else if (LocalDate.class.isAssignableFrom(classField)) {
+										ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+										value = convertStringToDate(stringValue, fm.excelDate()).toInstant().atZone(zone).toLocalDate();
+									} else if (LocalDateTime.class.isAssignableFrom(classField)) {
+										ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+										value = convertStringToDate(stringValue, fm.excelDate()).toInstant().atZone(zone).toLocalDateTime();
+									} else if (Instant.class.isAssignableFrom(classField)) {
+										value = convertStringToDate(stringValue, fm.excelDate()).toInstant();
+									} else if (OffsetDateTime.class.isAssignableFrom(classField)) {
+										ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+										Instant instant = convertStringToDate(stringValue, fm.excelDate()).toInstant();
+										value = instant.atOffset(zone.getRules().getOffset(instant));
+									} else if (Boolean.class.isAssignableFrom(classField))
 										value = StringUtils.isNotBlank(stringValue) ? Boolean.valueOf(stringValue.trim()) : null;
 									else if (Character.class.isAssignableFrom(classField)) {
 										if (StringUtils.isNotEmpty(stringValue)) {
@@ -243,6 +265,18 @@ public class ReadExcelImpl implements ReadExcel {
 									}
 								} else if (Date.class.isAssignableFrom(classField)) {
 									value = cell.getDateCellValue();
+								} else if (LocalDate.class.isAssignableFrom(classField)) {
+									ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+									value = cell.getDateCellValue().toInstant().atZone(zone).toLocalDate();
+								} else if (LocalDateTime.class.isAssignableFrom(classField)) {
+									ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+									value = cell.getDateCellValue().toInstant().atZone(zone).toLocalDateTime();
+								} else if (Instant.class.isAssignableFrom(classField)) {
+									value = cell.getDateCellValue().toInstant();
+								} else if (OffsetDateTime.class.isAssignableFrom(classField)) {
+									ZoneId zone = SpreadsheetUtils.resolveZone(fm.excelDate(), this.valueProps);
+									Instant instant = cell.getDateCellValue().toInstant();
+									value = instant.atOffset(zone.getRules().getOffset(instant));
 								} else if (Boolean.class.isAssignableFrom(classField) && excelBooleanText == null) {
 									value = cell.getBooleanCellValue();
 								} else if (Character.class.isAssignableFrom(classField)) {

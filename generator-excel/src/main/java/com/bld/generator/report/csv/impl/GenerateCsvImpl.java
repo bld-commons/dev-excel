@@ -4,6 +4,12 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.security.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -76,6 +82,21 @@ public class GenerateCsvImpl implements GenerateCsv {
 							value=sdf.format(((Calendar)value).getTime());
 						else if(value instanceof Timestamp)
 							value=sdf.format(((Timestamp)value).getTimestamp());
+						else if (value instanceof LocalDate) {
+							DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+							value = dtf.format((LocalDate) value);
+						} else if (value instanceof LocalDateTime) {
+							DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+							value = dtf.format((LocalDateTime) value);
+						} else if (value instanceof Instant) {
+							ZoneId zone = ZoneId.of(csvHeader.getDateFormat().timezone());
+							DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format).withZone(zone);
+							value = dtf.format((Instant) value);
+						} else if (value instanceof OffsetDateTime) {
+							ZoneId zone = ZoneId.of(csvHeader.getDateFormat().timezone());
+							DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+							value = dtf.format(((OffsetDateTime) value).atZoneSameInstant(zone));
+						}
 					}
 					row[i]=value;
 				}

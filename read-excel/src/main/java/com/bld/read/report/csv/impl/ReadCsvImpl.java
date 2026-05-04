@@ -11,6 +11,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -241,6 +247,17 @@ public class ReadCsvImpl implements ReadCsv {
 					value = calendar;
 				} else if (Date.class.isAssignableFrom(classField)) {
 					value = getDate(csvRecord.get(header), fm.csvDate());
+				} else if (LocalDate.class.isAssignableFrom(classField)) {
+					value = LocalDate.parse(csvRecord.get(header), buildCsvFormatter(fm.csvDate()));
+				} else if (LocalDateTime.class.isAssignableFrom(classField)) {
+					value = LocalDateTime.parse(csvRecord.get(header), buildCsvFormatter(fm.csvDate()));
+				} else if (Instant.class.isAssignableFrom(classField)) {
+					DateTimeFormatter dtf = buildCsvFormatter(fm.csvDate()).withZone(ZoneId.of(fm.csvDate().timezone()));
+					value = Instant.from(dtf.parse(csvRecord.get(header)));
+				} else if (OffsetDateTime.class.isAssignableFrom(classField)) {
+					ZoneId zone = ZoneId.of(fm.csvDate().timezone());
+					LocalDateTime ldt = LocalDateTime.parse(csvRecord.get(header), buildCsvFormatter(fm.csvDate()));
+					value = ldt.atOffset(zone.getRules().getOffset(ldt.atZone(zone).toInstant()));
 				} else if (Boolean.class.isAssignableFrom(classField)) {
 					String boolStr = csvRecord.get(header);
 					value = StringUtils.isNotBlank(boolStr) ? Boolean.valueOf(boolStr.trim()) : null;
@@ -312,6 +329,11 @@ public class ReadCsvImpl implements ReadCsv {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		sdf.setTimeZone(TimeZone.getTimeZone(csvDate.timezone()));
 		return sdf.parse(date);
+	}
+
+	private DateTimeFormatter buildCsvFormatter(CsvDate csvDate) {
+		String fmt = csvDate.value().getValue().replace("/", csvDate.separator());
+		return DateTimeFormatter.ofPattern(fmt);
 	}
 
 }
