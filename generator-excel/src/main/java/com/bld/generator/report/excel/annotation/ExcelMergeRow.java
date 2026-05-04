@@ -32,9 +32,9 @@ public @interface ExcelMergeRow {
 
 
 	/**
-	 * Reference field.
+	 * Reference field name of the driver column. Empty means this column IS the driver.
 	 *
-	 * @return the string[]
+	 * @return the reference field name
 	 */
-	public String[] referenceField() default {};	
+	public String value() default "";
 }

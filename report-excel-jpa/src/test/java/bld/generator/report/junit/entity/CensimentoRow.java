@@ -11,7 +11,7 @@ public class CensimentoRow implements RowSheet {
 
 	@ExcelColumn(name = "Nazione", index = 0)
 	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "")
+	@ExcelMergeRow
 	private String desNazione;
 	
 	@ExcelColumn(name = "Anno", index = 1)

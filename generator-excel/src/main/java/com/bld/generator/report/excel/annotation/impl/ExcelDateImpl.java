@@ -18,7 +18,10 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 	
 	/** The value. */
 	private ColumnDateFormat value;
-	
+
+	/** The timezone. */
+	private String timezone = "${spring.jackson.time-zone:}";
+
 
 	/**
 	 * Instantiates a new excel date impl.
@@ -56,6 +59,15 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 	 */
 	public void setValue(ColumnDateFormat value) {
 		this.value = value;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone(String timezone) {
+		if (timezone != null)
+			this.timezone = timezone;
 	}
 
 	/**

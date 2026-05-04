@@ -537,6 +537,10 @@ public class SheetHeader implements Cloneable {
 		this.excelNumberFormat = excelNumberFormat;
 	}
 
+	public int getColorSize() {
+		return colorSize;
+	}
+
 	public CellType getCellType() {
 		return cellType;
 	}

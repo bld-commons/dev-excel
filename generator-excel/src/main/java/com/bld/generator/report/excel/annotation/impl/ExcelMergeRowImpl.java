@@ -5,8 +5,6 @@
 */
 package com.bld.generator.report.excel.annotation.impl;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.bld.generator.report.excel.annotation.ExcelMergeRow;
 
 /**
@@ -14,8 +12,8 @@ import com.bld.generator.report.excel.annotation.ExcelMergeRow;
  */
 public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 
-	/** The reference field. */
-	private String[] referenceField;
+	/** The reference field name of the driver column. Empty means this column is the driver. */
+	private String value = "";
 
 	/**
 	 * Instantiates a new excel merge row impl.
@@ -27,51 +25,40 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 	/**
 	 * Instantiates a new excel merge row impl.
 	 *
-	 * @param referenceField the reference field
+	 * @param value the reference field name
 	 */
-	public ExcelMergeRowImpl(String... referenceField) {
+	public ExcelMergeRowImpl(String value) {
 		super();
-		this.setReferenceField(referenceField);
+		this.setValue(value);
 	}
 
 	/**
-	 * Gets the reference field.
+	 * Gets the value.
 	 *
-	 * @return the reference field
+	 * @return the reference field name
 	 */
-	public String[] getReferenceField() {
-		return referenceField;
+	public String getValue() {
+		return value;
 	}
 
 	/**
-	 * Sets the reference field.
+	 * Sets the value.
 	 *
-	 * @param referenceField the new reference field
+	 * @param value the reference field name
 	 */
-	public void setReferenceField(String... referenceField) {
-		if (ArrayUtils.isNotEmpty(referenceField))
-			this.referenceField = referenceField;
+	public void setValue(String value) {
+		if (value != null)
+			this.value = value;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((referenceField == null) ? 0 : referenceField.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -81,10 +68,10 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelMergeRowImpl other = (ExcelMergeRowImpl) obj;
-		if (referenceField == null) {
-			if (other.referenceField != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!referenceField.equals(other.referenceField))
+		} else if (!value.equals(other.value))
 			return false;
 		return true;
 	}

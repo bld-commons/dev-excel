@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -73,6 +74,7 @@ import com.bld.generator.report.excel.annotation.ExcelClearRows;
 import com.bld.generator.report.excel.annotation.ExcelConditionCellLayouts;
 import com.bld.generator.report.excel.annotation.ExcelFreezePane;
 import com.bld.generator.report.excel.annotation.ExcelLabel;
+import com.bld.generator.report.excel.annotation.ExcelMergeRow;
 import com.bld.generator.report.excel.annotation.ExcelPivot;
 import com.bld.generator.report.excel.annotation.ExcelRowHeight;
 import com.bld.generator.report.excel.annotation.ExcelSelectCell;
@@ -86,6 +88,7 @@ import com.bld.generator.report.excel.data.InfoChart;
 import com.bld.generator.report.excel.data.InfoColumn;
 import com.bld.generator.report.excel.data.LayoutCell;
 import com.bld.generator.report.excel.data.MergeCell;
+import com.bld.generator.report.excel.data.MergeColumnState;
 import com.bld.generator.report.excel.data.ReportExcel;
 import com.bld.generator.report.excel.data.SheetHeader;
 import com.bld.generator.report.excel.data.SubtotalRow;
@@ -539,8 +542,18 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			indexRow++;
 
 		boolean start = true;
-		// CellStyle cellStyle = null;
 		Map<Integer, MergeCell> mapMergeRow = new HashMap<>();
+		Map<String, MergeColumnState> mapMergeState = new HashMap<>();
+		if (!excelSheetLayout.notMerge()) {
+			for (int idx = 0; idx < listSheetHeader.size(); idx++) {
+				SheetHeader sh = listSheetHeader.get(idx);
+				if (sh.getExcelMergeRow() != null) {
+					if (StringUtils.isBlank(sh.getExcelMergeRow().value()) && idx > 0)
+						throw new ExcelGeneratorException("Only the first column can have @ExcelMergeRow with blank value (driver column)");
+					mapMergeState.put(getFieldName(sh), new MergeColumnState());
+				}
+			}
+		}
 		RowSheet lastRowSheet = null;
 
 		Map<String, Map<String, InfoChart>> mapChart = new LinkedHashMap<>();
@@ -631,8 +644,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				if (start) {
 					ExcelCellLayout excelCellLayout = sheetHeader.getExcelCellLayout();
 					LayoutCell layoutCell = sheetHeader.getLayoutCell(indexRow);
-					int colorSize = excelCellLayout.rgbFont().length > excelCellLayout.rgbForeground().length ? excelCellLayout.rgbFont().length : excelCellLayout.rgbForeground().length;
-					for (int colorModul = 0; colorModul < colorSize; colorModul++) {
+					for (int colorModul = 0; colorModul < sheetHeader.getColorSize(); colorModul++) {
 						LayoutCell layoutCellTemp = sheetHeader.getLayoutCell(colorModul);
 						if (!this.mapCellStyle.containsKey(layoutCellTemp))
 							this.mapCellStyle.put(layoutCellTemp, this.excelLayoutUtility.createCellStyle(workbook, excelCellLayout, sheetHeader, colorModul));
@@ -642,54 +654,54 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 					infoColumn.setLastRow(indexRow + sheetData.getRows().size() - 1);
 				} else
 					infoColumn.incrementLastRow(splitRow);
-				boolean repeat = true;
 
-				do {
-					MergeCell mergeRow = null;
-					Object valueBefore = null;
-					if (excelSheetLayout.notMerge() || !mapMergeRow.containsKey(numColumn)) {
-						if (!excelSheetLayout.notMerge() && sheetHeader.getExcelMergeRow() != null) {
-							mergeRow = new MergeCell();
-							mergeRow.setRowStart(indexRow);
-							mergeRow.setColumnFrom(numColumn);
-							mergeRow.setColumnTo(numColumn);
-							mergeRow.setSheetHeader((SheetHeader) sheetHeader.clone());
-							if (sheetHeader.getExcelFunction() == null)
-								mergeRow.getSheetHeader().setValue(value);
-							mergeRow.setCellFrom(cell);
-							mergeRow.setCellStyleFrom(cellStyle);
-							infoColumn.setLastRowReference(indexRow);
-							infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
-							mapMergeRow.put(numColumn, mergeRow);
-						} else {
-							super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex(), indexRow);
-							super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
-						}
+				if (!excelSheetLayout.notMerge() && sheetHeader.getExcelMergeRow() != null) {
+					ExcelMergeRow excelMergeRow = sheetHeader.getExcelMergeRow();
+					String fieldKey = getFieldName(sheetHeader);
+					MergeColumnState state = mapMergeState.get(fieldKey);
+					int workRow = indexRow - splitRow;
 
-						repeat = false;
+					boolean changed;
+					if (!state.isInitialized()) {
+						changed = false;
+					} else if (StringUtils.isBlank(excelMergeRow.value())) {
+						changed = !Objects.equals(state.getPreviousValue(), value);
 					} else {
-						int workRow = indexRow - splitRow;
+						MergeColumnState refState = mapMergeState.get(excelMergeRow.value());
+						if (refState == null)
+							throw new ExcelGeneratorException("@ExcelMergeRow value \"" + excelMergeRow.value() + "\" does not match any field in the sheet");
+						changed = refState.isChanged() || !Objects.equals(state.getPreviousValue(), value);
+					}
+					state.setChanged(changed);
+					state.setPreviousValue(value);
+					state.setInitialized(true);
+
+					if (changed && mapMergeRow.containsKey(numColumn)) {
 						infoColumn.getMapRowMergeRow().put(workRow, infoColumn.getMergeCell());
-						if (numColumn > excelSheetLayout.startColumn() && ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField()))
-							throw new ExcelGeneratorException("Only first column can have the propertie \"referenceColumn\" is blank!!!");
-						if (field != null)
-							valueBefore = lastBeanWrapper.getPropertyValue(field.getName());
-						if (ArrayUtils.isEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
-							if (!(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
-								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
-							else
-								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
-
-						} else if (ArrayUtils.isNotEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
-							if (checkMergeColumn(sheetHeader, rowSheet, lastRowSheet, valueBefore, listSheetHeader))
-								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
-							else
-								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
-						}
-
+						super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
 					}
 
-				} while (repeat);
+					if (!mapMergeRow.containsKey(numColumn)) {
+						MergeCell mergeRow = new MergeCell();
+						mergeRow.setRowStart(indexRow);
+						mergeRow.setColumnFrom(numColumn);
+						mergeRow.setColumnTo(numColumn);
+						mergeRow.setSheetHeader((SheetHeader) sheetHeader.clone());
+						if (sheetHeader.getExcelFunction() == null)
+							mergeRow.getSheetHeader().setValue(value);
+						mergeRow.setCellFrom(cell);
+						mergeRow.setCellStyleFrom(cellStyle);
+						infoColumn.setLastRowReference(indexRow);
+						infoColumn.getMapRowMergeRow().put(indexRow, mergeRow);
+						mapMergeRow.put(numColumn, mergeRow);
+					} else {
+						infoColumn.getMapRowMergeRow().put(workRow, infoColumn.getMergeCell());
+						super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
+					}
+				} else {
+					super.manageDropDown(sheet, sheetHeader, cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex(), indexRow);
+					super.setCellValueExcel(workbook, sheet, cell, cellStyle, sheetHeader, indexRow, formulaEvaluator);
+				}
 
 			}
 			lastRowSheet = rowSheet;
@@ -941,40 +953,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			if (sheetHeader.getExcelCellLayout().autoSizeColumn())
 				sheet.autoSizeColumn(sheetHeader.getNumColumn());
 	}
-
-	/**
-	 * Check merge column.
-	 *
-	 * @param sheetHeader     the sheet header
-	 * @param rowSheet        the row sheet
-	 * @param lastRowSheet    the last row sheet
-	 * @param valueBefore     the value before
-	 * @param listSheetHeader the list sheet header
-	 * @return true, if successful
-	 * @throws Exception the exception
-	 */
-	private boolean checkMergeColumn(SheetHeader sheetHeader, RowSheet rowSheet, RowSheet lastRowSheet, Object valueBefore, List<SheetHeader> listSheetHeader) throws Exception {
-		BeanWrapperImpl beanWrapper = new BeanWrapperImpl(rowSheet);
-		BeanWrapperImpl lastBeanWrapper = new BeanWrapperImpl(lastRowSheet);
-		for (String referenceField : sheetHeader.getExcelMergeRow().referenceField()) {
-			if (StringUtils.isBlank(referenceField))
-				throw new ExcelGeneratorException("@ExcelMergeRow referenceField contains a blank value - use @ExcelMergeRow without parameters for value-based merging");
-			SheetHeader refHeader = listSheetHeader.stream()
-				.filter(h -> (h.getField() != null && referenceField.equals(h.getField().getName())) || referenceField.equals(h.getKeyMap()))
-				.findFirst()
-				.orElseThrow(() -> new ExcelGeneratorException("@ExcelMergeRow referenceField \"" + referenceField + "\" does not match any field or function name in the sheet"));
-			Object valueRefColumn = refHeader.getField() != null
-				? beanWrapper.getPropertyValue(referenceField)
-				: ((DynamicRowSheet) rowSheet).getMapValue().get(referenceField);
-			Object valueRefColumnBefore = refHeader.getField() != null
-				? lastBeanWrapper.getPropertyValue(referenceField)
-				: ((DynamicRowSheet) lastRowSheet).getMapValue().get(referenceField);
-			if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
-				return true;
-		}
-		return false;
-	}
-
 
 	/**
 	 * Write label.
