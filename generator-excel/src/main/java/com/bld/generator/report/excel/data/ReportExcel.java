@@ -46,13 +46,22 @@ public class ReportExcel {
 	private boolean enableSheetMapping;
 
 	/**
+	 * When {@code true}, {@link org.apache.poi.ss.usermodel.FormulaEvaluator#evaluateAll()}
+	 * is called after all sheets are written so that cached formula values are embedded in
+	 * the file and Excel opens without recalculating. When {@code false} the workbook is
+	 * saved without pre-computed values and Excel recalculates on open (current default
+	 * behaviour before this flag existed).
+	 */
+	private boolean evaluateFormulas;
+
+	/**
 	 * Instantiates a new report excel.
 	 *
 	 * @param title the title
 	 */
 	public ReportExcel(String title) {
 		super();
-		init(title, false, false);
+		init(title, false, false,true);
 	}
 
 	/**
@@ -62,12 +71,13 @@ public class ReportExcel {
 	 * @param ignoreCover the ignore cover
 	 * @param enableSheetMapping the enable sheet mapping
 	 */
-	private void init(String title, boolean ignoreCover, boolean enableSheetMapping) {
+	private void init(String title, boolean ignoreCover, boolean enableSheetMapping,boolean evaluateFormulas) {
 		this.title = title;
 		this.date = new Date();
 		this.ignoreCover = ignoreCover;
 		this.sheets = new ArrayList<>();
 		this.enableSheetMapping = enableSheetMapping;
+		this.evaluateFormulas=evaluateFormulas;
 	}
 
 	/**
@@ -78,7 +88,7 @@ public class ReportExcel {
 	 */
 	public ReportExcel(String title, boolean ignoreCover) {
 		super();
-		init(title, ignoreCover, false);
+		init(title, ignoreCover, false,true);
 	}
 
 	/**
@@ -90,7 +100,7 @@ public class ReportExcel {
 	 */
 	public ReportExcel(String title, boolean ignoreCover, boolean enableSheetMapping) {
 		super();
-		init(title, ignoreCover, enableSheetMapping);
+		init(title, ignoreCover, enableSheetMapping,true);
 	}
 
 	/**
@@ -217,6 +227,26 @@ public class ReportExcel {
 	 */
 	public void setIgnoreCover(boolean ignoreCover) {
 		this.ignoreCover = ignoreCover;
+	}
+
+	/**
+	 * Returns whether formula evaluation is performed before saving the workbook.
+	 *
+	 * @return {@code true} if {@link org.apache.poi.ss.usermodel.FormulaEvaluator#evaluateAll()}
+	 *         will be called after all sheets are written
+	 */
+	public boolean isEvaluateFormulas() {
+		return evaluateFormulas;
+	}
+
+	/**
+	 * Sets whether formula evaluation is performed before saving the workbook.
+	 *
+	 * @param evaluateFormulas {@code true} to pre-compute formula values (Excel opens faster,
+	 *                         no recalculation prompt); {@code false} to let Excel recalculate on open
+	 */
+	public void setEvaluateFormulas(boolean evaluateFormulas) {
+		this.evaluateFormulas = evaluateFormulas;
 	}
 
 	/**

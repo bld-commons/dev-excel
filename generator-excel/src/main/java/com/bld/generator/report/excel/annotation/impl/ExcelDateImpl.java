@@ -11,31 +11,50 @@ import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 
 
 /**
- * The Class ExcelDateImpl.
+ * Programmatic (builder-style) implementation of {@link ExcelDate}.
+ *
+ * <p>Use this class when the date-format configuration cannot be expressed
+ * with a static annotation — for example when building sheets dynamically at runtime.</p>
+ *
+ * <p>Usage example:</p>
+ * <pre>
+ * sheetHeader.setExcelDate(new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY));
+ *
+ * // With explicit time zone
+ * ExcelDateImpl d = new ExcelDateImpl(ColumnDateFormat.DD_MM_YYYY);
+ * d.setTimezone("Europe/Rome");
+ * sheetHeader.setExcelDate(d);
+ * </pre>
  */
 public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 
-	
-	/** The value. */
+	/** Date format pattern applied to the cell. */
 	private ColumnDateFormat value;
 
-	/** The timezone. */
+	/**
+	 * Time-zone identifier used when converting zone-aware date types.
+	 * Defaults to the Spring placeholder {@code ${spring.jackson.time-zone:}}
+	 * so it inherits the application's Jackson time-zone setting when resolved.
+	 *
+	 * @see ExcelDate#timezone()
+	 */
 	private String timezone = "${spring.jackson.time-zone:}";
 
 
 	/**
-	 * Instantiates a new excel date impl.
+	 * Creates an {@code ExcelDateImpl} with the specified date format.
+	 * The time zone defaults to {@code ${spring.jackson.time-zone:}}.
 	 *
-	 * @param value the value
+	 * @param value the date format pattern to apply to the cell
 	 */
 	public ExcelDateImpl(ColumnDateFormat value){
 		super();
 		this.value = value;
 	}
 
-
 	/**
-	 * Instantiates a new excel date impl.
+	 * Creates an {@code ExcelDateImpl} with no preset format.
+	 * Both {@code value} and {@code timezone} must be set before use.
 	 */
 	public ExcelDateImpl() {
 		super();
@@ -61,10 +80,22 @@ public class ExcelDateImpl extends ExcelAnnotationImpl<ExcelDate>{
 		this.value = value;
 	}
 
+	/**
+	 * Returns the time-zone identifier used for zone-aware date conversion.
+	 *
+	 * @return a {@link java.time.ZoneId} string or a Spring placeholder;
+	 *         never {@code null}
+	 */
 	public String getTimezone() {
 		return timezone;
 	}
 
+	/**
+	 * Sets the time-zone identifier.
+	 *
+	 * @param timezone a {@link java.time.ZoneId} string (e.g. {@code "Europe/Rome"}),
+	 *                 a Spring placeholder, or {@code null} (ignored, keeps current value)
+	 */
 	public void setTimezone(String timezone) {
 		if (timezone != null)
 			this.timezone = timezone;

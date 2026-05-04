@@ -17,24 +17,32 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 /**
  * The Interface ExcelFunctionMergeRow.<br>
- * ExcelFunctionMergeRow is used to configure the cell layout merged and define
- * the excel function.<br>
- * It is composed from:
+ * Defines a computed (formula) column whose cells are also merged vertically
+ * based on a driver field, combining the capabilities of
+ * {@link ExcelFunction} and {@link ExcelMergeRow}.<br>
+ *
+ * <p>Because a formula column has no bound bean field, its cell value is
+ * always {@code null} at row-write time. The merge driver must therefore be
+ * a <em>regular</em> field declared in the same {@code RowSheet} class via
+ * {@link ExcelMergeRow#value()} on {@link #excelMergeRow()}. The merge
+ * boundary is determined by changes in that driver field, not by the formula
+ * result itself.</p>
+ *
+ * <p>Composed of:</p>
  * <ul>
- * <li>ExcelCellsLayout - to define cell layout</li>
- * <li>ExcelColumn - to define the header description and the position of
- * column</li>
- * <li>ExcelMergeRow - it is used to merge cells after checking the equality the
- * reference field values</li>
- * <li>ExcelFunction - to define the function</li>
- * <li>ExcelColumnWidth - to set column width</li>
- * <li>ExcelHeaderCellLayout - to define header cell layout</li>
- * <li>ExcelSubtotal - to execute subtotal function</li>
+ *   <li>{@link #excelCellsLayout()} — cell layout for the merged result cell</li>
+ *   <li>{@link #excelColumn()} — column header name and position index</li>
+ *   <li>{@link #excelMergeRow()} — merge driver configuration
+ *       (use {@code @ExcelMergeRow("driverField")} to reference a driver column)</li>
+ *   <li>{@link #excelFunction()} — the Excel formula written into the merged cell</li>
+ *   <li>{@link #excelColumnWidth()} — column width</li>
+ *   <li>{@link #excelHeaderCellLayout()} — header cell layout</li>
+ *   <li>{@link #excelSubtotal()} — optional subtotal function applied below the column</li>
+ *   <li>{@link #excelNumberFormat()} — number format for the result cell</li>
  * </ul>
- * 
- * ExcelFunctionMergeRow is parameter of the annotation
- * {@link com.bld.generator.report.excel.annotation.ExcelFunctionRows}.
- * 
+ *
+ * <p>{@code ExcelFunctionMergeRow} is used as a parameter of
+ * {@link com.bld.generator.report.excel.annotation.ExcelFunctionRows}.</p>
  */
 @Retention(RUNTIME)
 @Target({})
@@ -56,9 +64,15 @@ public @interface ExcelFunctionMergeRow {
 	public ExcelColumn excelColumn();
 
 	/**
-	 * Excel merge row.
+	 * Merge configuration for this formula column.
 	 *
-	 * @return the excel merge row
+	 * <p>Since formula columns have no bean field, the merge trigger cannot be
+	 * derived from the column's own value. Always specify a driver field name via
+	 * {@code @ExcelMergeRow("driverField")}, where {@code driverField} is a regular
+	 * field in the same {@code RowSheet} class annotated with a plain
+	 * {@code @ExcelMergeRow} (empty value).</p>
+	 *
+	 * @return the {@link ExcelMergeRow} specifying the driver field for this formula column
 	 */
 	public ExcelMergeRow excelMergeRow();
 

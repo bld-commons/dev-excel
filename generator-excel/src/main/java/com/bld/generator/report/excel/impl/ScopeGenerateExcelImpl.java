@@ -411,11 +411,11 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 				this.setCellFormulaAndEvaluate(sheet, functionCell.getMergeRow(), 0, functionCell.getFormulaEvaluator());
 			else
 				this.setCellFormulaAndEvaluateCell(functionCell.getCell(), functionCell.getCell().getCellStyle(), functionCell.getSheetHeader(), functionCell.getCell().getRowIndex(), sheet, functionCell.getFormulaEvaluator());
-
-			// evaluateAllFormulaCells(workbook, sheet);
 		}
 
 		workbook.setForceFormulaRecalculation(true);
+		if (report.isEvaluateFormulas())
+			formulaEvaluator.evaluateAll();
 
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++)
 			workbook.setSheetName(i, workbook.getSheetName(i).replace(BaseSheet.APOS, "'"));
