@@ -6,6 +6,7 @@
 package com.bld.generator.report.excel.annotation.impl;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import com.bld.generator.report.excel.annotation.ExcelFormulaAlias;
 import com.bld.generator.report.excel.annotation.ExcelFunction;
@@ -94,6 +95,36 @@ public class ExcelFunctionImpl extends ExcelAnnotationImpl<ExcelFunction> {
 		this.nameFunction = nameFunction;
 		this.anotherTable = anotherTable;
 		this.alias = alias;
+	}
+
+	/**
+	 * Adds an {@link com.bld.generator.report.excel.annotation.ExcelFormulaAlias} to the alias array.
+	 *
+	 * @param consumer the alias configurator
+	 * @return this (for chaining inside a lambda)
+	 */
+	public ExcelFunctionImpl addAlias(Consumer<ExcelFormulaAliasImpl> consumer) {
+		ExcelFormulaAliasImpl impl = new ExcelFormulaAliasImpl();
+		consumer.accept(impl);
+		if (this.alias == null) {
+			this.alias = new ExcelFormulaAlias[]{impl.getAnnotation()};
+		} else {
+			ExcelFormulaAlias[] updated = Arrays.copyOf(this.alias, this.alias.length + 1);
+			updated[updated.length - 1] = impl.getAnnotation();
+			this.alias = updated;
+		}
+		return this;
+	}
+
+	/**
+	 * Sets the on sub total row via a configurator lambda.
+	 *
+	 * @param consumer the sub total row configurator
+	 */
+	public void setOnSubTotalRow(Consumer<ExcelFunctionSubTotalImpl> consumer) {
+		ExcelFunctionSubTotalImpl impl = new ExcelFunctionSubTotalImpl();
+		consumer.accept(impl);
+		this.onSubTotalRow = impl.getAnnotation();
 	}
 
 	@Override

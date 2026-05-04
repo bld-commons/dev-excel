@@ -7,6 +7,7 @@ package com.bld.generator.report.excel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -98,6 +99,20 @@ public abstract class SheetDynamicData<T extends DynamicRowSheet> extends SheetD
 	public void addExtraColumn(String key, ExtraColumnAnnotation extraColumnAnnotation) {
 		if (StringUtils.isNotBlank(key) && extraColumnAnnotation != null)
 			this.mapExtraColumnAnnotation.put(key, extraColumnAnnotation);
+	}
+
+	/**
+	 * Adds and configures a dynamic column via a configurator lambda.
+	 *
+	 * @param key      the column key (must match the key in {@link com.bld.generator.report.excel.DynamicRowSheet#getMapValue()})
+	 * @param consumer the column configurator
+	 */
+	public void addExtraColumnAnnotation(String key, Consumer<ExtraColumnAnnotation> consumer) {
+		if (StringUtils.isNotBlank(key) && consumer != null) {
+			ExtraColumnAnnotation annotation = new ExtraColumnAnnotation();
+			consumer.accept(annotation);
+			this.mapExtraColumnAnnotation.put(key, annotation);
+		}
 	}
 
 	/**

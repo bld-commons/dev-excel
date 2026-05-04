@@ -76,7 +76,7 @@ public abstract class MapSheetRead<ID, T extends RowSheetRead> extends SheetRead
 	}
 
 	/**
-	 * Adds a row to the underlying list (via {@link SheetRead#addRowSheet(RowSheetRead)})
+	 * Adds a row to the underlying list (via {@link SheetRead#addRow(RowSheetRead)})
 	 * and also inserts it into the internal index map using the value of the configured
 	 * key field as the map key.
 	 * <p>
@@ -89,8 +89,8 @@ public abstract class MapSheetRead<ID, T extends RowSheetRead> extends SheetRead
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void addRowSheet(T t) throws Exception {
-		super.addRowSheet(t);
+	public void addRow(T t) throws Exception {
+		super.addRow(t);
 		this.mapRows.put((ID) new BeanWrapperImpl(t).getPropertyValue(keyField), t);
 	}
 

@@ -28,14 +28,14 @@ This project provides two libraries built on top of Apache POI to simplify the g
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 
 <!-- Excel / CSV Reader -->
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -86,6 +86,7 @@ Add one of the following annotations to your Spring Boot configuration class or 
 | `@ExcelSuperHeaders` | Class | Adds a merged header row above the regular header |
 | `@ExcelDataValidation` | Field | Adds dropdown list validation |
 | `@ExcelQuery` | Class | Populates rows from a native SQL or JPQL query |
+| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Class | Adds computed formula columns entirely via annotation; `${fieldName}` placeholders resolve to cell addresses |
 
 ### Generation Methods
 
@@ -133,10 +134,16 @@ Add one of the following annotations to your Spring Boot configuration class or 
 |---|---|---|
 | `@ExcelReadSheet` | Class | Configures sheet name, start row and start column |
 | `@ExcelReadColumn` | Field | Maps a field to an Excel column header name |
+| `@ExcelBooleanText` | Field | Maps a string cell ("Sì"/"No", "Yes"/"No", …) to a `Boolean` field |
+| `@ExcelDate` | Field | Specifies the date format when reading string cells |
+| `@CsvSettings` | Class | Configures CSV parsing (delimiter, header skip, parallel mode) |
+| `@CsvDate` | Field | Specifies the date format for CSV date columns |
 
 ### Supported Field Types
 
 `String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
+
+> **Performance:** per-class metadata is cached in a `ConcurrentHashMap` after the first read; subsequent reads of the same class incur zero reflection overhead.
 
 ---
 
@@ -226,14 +233,14 @@ Questo progetto fornisce due librerie basate su Apache POI per semplificare la g
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 
 <!-- Lettura Excel / CSV -->
 <dependency>
     <groupId>com.github.bld-commons.excel</groupId>
     <artifactId>read-excel</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -284,6 +291,7 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 | `@ExcelSuperHeaders` | Classe | Aggiunge una riga di intestazione unificata sopra quella standard |
 | `@ExcelDataValidation` | Campo | Aggiunge validazione con lista a discesa |
 | `@ExcelQuery` | Classe | Popola le righe da query SQL nativa o JPQL |
+| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Classe | Aggiunge colonne formula calcolate interamente tramite annotazione; i segnaposto `${nomeCampo}` vengono risolti in indirizzi cella |
 
 ### Modalità di Generazione
 
@@ -331,10 +339,16 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 |---|---|---|
 | `@ExcelReadSheet` | Classe | Configura nome foglio, riga e colonna iniziale |
 | `@ExcelReadColumn` | Campo | Mappa un campo al nome di intestazione di una colonna Excel |
+| `@ExcelBooleanText` | Campo | Mappa una cella stringa ("Sì"/"No", "Yes"/"No", …) a un campo `Boolean` |
+| `@ExcelDate` | Campo | Specifica il formato data per la lettura di celle stringa |
+| `@CsvSettings` | Classe | Configura il parsing CSV (delimitatore, skip intestazione, modalità parallela) |
+| `@CsvDate` | Campo | Specifica il formato data per le colonne data CSV |
 
 ### Tipi di Campo Supportati
 
 `String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
+
+> **Performance:** i metadati per classe vengono memorizzati in una `ConcurrentHashMap` dopo la prima lettura; le letture successive della stessa classe non eseguono alcuna reflection.
 
 ---
 

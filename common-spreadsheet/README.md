@@ -8,7 +8,7 @@ Shared foundation library for the dev-excel project. Provides core annotations, 
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>common-spreadsheet</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 

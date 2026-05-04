@@ -5,6 +5,8 @@
  */
 package com.bld.generator.report.excel.annotation.impl;
 
+import java.util.function.Consumer;
+
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -97,6 +99,17 @@ public class ExcelSubtotalImpl extends ExcelAnnotationImpl<ExcelSubtotal> {
 	 */
 	public void setDataConsolidateFunction(DataConsolidateFunction dataConsolidateFunction) {
 		this.dataConsolidateFunction = dataConsolidateFunction;
+	}
+
+	/**
+	 * Sets the excel cell layout via a configurator lambda.
+	 *
+	 * @param consumer the cell layout configurator
+	 */
+	public void setExcelCellLayout(Consumer<ExcelCellLayoutImpl> consumer) {
+		ExcelCellLayoutImpl impl = new ExcelCellLayoutImpl();
+		consumer.accept(impl);
+		this.excelCellLayout = impl.getAnnotation();
 	}
 
 	/**

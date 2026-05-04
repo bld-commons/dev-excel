@@ -22,12 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +57,8 @@ import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bld.common.spreadsheet.constant.RowStartEndType;
@@ -121,6 +121,8 @@ public abstract class SuperGenerateExcelImpl {
 	/** The Constant PATTERN. */
 	private static final String PATTERN = "\\$\\{.*?}";
 
+	private static final Map<Class<?>, List<SheetHeader>> SHEET_HEADER_TEMPLATE_CACHE = new ConcurrentHashMap<>();
+
 	// private static final String PATTERN_QUAD = "\\[.*?\\]";
 
 	/** The merge calcolo cells. */
@@ -178,8 +180,19 @@ public abstract class SuperGenerateExcelImpl {
 	 * @return the list sheet header
 	 * @throws Exception the exception
 	 */
-	protected List<SheetHeader> getListSheetHeader(Class<?> classRow, Object entity, Sheet sheet) throws Exception {
+	protected List<SheetHeader> getListSheetHeader(Class<?> classRow, BaseSheet baseSheet, Sheet sheet) throws Exception {
 		logger.debug("Row: " + classRow.getSimpleName());
+		if (baseSheet != null)
+			return buildSheetHeaderList(classRow, baseSheet);
+		List<SheetHeader> cached = SHEET_HEADER_TEMPLATE_CACHE.get(classRow);
+		if (cached != null)
+			return cloneSheetHeaderList(cached);
+		List<SheetHeader> listSheetHeader = buildSheetHeaderList(classRow, null);
+		SHEET_HEADER_TEMPLATE_CACHE.put(classRow, Collections.unmodifiableList(listSheetHeader));
+		return listSheetHeader;
+	}
+
+	private List<SheetHeader> buildSheetHeaderList(Class<?> classRow, BaseSheet baseSheet) throws Exception {
 		Set<String> listTitle = new HashSet<>();
 		List<SheetHeader> listSheetHeader = new ArrayList<>();
 		Set<Field> listField = SpreadsheetUtils.getListField(classRow);
@@ -187,8 +200,8 @@ public abstract class SuperGenerateExcelImpl {
 			ExcelColumn column = field.getAnnotation(ExcelColumn.class);
 			if (column != null && !column.ignore()) {
 				Object value = null;
-				if (entity != null)
-					value = new BeanWrapperImpl(entity).getPropertyValue(field.getName());
+				if (baseSheet != null)
+					value = new BeanWrapperImpl(baseSheet).getPropertyValue(field.getName());
 				SheetHeader sheetHeader = new SheetHeader(field, value);
 				if (value != null) {
 					value = manageExcelImage(sheetHeader, value);
@@ -217,7 +230,6 @@ public abstract class SuperGenerateExcelImpl {
 				sheetHeader.setExcelSubtotal(excelFunction.excelSubtotal());
 				sheetHeader.setExcelNumberFormat(excelFunction.excelNumberFormat());
 				listSheetHeader.add(sheetHeader);
-
 			}
 			for (ExcelFunctionMergeRow excelFunctionMerge : excelFunctionRows.excelFunctionMerges()) {
 				SheetHeader sheetHeader = new SheetHeader();
@@ -230,12 +242,17 @@ public abstract class SuperGenerateExcelImpl {
 				sheetHeader.setExcelSubtotal(excelFunctionMerge.excelSubtotal());
 				sheetHeader.setExcelNumberFormat(excelFunctionMerge.excelNumberFormat());
 				listSheetHeader.add(sheetHeader);
-
 			}
 		}
-
 		Collections.sort(listSheetHeader, new SheetColumnComparator(this.valueProps));
 		return listSheetHeader;
+	}
+
+	private List<SheetHeader> cloneSheetHeaderList(List<SheetHeader> source) throws CloneNotSupportedException {
+		List<SheetHeader> result = new ArrayList<>(source.size());
+		for (SheetHeader sheetHeader : source)
+			result.add((SheetHeader) sheetHeader.clone());
+		return result;
 	}
 
 	/**
@@ -485,8 +502,7 @@ public abstract class SuperGenerateExcelImpl {
 	 * @throws Exception the exception
 	 */
 	protected void setCellFormulaAndEvaluate(Sheet sheet, MergeCell mergeRow, Integer indexRow, FormulaEvaluator formulaEvaluator) throws Exception {
-		Cell cell = setCellFormula(sheet, mergeRow, indexRow);
-		//formulaEvaluator.evaluateFormulaCell(cell);
+		setCellFormula(sheet, mergeRow, indexRow);
 	}
 
 	/**

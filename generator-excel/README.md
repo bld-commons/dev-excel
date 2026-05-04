@@ -77,7 +77,17 @@ try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
 ```java
 // 1. Row entity
-public class EmployeeRow implements RowSheet {
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn = @ExcelColumn(index = 9, name = "Taxation"),
+        excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2),
+        excelFunction = @ExcelFunction(
+            function = "IF(${salary}<=28000,${salary}*0.23,IF(${salary}<=50000,${salary}*0.35,${salary}*0.43))",
+            nameFunction = "taxation"
+        )
+    )
+})
+public class EmployeeRow implements RowSheet, CsvRow {
 
     @ExcelColumn(name = "ID", index = 1)
     private Integer id;
@@ -119,6 +129,9 @@ public byte[] export(List<EmployeeRow> employees) throws Exception {
 }
 ```
 
+
+> The `@ExcelFunctionRows` annotation adds a computed formula column entirely via annotation — no value needs to be set on the row entity. The `${fieldName}` placeholders are resolved to the actual Excel cell addresses at generation time. The same `EmployeeRow` class implements both `RowSheet` (for Excel) and `CsvRow` (for CSV), allowing a single data object to be used with both generators.
+
 | | Apache POI | generator-excel |
 |---|---|---|
 | Lines of code | ~70 | ~20 |
@@ -135,7 +148,7 @@ public byte[] export(List<EmployeeRow> employees) throws Exception {
 <dependency>
     <groupId>com.github.bld-commons</groupId>
     <artifactId>generator-excel</artifactId>
-    <version>5.1.4</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -223,7 +236,7 @@ Full hierarchy overview: [→ docs/domain-classes.md](docs/domain-classes.md)
 
 | Category | Annotations | Details |
 |----------|-------------|---------|
-| **Sheet Layout & Structure** | `@ExcelSheetLayout`, `@ExcelHeaderLayout`, `@ExcelHeaderCellLayout`, `@ExcelMarginSheet`, `@ExcelFreezePane`, `@ExcelAreaBorder`, `@ExcelLocked`, `@ExcelRowHeight` | [→ docs/sheet-layout.md](docs/sheet-layout.md) |
+| **Sheet Layout & Structure** | `@ExcelSheetLayout`, `@ExcelHeaderLayout`, `@ExcelHeaderCellLayout`, `@ExcelMarginSheet`, `@ExcelFreezePane`, `@ExcelAreaBorder`, `@ExcelLocked`, `LockedSheet`, `@ExcelRowHeight` | [→ docs/sheet-layout.md](docs/sheet-layout.md) |
 | **Columns & Cells** | `@ExcelColumn`, `@ExcelCellLayout`, `@ExcelFont`, `@ExcelBorder`, `@ExcelRgbColor`, `@ExcelColumnWidth`, `@ExcelNumberFormat`, `@ExcelMergeRow` | [→ docs/columns-cells.md](docs/columns-cells.md) |
 | **Functions & Formulas** | `@ExcelFunctionRows`, `@ExcelFunctionRow`, `@ExcelFunctionMergeRow`, `@ExcelFunction`, `@ExcelFunctionSubTotal`, `@ExcelFormulaAlias` | [→ docs/functions-formulas.md](docs/functions-formulas.md) |
 | **Subtotals** | `@ExcelSubtotals`, `@ExcelSubtotal` | [→ docs/subtotals.md](docs/subtotals.md) |
@@ -298,6 +311,203 @@ public class EmployeeSheet extends QuerySheetData<EmployeeRow> {
 EmployeeSheet sheet = new EmployeeSheet("Employees");
 sheet.addParameters("dept", "Engineering");
 byte[] bytes = generateExcel.createFileXlsx(new ReportExcel("report", List.of(sheet)));
+```
+
+---
+
+## Computed Formula Columns — `@ExcelFunctionRows` / `@ExcelFunctionRow`
+
+A column can be declared entirely via annotation, with no corresponding value in the row entity. The formula references other row fields using `${fieldName}` placeholders, which are resolved to actual Excel cell addresses at generation time.
+
+```java
+@ExcelFunctionRows(excelFunctions = {
+    @ExcelFunctionRow(
+        excelColumn = @ExcelColumn(index = 9, name = "Taxation"),
+        excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2),
+        excelFunction = @ExcelFunction(
+            function = "IF(${salary}<=28000,${salary}*0.23,IF(${salary}<=50000,${salary}*0.35,${salary}*0.43))",
+            nameFunction = "taxation"
+        )
+    )
+})
+public class EmployeeRow implements RowSheet { ... }
+```
+
+The formula above applies a progressive tax rate to each row: salary ≤ 28,000 → 23%, 28,001–50,000 → 35%, > 50,000 → 43%. The `nameFunction` value (`"taxation"`) uniquely identifies the computed column; it can be referenced in `@ExcelMergeRow(referenceField = ...)` or other formulas.
+
+For a full reference of formula syntax, placeholder variants (`${field}`, `${field[start]}:${field[end]}`, cross-sheet syntax), and the related annotations `@ExcelFunctionMergeRow`, `@ExcelFunction`, `@ExcelFunctionSubTotal`, and `@ExcelFormulaAlias`, see the [Functions & Formulas reference in the Annotations Reference section](#annotations-reference).
+
+---
+
+## Dual Excel + CSV Row Classes
+
+A single row class can implement both `RowSheet` (for Excel generation) and `CsvRow` (for CSV generation), allowing the same data object to be passed to both `GenerateExcel` and `GenerateCsv` without duplication:
+
+```java
+public class EmployeeRow implements RowSheet, CsvRow {
+
+    @ExcelColumn(name = "Name", index = 1)
+    @CsvColumn(name = "Name", index = 0)
+    private String name;
+
+    // other fields ...
+}
+```
+
+---
+
+## Dynamic Columns
+
+**Dynamic columns** let you add columns at runtime without declaring them as annotated fields in the `RowSheet`. They are useful when the number or type of columns is only known at execution time (e.g. years, variable parameters).
+
+### `DynamicRowSheet`
+
+Abstract class extending `RowSheet`. Values for dynamic columns are stored in an internal `mapValue` map keyed by string.
+
+```java
+public class AuthorBooksRowDynamic extends DynamicRowSheet {
+
+    @ExcelColumn(name = "ID", index = 1)
+    @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
+    @ExcelMergeRow
+    private Integer id;
+
+    @ExcelColumn(name = "Name", index = 2)
+    @ExcelCellLayout
+    @ExcelMergeRow(referenceField = "id")
+    private String name;
+
+    // other static fields ...
+}
+
+// Adding dynamic values per row
+AuthorBooksRowDynamic row = new AuthorBooksRowDynamic(...);
+row.addValue("year2015", 23.4);
+row.addValue("year2016", 30.12);
+row.addValue("reportDate", new Date());
+```
+
+### `SheetDynamicData<T extends DynamicRowSheet>`
+
+Abstract sheet class that accepts dynamic columns. Columns are configured via `addExtraColumnAnnotation`.
+
+```java
+@ExcelSheetLayout
+@ExcelHeaderLayout
+public class AuthorBooksSheetDynamic extends SheetDynamicData<AuthorBooksRowDynamic> {
+    public AuthorBooksSheetDynamic(String sheetName) { super(sheetName); }
+}
+```
+
+### `addExtraColumnAnnotation(String key, Consumer<ExtraColumnAnnotation>)`
+
+Adds and configures a dynamic column via lambda. The `key` must match the key used in `DynamicRowSheet.addValue(...)`.
+
+`ExtraColumnAnnotation` supports the same annotations as a static `RowSheet` field:
+
+| Setter | Description |
+|--------|-------------|
+| `setExcelColumn(Consumer<ExcelColumnImpl>)` | **Required.** Column name, index, ignore flag |
+| `setExcelCellLayout(Consumer<ExcelCellLayoutImpl>)` | **Required.** Cell style |
+| `setExcelDate(Consumer<ExcelDateImpl>)` | Date format |
+| `setExcelFunction(Consumer<ExcelFunctionImpl>)` | Computed Excel formula per row |
+| `setExcelSubtotal(Consumer<ExcelSubtotalImpl>)` | Column subtotal |
+| `setExcelMergeRow(Consumer<ExcelMergeRowImpl>)` | Merge consecutive cells |
+| `setExcelHeaderCellLayout(Consumer<ExcelHeaderCellLayoutImpl>)` | Header cell style |
+| `setExcelColumnWidth(Consumer<ExcelColumnWidthImpl>)` | Column width |
+| `setExcelDataValidation(Consumer<ExcelDataValidationImpl>)` | Cell validation rule |
+| `setExcelDropDown(Consumer<ExcelDropDownImpl>)` | Drop-down list |
+| `setExcelBooleanText(Consumer<ExcelBooleanTextImpl>)` | Boolean display text |
+| `setExcelNumberFormat(Consumer<ExcelNumberFormatImpl>)` | Custom number format |
+| `setExcelImage(Consumer<ExcelImageImpl>)` | Image in cell |
+
+### Example
+
+```java
+AuthorBooksSheetDynamic sheet = new AuthorBooksSheetDynamic("Author Books");
+
+Consumer<ExcelCellLayoutImpl> doubleCellLayout = l -> {
+    l.setWrap(true);
+    l.setVerticalAlignment(VerticalAlignment.CENTER);
+    l.setPrecision(2);
+    l.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+    l.setFillPatternType(FillPatternType.SOLID_FOREGROUND);
+    l.addRgbForeground(r -> { r.setRed((byte) 255); r.setGreen((byte) 255); r.setBlue((byte) 255); });
+    l.addRgbFont(r -> {});
+    l.setBorder(b -> {
+        b.setLeft(BorderStyle.THIN); b.setTop(BorderStyle.THIN);
+        b.setRight(BorderStyle.THIN); b.setBottom(BorderStyle.THIN);
+    });
+};
+
+// Plain value column
+sheet.addExtraColumnAnnotation("year2015", a -> {
+    a.setExcelColumn(c -> { c.setName("2015"); c.setIndex(20); });
+    a.setExcelCellLayout(doubleCellLayout);
+});
+
+// Formula column with subtotal and merge
+sheet.addExtraColumnAnnotation("totalYearsPerAuthor", a -> {
+    a.setExcelColumn(c -> { c.setName("Total Years per Author"); c.setIndex(22); });
+    a.setExcelCellLayout(doubleCellLayout);
+    a.setExcelFunction(f -> {
+        f.setFunction("sum(${totalYearsRowStart}:${totalYearsRowEnd})");
+        f.setNameFunction("totalYearsPerAuthor");
+        f.setAnotherTable(false);
+    });
+    a.setExcelMergeRow(m -> m.setReferenceField("id"));
+    a.setExcelColumnWidth(cw -> cw.setWidth(10));
+});
+
+// Populate rows
+AuthorBooksRowDynamic row = new AuthorBooksRowDynamic("Alice", "Rossi", 1, 25.5);
+row.addValue("year2015", 23.4);
+sheet.addRows(row);
+
+byte[] bytes = generateExcel.createFileXlsx(new ReportExcel("report", List.of(sheet)));
+```
+
+---
+
+## Merge Rows — `@ExcelMergeRow`
+
+Merges consecutive cells in a column when the annotated field value does not change between rows.
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `referenceField` | `String[]` | `{}` | Field names (or `nameFunction`) used as the merge-break condition |
+
+**Behaviour**
+
+| Configuration | Effect |
+|---|---|
+| `@ExcelMergeRow` (no parameters) | Value-based merge: breaks when the cell value changes. Valid only on the first column. |
+| `@ExcelMergeRow(referenceField = "field")` | Merge breaks when `field` changes compared to the previous row. |
+| `@ExcelMergeRow(referenceField = {"f1","f2"})` | Merge breaks when any of the listed fields changes. |
+
+Each value in `referenceField` must match either:
+- a Java field name in the `RowSheet` class, or
+- a `nameFunction` from a `@ExcelFunction` / `ExtraColumnAnnotation` column.
+
+A blank value or one that does not match any field throws `ExcelGeneratorException` at runtime.
+
+> `@ExcelMergeRow` only takes effect when `notMerge = false` in `@ExcelSheetLayout` (the default).
+
+```java
+// Value-based merge — first column only
+@ExcelColumn(name = "ID", index = 1)
+@ExcelMergeRow
+private Integer id;
+
+// Merge breaks when "id" changes
+@ExcelColumn(name = "Name", index = 2)
+@ExcelMergeRow(referenceField = "id")
+private String name;
+
+// Merge breaks when "id" or "surname" changes
+@ExcelColumn(name = "Genre", index = 5)
+@ExcelMergeRow(referenceField = {"id", "surname"})
+private String genre;
 ```
 
 ---

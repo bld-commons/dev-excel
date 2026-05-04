@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -89,6 +87,7 @@ import org.openxmlformats.schemas.drawingml.x2006.chart.CTScatterChart;
 import org.openxmlformats.schemas.drawingml.x2006.chart.CTScatterSer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -105,6 +104,7 @@ import com.bld.generator.report.excel.DynamicChart;
 import com.bld.generator.report.excel.DynamicRowSheet;
 import com.bld.generator.report.excel.FunctionsTotal;
 import com.bld.generator.report.excel.LoadSheetData;
+import com.bld.generator.report.excel.LockedSheet;
 import com.bld.generator.report.excel.MergeSheet;
 import com.bld.generator.report.excel.QuerySheetData;
 import com.bld.generator.report.excel.RowSheet;
@@ -113,6 +113,7 @@ import com.bld.generator.report.excel.SheetComponent;
 import com.bld.generator.report.excel.SheetData;
 import com.bld.generator.report.excel.SheetFunctionTotal;
 import com.bld.generator.report.excel.SheetSummary;
+import com.bld.generator.report.excel.annotation.ExcelLocked;
 import com.bld.generator.report.excel.annotation.ExcelAreaBorder;
 import com.bld.generator.report.excel.annotation.ExcelBarChartData;
 import com.bld.generator.report.excel.annotation.ExcelCellLayout;
@@ -434,6 +435,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			} else if (baseSheet instanceof SheetData) {
 				this.generateSheetData(workbook, sheet, (SheetData<? extends RowSheet>) baseSheet, 0, false, formulaEvaluator);
 			}
+			ExcelSheetLayout excelSheetLayout = SpreadsheetUtils.getAnnotation(baseSheet.getClass(), ExcelSheetLayout.class);
+			applySheetLock(workbook, sheet, baseSheet, excelSheetLayout);
 
 			// formulaEvaluator.evaluateAll();
 			Date endSheet = new Date();
@@ -720,7 +723,7 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
 
 						} else if (ArrayUtils.isNotEmpty(sheetHeader.getExcelMergeRow().referenceField())) {
-							if (checkMergeColumn(sheetHeader, rowSheet, lastRowSheet, valueBefore))
+							if (checkMergeColumn(sheetHeader, rowSheet, lastRowSheet, valueBefore, listSheetHeader))
 								super.mergeRowAndRemoveMap(workbook, sheet, workRow, mapMergeRow, numColumn, formulaEvaluator);
 							else
 								repeat = super.setCellValueWillMerged(workbook, cellStyle, cell, sheetHeader, workRow, sheet);
@@ -889,12 +892,6 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			logger.info(rangeAddress);
 			sheet.setAutoFilter(new CellRangeAddress(startRowSheet - 1, indexRow - 1, excelSheetLayout.startColumn(), listSheetHeader.size() + excelSheetLayout.startColumn() - 1));
 		}
-		if (excelSheetLayout.locked().locked() || excelSheetLayout.hidden()) {
-			if (sheet instanceof XSSFSheet && enableAutoFilter)
-				((XSSFSheet) sheet).lockAutoFilter(false);
-			sheet.protectSheet(this.valueProps.valueProps(excelSheetLayout.locked().value()));
-			workbook.setSheetHidden(workbook.getSheetIndex(sheet), excelSheetLayout.hidden());
-		}
 
 		if (sheetData instanceof FunctionsTotal) {
 			FunctionsTotal<SheetFunctionTotal<? extends RowSheet>> functionsTotal = (FunctionsTotal<SheetFunctionTotal<? extends RowSheet>>) sheetData;
@@ -1049,24 +1046,32 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 	/**
 	 * Check merge column.
 	 *
-	 * @param sheetHeader  the sheet header
-	 * @param rowSheet     the row sheet
-	 * @param lastRowSheet the last row sheet
-	 * @param valueBefore  the value before
+	 * @param sheetHeader     the sheet header
+	 * @param rowSheet        the row sheet
+	 * @param lastRowSheet    the last row sheet
+	 * @param valueBefore     the value before
+	 * @param listSheetHeader the list sheet header
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	private boolean checkMergeColumn(SheetHeader sheetHeader, RowSheet rowSheet, RowSheet lastRowSheet, Object valueBefore) throws Exception {
+	private boolean checkMergeColumn(SheetHeader sheetHeader, RowSheet rowSheet, RowSheet lastRowSheet, Object valueBefore, List<SheetHeader> listSheetHeader) throws Exception {
 		for (String referenceField : sheetHeader.getExcelMergeRow().referenceField()) {
-			if (StringUtils.isNotBlank(referenceField)) {
-				Object valueRefColumn = new BeanWrapperImpl(rowSheet).getPropertyValue(referenceField);
-				Object valueRefColumnBefore = new BeanWrapperImpl(lastRowSheet).getPropertyValue(referenceField);
-				if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
-					return true;
-			}
+			if (StringUtils.isBlank(referenceField))
+				throw new ExcelGeneratorException("@ExcelMergeRow referenceField contains a blank value - use @ExcelMergeRow without parameters for value-based merging");
+			SheetHeader refHeader = listSheetHeader.stream()
+				.filter(h -> (h.getField() != null && referenceField.equals(h.getField().getName())) || referenceField.equals(h.getKeyMap()))
+				.findFirst()
+				.orElseThrow(() -> new ExcelGeneratorException("@ExcelMergeRow referenceField \"" + referenceField + "\" does not match any field or function name in the sheet"));
+			Object valueRefColumn = refHeader.getField() != null
+				? new BeanWrapperImpl(rowSheet).getPropertyValue(referenceField)
+				: ((DynamicRowSheet) rowSheet).getMapValue().get(referenceField);
+			Object valueRefColumnBefore = refHeader.getField() != null
+				? new BeanWrapperImpl(lastRowSheet).getPropertyValue(referenceField)
+				: ((DynamicRowSheet) lastRowSheet).getMapValue().get(referenceField);
+			if ((valueRefColumn != null && valueRefColumnBefore != null && !valueRefColumn.equals(valueRefColumnBefore)) || !(sheetHeader.getValue() == valueBefore || sheetHeader.getValue().equals(valueBefore)))
+				return true;
 		}
 		return false;
-
 	}
 
 	/**
@@ -1706,4 +1711,27 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 		}
 
 	}
+
+	private void applySheetLock(Workbook workbook, Sheet sheet, BaseSheet baseSheet, ExcelSheetLayout excelSheetLayout) {
+		boolean isLocked = (baseSheet instanceof LockedSheet) || baseSheet.getClass().isAnnotationPresent(ExcelLocked.class);
+		if (isLocked || excelSheetLayout.hidden()) {
+			if (isLocked) {
+				if (sheet instanceof XSSFSheet)
+					((XSSFSheet) sheet).lockAutoFilter(false);
+				String password = resolvePassword(baseSheet);
+				sheet.protectSheet(StringUtils.isNotBlank(password) ? password : "");
+			}
+			workbook.setSheetHidden(workbook.getSheetIndex(sheet), excelSheetLayout.hidden());
+		}
+	}
+
+	private String resolvePassword(BaseSheet baseSheet) {
+		if (baseSheet instanceof LockedSheet sheet)
+			return sheet.password();
+		ExcelLocked excelLocked = baseSheet.getClass().getAnnotation(ExcelLocked.class);
+		if (excelLocked != null)
+			return this.valueProps.valueProps(excelLocked.value());
+		return null;
+	}
+
 }

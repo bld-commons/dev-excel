@@ -40,7 +40,7 @@ public @interface ExcelFunctionRow {
 	 *
 	 * @return the excel cell layout
 	 */
-	public ExcelCellLayout excelCellsLayout() default @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2);
+	public ExcelCellLayout excelCellsLayout() default @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,precision = 2,locked = true);
 	
 	/**
 	 * Excel column.

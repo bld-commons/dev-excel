@@ -5,6 +5,8 @@
 */
 package com.bld.generator.report.excel.annotation.impl;
 
+import java.util.function.Consumer;
+
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -266,6 +268,50 @@ public class ExcelHeaderCellLayoutImpl extends ExcelAnnotationImpl<ExcelHeaderCe
 	 */
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	/**
+	 * Sets the rgb foreground via a configurator lambda.
+	 *
+	 * @param consumer the rgb foreground configurator
+	 */
+	public void setRgbForeground(Consumer<ExcelRgbColorImpl> consumer) {
+		ExcelRgbColorImpl impl = new ExcelRgbColorImpl();
+		consumer.accept(impl);
+		this.rgbForeground = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the rgb font via a configurator lambda.
+	 *
+	 * @param consumer the rgb font configurator
+	 */
+	public void setRgbFont(Consumer<ExcelRgbColorImpl> consumer) {
+		ExcelRgbColorImpl impl = new ExcelRgbColorImpl();
+		consumer.accept(impl);
+		this.rgbFont = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the font via a configurator lambda.
+	 *
+	 * @param consumer the font configurator
+	 */
+	public void setFont(Consumer<ExcelFontImpl> consumer) {
+		ExcelFontImpl impl = new ExcelFontImpl();
+		consumer.accept(impl);
+		this.font = impl.getAnnotation();
+	}
+
+	/**
+	 * Sets the border via a configurator lambda.
+	 *
+	 * @param consumer the border configurator
+	 */
+	public void setBorder(Consumer<ExcelBorderImpl> consumer) {
+		ExcelBorderImpl impl = new ExcelBorderImpl();
+		consumer.accept(impl);
+		this.border = impl.getAnnotation();
 	}
 
 	/**

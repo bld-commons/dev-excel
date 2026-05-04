@@ -22,15 +22,15 @@ public class ExcelController {
 	@PostMapping(path = "/sheet-read", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void readSheet(@RequestBody @Valid ReadSheetModel readSheetModel) {
 		if (readSheetModel.getReadAutoreLibriSheet() != null)
-			readObj(readSheetModel.getReadAutoreLibriSheet().getListRowSheet());
+			readObj(readSheetModel.getReadAutoreLibriSheet().getRows());
 	}
 	
 	
 	@PostMapping(path = "/excel-read", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void readExcel(@RequestBody @Valid ReadExcelModel readExcelModel) {
 		
-		readObj(readExcelModel.getReadSheetsModel().getAutoreLibri().getListRowSheet());
-		readObj(readExcelModel.getReadSheetsModel().getGenere().getListRowSheet());
+		readObj(readExcelModel.getReadSheetsModel().getAutoreLibri().getRows());
+		readObj(readExcelModel.getReadSheetsModel().getGenere().getRows());
 			
 	}
 	

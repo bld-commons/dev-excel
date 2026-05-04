@@ -78,7 +78,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	/** The matricola. */
 	@ExcelColumn(name = "Matricola", index = 1)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT)
-	@ExcelMergeRow(referenceField = "")
+	@ExcelMergeRow
 	private Integer matricola;
 
 	/** The prezzo. */

@@ -11,9 +11,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.bld.generator.report.excel.constant.ExcelConstant;
-
-
 /**
  * The Interface ExcelColumnWidth.
  * <br>
@@ -29,6 +26,6 @@ public @interface ExcelColumnWidth {
 	 *
 	 * @return the int
 	 */
-	public int width() default ExcelConstant.DEFAULT_WIDTH_COLUMN;
+	public int width() default 5;
 	
 }

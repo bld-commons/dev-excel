@@ -29,7 +29,7 @@ public class CsvRead<T extends RowSheetRead> {
 	private InputStream csv;
 
 	/** The list row sheet. */
-	private List<T> listRowSheet;
+	private List<T> rows;
 	
 	private boolean close;
 
@@ -38,7 +38,7 @@ public class CsvRead<T extends RowSheetRead> {
 	 */
 	public CsvRead() {
 		super();
-		this.listRowSheet = new ArrayList<>();
+		this.rows = new ArrayList<>();
 		this.close=false;
 	}
 
@@ -91,13 +91,13 @@ public class CsvRead<T extends RowSheetRead> {
 	 *
 	 * @return the list row sheet
 	 */
-	public List<T> getListRowSheet() {
-		return listRowSheet;
+	public List<T> getRows() {
+		return rows;
 	}
 	
 	
-	public void addRowSheet(T t) {
-		this.listRowSheet.add(t);
+	public void addRow(T t) {
+		this.rows.add(t);
 	}
 
 	/**

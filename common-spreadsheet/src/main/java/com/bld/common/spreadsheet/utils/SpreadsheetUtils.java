@@ -6,11 +6,13 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -45,6 +47,8 @@ public class SpreadsheetUtils {
 	public final static int SHEET_NAME_SIZE = 31;
 
 	private static final List<String> CLASS_PACKAGES = Arrays.asList("com.bld.generator", "com.bld.common");
+
+	private static final Map<Class<?>, Set<Field>> FIELD_CACHE = new ConcurrentHashMap<>();
 
     private static final Logger logger=LoggerFactory.getLogger(SpreadsheetUtils.class);
 	/**
@@ -160,13 +164,15 @@ public class SpreadsheetUtils {
 	 * @return a {@link java.util.Set} containing all declared fields in the hierarchy
 	 */
 	public static Set<Field> getListField(Class<?> classComponentExcel) {
-		Set<Field> listField = new HashSet<>();
-		Class<?> classApp = classComponentExcel;
-		do {
-			listField.addAll(Arrays.asList(classApp.getDeclaredFields()));
-			classApp = classApp.getSuperclass();
-		} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
-		return listField;
+		return FIELD_CACHE.computeIfAbsent(classComponentExcel, cls -> {
+			Set<Field> listField = new HashSet<>();
+			Class<?> classApp = cls;
+			do {
+				listField.addAll(Arrays.asList(classApp.getDeclaredFields()));
+				classApp = classApp.getSuperclass();
+			} while (classApp.getSuperclass() != null && !classApp.getName().equals(Object.class.getName()));
+			return Collections.unmodifiableSet(listField);
+		});
 	}
 
 	/**
