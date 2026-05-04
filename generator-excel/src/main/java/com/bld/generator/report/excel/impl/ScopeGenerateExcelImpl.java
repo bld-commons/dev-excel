@@ -594,14 +594,17 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 			}
 		}
 
+		BeanWrapperImpl beanWrapper = null;
 		for (RowSheet rowSheet : sheetData.getRows()) {
 			int splitRow = 0;
-			BeanWrapperImpl beanWrapper = new BeanWrapperImpl(rowSheet);
-			BeanWrapperImpl lastBeanWrapper = lastRowSheet != null ? new BeanWrapperImpl(lastRowSheet) : null;
+			if (beanWrapper == null)
+				beanWrapper = new BeanWrapperImpl(rowSheet);
+			else
+				beanWrapper.setWrappedInstance(rowSheet);
 			if (rowSheet.getClass().isAnnotationPresent(ExcelSubtotals.class)) {
 				if (enableSumForGroup && lastRowSheet != null) {
 					for (String fieldName : sumForGroups)
-						if (!lastBeanWrapper.getPropertyValue(fieldName).equals(beanWrapper.getPropertyValue(fieldName)))
+						if (!Objects.equals(mapValue.get(fieldName), beanWrapper.getPropertyValue(fieldName)))
 							splitRow = sumForGroups.indexOf(fieldName) + 1;
 					for (int i = 0; i < splitRow; i++) {
 						String fieldName = sumForGroups.get(i);
