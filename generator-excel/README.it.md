@@ -282,42 +282,39 @@ Impostano larghezze di colonna o altezze di riga personalizzate.
 
 #### `@ExcelMergeRow`
 
-Unisce celle consecutive in una colonna quando il valore del campo annotato non cambia tra una riga e la successiva.
+Unisce celle consecutive in una colonna. Il modello di merge usa una relazione esplicita **driver / dipendente** (introdotta in 5.2.0):
 
-| Attributo        | Tipo       | Default | Descrizione                                                                 |
-|------------------|------------|---------|-----------------------------------------------------------------------------|
-| `referenceField` | `String[]` | `{}`    | Nomi dei campi (o `nameFunction`) usati come condizione di interruzione del merge |
+| Attributo | Tipo     | Default | Descrizione                                                              |
+|-----------|----------|---------|--------------------------------------------------------------------------|
+| `value`   | `String` | `""`    | Nome del campo *driver*. Stringa vuota ⇒ la colonna è driver di se stessa. |
 
 **Comportamento**
 
 | Configurazione | Effetto |
 |---|---|
-| `@ExcelMergeRow` (senza parametri) | Merge basato sul valore della cella stessa; si interrompe quando il valore cambia. Valido solo sulla prima colonna. |
-| `@ExcelMergeRow(referenceField = "campo")` | Merge interrotto quando il campo `campo` cambia nella riga corrente rispetto alla precedente. |
-| `@ExcelMergeRow(referenceField = {"campo1","campo2"})` | Merge interrotto quando uno qualsiasi dei campi elencati cambia. |
+| `@ExcelMergeRow` (`value` vuoto) | Colonna driver: una nuova area di merge inizia ogni volta che il valore del campo cambia tra righe consecutive. |
+| `@ExcelMergeRow("driverField")` | Colonna dipendente: il merge segue le aree del campo `driverField` — indipendentemente dal valore della colonna stessa. |
 
-Ogni valore in `referenceField` deve corrispondere a:
-- un nome di campo Java della classe `RowSheet`, oppure
-- un `nameFunction` di una colonna `@ExcelFunction` / `ExtraColumnAnnotation`.
+`value` deve corrispondere a un nome di campo Java della stessa `RowSheet` (oppure a un `nameFunction` di una colonna `@ExcelFunction` / `ExtraColumnAnnotation`). Un valore non corrispondente fa lanciare `ExcelGeneratorException` a runtime.
 
-Un valore blank o non corrispondente ad alcun campo fa lanciare una `ExcelGeneratorException` a runtime.
+> Prerequisiti: `@ExcelSheetLayout(notMerge = false)` (valore di default), e la lista delle righe deve essere ordinata in modo che le righe dello stesso gruppo di merge siano contigue.
 
-> `@ExcelMergeRow` funziona solo se `notMerge = false` in `@ExcelSheetLayout` (valore di default).
+> **Migrazione da < 5.2.0:** l'attributo `String[] referenceField` è stato rimosso. Sostituire `@ExcelMergeRow(referenceField = "X")` con `@ExcelMergeRow("X")`. Per la vecchia forma multi-campo basta indicare il **primo elemento** (driver diretto): l'effetto multi-campo emerge per cascata dalla catena dei driver. Esempio: prima `referenceField = {"genere","matricola"}` su una colonna "Totale per Genere" serviva a spezzare il merge sia al cambio di genere che al cambio di autore. Adesso basta `@ExcelMergeRow("genere")`: la colonna `genere` è già dipendente da `matricola`, quindi quando `matricola` cambia il merge di `genere` si rompe, e il "Totale per Genere" eredita la rottura senza dover ripetere `matricola`.
 
 ```java
-// Merge basato sul valore della cella — solo prima colonna
+// Colonna driver: il merge tiene mentre "matricola" resta uguale tra righe consecutive
 @ExcelColumn(name = "Matricola", index = 1)
 @ExcelMergeRow
 private Integer matricola;
 
-// Merge interrotto quando cambia "matricola"
+// Colonna dipendente: il merge segue "matricola"
 @ExcelColumn(name = "Nome", index = 2)
-@ExcelMergeRow(referenceField = "matricola")
+@ExcelMergeRow("matricola")
 private String nome;
 
-// Merge interrotto quando cambia "matricola" o "cognome"
+// Altra colonna dipendente che segue lo stesso driver
 @ExcelColumn(name = "Genere", index = 5)
-@ExcelMergeRow(referenceField = {"matricola", "cognome"})
+@ExcelMergeRow("matricola")
 private String genere;
 ```
 
@@ -515,7 +512,7 @@ La formula Excel vera e propria è definita all'interno di `@ExcelFunction`.
 public class EmployeeRow implements RowSheet, CsvRow { ... }
 ```
 
-La formula applica un'aliquota fiscale progressiva a ogni riga: stipendio ≤ 28.000 → 23%, 28.001–50.000 → 35%, > 50.000 → 43%. Il valore `nameFunction` (`"tassazione"`) identifica univocamente la colonna calcolata e può essere referenziato in `@ExcelMergeRow(referenceField = ...)` o in altre formule.
+La formula applica un'aliquota fiscale progressiva a ogni riga: stipendio ≤ 28.000 → 23%, 28.001–50.000 → 35%, > 50.000 → 43%. Il valore `nameFunction` (`"tassazione"`) identifica univocamente la colonna calcolata e può essere usato come driver in `@ExcelMergeRow("...")` o referenziato in altre formule.
 
 La stessa classe riga può implementare sia `RowSheet` (per la generazione Excel) che `CsvRow` (per la generazione CSV), permettendo di usare lo stesso oggetto dati con entrambi i generatori.
 
@@ -717,7 +714,7 @@ public class SituazioneUfficiRow implements RowSheet { ... }
     excelFunctionMerges = {
         @ExcelFunctionMergeRow(
             excelColumn   = @ExcelColumn(index = 7.1, name = "Prezzo Totale per Autore"),
-            excelMergeRow = @ExcelMergeRow(referenceField = "matricola"),
+            excelMergeRow = @ExcelMergeRow("matricola"),
             excelFunction = @ExcelFunction(
                 function     = "sum(${prezzoRowStart}:${prezzoRowEnd})",
                 nameFunction = "prezzoTotalePerAutore",
@@ -742,14 +739,14 @@ public class SituazioneUfficiRow implements RowSheet { ... }
 public class LibroRow implements RowSheet { ... }
 ```
 
-**7. Confini di unione multi-campo**
+**7. Driver di merge esplicito**
 
-Il campo `referenceField` di `@ExcelMergeRow` dentro `@ExcelFunctionMergeRow` accetta un array; le celle vengono unite solo quando **tutti** i campi elencati sono uguali:
+In `@ExcelFunctionMergeRow` l'attributo `excelMergeRow.value` indica il singolo campo driver: la colonna calcolata viene fusa nelle stesse aree del driver.
 
 ```java
 @ExcelFunctionMergeRow(
     excelColumn   = @ExcelColumn(index = 7.3, name = "Prezzo Totale per Genere"),
-    excelMergeRow = @ExcelMergeRow(referenceField = {"genere", "matricola"}),
+    excelMergeRow = @ExcelMergeRow("genere"),
     excelFunction = @ExcelFunction(
         function     = "sum(${prezzoRowStart}:${prezzoRowEnd})",
         nameFunction = "prezzoTotalePerGenere",
@@ -757,6 +754,8 @@ Il campo `referenceField` di `@ExcelMergeRow` dentro `@ExcelFunctionMergeRow` ac
     )
 )
 ```
+
+> Nota 5.2.0: il vecchio `String[] referenceField` accettava più campi e rompeva il merge se uno qualsiasi cambiava. Adesso basta il **primo elemento** (driver diretto): l'effetto multi-campo si propaga per cascata — quando cambia un driver a monte, il merge della colonna dipendente immediata si rompe e tutte le colonne che la seguono ereditano la rottura.
 
 **8. Riferimento cross-sheet tramite alias**
 
@@ -889,7 +888,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 
     @ExcelColumn(name = "Nome", index = 2)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "matricola")
+    @ExcelMergeRow("matricola")
     private String nome;
 
     // campi statici normali ...
@@ -955,7 +954,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 
     @ExcelColumn(name = "Nome", index = 2)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "matricola")
+    @ExcelMergeRow("matricola")
     private String nome;
 
     // altri campi statici ...
@@ -1000,7 +999,7 @@ sheet.addExtraColumnAnnotation("totalePrezzoAnniAutore", a -> {
         f.setNameFunction("totalePrezzoAnniAutore");
         f.setAnotherTable(false);
     });
-    a.setExcelMergeRow(m -> m.setReferenceField("matricola"));
+    a.setExcelMergeRow(m -> m.setValue("matricola"));
     a.setExcelColumnWidth(cw -> cw.setWidth(10));
 });
 

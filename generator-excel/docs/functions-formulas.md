@@ -165,7 +165,7 @@ public class StaffRow implements RowSheet { ... }
     excelFunctionMerges = {
         @ExcelFunctionMergeRow(
             excelColumn   = @ExcelColumn(index = 7.1, name = "Total per Author"),
-            excelMergeRow = @ExcelMergeRow(referenceField = "authorId"),
+            excelMergeRow = @ExcelMergeRow("authorId"),
             excelFunction = @ExcelFunction(
                 function     = "sum(${priceRowStart}:${priceRowEnd})",
                 nameFunction = "totalPerAuthor",
@@ -216,12 +216,14 @@ public class BookRow implements RowSheet { ... }
 )
 ```
 
-**7. Multi-field merge boundaries**
+**7. Explicit merge driver**
+
+In `@ExcelFunctionMergeRow`, the `excelMergeRow.value` is the single driver field — the computed column merges in lockstep with that driver.
 
 ```java
 @ExcelFunctionMergeRow(
     excelColumn   = @ExcelColumn(index = 7.3, name = "Total per Genre"),
-    excelMergeRow = @ExcelMergeRow(referenceField = {"genre", "authorId"}),
+    excelMergeRow = @ExcelMergeRow("genre"),
     excelFunction = @ExcelFunction(
         function     = "sum(${priceRowStart}:${priceRowEnd})",
         nameFunction = "totalPerGenre",
@@ -229,3 +231,5 @@ public class BookRow implements RowSheet { ... }
     )
 )
 ```
+
+> Note 5.2.0: `String[] referenceField` accepted multiple fields and broke the merge when *any* of them changed. Now pass only the **first element** (direct driver): the multi-field effect cascades — when an upstream driver changes, the merge of the immediate dependent breaks and downstream observers inherit the break.

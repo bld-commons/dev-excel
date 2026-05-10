@@ -251,7 +251,7 @@ A production-style report that combines:
     excelFunctionMerges = {
         @ExcelFunctionMergeRow(
             excelColumn      = @ExcelColumn(index = 7.1, name = "Price per Author"),
-            excelMergeRow    = @ExcelMergeRow(referenceField = "authorId"),
+            excelMergeRow    = @ExcelMergeRow("authorId"),
             excelFunction    = @ExcelFunction(
                 function     = "sum(${priceRowStart}:${priceRowEnd})",
                 anotherTable = false,
@@ -272,7 +272,7 @@ A production-style report that combines:
         ),
         @ExcelFunctionMergeRow(
             excelColumn   = @ExcelColumn(index = 7.2, name = "Price per Genre"),
-            excelMergeRow = @ExcelMergeRow(referenceField = {"genre", "authorId"}),
+            excelMergeRow = @ExcelMergeRow("genre"),
             excelFunction = @ExcelFunction(
                 function     = "sum(${priceRowStart}:${priceRowEnd})",
                 anotherTable = false,
@@ -290,23 +290,23 @@ public class BookRow implements RowSheet {
 
     @ExcelColumn(name = "First Name", index = 2)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "authorId")
+    @ExcelMergeRow("authorId")
     private String firstName;
 
     @ExcelColumn(name = "Last Name", index = 3)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "authorId")
+    @ExcelMergeRow("authorId")
     private String lastName;
 
     @ExcelColumn(name = "Birth Date", index = 4)
     @ExcelDate(ColumnDateFormat.YYYY_MM_DD)
     @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
-    @ExcelMergeRow(referenceField = "authorId")
+    @ExcelMergeRow("authorId")
     private Calendar birthDate;
 
     @ExcelColumn(name = "Genre", index = 5)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "lastName")
+    @ExcelMergeRow("authorId")
     private String genre;
 
     @ExcelColumn(name = "Title", index = 6)

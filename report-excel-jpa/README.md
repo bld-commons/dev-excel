@@ -246,7 +246,7 @@ public class CensimentoSheet extends QuerySheetData<CensimentoRow> {
 public class CensimentoRow implements RowSheet {
     @ExcelColumn(name = "Nazione", index = 0)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "")   // merge equal consecutive values
+    @ExcelMergeRow   // driver column: merges equal consecutive values
     private String desNazione;
 
     @ExcelColumn(name = "Anno", index = 1)

@@ -229,11 +229,11 @@ public class ReportTestMultipleDataSource {
         excelRead = readExcel.convertExcelToEntity(excelRead);
 
         ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class, "Libri d'autore");
-        for (ReadAutoreLibriRow row : sheet.getListRowSheet())
+        for (ReadAutoreLibriRow row : sheet.getRows())
             System.out.println(row);
 
         ReadGenereSheet genereSheet = excelRead.getSheet(ReadGenereSheet.class, "Genere");
-        for (ReadGenereRow row : genereSheet.getListRowSheet())
+        for (ReadGenereRow row : genereSheet.getRows())
             System.out.println(row);
     }
 }

@@ -333,7 +333,7 @@ A column can be declared entirely via annotation, with no corresponding value in
 public class EmployeeRow implements RowSheet { ... }
 ```
 
-The formula above applies a progressive tax rate to each row: salary ≤ 28,000 → 23%, 28,001–50,000 → 35%, > 50,000 → 43%. The `nameFunction` value (`"taxation"`) uniquely identifies the computed column; it can be referenced in `@ExcelMergeRow(referenceField = ...)` or other formulas.
+The formula above applies a progressive tax rate to each row: salary ≤ 28,000 → 23%, 28,001–50,000 → 35%, > 50,000 → 43%. The `nameFunction` value (`"taxation"`) uniquely identifies the computed column; it can be referenced as the driver in `@ExcelMergeRow("...")` or in other formulas.
 
 For a full reference of formula syntax, placeholder variants (`${field}`, `${field[start]}:${field[end]}`, cross-sheet syntax), and the related annotations `@ExcelFunctionMergeRow`, `@ExcelFunction`, `@ExcelFunctionSubTotal`, and `@ExcelFormulaAlias`, see the [Functions & Formulas reference in the Annotations Reference section](#annotations-reference).
 
@@ -374,7 +374,7 @@ public class AuthorBooksRowDynamic extends DynamicRowSheet {
 
     @ExcelColumn(name = "Name", index = 2)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "id")
+    @ExcelMergeRow("id")
     private String name;
 
     // other static fields ...
@@ -455,7 +455,7 @@ sheet.addExtraColumnAnnotation("totalYearsPerAuthor", a -> {
         f.setNameFunction("totalYearsPerAuthor");
         f.setAnotherTable(false);
     });
-    a.setExcelMergeRow(m -> m.setReferenceField("id"));
+    a.setExcelMergeRow(m -> m.setValue("id"));
     a.setExcelColumnWidth(cw -> cw.setWidth(10));
 });
 
@@ -471,42 +471,39 @@ byte[] bytes = generateExcel.createFileXlsx(new ReportExcel("report", List.of(sh
 
 ## Merge Rows — `@ExcelMergeRow`
 
-Merges consecutive cells in a column when the annotated field value does not change between rows.
+Merges consecutive cells in a column. The merge model uses an explicit **driver / dependent** relationship (introduced in 5.2.0):
 
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `referenceField` | `String[]` | `{}` | Field names (or `nameFunction`) used as the merge-break condition |
+| `value` | `String` | `""` | Name of the *driver* field. Empty string ⇒ this column is its own driver. |
 
 **Behaviour**
 
 | Configuration | Effect |
 |---|---|
-| `@ExcelMergeRow` (no parameters) | Value-based merge: breaks when the cell value changes. Valid only on the first column. |
-| `@ExcelMergeRow(referenceField = "field")` | Merge breaks when `field` changes compared to the previous row. |
-| `@ExcelMergeRow(referenceField = {"f1","f2"})` | Merge breaks when any of the listed fields changes. |
+| `@ExcelMergeRow` (empty `value`) | Driver column: a new merge region begins whenever this field's value changes between consecutive rows. |
+| `@ExcelMergeRow("driverField")` | Dependent column: cells are merged according to the merge regions of `driverField` — regardless of this column's own value. |
 
-Each value in `referenceField` must match either:
-- a Java field name in the `RowSheet` class, or
-- a `nameFunction` from a `@ExcelFunction` / `ExtraColumnAnnotation` column.
+`value` must match a Java field name in the same `RowSheet` class (or a `nameFunction` from a `@ExcelFunction` / `ExtraColumnAnnotation` column). A non-matching value throws `ExcelGeneratorException` at runtime.
 
-A blank value or one that does not match any field throws `ExcelGeneratorException` at runtime.
+> Prerequisites: `@ExcelSheetLayout(notMerge = false)` (the default), and the input row list must be sorted so that rows of the same merge group are contiguous.
 
-> `@ExcelMergeRow` only takes effect when `notMerge = false` in `@ExcelSheetLayout` (the default).
+> **Migration from < 5.2.0:** the old `String[] referenceField` attribute has been removed. Replace `@ExcelMergeRow(referenceField = "X")` with `@ExcelMergeRow("X")`. For the legacy multi-field form, pass only the **first element** (the direct driver): the multi-field effect emerges automatically through the driver chain. Example: previously `referenceField = {"genre","authorId"}` on a "Total per Genre" column was needed to break the merge both when the genre changed and when the author changed. Now `@ExcelMergeRow("genre")` is enough — the `genre` column already depends on `authorId`, so when `authorId` changes the merge on `genre` breaks, and "Total per Genre" inherits the break without restating `authorId`.
 
 ```java
-// Value-based merge — first column only
+// Driver column: merges while "id" stays the same across consecutive rows
 @ExcelColumn(name = "ID", index = 1)
 @ExcelMergeRow
 private Integer id;
 
-// Merge breaks when "id" changes
+// Dependent column: merges in lockstep with "id"
 @ExcelColumn(name = "Name", index = 2)
-@ExcelMergeRow(referenceField = "id")
+@ExcelMergeRow("id")
 private String name;
 
-// Merge breaks when "id" or "surname" changes
+// Another dependent column following the same driver
 @ExcelColumn(name = "Genre", index = 5)
-@ExcelMergeRow(referenceField = {"id", "surname"})
+@ExcelMergeRow("id")
 private String genre;
 ```
 

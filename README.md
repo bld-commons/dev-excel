@@ -61,8 +61,11 @@ Add one of the following annotations to your Spring Boot configuration class or 
 | `ReportExcel` | Root object representing the entire Excel document |
 | `BaseSheet` | Abstract base class for all sheet types (max 31-character name) |
 | `SheetData<T>` | Sheet backed by a typed list of rows |
+| `SheetDynamicData<T>` | Variant of `SheetData` that adds runtime extra columns via `addExtraColumnAnnotation(key, cfg)` — declare layout/format/function programmatically without recompiling the row class |
 | `QuerySheetData<T>` | Sheet populated automatically from a JPA/SQL query via `@ExcelQuery` |
 | `RowSheet` | Interface implemented by each row entity |
+| `LockedSheet` | Marker interface; override `password()` for runtime sheet protection (alternative/complement to `@ExcelLocked`) |
+| `ExtraColumnAnnotation` | Fluent runtime builder for an extra column's annotations: `cellLayout`, `column`, `dateFormat`, `columnWidth`, `headerCellLayout`, `mergeRow`, `function`, `dropDown`, `subtotal`, `booleanText`, `dataValidation`, `numberFormat`, `image` |
 | `GenerateExcel` | Service interface injected via Spring to trigger generation |
 | `GenerateCsv` | Service interface for CSV generation |
 
@@ -73,12 +76,14 @@ Add one of the following annotations to your Spring Boot configuration class or 
 | `@ExcelSheetLayout` | Class | Configures sheet layout, start row/column, merge behaviour |
 | `@ExcelHeaderLayout` | Class | Configures the header row appearance |
 | `@ExcelMarginSheet` | Class | Sets page margins |
+| `@ExcelLocked` | Class | Marks the sheet as protected; combine with `LockedSheet` for runtime password |
 | `@ExcelColumn` | Field | Maps a field to an Excel column |
 | `@ExcelCellLayout` | Field | Configures font, colour, border, alignment of a cell |
-| `@ExcelDate` | Field | Configures date format |
+| `@ExcelDate` | Field | Configures date format; `timezone()` (default `${spring.jackson.time-zone:}`) drives `LocalDateTime`/`Instant`/`OffsetDateTime` conversion |
 | `@ExcelBooleanText` | Field | Displays boolean values as custom text |
 | `@ExcelImage` | Field | Embeds an image from byte array or file path |
-| `@ExcelMergeRow` | Field | Merges equal consecutive values in a column |
+| `@ExcelMergeRow` | Field | Merges equal consecutive values in a column; `value()` names the *driver* field — the column merges only when the driver field has merged |
+| `@ExcelFunctionMergeRow` | Field | Computed formula column over a merged region; default cell layout is `locked = true` |
 | `@ExcelSubtotals` / `@ExcelSubtotal` | Class / Field | Inserts grouped subtotal rows |
 | `@ExcelConditionCellLayouts` | Class | Applies conditional cell formatting via Excel formula |
 | `@ExcelCharts` / `@ExcelChart` | Class | Embeds one or more charts |
@@ -86,7 +91,7 @@ Add one of the following annotations to your Spring Boot configuration class or 
 | `@ExcelSuperHeaders` | Class | Adds a merged header row above the regular header |
 | `@ExcelDataValidation` | Field | Adds dropdown list validation |
 | `@ExcelQuery` | Class | Populates rows from a native SQL or JPQL query |
-| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Class | Adds computed formula columns entirely via annotation; `${fieldName}` placeholders resolve to cell addresses |
+| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Class | Adds computed formula columns entirely via annotation; `${fieldName}` placeholders resolve to cell addresses; default cell layout is `locked = true` |
 
 ### Generation Methods
 
@@ -141,9 +146,11 @@ Add one of the following annotations to your Spring Boot configuration class or 
 
 ### Supported Field Types
 
-`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
+`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`, `LocalDate`, `LocalDateTime`, `Instant`, `OffsetDateTime`
 
-> **Performance:** per-class metadata is cached in a `ConcurrentHashMap` after the first read; subsequent reads of the same class incur zero reflection overhead.
+> **Performance:** per-class metadata is cached in a `ConcurrentHashMap` after the first read; subsequent reads of the same class incur zero reflection overhead. CSV reading supports parallel parsing via `@CsvSettings(parallel = true)`.
+
+> **Breaking (5.2.0):** `SheetRead`/`MapSheetRead`/`CsvRead` accessors renamed `listRowSheet` → `rows`, `getListRowSheet()` → `getRows()`, `addRowSheet(...)` → `addRow(...)`.
 
 ---
 
@@ -266,8 +273,11 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 | `ReportExcel` | Oggetto radice che rappresenta l'intero documento Excel |
 | `BaseSheet` | Classe astratta base per tutti i tipi di foglio (nome max 31 caratteri) |
 | `SheetData<T>` | Foglio associato a una lista tipizzata di righe |
+| `SheetDynamicData<T>` | Variante di `SheetData` che aggiunge colonne extra a runtime tramite `addExtraColumnAnnotation(key, cfg)` — layout/format/funzioni dichiarate programmaticamente senza ricompilare la riga |
 | `QuerySheetData<T>` | Foglio popolato automaticamente da una query JPA/SQL tramite `@ExcelQuery` |
 | `RowSheet` | Interfaccia implementata da ogni entità riga |
+| `LockedSheet` | Interfaccia marker; sovrascrivere `password()` per la protezione del foglio a runtime (alternativa/complemento a `@ExcelLocked`) |
+| `ExtraColumnAnnotation` | Builder fluente runtime per le annotazioni di una colonna extra: `cellLayout`, `column`, `dateFormat`, `columnWidth`, `headerCellLayout`, `mergeRow`, `function`, `dropDown`, `subtotal`, `booleanText`, `dataValidation`, `numberFormat`, `image` |
 | `GenerateExcel` | Interfaccia del servizio Spring da iniettare per la generazione |
 | `GenerateCsv` | Interfaccia del servizio Spring per la generazione CSV |
 
@@ -278,12 +288,14 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 | `@ExcelSheetLayout` | Classe | Configura il layout del foglio, riga/colonna iniziale, comportamento merge |
 | `@ExcelHeaderLayout` | Classe | Configura l'aspetto della riga di intestazione |
 | `@ExcelMarginSheet` | Classe | Imposta i margini di pagina |
+| `@ExcelLocked` | Classe | Marca il foglio come protetto; combinare con `LockedSheet` per password runtime |
 | `@ExcelColumn` | Campo | Mappa un campo a una colonna Excel |
 | `@ExcelCellLayout` | Campo | Configura font, colore, bordo, allineamento di una cella |
-| `@ExcelDate` | Campo | Configura il formato della data |
+| `@ExcelDate` | Campo | Configura il formato data; `timezone()` (default `${spring.jackson.time-zone:}`) gestisce conversione `LocalDateTime`/`Instant`/`OffsetDateTime` |
 | `@ExcelBooleanText` | Campo | Rappresenta i booleani con testo personalizzato |
 | `@ExcelImage` | Campo | Inserisce un'immagine da byte array o percorso file |
-| `@ExcelMergeRow` | Campo | Unisce valori consecutivi uguali in una colonna |
+| `@ExcelMergeRow` | Campo | Unisce valori consecutivi uguali in una colonna; `value()` indica il *driver field* — la colonna viene fusa solo quando il driver risulta fuso |
+| `@ExcelFunctionMergeRow` | Campo | Colonna formula calcolata su area mergiata; layout cella di default `locked = true` |
 | `@ExcelSubtotals` / `@ExcelSubtotal` | Classe / Campo | Inserisce righe di subtotale raggruppate |
 | `@ExcelConditionCellLayouts` | Classe | Applica formattazione condizionale tramite formula Excel |
 | `@ExcelCharts` / `@ExcelChart` | Classe | Inserisce uno o più grafici |
@@ -291,7 +303,7 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 | `@ExcelSuperHeaders` | Classe | Aggiunge una riga di intestazione unificata sopra quella standard |
 | `@ExcelDataValidation` | Campo | Aggiunge validazione con lista a discesa |
 | `@ExcelQuery` | Classe | Popola le righe da query SQL nativa o JPQL |
-| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Classe | Aggiunge colonne formula calcolate interamente tramite annotazione; i segnaposto `${nomeCampo}` vengono risolti in indirizzi cella |
+| `@ExcelFunctionRows` / `@ExcelFunctionRow` | Classe | Aggiunge colonne formula calcolate interamente tramite annotazione; i segnaposto `${nomeCampo}` vengono risolti in indirizzi cella; layout cella di default `locked = true` |
 
 ### Modalità di Generazione
 
@@ -346,9 +358,11 @@ Aggiungere una delle seguenti annotazioni alla propria classe di configurazione 
 
 ### Tipi di Campo Supportati
 
-`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`
+`String`, `Integer`, `Double`, `Float`, `Long`, `BigDecimal`, `Boolean`, `Character`, `Date`, `Calendar`, `LocalDate`, `LocalDateTime`, `Instant`, `OffsetDateTime`
 
-> **Performance:** i metadati per classe vengono memorizzati in una `ConcurrentHashMap` dopo la prima lettura; le letture successive della stessa classe non eseguono alcuna reflection.
+> **Performance:** i metadati per classe vengono memorizzati in una `ConcurrentHashMap` dopo la prima lettura; le letture successive della stessa classe non eseguono alcuna reflection. La lettura CSV supporta il parsing parallelo tramite `@CsvSettings(parallel = true)`.
+
+> **Breaking (5.2.0):** gli accessor di `SheetRead`/`MapSheetRead`/`CsvRead` sono stati rinominati: `listRowSheet` → `rows`, `getListRowSheet()` → `getRows()`, `addRowSheet(...)` → `addRow(...)`.
 
 ---
 

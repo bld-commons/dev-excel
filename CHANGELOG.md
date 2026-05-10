@@ -9,6 +9,48 @@ Main modules: `generator-excel`, `read-excel`, `common-spreadsheet`.
 
 ## [Unreleased]
 
+### 5.2.0 — 2026-05-10
+**Stack:** Java 17 · Spring Boot 3.5.10 · Apache POI 5.5.1
+
+#### ⚠ Breaking changes
+- **`read-excel`** — `SheetRead`, `MapSheetRead` and `CsvRead` renamed `listRowSheet` → `rows`; `getListRowSheet()` → `getRows()`; `addRowSheet(...)` → `addRow(...)`. Update existing read code accordingly.
+- **`generator-excel`** — `@ExcelMergeRow` attribute `String[] referenceField()` removed and replaced by `String value()` carrying the single *driver* field; explicit driver/dependent semantics now required (a column merges only when its driver field has merged). Migrate multi-field arrays to the **first element** only: the multi-field effect cascades automatically — when an upstream driver changes, the immediate dependent column's merge breaks and downstream observers inherit the break, so secondary fields no longer need to be restated.
+- **`generator-excel`** — `@ExcelLocked` target moved from `ANNOTATION_TYPE` to `TYPE` (apply directly on the sheet class); the inline `boolean locked()` attribute and `@ExcelSheetLayout.locked()` were removed.
+- **`generator-excel`** — `ExcelConstant` class removed; references replaced by inline literals (default column width = `5`).
+
+#### Added — generator-excel
+- **Dynamic columns at runtime** — new `SheetDynamicData<T>` base class (extends `SheetData`) holding a `Map<String, ExtraColumnAnnotation>` plus fluent `addExtraColumnAnnotation(String key, Consumer<ExtraColumnAnnotation> cfg)` to declare extra columns programmatically — without recompiling the row class.
+- **`ExtraColumnAnnotation`** — fluent builder for runtime cell metadata: `cellLayout`, `column`, `dateFormat`, `columnWidth`, `headerCellLayout`, `mergeRow`, `function`, `dropDown`, `subtotal`, `booleanText`, `dataValidation`, `numberFormat`, `image`.
+- **Programmatic annotation builders** under `excel/annotation/impl/`: `ExcelDataValidationImpl`, `ExcelDropDownImpl`, `ExcelFunctionImpl`, `ExcelHeaderCellLayoutImpl`, `ExcelImageImpl`, `ExcelNumberFormatImpl`, `ExcelSubtotalImpl`. `ExcelCellLayoutImpl` gains `Consumer`-based configurators (`setFont`, `setBorder`, `addRgbForeground`, `addRgbFont`).
+- **`LockedSheet`** marker interface — implement on a sheet class and override `password()` to enable runtime sheet protection (works alongside `@ExcelLocked`).
+- **java.time in CSV generation** — `GenerateCsvImpl` now formats `LocalDate`, `LocalDateTime`, `Instant` (with `ZoneId`) and `OffsetDateTime` in addition to `Date/Calendar/Timestamp`.
+- **`CsvData.addRows(T...)`** — varargs helper to append multiple rows in one call.
+
+#### Added — read-excel
+- **java.time in CSV reading** — `ReadCsvImpl` parses `LocalDate`, `LocalDateTime`, `Instant`, `OffsetDateTime` via `@CsvDate`/`buildCsvFormatter`.
+- **Per-class metadata cache** — `ReadExcelImpl` and `ReadCsvImpl` cache reflective metadata in a static `ConcurrentHashMap` (`SHEET_CACHE` / `CSV_CACHE`) using `record` types (`SheetMeta`/`FieldMeta`, `CsvClassMeta`/`CsvFieldMeta`); subsequent reads of the same class skip reflection entirely.
+- **Parallel CSV reader** — `ReadCsvImpl.extractParallelRows`, gated by `CsvSettings.parallel`.
+- Merged-region resolution extracted into `buildMergedRegionMap` for faster lookups.
+
+#### Added — common-spreadsheet
+- **`@ExcelDate.timezone()`** — new optional attribute (default reads `${spring.jackson.time-zone:}`); used by both generator and reader for `LocalDateTime`/`Instant`/`OffsetDateTime` conversions.
+- **`SpreadsheetUtils.resolveZone(ExcelDate, ValueProps)`** helper; `getListField` now memoised in a per-class field cache.
+
+#### Changed — generator-excel
+- **`@ExcelFunctionRow` / `@ExcelFunctionMergeRow`** — default cell layout is now `locked = true`.
+- **Refactor of the generation pipeline** — `ScopeGenerateExcelImpl` (~1700 → ~1080 lines) and `SuperGenerateExcelImpl` (~470 lines lighter) split into focused Spring components and utilities:
+  - `ExcelChartBuilder` — chart construction (bar/line/area + 3D, legend, label data).
+  - `ExcelDropDownBuilder` — applies `DataValidation` constraints from `@ExcelDropDown`.
+  - `ExcelImageManager` — embeds pictures via POI `Drawing` + `ClientAnchor`.
+  - `ExcelPivotBuilder` — builds `XSSFPivotTable` from `@ExcelPivot` metadata.
+  - `ExcelSheetHeaderBuilder` — caches `List<SheetHeader>` templates per row class.
+  - `ExcelSubtotalWriter` — writes subtotal rows and resolves their styles.
+  - `ExcelAreaBorderUtility` — applies `@ExcelAreaBorder` regions.
+  - `ExcelSheetLockUtility` — applies `@ExcelLocked` / `LockedSheet` protection.
+
+#### Tests
+- New round-trip generation/reading tests on deterministic seeded data: `EmployeeRow`/`EmployeeSheet`/`EmployeeCsvData`, `ProductRow`/`ProductSheet`, `TestDataGenerator` (fixed seed = 42), plus matching `ReadEmployeeRow`/`ReadEmployeeSheet`/`ReadEmployeeCsvRow`/`ReadProductRow`/`ReadProductSheet`.
+
 ### 5.1.4 — 2026-04-30
 **Stack:** Java 17 · Spring Boot 3.5.10 · Apache POI 5.5.1
 
@@ -419,7 +461,13 @@ _(legacy branch — Java 8 / Spring Boot 2.x long-term support)_
 
 ---
 
-[Unreleased]: https://github.com/bld-commons/dev-excel/compare/5.0.5...HEAD
+[Unreleased]: https://github.com/bld-commons/dev-excel/compare/5.2.0...HEAD
+[5.2.0]: https://github.com/bld-commons/dev-excel/compare/5.1.4...5.2.0
+[5.1.4]: https://github.com/bld-commons/dev-excel/compare/5.1.3...5.1.4
+[5.1.3]: https://github.com/bld-commons/dev-excel/compare/5.1.2...5.1.3
+[5.1.2]: https://github.com/bld-commons/dev-excel/compare/5.1.1...5.1.2
+[5.1.1]: https://github.com/bld-commons/dev-excel/compare/5.1.0...5.1.1
+[5.1.0]: https://github.com/bld-commons/dev-excel/compare/5.0.5...5.1.0
 [5.0.5]: https://github.com/bld-commons/dev-excel/compare/5.0.4...5.0.5
 [5.0.4]: https://github.com/bld-commons/dev-excel/compare/5.0.3...5.0.4
 [5.0.3]: https://github.com/bld-commons/dev-excel/compare/5.0.2...5.0.3

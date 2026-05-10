@@ -103,7 +103,7 @@ public class EmployeeRow implements RowSheet {
 
     @ExcelColumn(name = "Department", index = 3)
     @ExcelCellLayout
-    @ExcelMergeRow(referenceField = "department")
+    @ExcelMergeRow
     @ExcelDropDown(
         areaRange = "${Departments.deptRowStart}:${Departments.deptRowEnd}",
         suppressDropDownArrow = true

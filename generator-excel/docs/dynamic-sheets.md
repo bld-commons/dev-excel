@@ -93,7 +93,7 @@ public class SalesRow extends DynamicRowSheet {
 
     @ExcelColumn(name = "Product", index = 1)
     @ExcelCellLayout(autoSizeColumn = true)
-    @ExcelMergeRow(referenceField = "region")
+    @ExcelMergeRow("region")
     private String product;
 
     @ExcelColumn(name = "Region", index = 2)

@@ -117,7 +117,7 @@ public class DataMeteoSheet extends SheetRead<DataMeteoRow> {
 
 | Metodo | Descrizione |
 |--------|-------------|
-| `getListRowSheet()` | Restituisce tutte le righe analizzate |
+| `getRows()` | Restituisce tutte le righe analizzate |
 | `size()` | Numero di righe analizzate |
 | `filtered(T)` | Sovrascrivere per implementare il filtraggio a livello di riga |
 | `getSheetName()` | Nome del foglio |
@@ -163,7 +163,7 @@ csvRead.setCsv("/percorso/file.csv");  // da percorso file
 csvRead.setClose(true);                // chiusura automatica dello stream
 
 readCsv.convertCsvToEntity(csvRead, MyRow.class);
-List<MyRow> rows = csvRead.getListRowSheet();
+List<MyRow> rows = csvRead.getRows();
 ```
 
 ---
@@ -380,11 +380,11 @@ public class ReadReportTest {
         excelRead = readExcel.convertExcelToEntity(excelRead);
 
         AutoreLibriSheet books = excelRead.getSheet(AutoreLibriSheet.class, "Libri d'autore");
-        for (AutoreLibriRow row : books.getListRowSheet())
+        for (AutoreLibriRow row : books.getRows())
             System.out.println(row);
 
         GenereSheet genres = excelRead.getSheet(GenereSheet.class, "Genere");
-        for (GenereRow row : genres.getListRowSheet())
+        for (GenereRow row : genres.getRows())
             System.out.println(row);
     }
 }
@@ -456,7 +456,7 @@ public void testReadCsv() throws Exception {
     CsvRead<RendicontazioneMassivaImportColumn> csvRead = new CsvRead<>();
     csvRead.setCsv(csv);
     readCsv.convertCsvToEntity(csvRead, RendicontazioneMassivaImportColumn.class);
-    System.out.println("Righe: " + csvRead.getListRowSheet().size());
+    System.out.println("Righe: " + csvRead.getRows().size());
 }
 ```
 

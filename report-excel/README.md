@@ -184,7 +184,7 @@ public void testRead() throws Exception {
     excelRead = readExcel.convertExcelToEntity(excelRead);
 
     ReadAutoreLibriSheet sheet = excelRead.getSheet(ReadAutoreLibriSheet.class, "Libri d'autore");
-    for (ReadAutoreLibriRow row : sheet.getListRowSheet())
+    for (ReadAutoreLibriRow row : sheet.getRows())
         System.out.println(row);
 }
 ```
@@ -258,7 +258,7 @@ public void testReadCsv() throws Exception {
     CsvRead<RendicontazioneMassivaImportColumn> csvRead = new CsvRead<>();
     csvRead.setCsv(csv);
     readCsv.convertCsvToEntity(csvRead, RendicontazioneMassivaImportColumn.class);
-    logger.info("Rows: " + csvRead.getListRowSheet().size());
+    logger.info("Rows: " + csvRead.getRows().size());
 }
 ```
 

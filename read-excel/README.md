@@ -116,7 +116,7 @@ public List<EmployeeRow> read(byte[] fileBytes) throws Exception {
     excelRead.setExcelType(ExcelType.XLSX);
     excelRead.addSheetConvertion(EmployeeSheet.class, "Employees");
     excelRead = readExcel.convertExcelToEntity(excelRead);
-    return excelRead.getSheet(EmployeeSheet.class, "Employees").getListRowSheet();
+    return excelRead.getSheet(EmployeeSheet.class, "Employees").getRows();
 }
 ```
 
@@ -245,7 +245,7 @@ public class DataMeteoSheet extends SheetRead<DataMeteoRow> {
 
 | Method | Description |
 |--------|-------------|
-| `getListRowSheet()` | Return all parsed rows |
+| `getRows()` | Return all parsed rows |
 | `size()` | Number of parsed rows |
 | `filtered(T)` | Override to implement row-level filtering |
 | `getSheetName()` | Sheet name |
@@ -291,7 +291,7 @@ csvRead.setCsv("/path/file.csv");   // from file path
 csvRead.setClose(true);             // auto-close stream
 
 readCsv.convertCsvToEntity(csvRead, MyRow.class);
-List<MyRow> rows = csvRead.getListRowSheet();
+List<MyRow> rows = csvRead.getRows();
 ```
 
 ---
@@ -515,11 +515,11 @@ public class ReadReportTest {
         excelRead = readExcel.convertExcelToEntity(excelRead);
 
         AutoreLibriSheet books = excelRead.getSheet(AutoreLibriSheet.class, "Libri d'autore");
-        for (AutoreLibriRow row : books.getListRowSheet())
+        for (AutoreLibriRow row : books.getRows())
             System.out.println(row);
 
         GenereSheet genres = excelRead.getSheet(GenereSheet.class, "Genere");
-        for (GenereRow row : genres.getListRowSheet())
+        for (GenereRow row : genres.getRows())
             System.out.println(row);
     }
 }
@@ -591,7 +591,7 @@ public void testReadCsv() throws Exception {
     CsvRead<RendicontazioneMassivaImportColumn> csvRead = new CsvRead<>();
     csvRead.setCsv(csv);
     readCsv.convertCsvToEntity(csvRead, RendicontazioneMassivaImportColumn.class);
-    System.out.println("Rows: " + csvRead.getListRowSheet().size());
+    System.out.println("Rows: " + csvRead.getRows().size());
 }
 ```
 

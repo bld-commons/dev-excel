@@ -188,27 +188,28 @@ private Double amount;
 
 ## `@ExcelMergeRow`
 
-Merges consecutive cells in a column when a reference field has the same value across adjacent rows.
+Merges consecutive cells in a column. Uses an explicit **driver / dependent** model (introduced in 5.2.0).
 
-| Attribute        | Type       | Default | Description |
-|------------------|------------|---------|-------------|
-| `referenceField` | `String[]` | `{}`    | Field name(s) that define the merge grouping. When multiple fields are listed, cells merge only when **all** listed fields are equal in adjacent rows. An empty array merges all rows unconditionally. |
+| Attribute | Type     | Default | Description |
+|-----------|----------|---------|-------------|
+| `value`   | `String` | `""`    | Name of the driver field. Empty string ⇒ this column is its own driver — merge regions follow this column's own consecutive-equal values. |
 
 ```java
-// Merge "Name" cells while "authorId" is the same
+// Driver column: merges as long as authorId stays the same on consecutive rows
+@ExcelColumn(name = "Author Id", index = 1)
+@ExcelMergeRow
+private Long authorId;
+
+// Dependent column: merges in lockstep with "authorId"
 @ExcelColumn(name = "Name", index = 2)
 @ExcelCellLayout
-@ExcelMergeRow(referenceField = "authorId")
+@ExcelMergeRow("authorId")
 private String name;
 
-// Merge unconditionally (all rows become one merged block)
-@ExcelColumn(name = "Department", index = 1)
-@ExcelCellLayout
-@ExcelMergeRow
-private String department;
-
-// Merge only when BOTH genre AND authorId are equal
+// Another dependent column following the same driver
 @ExcelColumn(name = "Genre", index = 3)
-@ExcelMergeRow(referenceField = {"genre", "authorId"})
+@ExcelMergeRow("authorId")
 private String genre;
 ```
+
+> **Migration from < 5.2.0:** `String[] referenceField` is gone. Replace `@ExcelMergeRow(referenceField = "X")` with `@ExcelMergeRow("X")`. For the legacy multi-field form, pass only the **first element** (the direct driver): the multi-field effect emerges automatically via the driver chain — when an upstream driver changes, the dependent column's merge breaks, and any column that follows it inherits the break.
