@@ -1,5 +1,13 @@
 # dev-excel
 
+[![Maven Central — generator-excel](https://img.shields.io/maven-central/v/com.github.bld-commons.excel/generator-excel?label=generator-excel)](https://central.sonatype.com/artifact/com.github.bld-commons.excel/generator-excel)
+[![Maven Central — read-excel](https://img.shields.io/maven-central/v/com.github.bld-commons.excel/read-excel?label=read-excel)](https://central.sonatype.com/artifact/com.github.bld-commons.excel/read-excel)
+[![Maven Central — common-spreadsheet](https://img.shields.io/maven-central/v/com.github.bld-commons/common-spreadsheet?label=common-spreadsheet)](https://central.sonatype.com/artifact/com.github.bld-commons/common-spreadsheet)
+[![Javadoc — generator-excel](https://javadoc.io/badge2/com.github.bld-commons.excel/generator-excel/javadoc.svg)](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel)
+[![Javadoc — read-excel](https://javadoc.io/badge2/com.github.bld-commons.excel/read-excel/javadoc.svg)](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://adoptium.net/)
+
 ## English
 
 This project provides two libraries built on top of Apache POI to simplify the generation and reading of Excel and CSV files in Spring Boot applications through an annotation-driven approach.

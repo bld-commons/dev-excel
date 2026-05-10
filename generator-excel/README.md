@@ -1,5 +1,10 @@
 # generator-excel
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.bld-commons.excel/generator-excel)](https://central.sonatype.com/artifact/com.github.bld-commons.excel/generator-excel)
+[![Javadoc](https://javadoc.io/badge2/com.github.bld-commons.excel/generator-excel/javadoc.svg)](https://javadoc.io/doc/com.github.bld-commons.excel/generator-excel)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://adoptium.net/)
+
 Spring Boot library for generating Excel (XLS, XLSX, SXSSF) and CSV files from annotated Java objects.  
 Supports static data, JPA query-driven data, charts, pivot tables, images, subtotals, conditional formatting, super headers, and more.
 

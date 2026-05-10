@@ -1,5 +1,10 @@
 # read-excel
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.bld-commons.excel/read-excel)](https://central.sonatype.com/artifact/com.github.bld-commons.excel/read-excel)
+[![Javadoc](https://javadoc.io/badge2/com.github.bld-commons.excel/read-excel/javadoc.svg)](https://javadoc.io/doc/com.github.bld-commons.excel/read-excel)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://adoptium.net/)
+
 Spring Boot library for reading Excel (XLS, XLSX) and CSV files into typed Java objects.
 Supports multi-sheet reading, map-indexed sheets, custom row filtering, and Bean Validation.
 

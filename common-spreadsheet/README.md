@@ -1,5 +1,9 @@
 # common-spreadsheet
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.bld-commons/common-spreadsheet)](https://central.sonatype.com/artifact/com.github.bld-commons/common-spreadsheet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://adoptium.net/)
+
 Shared foundation library for the dev-excel project. Provides core annotations, utilities, and exceptions used by both `generator-excel` and `read-excel`.
 
 ## Maven Dependency
