@@ -31,7 +31,7 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(name = "Matricola", index = 0)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)}) 
 	@ExcelPivotFilter
-	@ExcelMergeRow(referenceField = "")
+	@ExcelMergeRow
 	private Integer idAutore;
 	@ExcelColumn(name = "Anno", index = 7)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
@@ -49,25 +49,25 @@ public class AutoreLibriRow implements RowSheet {
 	@ExcelColumn(name = "Nome", index = 1)
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotRow(order = 2)
-	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelMergeRow("idAutore")
 	private String nome;
 	@ExcelColumn(name = "Cognome", index = 2)
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelPivotRow(order = 0)
-	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelMergeRow("idAutore")
 	private String cognome;
 	@ExcelColumn(name = "Data di Nascita", index = 3)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
 	@ExcelDate
-	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelMergeRow("idAutore")
 	private Date dataNascita;
 	@ExcelColumn(name = "Sesso", index = 4)
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER,rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
-	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelMergeRow("idAutore")
 	private Character sesso;
 	@ExcelColumn(name = "Genere", index = 5)
 	@ExcelCellLayout(rgbForeground = {@ExcelRgbColor(red = (byte)255,green = (byte)255,blue = (byte)255),@ExcelRgbColor(red = (byte)0,green = (byte)255,blue = (byte)255)})
-	@ExcelMergeRow(referenceField = "idAutore")
+	@ExcelMergeRow("idAutore")
 	@ExcelDropDown(areaRange = "${Genere.genereRowStart}:${Genere.genereRowEnd}",suppressDropDownArrow = true)
 	private String desGenere;
 	

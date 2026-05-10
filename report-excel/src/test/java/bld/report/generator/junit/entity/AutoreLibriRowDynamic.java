@@ -39,7 +39,7 @@ import com.bld.generator.report.excel.dropdown.CalendarDropDown;
 		excelFunctionMerges = {
 				@ExcelFunctionMergeRow(excelCellsLayout = @ExcelCellLayout(horizontalAlignment = HorizontalAlignment.RIGHT, precision = 2), 
 						excelColumn = @ExcelColumn(index = 7.1, name = "Prezzo Totale per Autore"), 
-						excelMergeRow = @ExcelMergeRow(referenceField = "matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "prezzoTotalePerAutore",anotherTable = false)) 
+						excelMergeRow = @ExcelMergeRow("matricola"), excelFunction = @ExcelFunction(function = "sum(${prezzoRowStart}:${prezzoRowEnd})", nameFunction = "prezzoTotalePerAutore",anotherTable = false)) 
 				}
 		)
 @ExcelSubtotals(startLabel = "Totale", labelTotalGroup = "Totale", sumForGroup = { "matricola" })
@@ -48,20 +48,20 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	/** The nome. */
 	@ExcelColumn(name = "Nome", index = 2)
 	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "matricola")
+	@ExcelMergeRow("matricola")
 	private String nome;
 
 	/** The cognome. */
 	@ExcelColumn(name = "Cognome", index = 3)
 	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "matricola")
+	@ExcelMergeRow("matricola")
 	private String cognome;
 
 	/** The data di nascita. */
 	@ExcelColumn(name = "Data di Nascita", index = 4)
 	@ExcelDate
 	@ExcelCellLayout(horizontalAlignment = HorizontalAlignment.CENTER)
-	@ExcelMergeRow(referenceField = "matricola")
+	@ExcelMergeRow("matricola")
 	private CalendarDropDown dataDiNascita;
 
 	/** The titolo. */
@@ -72,7 +72,7 @@ public class AutoreLibriRowDynamic extends DynamicRowSheet {
 	/** The genere. */
 	@ExcelColumn(name = "Genere", index = 5)
 	@ExcelCellLayout
-	@ExcelMergeRow(referenceField = "cognome")
+	@ExcelMergeRow("cognome")
 	private String genere;
 
 	/** The matricola. */

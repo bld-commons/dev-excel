@@ -7,6 +7,10 @@ package com.bld.generator.report.excel.data;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -70,6 +74,9 @@ public class SheetHeader implements Cloneable {
 
 	/** The excel function. */
 	private ExcelFunction excelFunction;
+
+	/** Cached alias map derived from excelFunction.alias() — computed once per SheetHeader on first formula write. */
+	private Map<String, KeyParameterAlias> mapFormulaAlias;
 
 	/** The excel column width. */
 	private ExcelColumnWidth excelColumnWidth;
@@ -140,7 +147,9 @@ public class SheetHeader implements Cloneable {
 		this.excelColumn = SpreadsheetUtils.getAnnotation(this.field, ExcelColumn.class);
 		this.excelCellLayout = SpreadsheetUtils.getAnnotation(this.field, ExcelCellLayout.class);
 		if (Date.class.isAssignableFrom(this.field.getType()) || Calendar.class.isAssignableFrom(this.field.getType()) || Timestamp.class.isAssignableFrom(this.field.getType()) || DateDropDown.class.isAssignableFrom(this.field.getType())
-				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType()))
+				|| CalendarDropDown.class.isAssignableFrom(this.field.getType()) || TimestampDropDown.class.isAssignableFrom(this.field.getType())
+				|| LocalDate.class.isAssignableFrom(this.field.getType()) || LocalDateTime.class.isAssignableFrom(this.field.getType())
+				|| Instant.class.isAssignableFrom(this.field.getType()) || OffsetDateTime.class.isAssignableFrom(this.field.getType()))
 			excelDate = SpreadsheetUtils.getAnnotation(this.field, ExcelDate.class);
 		if (field.isAnnotationPresent(ExcelNumberFormat.class)) {
 			this.setExcelNumberFormat(field.getAnnotation(ExcelNumberFormat.class));
@@ -379,6 +388,15 @@ public class SheetHeader implements Cloneable {
 		if (excelFunction != null)
 			this.cellType = CellType.FORMULA;
 		this.excelFunction = excelFunction;
+		this.mapFormulaAlias = null;
+	}
+
+	public Map<String, KeyParameterAlias> getMapFormulaAlias() {
+		return mapFormulaAlias;
+	}
+
+	public void setMapFormulaAlias(Map<String, KeyParameterAlias> mapFormulaAlias) {
+		this.mapFormulaAlias = mapFormulaAlias;
 	}
 
 	/**
@@ -517,6 +535,10 @@ public class SheetHeader implements Cloneable {
 
 	public void setExcelNumberFormat(ExcelNumberFormat excelNumberFormat) {
 		this.excelNumberFormat = excelNumberFormat;
+	}
+
+	public int getColorSize() {
+		return colorSize;
 	}
 
 	public CellType getCellType() {

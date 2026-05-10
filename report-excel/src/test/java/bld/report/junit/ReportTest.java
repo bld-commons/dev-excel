@@ -323,7 +323,7 @@ public class ReportTest {
 				f.setNameFunction("totalePrezzoAnniAutore");
 				f.setAnotherTable(false);
 			});
-			a.setExcelMergeRow(m -> m.setReferenceField("matricola"));
+			a.setExcelMergeRow(m -> m.setValue("matricola"));
 			a.setExcelColumnWidth(cw -> cw.setWidth(10));
 		});
 

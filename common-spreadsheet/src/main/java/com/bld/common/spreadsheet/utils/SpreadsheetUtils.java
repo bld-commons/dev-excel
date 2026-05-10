@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,11 +15,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.bld.common.spreadsheet.excel.annotation.ExcelDate;
 import com.bld.common.spreadsheet.exception.SpreadsheetException;
 
 /**
@@ -234,5 +237,12 @@ public class SpreadsheetUtils {
 		if(!text.startsWith(start))
 			text=start+text;
 		return text;
+	}
+
+	public static ZoneId resolveZone(ExcelDate excelDate, ValueProps valueProps) {
+		if (excelDate == null)
+			return ZoneId.systemDefault();
+		String tz = valueProps.valueProps(excelDate.timezone());
+		return StringUtils.isNotBlank(tz) ? ZoneId.of(tz) : ZoneId.systemDefault();
 	}
 }

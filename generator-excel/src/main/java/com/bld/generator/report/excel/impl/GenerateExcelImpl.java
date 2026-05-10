@@ -11,19 +11,23 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import com.bld.common.spreadsheet.utils.ValueProps;
 import com.bld.generator.report.excel.GenerateExcel;
 import com.bld.generator.report.excel.data.ReportExcel;
+import com.bld.generator.report.excel.query.ExcelQueryComponent;
+import com.bld.generator.report.excel.utility.ExcelLayoutUtility;
 
 /**
  * Facade Spring component that exposes the public API for Excel and CSV file generation.
  * <p>
  * This class is a singleton Spring bean that delegates every generation request to a
- * prototype-scoped {@link ScopeGenerateExcelImpl} instance retrieved from the
- * {@link org.springframework.context.ApplicationContext}. Using a prototype bean ensures
- * that the stateful Apache POI {@code Workbook} is never shared across concurrent calls.
+ * new {@link ScopeGenerateExcelImpl} instance created via a factory method.
+ * Using a new instance per call ensures that the stateful Apache POI {@code Workbook}
+ * is never shared across concurrent calls.
  * </p>
  *
  * <p>Three generation modes are available:</p>
@@ -68,9 +72,56 @@ public class GenerateExcelImpl implements GenerateExcel {
 
 	private static final Logger logger = LoggerFactory.getLogger(GenerateExcelImpl.class);
 
-	/** The application context. */
 	@Autowired
-	private ApplicationContext applicationContext;
+	private ExcelLayoutUtility excelLayoutUtility;
+
+	@Autowired
+	private ValueProps valueProps;
+
+	@Autowired(required = false)
+	private ExcelQueryComponent excelQueryComponent;
+
+	@Autowired
+	private ConditionalCellLayout conditionalCellLayout;
+
+	@Autowired
+	private ExcelChartBuilder excelChartBuilder;
+
+	@Autowired
+	private ExcelSubtotalWriter excelSubtotalWriter;
+
+	@Autowired
+	private ExcelSheetHeaderBuilder excelSheetHeaderBuilder;
+
+	@Autowired
+	private ExcelDropDownBuilder excelDropDownBuilder;
+
+	@Autowired
+	private ExcelImageManager excelImageManager;
+
+	@Autowired
+	private ExcelPivotBuilder excelPivotBuilder;
+
+	@Value("${com.bld.commons.number.empty.rows:2}")
+	private int numberEmptyRows;
+
+	@Value("${com.bld.commons.resource.cover.path:}")
+	private Resource cover;
+
+	/**
+	 * Creates a new {@link ScopeGenerateExcelImpl} instance with all required dependencies.
+	 *
+	 * @return a new ScopeGenerateExcelImpl
+	 */
+	private ScopeGenerateExcelImpl newScope() {
+		return new ScopeGenerateExcelImpl(
+			excelLayoutUtility, valueProps, excelImageManager,
+			excelDropDownBuilder, excelPivotBuilder, excelSheetHeaderBuilder,
+			excelQueryComponent, conditionalCellLayout,
+			excelChartBuilder, excelSubtotalWriter,
+			numberEmptyRows, cover
+		);
+	}
 
 	/**
 	 * Generates an XLS file using the HSSF engine and returns it as a byte array.
@@ -82,7 +133,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public byte[] createFileXls(ReportExcel report) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			return scopeGenerateExcelImpl.createFileXls(report);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -101,7 +152,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public byte[] createFileXlsx(ReportExcel report) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			return scopeGenerateExcelImpl.createFileXlsx(report);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -122,7 +173,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public byte[] createBigDataFileXlsx(ReportExcel report) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			return scopeGenerateExcelImpl.createBigDataFileXlsx(report);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -140,7 +191,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public void createFileXls(ReportExcel report, OutputStream outputStream) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			scopeGenerateExcelImpl.createFileXls(report, outputStream);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -158,7 +209,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public void createFileXlsx(ReportExcel report, OutputStream outputStream) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			scopeGenerateExcelImpl.createFileXlsx(report, outputStream);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));
@@ -178,7 +229,7 @@ public class GenerateExcelImpl implements GenerateExcel {
 	@Override
 	public void createBigDataFileXlsx(ReportExcel report, OutputStream outputStream) {
 		try {
-			ScopeGenerateExcelImpl scopeGenerateExcelImpl = this.applicationContext.getBean(ScopeGenerateExcelImpl.class);
+			ScopeGenerateExcelImpl scopeGenerateExcelImpl = newScope();
 			scopeGenerateExcelImpl.createBigDataFileXlsx(report, outputStream);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getStackTrace(e));

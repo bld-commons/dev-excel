@@ -5,73 +5,81 @@
 */
 package com.bld.generator.report.excel.annotation.impl;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.bld.generator.report.excel.annotation.ExcelMergeRow;
 
 /**
- * The Class ExcelMergeRowImpl.
+ * Programmatic (builder-style) implementation of {@link ExcelMergeRow}.
+ *
+ * <p>Use this class when the merge configuration cannot be expressed with a static
+ * annotation — for example when building sheets dynamically at runtime.</p>
+ *
+ * <p>Usage examples:</p>
+ * <pre>
+ * // Driver column (merges on its own value)
+ * sheetHeader.setExcelMergeRow(new ExcelMergeRowImpl());
+ *
+ * // Dependent column (merges when "idAutore" changes)
+ * sheetHeader.setExcelMergeRow(new ExcelMergeRowImpl("idAutore"));
+ *
+ * // Equivalent fluent form via lambda
+ * sheetHeader.setExcelMergeRow(m -> m.setValue("idAutore"));
+ * </pre>
  */
 public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 
-	/** The reference field. */
-	private String[] referenceField;
+	/**
+	 * Name of the driver field. Empty string means this column is its own driver.
+	 *
+	 * @see ExcelMergeRow#value()
+	 */
+	private String value = "";
 
 	/**
-	 * Instantiates a new excel merge row impl.
+	 * Creates a driver-column merge row (this column drives its own merge on its own value).
 	 */
 	public ExcelMergeRowImpl() {
 		super();
 	}
 
 	/**
-	 * Instantiates a new excel merge row impl.
+	 * Creates a dependent-column merge row that follows the given driver field.
 	 *
-	 * @param referenceField the reference field
+	 * @param value name of the driver field in the same {@code RowSheet} class;
+	 *              pass {@code ""} or {@code null} to make this column its own driver
 	 */
-	public ExcelMergeRowImpl(String... referenceField) {
+	public ExcelMergeRowImpl(String value) {
 		super();
-		this.setReferenceField(referenceField);
+		this.setValue(value);
 	}
 
 	/**
-	 * Gets the reference field.
+	 * Returns the driver field name.
 	 *
-	 * @return the reference field
+	 * @return {@code ""} if this column is its own driver, otherwise the name of
+	 *         the field that controls when merging restarts
 	 */
-	public String[] getReferenceField() {
-		return referenceField;
+	public String getValue() {
+		return value;
 	}
 
 	/**
-	 * Sets the reference field.
+	 * Sets the driver field name.
 	 *
-	 * @param referenceField the new reference field
+	 * @param value name of the driver field, or {@code ""} / {@code null} for self-driven merging
 	 */
-	public void setReferenceField(String... referenceField) {
-		if (ArrayUtils.isNotEmpty(referenceField))
-			this.referenceField = referenceField;
+	public void setValue(String value) {
+		if (value != null)
+			this.value = value;
 	}
 
-	/**
-	 * Hash code.
-	 *
-	 * @return the int
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((referenceField == null) ? 0 : referenceField.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
-	/**
-	 * Equals.
-	 *
-	 * @param obj the obj
-	 * @return true, if successful
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -81,10 +89,10 @@ public class ExcelMergeRowImpl extends ExcelAnnotationImpl<ExcelMergeRow> {
 		if (getClass() != obj.getClass())
 			return false;
 		ExcelMergeRowImpl other = (ExcelMergeRowImpl) obj;
-		if (referenceField == null) {
-			if (other.referenceField != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!referenceField.equals(other.referenceField))
+		} else if (!value.equals(other.value))
 			return false;
 		return true;
 	}
