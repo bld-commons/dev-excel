@@ -329,13 +329,15 @@ public class ExcelChartBuilder {
 			valueAxis.setCrossBetween(excelChart.crossBetween());
 		}
 		logger.debug("-----------------xAxis: " + xAxis);
-		AreaReference areaReference = new AreaReference(xAxis, excelChart.spreadsheetVersion());
+		String cleanXAxis = xAxis.replaceAll(":\\s*'[^']+'!", ":");
+		AreaReference areaReference = new AreaReference(cleanXAxis, excelChart.spreadsheetVersion());
 		XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet,
 				CellRangeAddress.valueOf(xAxis));
 		XDDFChartData chartData = chart.createData(excelChart.chartTypes(), categoryAxis, valueAxis);
 		XDDFChartData.Series series = null;
 		logger.debug("------------seriesChart: " + seriesChart);
-		areaReference = new AreaReference(seriesChart, excelChart.spreadsheetVersion());
+		String cleanSeriesChart = xAxis.replaceAll(":\\s*'[^']+'!", ":");
+		areaReference = new AreaReference(cleanSeriesChart, excelChart.spreadsheetVersion());
 		XDDFNumericalDataSource<Double> numericalDataSource = XDDFDataSourcesFactory.fromNumericCellRange(StringUtils.isNotEmpty(areaReference.getFirstCell().getSheetName()) ? workbook.getSheet(areaReference.getFirstCell().getSheetName()) : sheet,
 				CellRangeAddress.valueOf(seriesChart));
 		series = chartData.addSeries(xs, numericalDataSource);
