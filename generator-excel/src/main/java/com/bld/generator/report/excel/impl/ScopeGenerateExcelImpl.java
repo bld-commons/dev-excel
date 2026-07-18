@@ -740,7 +740,8 @@ public class ScopeGenerateExcelImpl extends SuperGenerateExcelImpl implements Sc
 							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, indexRow, areaFieldName, RowStartEndType.ROW_HEADER, true, true, mapFieldColumn, mapSheet);
 							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_START, true, true, mapFieldColumn, mapSheet);
 							areaFieldName = ExcelBuildFunctionUtility.buildFunction(sheet, null, areaFieldName, RowStartEndType.ROW_END, true, true, mapFieldColumn, mapSheet);
-							AreaReference areaReference = new AreaReference(areaFieldName, excelChart.spreadsheetVersion());
+							String cleanAreaFieldName = areaFieldName.replaceAll(":\\s*'[^']+'!", ":");
+							AreaReference areaReference = new AreaReference(cleanAreaFieldName, excelChart.spreadsheetVersion());
 							for (CellReference cr : areaReference.getAllReferencedCells()) {
 								Sheet appSheet = StringUtils.isNotEmpty(cr.getSheetName()) ? workbook.getSheet(cr.getSheetName()) : sheet;
 								title = appSheet.getRow(cr.getRow()).getCell(cr.getCol()).getStringCellValue();
